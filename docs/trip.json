@@ -361,6 +361,17 @@
    "ll": [
     64.1455,
     -21.9306
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1754329718964-b0f3510ce104?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8N3x8UmFpbmJvdyUyMFN0cmVldCUyMEljZWxhbmR8ZW58MXwwfHx8MTc5MTE4MDcwOXww&ixlib=rb-4.1.0",
+     "w": 6048,
+     "h": 4032,
+     "author": "Julia Taubitz",
+     "author_link": "https://unsplash.com/@justmejuliee",
+     "page": "https://unsplash.com/photos/a-pedestrian-street-with-rainbow-stripes-E9sFr4JfRaQ",
+     "alt": "A pedestrian street with rainbow stripes"
+    }
    ]
   },
   "sun_voyager": {
@@ -379,6 +390,35 @@
    "ll": [
     64.1504,
     -21.9329
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1561931510-54f4317f210a?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8MXx8SGFycGElMjBJY2VsYW5kfGVufDF8MHx8fDE3OTExODA3MTF8MA&ixlib=rb-4.1.0",
+     "w": 8256,
+     "h": 4644,
+     "author": "Steve Smith",
+     "author_link": "https://unsplash.com/@varrak",
+     "page": "https://unsplash.com/photos/black-building-NDFMOg3jDjQ",
+     "alt": "black building"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1693248489163-f7866ab2f52e?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8NXx8SGFycGElMjBJY2VsYW5kfGVufDF8MHx8fDE3OTExODA3MTF8MA&ixlib=rb-4.1.0",
+     "w": 3216,
+     "h": 2144,
+     "author": "Shino Nakamura",
+     "author_link": "https://unsplash.com/@shinonk",
+     "page": "https://unsplash.com/photos/a-very-large-building-with-a-lot-of-windows-RMNKgUFtA90",
+     "alt": "a very large building with a lot of windows"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1708381487702-8ca6103811b7?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8M3x8SGFycGElMjBJY2VsYW5kfGVufDF8MHx8fDE3OTExODA3MTF8MA&ixlib=rb-4.1.0",
+     "w": 6000,
+     "h": 4000,
+     "author": "Scott Xu",
+     "author_link": "https://unsplash.com/@imaginesmalascapio",
+     "page": "https://unsplash.com/photos/a-view-of-a-body-of-water-through-a-window-SFGO30ZLmdQ",
+     "alt": "a view of a body of water through a window"
+    }
    ]
   },
   "thingvellir": {
@@ -424,6 +464,17 @@
    "ll": [
     64.2621,
     -20.5209
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1790008228523-e07821bc07c4?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8MXx8QnIlQzMlQkFhcmZvc3MlMjBJY2VsYW5kfGVufDF8MHx8fDE3OTExODA3MTJ8MA&ixlib=rb-4.1.0",
+     "w": 5674,
+     "h": 4548,
+     "author": "Joseph Corl",
+     "author_link": "https://unsplash.com/@jcorl",
+     "page": "https://unsplash.com/photos/bruarfoss-waterfall-with-blue-water-V5ogQe_mx_w",
+     "alt": "Bright blue water cascading over dark mossy rocks at Bruarfoss waterfall in Iceland"
+    }
    ]
   },
   "geysir": {
@@ -433,6 +484,17 @@
    "ll": [
     64.3094,
     -20.3019
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1632235819708-0654dc851715?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8M3x8R2V5c2lyJTIwSWNlbGFuZHxlbnwxfDB8fHwxNzkxMTgwNzEzfDA&ixlib=rb-4.1.0",
+     "w": 3754,
+     "h": 2493,
+     "author": "Rach Wang",
+     "author_link": "https://unsplash.com/@rachwang",
+     "page": "https://unsplash.com/photos/a-geyser-spewing-water-into-the-air-at-sunset-oh0p_2s9aE4",
+     "alt": "a geyser spewing water into the air at sunset"
+    }
    ]
   },
   "gullfoss": {
@@ -544,6 +606,35 @@
    "ll": [
     63.5269,
     -19.5114
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1741642880695-a8ff2bef5f5a?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8M3x8U2slQzMlQjNnYWZvc3MlMjBJY2VsYW5kfGVufDF8MHx8fDE3OTExODA3MTd8MA&ixlib=rb-4.1.0",
+     "w": 7728,
+     "h": 5152,
+     "author": "Sigurdur Fjalar Jonsson",
+     "author_link": "https://unsplash.com/@sfjalar",
+     "page": "https://unsplash.com/photos/a-majestic-waterfall-cascades-down-a-green-hill-mU8pfLjRQfM",
+     "alt": "A majestic waterfall cascades down a green hill"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1621959721891-d297dfd9d6ee?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8MXx8U2slQzMlQjNnYWZvc3MlMjBJY2VsYW5kfGVufDF8MHx8fDE3OTExODA3MTd8MA&ixlib=rb-4.1.0",
+     "w": 4791,
+     "h": 3173,
+     "author": "Lukas Tennie",
+     "author_link": "https://unsplash.com/@luk10",
+     "page": "https://unsplash.com/photos/waterfalls-on-green-grass-covered-mountain-during-daytime-54Pfu4EK4pc",
+     "alt": "waterfalls on green grass covered mountain during daytime"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1623481533867-3c60e93426a7?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8NHx8U2slQzMlQjNnYWZvc3MlMjBJY2VsYW5kfGVufDF8MHx8fDE3OTExODA3MTd8MA&ixlib=rb-4.1.0",
+     "w": 5903,
+     "h": 3924,
+     "author": "Sharon Janssens",
+     "author_link": "https://unsplash.com/@slalon1919",
+     "page": "https://unsplash.com/photos/a-group-of-people-standing-in-front-of-a-waterfall-o5ek6OPevbU",
+     "alt": "a group of people standing in front of a waterfall"
+    }
    ]
   },
   "solheimajokull": {
@@ -611,6 +702,17 @@
    "ll": [
     64.0084,
     -16.8801
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1668699548752-45d6289759c5?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8OHx8U3YlQzMlQURuYWZlbGxzaiVDMyVCNmt1bGwlMjBnbGFjaWVyJTIwSWNlbGFuZHxlbnwxfDB8fHwxNzkxMTgwNzE5fDA&ixlib=rb-4.1.0",
+     "w": 6000,
+     "h": 4000,
+     "author": "Julian Berengar Sölter",
+     "author_link": "https://unsplash.com/@moinundmeer",
+     "page": "https://unsplash.com/photos/a-lake-with-mountains-in-the-background-Xvs8_CplHcA",
+     "alt": "a lake with mountains in the background"
+    }
    ]
   },
   "mulagljufur": {
@@ -651,6 +753,35 @@
    "ll": [
     64.0428,
     -16.1828
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1648116119723-3407f2c11568?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8NHx8RGlhbW9uZCUyMEJlYWNoJTIwSWNlbGFuZHxlbnwxfDB8fHwxNzkxMTgwNzIyfDA&ixlib=rb-4.1.0",
+     "w": 5184,
+     "h": 3456,
+     "author": "Marg Ab",
+     "author_link": "https://unsplash.com/@marga75",
+     "page": "https://unsplash.com/photos/a-beach-covered-in-lots-of-ice-next-to-the-ocean-f6MEOjdY1WE",
+     "alt": "a beach covered in lots of ice next to the ocean"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1697126396621-9022787543ec?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8M3x8RGlhbW9uZCUyMEJlYWNoJTIwSWNlbGFuZHxlbnwxfDB8fHwxNzkxMTgwNzIyfDA&ixlib=rb-4.1.0",
+     "w": 6000,
+     "h": 4000,
+     "author": "Samuel Quek",
+     "author_link": "https://unsplash.com/@samuelqyx",
+     "page": "https://unsplash.com/photos/an-iceberg-on-a-beach-near-the-ocean-eTJ0CHYAldI",
+     "alt": "an iceberg on a beach near the ocean"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1567788189084-da2d8108c34a?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8Mnx8RGlhbW9uZCUyMEJlYWNoJTIwSWNlbGFuZHxlbnwxfDB8fHwxNzkxMTgwNzIyfDA&ixlib=rb-4.1.0",
+     "w": 5184,
+     "h": 3456,
+     "author": "Sammy Schuckert",
+     "author_link": "https://unsplash.com/@sammyschuckert",
+     "page": "https://unsplash.com/photos/beach-during-daytime-L5x451FPvJQ",
+     "alt": "beach during daytime"
+    }
    ]
   },
   "fjallsarlon": {
@@ -678,6 +809,35 @@
    "ll": [
     64.2552,
     -14.9937
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1504829857797-ddff29c27927?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8NHx8VmVzdHJhaG9ybiUyMEljZWxhbmR8ZW58MXwwfHx8MTc5MTE4MDcyMnww&ixlib=rb-4.1.0",
+     "w": 8270,
+     "h": 5514,
+     "author": "Norris Niman",
+     "author_link": "https://unsplash.com/@norrisniman",
+     "page": "https://unsplash.com/photos/mountain-terrain-near-body-of-water-ABtmE3jhaPQ",
+     "alt": "mountain terrain near body of water"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1682547094948-1d764fc412ce?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8OHx8VmVzdHJhaG9ybiUyMEljZWxhbmR8ZW58MXwwfHx8MTc5MTE4MDcyMnww&ixlib=rb-4.1.0",
+     "w": 5916,
+     "h": 3944,
+     "author": "David Becker",
+     "author_link": "https://unsplash.com/@beckerworks",
+     "page": "https://unsplash.com/photos/the-sun-is-setting-over-a-mountain-range-ea4FS8zIsqE",
+     "alt": "the sun is setting over a mountain range"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1511300636408-a63a89df3482?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8NXx8VmVzdHJhaG9ybiUyMEljZWxhbmR8ZW58MXwwfHx8MTc5MTE4MDcyMnww&ixlib=rb-4.1.0",
+     "w": 6700,
+     "h": 4467,
+     "author": "Luca Micheli",
+     "author_link": "https://unsplash.com/@lucamicheli",
+     "page": "https://unsplash.com/photos/vestrahorn-mountain-reflected-on-icelandic-beach-ruWkmt3nU58",
+     "alt": "Vestrahorn mountain reflected in the wet black sand of an Icelandic beach"
+    }
    ]
   },
   "hofn": {
@@ -700,6 +860,17 @@
    "ll": [
     64.4049,
     -14.5392
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1751398746250-445c4a7e14c7?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8OHx8SHZhbG5lcyUyMExpZ2h0aG91c2UlMjBJY2VsYW5kfGVufDF8MHx8fDE3OTExODA3MjN8MA&ixlib=rb-4.1.0",
+     "w": 11272,
+     "h": 6908,
+     "author": "Joseph Corl",
+     "author_link": "https://unsplash.com/@jcorl",
+     "page": "https://unsplash.com/photos/a-dramatic-island-scenery-under-a-cloudy-sky-A4mHvSThgaY",
+     "alt": "A dramatic island scenery under a cloudy sky"
+    }
    ]
   },
   "djupivogur": {
@@ -772,6 +943,35 @@
    "ll": [
     65.6411,
     -16.8094
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1597700226317-7790905a87a1?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8OHx8SHZlcmlyJTIwZ2VvdGhlcm1hbCUyMGFyZWElMjBJY2VsYW5kfGVufDF8MHx8fDE3OTExODA3Mjd8MA&ixlib=rb-4.1.0",
+     "w": 4032,
+     "h": 3024,
+     "author": "Mark Kuiper",
+     "author_link": "https://unsplash.com/@markkuiper",
+     "page": "https://unsplash.com/photos/brown-mountain-under-blue-sky-during-daytime-DP0BP-x3MDU",
+     "alt": "brown mountain under blue sky during daytime"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1549193308-7c895560f8e2?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8N3x8SHZlcmlyJTIwZ2VvdGhlcm1hbCUyMGFyZWElMjBJY2VsYW5kfGVufDF8MHx8fDE3OTExODA3Mjd8MA&ixlib=rb-4.1.0",
+     "w": 5616,
+     "h": 3744,
+     "author": "Matt Palmer",
+     "author_link": "https://unsplash.com/@mattpalmer",
+     "page": "https://unsplash.com/photos/smoke-coming-out-of-the-land-UXjYy04EvOc",
+     "alt": "smoke coming out of the land"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1699565784862-17def7744d66?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8M3x8SHZlcmlyJTIwZ2VvdGhlcm1hbCUyMGFyZWElMjBJY2VsYW5kfGVufDF8MHx8fDE3OTExODA3Mjd8MA&ixlib=rb-4.1.0",
+     "w": 5887,
+     "h": 3763,
+     "author": "Job Savelsberg",
+     "author_link": "https://unsplash.com/@jobsavelsberg",
+     "page": "https://unsplash.com/photos/a-man-standing-in-the-middle-of-a-body-of-water-m_Ylq1LFWyA",
+     "alt": "a man standing in the middle of a body of water"
+    }
    ]
   },
   "myvatn_baths": {
@@ -790,6 +990,26 @@
    "ll": [
     65.7186,
     -16.7553
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1701539470515-1ecf55bcee58?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8NHx8ViVDMyVBRHRpJTIwY3JhdGVyJTJDJTIwS3JhZmxhJTIwSWNlbGFuZHxlbnwxfDB8fHwxNzkxMTgwNzI5fDA&ixlib=rb-4.1.0",
+     "w": 7626,
+     "h": 3639,
+     "author": "Bernd 📷 Dittrich",
+     "author_link": "https://unsplash.com/@hdbernd",
+     "page": "https://unsplash.com/photos/a-large-blue-lake-surrounded-by-mountains-under-a-cloudy-sky-_kG0Juu63D8",
+     "alt": "a large blue lake surrounded by mountains under a cloudy sky"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1630925137799-878d11d18787?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8M3x8ViVDMyVBRHRpJTIwY3JhdGVyJTJDJTIwS3JhZmxhJTIwSWNlbGFuZHxlbnwxfDB8fHwxNzkxMTgwNzI5fDA&ixlib=rb-4.1.0",
+     "w": 4032,
+     "h": 3024,
+     "author": "Pavol Svantner",
+     "author_link": "https://unsplash.com/@palsoft",
+     "page": "https://unsplash.com/photos/blue-lake-surrounded-by-brown-and-green-mountains-under-blue-sky-during-daytime-pACtyqDfn9U",
+     "alt": "blue lake surrounded by brown and green mountains under blue sky during daytime"
+    }
    ]
   },
   "leirhnjukur": {
@@ -889,6 +1109,35 @@
    "ll": [
     64.9417,
     -23.3075
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1595742744735-415fc20ef88f?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8Mnx8S2lya2p1ZmVsbCUyMCUyNiUyMEtpcmtqdWZlbGxzZm9zcyUyMEljZWxhbmR8ZW58MXwwfHx8MTc5MTE4MDczMnww&ixlib=rb-4.1.0",
+     "w": 6960,
+     "h": 4640,
+     "author": "Yves Alarie",
+     "author_link": "https://unsplash.com/@yvesalarie",
+     "page": "https://unsplash.com/photos/green-grass-field-near-waterfalls-under-cloudy-sky-during-daytime-t1N6iM0U9zc",
+     "alt": "green grass field near waterfalls under cloudy sky during daytime"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1723758100246-86fcf2913ae3?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8NXx8S2lya2p1ZmVsbCUyMCUyNiUyMEtpcmtqdWZlbGxzZm9zcyUyMEljZWxhbmR8ZW58MXwwfHx8MTc5MTE4MDczMnww&ixlib=rb-4.1.0",
+     "w": 9504,
+     "h": 6336,
+     "author": "Himmel S",
+     "author_link": "https://unsplash.com/@skyhung1228",
+     "page": "https://unsplash.com/photos/a-waterfall-with-a-mountain-in-the-background-S_5wLF6KFdQ",
+     "alt": "A waterfall with a mountain in the background"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1605025169915-987049301f31?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8MXx8S2lya2p1ZmVsbCUyMCUyNiUyMEtpcmtqdWZlbGxzZm9zcyUyMEljZWxhbmR8ZW58MXwwfHx8MTc5MTE4MDczMnww&ixlib=rb-4.1.0",
+     "w": 6000,
+     "h": 4000,
+     "author": "Federico Di Dio photography",
+     "author_link": "https://unsplash.com/@didiofederico_photographer",
+     "page": "https://unsplash.com/photos/waterfalls-near-brown-mountain-under-blue-sky-during-daytime--pnawSG96Ls",
+     "alt": "waterfalls near brown mountain under blue sky during daytime"
+    }
    ]
   },
   "saxholl": {
@@ -934,6 +1183,35 @@
    "ll": [
     64.8216,
     -23.3843
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1654086041929-ff0947441f94?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8Mnx8QiVDMyVCQSVDMyVCMGlyJTIwQmxhY2slMjBDaHVyY2glMjBJY2VsYW5kfGVufDF8MHx8fDE3OTExODA3MzZ8MA&ixlib=rb-4.1.0",
+     "w": 5892,
+     "h": 3928,
+     "author": "Jean Vella",
+     "author_link": "https://unsplash.com/@jean_vella",
+     "page": "https://unsplash.com/photos/a-black-church-with-a-steeple-and-a-white-door-569U3h5DAVU",
+     "alt": "a black church with a steeple and a white door"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1529888526727-55f26f84cbe3?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8NHx8QiVDMyVCQSVDMyVCMGlyJTIwQmxhY2slMjBDaHVyY2glMjBJY2VsYW5kfGVufDF8MHx8fDE3OTExODA3MzZ8MA&ixlib=rb-4.1.0",
+     "w": 5760,
+     "h": 3840,
+     "author": "Cassidy Dickens",
+     "author_link": "https://unsplash.com/@blueriverstudio",
+     "page": "https://unsplash.com/photos/black-and-white-church-TzOaBPv29pg",
+     "alt": "black and white church"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1559823317-161d069eea27?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8Nnx8QiVDMyVCQSVDMyVCMGlyJTIwQmxhY2slMjBDaHVyY2glMjBJY2VsYW5kfGVufDF8MHx8fDE3OTExODA3MzZ8MA&ixlib=rb-4.1.0",
+     "w": 7192,
+     "h": 4800,
+     "author": "Daniel Tseng",
+     "author_link": "https://unsplash.com/@daniel840528",
+     "page": "https://unsplash.com/photos/black-and-white-wooden-house-in-brown-field-vMj3t73NjuI",
+     "alt": "black and white wooden house in brown field"
+    }
    ]
   },
   "gerduberg": {
@@ -988,6 +1266,17 @@
    "ll": [
     60.3711,
     6.114
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1600256698889-61ff2cd73cd8?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8MXx8U3RlaW5zZGFsc2Zvc3NlbiUyME5vcndheXxlbnwxfDB8fHwxNzkxMTgwNzM3fDA&ixlib=rb-4.1.0",
+     "w": 5672,
+     "h": 3781,
+     "author": "Tobias Tullius",
+     "author_link": "https://unsplash.com/@tobiastu",
+     "page": "https://unsplash.com/photos/red-house-by-waterfall-and-bridge-eJeEz6Paz-o",
+     "alt": "A red house beside a waterfall and stone bridge in a green valley"
+    }
    ]
   },
   "buerbreen": {
@@ -1114,6 +1403,17 @@
    "ll": [
     59.3268,
     18.0717
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1622647503888-2303abf11fb7?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8M3x8Um95YWwlMjBQYWxhY2UlMjBTd2VkZW58ZW58MXwwfHx8MTc5MTE4MDczOXww&ixlib=rb-4.1.0",
+     "w": 4000,
+     "h": 2667,
+     "author": "Tom Samuelsson",
+     "author_link": "https://unsplash.com/@tsamu",
+     "page": "https://unsplash.com/photos/white-boat-on-body-of-water-near-white-concrete-building-during-daytime-V-NipnVXE0U",
+     "alt": "white boat on body of water near white concrete building during daytime"
+    }
    ]
   },
   "vasamuseet": {
@@ -1150,6 +1450,17 @@
    "ll": [
     59.3313,
     18.0598
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1705521866290-7a0448528a0b?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8NHx8VC1DZW50cmFsZW4lMjBtZXRybyUyMGFydCUyMFN3ZWRlbnxlbnwxfDB8fHwxNzkxMTgwNzUyfDA&ixlib=rb-4.1.0",
+     "w": 5268,
+     "h": 3512,
+     "author": "Sylwia Bartyzel",
+     "author_link": "https://unsplash.com/@sylwiabartyzel",
+     "page": "https://unsplash.com/photos/an-escalator-in-a-building-with-a-mural-on-the-wall-wm9tuKLtRWQ",
+     "alt": "an escalator in a building with a mural on the wall"
+    }
    ]
   },
   "stromkajen": {
@@ -1366,6 +1677,35 @@
    "ll": [
     55.6813,
     12.5759
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1613139711536-2dd70124fba7?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8MXx8Um91bmQlMjBUb3dlciUyMERlbm1hcmt8ZW58MXwwfHx8MTc5MTE4MDc0OHww&ixlib=rb-4.1.0",
+     "w": 4896,
+     "h": 3264,
+     "author": "Julien Chatelain",
+     "author_link": "https://unsplash.com/@jchatelain",
+     "page": "https://unsplash.com/photos/white-concrete-building-with-glass-windows-p7YlO9McTVk",
+     "alt": "white concrete building with glass windows"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1547909357-1e9f28448e0d?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8N3x8Um91bmQlMjBUb3dlciUyMERlbm1hcmt8ZW58MXwwfHx8MTc5MTE4MDc0OHww&ixlib=rb-4.1.0",
+     "w": 4032,
+     "h": 3024,
+     "author": "Maria Bobrova",
+     "author_link": "https://unsplash.com/@yamiable",
+     "page": "https://unsplash.com/photos/white-arch-room-EMo5LwAr4dU",
+     "alt": "white arch room"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1472849861029-789f64abdcb4?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8Nnx8Um91bmQlMjBUb3dlciUyMERlbm1hcmt8ZW58MXwwfHx8MTc5MTE4MDc0OHww&ixlib=rb-4.1.0",
+     "w": 4096,
+     "h": 2286,
+     "author": "JOHN TOWNER",
+     "author_link": "https://unsplash.com/@heytowner",
+     "page": "https://unsplash.com/photos/curving-white-walls-with-arched-windows-and-cobblestone-floor-fWrF9Qxce9E",
+     "alt": "Curving white walls with arched windows and cobblestone floor"
+    }
    ]
   },
   "christiansborg": {

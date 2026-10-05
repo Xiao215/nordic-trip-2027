@@ -65,6 +65,7 @@
     </section>
 
     <section id="dayView" class="view" hidden>
+      <div class="hero" id="hero" hidden></div>
       <div class="glance" id="glance"></div>
       <div class="tl-head">
         <h2 id="dayTitle"></h2>
@@ -102,6 +103,13 @@
       <div class="map-caption" id="mapCaption"></div>
     </div>
   </aside>
+</div>
+
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="照片" data-i18n-aria-label="照片" hidden>
+  <button type="button" class="lb-x" id="lbClose" aria-label="关闭" data-i18n-aria-label="关闭">×</button>
+  <button type="button" class="lb-nav prev" id="lbPrev" aria-label="上一张" data-i18n-aria-label="上一张">‹</button>
+  <figure class="lb-fig"><img id="lbImg" alt=""><figcaption id="lbCap"></figcaption></figure>
+  <button type="button" class="lb-nav next" id="lbNext" aria-label="下一张" data-i18n-aria-label="下一张">›</button>
 </div>
 
 <section class="cli" id="chat" data-open="false" aria-label="行程助手" data-i18n-aria-label="行程助手">
