@@ -317,12 +317,10 @@ li.now>.row .t{color:var(--sun);font-weight:600}
 .pp button{border:0;background:transparent;border-radius:9px;padding:7px 14px;font:inherit;font-size:14px;font-weight:600;color:var(--muted);cursor:pointer;transition:background .2s,color .2s}
 .pp button:hover{color:var(--ink)}
 .pp button[aria-checked="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(10,25,35,.08),0 4px 12px -4px rgba(10,25,35,.18)}
-.pp-live{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--muted)}
+.pp-live{display:flex;align-items:center;gap:10px;font-size:13.5px;color:var(--muted)}
 .pp-live[hidden]{display:none}
-.pp-sel{position:relative;display:inline-flex}
-.pp-sel select{appearance:none;font:inherit;font-size:14px;font-weight:600;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:6px 32px 6px 12px;cursor:pointer}
-.pp-sel select:hover{border-color:var(--fjord)}
-.pp-sel svg{position:absolute;right:10px;top:50%;width:14px;height:14px;transform:translateY(-50%);pointer-events:none;fill:none;stroke:var(--muted);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.pp.sm button{padding:6px 12px;font-size:13.5px}
+.pp button:focus-visible{outline:2px solid var(--fjord);outline-offset:1px}
 .entry-card{border:1px solid var(--line);border-radius:var(--r);background:var(--surface);padding:16px 14px 6px 18px}
 .entry-card.visa{border-color:color-mix(in srgb,var(--sun) 50%,var(--line))}
 .entry-top{display:flex;gap:14px;align-items:flex-start;padding:0 4px 12px 0}
