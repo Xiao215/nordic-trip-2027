@@ -69,7 +69,13 @@ h1 .en{font-family:var(--f-mono);font-size:.36em;font-weight:500;letter-spacing:
 button.chip.due{background:var(--sun);color:#fff;font-weight:600;cursor:pointer}
 button.chip.due:hover{filter:brightness(1.08)}
 
-.sticky{position:sticky;top:0;z-index:5;padding:10px 0 10px;margin:-6px 0 8px;background:linear-gradient(var(--bg) 82%,transparent);display:grid;gap:8px}
+.sticky{position:sticky;top:0;z-index:5;padding:10px 0 10px;margin:-6px 0 8px;display:grid;gap:8px}
+/* the backdrop that hides content scrolling under the bar: only once scrolled, and soft at the sides
+   so it never shows as a hard-cornered box over the header glow */
+.sticky::before{content:"";position:absolute;z-index:-1;inset:-6px -12px 0;pointer-events:none;opacity:0;transition:opacity .25s;
+  background:linear-gradient(var(--bg) 78%,transparent);
+  -webkit-mask:linear-gradient(90deg,transparent,#000 28px,#000 calc(100% - 28px),transparent);mask:linear-gradient(90deg,transparent,#000 28px,#000 calc(100% - 28px),transparent)}
+.sticky.stuck::before{opacity:1}
 .topbar{display:flex;align-items:center;gap:10px 14px;padding:6px 6px 6px 12px;border:1px solid var(--line);border-radius:16px;background:var(--glass);backdrop-filter:blur(14px) saturate(1.2);-webkit-backdrop-filter:blur(14px) saturate(1.2);transition:box-shadow .25s,border-color .25s}
 .sticky.stuck .topbar{box-shadow:0 10px 30px -14px rgba(10,25,35,.35);border-color:color-mix(in srgb,var(--fjord) 22%,var(--line))}
 .brand{display:flex;align-items:center;gap:8px;color:var(--ink);text-decoration:none;font-family:var(--f-display);font-weight:700;font-size:15px;white-space:nowrap}
