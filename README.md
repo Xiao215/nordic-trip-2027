@@ -39,6 +39,10 @@ Everything lives in `docs/trip.json`:
 - A booking's `"days": ["2027-07-06", ...]` are the dates it's for (nights for a stay, the pickup day for a car). Those days show it in their day card, booked or not, and the calendar marks days with anything still unbooked.
 - `entry`: visa and entry steps per passport, shown on the prep tab once a visitor picks theirs (saved on that device). Profiles are `ca` (Canadian passport) and `cn-ca`, `cn-uk`, `cn-cn` (Chinese passport, by country of residence). A booking with `"who": ["cn-ca"]` or `["ca"]` only shows for those passports (`"cn"` would mean every Chinese passport).
 
+### Photos
+
+Scenic stops show up to three photos from [Unsplash](https://unsplash.com) (`places[id].photos`), each checked by eye against reference photos of the place before it's added. They load straight from Unsplash's image servers and every one credits the photographer and Unsplash. Stops still waiting for photos show a grey 照片待定 / Photo TBD tile.
+
 ### English text
 
 The English page reads `docs/i18n/en.json`, a map from each Chinese string in `trip.json` to its English version (interface strings live in `UIEN` in `app.js`). After editing the plan, list what still needs translating:
@@ -59,14 +63,14 @@ python3 scripts/build_routes.py
 
 ## Run the backend
 
-1. Copy `backend/.env.example` to `backend/.env`, set `ACCESS_CODE` (the chat asks for it once per device), and either `ANTHROPIC_BASE_URL=http://127.0.0.1:8787` (your local claude-api, personal use) or `ANTHROPIC_API_KEY`. You can reuse the values from the Algonquin planner's `.env`.
+1. Copy `backend/.env.example` to `backend/.env`, set `ACCESS_CODE` (the chat asks for it once per device), and either `ANTHROPIC_BASE_URL=http://127.0.0.1:8787` (your local claude-api, personal use) or `ANTHROPIC_API_KEY`.
 2. Make sure the Tailscale app is running, then:
 
    ```bash
    ./start.sh
    ```
 
-   This serves the backend on `127.0.0.1:8791` and publishes it with Tailscale Funnel on port **10000** (443 is used by another app and 8443 by the Algonquin planner), at `https://xiaos-macbook-pro.tail3d8516.ts.net:10000`. Both planners can run at the same time.
+   This serves the backend on `127.0.0.1:8791` and publishes it with Tailscale Funnel on port **10000** (443 and 8443 are used by other apps), at `https://xiaos-macbook-pro.tail3d8516.ts.net:10000`.
 
 The chat only works while your Mac is awake, online and running `start.sh`; the rest of the page always works. To unpublish:
 
@@ -76,7 +80,7 @@ tailscale funnel --https=10000 off
 
 ## Google Maps
 
-Without a key the page uses Google's basic embedded map: one stop or one day's drive at a time, and a country view on the overview. With a key (same steps as the Algonquin planner: Maps JavaScript API, restricted to `https://xiao215.github.io/*` and `http://localhost:8001/*`) you get every drive on real roads, flights as great circles, numbered stop pins and where-you-sleep pins for the whole month. Paste it into `googleMapsKey` in `docs/config.js`.
+Without a key the page uses Google's basic embedded map: one stop or one day's drive at a time, and a country view on the overview. With a key (Maps JavaScript API, restricted to `https://xiao215.github.io/*` and `http://localhost:8001/*`) you get every drive on real roads, flights as great circles, numbered stop pins and where-you-sleep pins for the whole month. Paste it into `googleMapsKey` in `docs/config.js`.
 
 ## Local testing
 
@@ -88,4 +92,4 @@ Then open `http://localhost:8001/?api=http://localhost:8791` to point the chat a
 
 ## Host the frontend
 
-GitHub Pages serving `docs/` from `main`, like the Algonquin planner, at `https://xiao215.github.io/nordic-trip-2027/`.
+GitHub Pages serving `docs/` from `main`, at `https://xiao215.github.io/nordic-trip-2027/`.
