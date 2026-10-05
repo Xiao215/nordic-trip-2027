@@ -415,8 +415,9 @@ function renderEntry(){
   var h='<div class="tl-head"><h2>'+U("签证和入境")+'</h2><span class="hint">'+U("护照和勾选只保存在这台设备上")+'</span></div>';
   h+='<div class="entry-pick"><div class="pp" role="radiogroup" aria-label="'+U("护照")+'">'+["cn","ca"].map(function(k){
     return '<button type="button" role="radio" data-pp="'+k+'" aria-checked="'+(PASS.p===k)+'">'+esc(L(E.passports[k]))+"</button>";}).join("")+"</div>";
-  h+='<label class="pp-live"'+(PASS.p==="cn"?"":" hidden")+'>'+U("住在")+'<span class="pp-sel"><select id="ppLive">'+Object.keys(E.live).map(function(k){
-    return '<option value="'+k+'"'+((PASS.live||"ca")===k?" selected":"")+">"+esc(L(E.live[k]))+"</option>";}).join("")+"</select>"+ICON.chev+"</span></label></div>";
+  // a Chinese passport's steps depend on where you live: a second toggle, one tap per country
+  h+='<div class="pp-live"'+(PASS.p==="cn"?"":" hidden")+'><span id="ppLiveLab">'+U("住在")+'</span><div class="pp sm" role="radiogroup" aria-labelledby="ppLiveLab">'+Object.keys(E.live).map(function(k){
+    return '<button type="button" role="radio" data-live="'+k+'" aria-checked="'+((PASS.live||"ca")===k)+'">'+esc(L(E.live[k]))+"</button>";}).join("")+"</div></div></div>";
   if(!pr){
     h+='<div class="entry-card"><p class="entry-empty">'+U("选一下你的护照，只看跟你有关的签证和入境步骤。")+'</p><div class="entry-opts">'+Object.keys(E.profiles).map(function(k){
       return '<button type="button" data-prof="'+k+'"><b>'+esc(profLabel(k))+"</b><span>"+tx(E.profiles[k].head)+"</span></button>";}).join("")+"</div></div>";
@@ -499,9 +500,10 @@ function countPrep(){var all=0,on=0;
   $("entry").querySelectorAll("input[data-id]").forEach(function(el){all++;if(el.checked)on++;});
   var done=store("nt-booked")||{},shown=shownBookings(),b=shown.filter(function(x){return done[x.id];}).length;
   $("prepCount").textContent=(b+on)+"/"+(shown.length+all);}
-$("prepView").addEventListener("change",function(e){if(e.target.id==="ppLive"){setPassport("cn",e.target.value);return;}var id=e.target.dataset&&e.target.dataset.id;if(!id)return;var d=store("nt-check")||{};d[id]=e.target.checked;store("nt-check",d);countPrep();});
+$("prepView").addEventListener("change",function(e){var id=e.target.dataset&&e.target.dataset.id;if(!id)return;var d=store("nt-check")||{};d[id]=e.target.checked;store("nt-check",d);countPrep();});
 $("prepView").addEventListener("click",function(e){
   var pp=e.target.closest("[data-pp]");if(pp){if(PASS.p!==pp.dataset.pp)setPassport(pp.dataset.pp);return;}
+  var lv=e.target.closest("[data-live]");if(lv){if(PASS.live!==lv.dataset.live)setPassport("cn",lv.dataset.live);$("entry").querySelector('[data-live="'+lv.dataset.live+'"]').focus();return;}
   var pf=e.target.closest("[data-prof]");if(pf){var k=pf.dataset.prof;setPassport(k==="ca"?"ca":"cn",k==="ca"?null:k.slice(3));return;}
   var sa=e.target.closest("[data-showall]");if(sa){SHOWALL=sa.dataset.showall==="1";renderPrep();return;}
   var ob=e.target.closest("[data-open-booking]");if(ob){openBooking(ob.dataset.openBooking);return;}
