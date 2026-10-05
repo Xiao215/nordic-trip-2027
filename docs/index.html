@@ -29,15 +29,13 @@
           <button role="tab" class="seg-btn" data-view="prep" aria-selected="false"><span data-i18n="准备">准备</span> <small id="prepCount"></small></button>
         </div>
         <div class="prefs">
-          <label class="cur" title="价格换算（按最新汇率，约数）" data-i18n-title="价格换算（按最新汇率，约数）">
-            <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7"/><path d="M12.5 7.5c-.5-.8-1.4-1.2-2.5-1.2-1.5 0-2.5.8-2.5 1.9 0 2.6 5 1.2 5 3.7 0 1.1-1 1.9-2.5 1.9-1.1 0-2-.4-2.5-1.2M10 4.8v1.5M10 13.7v1.5"/></svg>
-            <select id="cur" aria-label="货币" data-i18n-aria-label="货币">
-              <option value="local" data-i18n="当地货币">当地货币</option>
-              <option value="CAD">CAD</option>
-              <option value="CNY">CNY</option>
-              <option value="USD">USD</option>
-            </select>
-          </label>
+          <div class="cur" id="curBox">
+            <button type="button" class="cur-btn" id="curBtn" aria-haspopup="listbox" aria-expanded="false" aria-controls="curMenu" title="价格换算" data-i18n-title="价格换算">
+              <span class="cur-sym" id="curSym">kr</span><span id="curLabel">当地</span>
+              <svg class="cur-chev" viewBox="0 0 20 20" aria-hidden="true"><path d="M6 8l4 4 4-4"/></svg>
+            </button>
+            <div class="cur-menu" id="curMenu" role="listbox" aria-label="货币" data-i18n-aria-label="货币" tabindex="-1" hidden></div>
+          </div>
           <div class="names" role="radiogroup" aria-label="语言 Language">
             <button type="button" role="radio" data-nm="zh" aria-checked="true" title="中文（地名悬停显示原文）">中文</button>
             <button type="button" role="radio" data-nm="local" aria-checked="false" title="English (place names in the local spelling)">EN</button>

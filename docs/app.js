@@ -45,7 +45,7 @@ var UIEN={
   "正在载入预报…":"Loading forecast…","出发前约 16 天出现预报":"Forecast appears ~16 days before","暂无预报":"No forecast",
   "不挪地方":"Staying put","景点、徒步、冰川、逛城":"Sights, hikes, glaciers, town","极昼":"Midnight sun","日出 {r} · 日照 {l}":"Sunrise {r} · {l} of daylight",
   "（{t}后）":" (in {t})",
-  "北欧之旅":"Nordic Trip","主导航":"Main navigation","路线":"Route","货币":"Currency","当地货币":"Local","价格换算（按最新汇率，约数）":"Convert prices (latest rates, approximate)",
+  "北欧之旅":"Nordic Trip","主导航":"Main navigation","路线":"Route","货币":"Currency","当地货币":"Local","当地":"Local","价格换算":"Currency","按原价显示，不换算":"As written, no conversion","汇率更新于 {d} · 约数":"Rates from {d} · approximate","汇率为约数":"Rates are approximate",
   "总览":"Overview","每日":"Daily","准备":"Prep","四周日历":"4-week calendar","点任意一天看当天安排":"Tap a day to see its plan","路线分段":"Route legs",
   "点一站看详情，地图会跳过去":"Tap a stop for details and to see it on the map","预订":"Bookings","前一天":"Previous day","后一天":"Next day",
   "视图":"View","选择日期":"Choose a day","语言":"Language","地图":"Map","行程地图":"Trip map","看全天 / 全程":"Show the whole day / trip",
@@ -58,7 +58,7 @@ var UIEN={
 // Prices stay as written in trip.json (ISK, NOK, SEK, DKK, €, US$). With CAD, CNY or USD picked, every
 // amount is converted on the page with the latest rates (per US dollar), and hovering shows the original.
 var CUR=["CAD","CNY","USD"].indexOf(store("nt-cur"))>=0?store("nt-cur"):"local";
-var FX=null,CSYM={CAD:"C$",CNY:"¥",USD:"US$"},SYMCODE={"US$":"USD","C$":"CAD","CA$":"CAD","€":"EUR"};
+var FX=null,FXAT=null,CSYM={CAD:"C$",CNY:"¥",USD:"US$"},SYMCODE={"US$":"USD","C$":"CAD","CA$":"CAD","€":"EUR"};
 var NUM="(\\d{1,3}(?:,\\d{3})+(?:\\.\\d+)?|\\d+(?:\\.\\d+)?)";
 var RE_PRE=new RegExp("(US\\$|CA\\$|C\\$|€)\\s?"+NUM+"(?:\\s*[–-]\\s*(?:US\\$|CA\\$|C\\$|€)?"+NUM+")?","g");
 var RE_SUF=new RegExp(NUM+"(?:\\s*[–-]\\s*"+NUM+")?\\s?(ISK|NOK|SEK|DKK|EUR|CAD|USD|CNY)(?![A-Za-z])","g");
@@ -74,10 +74,10 @@ function money(s,hold){if(CUR==="local"||!FX)return s;
 function curContext(){if(CUR==="local"||!FX)return "";
   return CUR+" (1 "+CUR+" = "+["ISK","NOK","SEK","DKK","EUR"].map(function(k){return (FX[k]/FX[CUR]).toFixed(2)+" "+k;}).join(", ")+")";}
 function loadFx(){
-  var c=store("nt-fx");if(c&&Date.now()-c.t<12*36e5){FX=c.rates;return;}
-  FX=(T.fx||{}).rates||null;
+  var c=store("nt-fx");if(c&&Date.now()-c.t<12*36e5){FX=c.rates;FXAT=c.t;return;}
+  FX=(T.fx||{}).rates||null;FXAT=T.fx&&T.fx.date?Date.parse(T.fx.date+"T12:00:00Z"):null;
   fetch("https://open.er-api.com/v6/latest/USD").then(function(r){return r.ok?r.json():Promise.reject();}).then(function(j){
-    if(j.result!=="success")return;FX=j.rates;store("nt-fx",{t:Date.now(),rates:j.rates});if(CUR!=="local")rerender();}).catch(function(){});}
+    if(j.result!=="success")return;FX=j.rates;FXAT=Date.now();store("nt-fx",{t:FXAT,rates:j.rates});renderCur();if(CUR!=="local")rerender();}).catch(function(){});}
 
 // an interface string in the current language, with {name} placeholders filled from v
 function U(s,v){var r=en()&&UIEN[s]!=null?UIEN[s]:s;return v?r.replace(/\{(\w+)\}/g,function(_,k){return v[k];}):r;}
@@ -193,7 +193,7 @@ function boot(trip){
   T.days.forEach(function(D){BYDATE[D.date]=D;var n=0;
     D.segs.forEach(function(s,i){s.i=i;if(s.t==="stop")s.num=++n;
       s.pts=s.geom?decode(s.geom):(s.t==="move"?s.path.map(LL):null);});});
-  loadFx();$("cur").value=CUR;
+  loadFx();renderCur();
   applyNames();renderHeader();renderAll();renderStrip();renderPrep();
   var h=decodeURIComponent(location.hash.slice(1)),saved=store("nt-pos")||{};
   var live=liveDate(),date=BYDATE[h]||DATES.indexOf(h)>=0?h:live||saved.date||T.dates.start;
@@ -285,10 +285,36 @@ document.querySelectorAll(".names button").forEach(function(b){b.addEventListene
   if(NM===b.dataset.nm)return;NM=b.dataset.nm;store("nt-names",NM);applyNames();rerender(true);});});
 // redraw everything that shows text (after a language or currency change), keeping the open stop
 function rerender(lang){
-  var sel=state.sel;applyStatic();renderHeader();renderAll();renderStrip();markStrip();renderPrep();$("fitLabel").textContent=U(state.view==="day"?"全天":"全程");
+  var sel=state.sel;applyStatic();renderCur();renderHeader();renderAll();renderStrip();markStrip();renderPrep();$("fitLabel").textContent=U(state.view==="day"?"全天":"全程");
   if(state.view==="day"){renderDay();if(sel!=null&&day()){state.sel=sel;paintOpen();}}
   if(lang){redrawMap();caption();document.dispatchEvent(new CustomEvent("trip:lang"));if(embed){var D=day();if(state.view==="day"&&D&&state.sel!=null)frame(D.segs[state.sel]);else fitView();}}}
-$("cur").addEventListener("change",function(){CUR=this.value;store("nt-cur",CUR);rerender(false);});
+/* ---------- currency menu ---------- */
+var CURS=[["local","kr","当地货币","Local currency"],["CAD","C$","加元","Canadian dollar"],["CNY","¥","人民币","Chinese yuan"],["USD","US$","美元","US dollar"]];
+function renderCur(){
+  var cur=CURS.filter(function(c){return c[0]===CUR;})[0];
+  $("curSym").textContent=cur[1];$("curLabel").textContent=CUR==="local"?U("当地"):CUR;
+  var h=CURS.map(function(c){var on=c[0]===CUR,sub;
+    if(c[0]==="local")sub=U("按原价显示，不换算");
+    else sub=FX&&FX[c[0]]?"1 "+c[1]+" ≈ "+(FX.ISK/FX[c[0]]).toFixed(c[0]==="CNY"?1:0)+" ISK":"";
+    return '<button type="button" class="cur-opt" role="option" data-cur="'+c[0]+'" aria-selected="'+on+'">'+
+      '<span class="cur-badge">'+esc(c[1])+'</span><span class="cur-txt"><b>'+esc(en()?c[3]:c[2])+(c[0]!=="local"?' <small>'+c[0]+"</small>":"")+"</b><small>"+esc(sub)+"</small></span>"+
+      '<svg class="cur-check" viewBox="0 0 20 20" aria-hidden="true"><path d="M4.5 10.5l3.5 3.5 7.5-8"/></svg></button>';}).join("");
+  var when=FXAT?new Date(FXAT):null;
+  h+='<div class="cur-foot">'+esc(when?U("汇率更新于 {d} · 约数",{d:cnDate(when.toISOString().slice(0,10))}):U("汇率为约数"))+"</div>";
+  $("curMenu").innerHTML=h;}
+function curOpen(on){var m=$("curMenu"),b=$("curBtn");if(on===!m.hidden)return;
+  b.setAttribute("aria-expanded",on);$("curBox").classList.toggle("open",on);
+  if(on){m.hidden=false;var sel=m.querySelector('[aria-selected="true"]');(sel||m).focus({preventScroll:true});}
+  else{m.hidden=true;}}
+function curPick(v){if(v!==CUR){CUR=v;store("nt-cur",CUR);rerender(false);}renderCur();curOpen(false);$("curBtn").focus();}
+$("curBtn").addEventListener("click",function(){curOpen($("curMenu").hidden);});
+$("curMenu").addEventListener("click",function(e){var o=e.target.closest(".cur-opt");if(o)curPick(o.dataset.cur);});
+$("curMenu").addEventListener("keydown",function(e){var opts=[].slice.call(this.querySelectorAll(".cur-opt")),i=opts.indexOf(document.activeElement);
+  if(e.key==="ArrowDown"||e.key==="ArrowUp"){e.preventDefault();opts[(i+(e.key==="ArrowDown"?1:opts.length-1))%opts.length].focus();}
+  else if(e.key==="Escape"){e.preventDefault();curOpen(false);$("curBtn").focus();}
+  else if(e.key==="Tab")curOpen(false);});
+$("curBtn").addEventListener("keydown",function(e){if(e.key==="ArrowDown"){e.preventDefault();curOpen(true);}});
+document.addEventListener("pointerdown",function(e){if(!$("curBox").contains(e.target))curOpen(false);});
 
 /* ---------- prep ---------- */
 function renderPrep(){
