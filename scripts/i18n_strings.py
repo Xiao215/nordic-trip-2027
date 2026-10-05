@@ -45,6 +45,8 @@ def main():
     trip = json.loads(TRIP.read_text())
     # place and country names are handled by the names switch (local spelling), so skip "places"/"countries"
     found = strings({k: v for k, v in trip.items() if k not in ("places", "countries")})
+    # kind labels are keyed by names like "stay" and "start" that SKIP drops elsewhere, so add them directly
+    found += [v for v in trip["kinds"].values() if CJK.search(v)]
     found = list(dict.fromkeys(found))
     have = json.loads(EN.read_text()) if EN.exists() else {}
     todo = [s for s in found if s not in have]
