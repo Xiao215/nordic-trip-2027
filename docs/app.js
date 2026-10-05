@@ -70,6 +70,9 @@ function money(s,hold){if(CUR==="local"||!FX)return s;
     var f=function(x){return +x.replace(/,/g,"")/FX[code]*FX[CUR];},t=fmtMoney(f(a))+(b?"–"+fmtMoney(f(b)).replace(CSYM[CUR],""):"");
     return hold?hold('<span class="pl money" data-lo="'+esc(m)+'">'+esc(t)+"</span>"):t;}
   return s.replace(RE_PRE,function(m,sym,a,b){return conv(m,SYMCODE[sym],a,b);}).replace(RE_SUF,function(m,a,b,code){return conv(m,code,a,b);});}
+// for the chat: the picked currency and the page's own rates, so its conversions match the page
+function curContext(){if(CUR==="local"||!FX)return "";
+  return CUR+" (1 "+CUR+" = "+["ISK","NOK","SEK","DKK","EUR"].map(function(k){return (FX[k]/FX[CUR]).toFixed(2)+" "+k;}).join(", ")+")";}
 function loadFx(){
   var c=store("nt-fx");if(c&&Date.now()-c.t<12*36e5){FX=c.rates;return;}
   FX=(T.fx||{}).rates||null;
@@ -201,11 +204,10 @@ function boot(trip){
   window.addEventListener("hashchange",function(){var h=decodeURIComponent(location.hash.slice(1));
     if(DATES.indexOf(h)>=0&&!(state.view==="day"&&state.date===h))setView("day",h);else if((h==="all"||h==="prep")&&state.view!==h)setView(h);});
   window.tripApp={context:function(){var D=day(),s=D&&state.sel!=null?D.segs[state.sel]:null;
-    var lang=en()?"en":"zh";
-    if(state.view==="prep")return {lang:lang,currency:CUR==="local"?"":CUR,day:"Prep tab",looking_at:"bookings and checklists"};
-    if(state.view==="all")return {lang:lang,currency:CUR==="local"?"":CUR,day:"Overview",looking_at:"the whole trip's calendar and route legs"};
-    var cur=CUR==="local"?"":CUR;
-    return {lang:lang,currency:cur,day:state.date+" · "+(D?plain(D.title):"being planned"),looking_at:s?(s.t==="move"?mode(s.mode)+" "+moveLabel(s,true):s.num+". "+plain(s.name||"[["+s.place+"]]")+(s.start?" ("+s.start+")":"")):"the whole day"};},
+    var lang=en()?"en":"zh",curTxt=curContext();
+    if(state.view==="prep")return {lang:lang,currency:curTxt,day:"Prep tab",looking_at:"bookings and checklists"};
+    if(state.view==="all")return {lang:lang,currency:curTxt,day:"Overview",looking_at:"the whole trip's calendar and route legs"};
+    return {lang:lang,currency:curTxt,day:state.date+" · "+(D?plain(D.title):"being planned"),looking_at:s?(s.t==="move"?mode(s.mode)+" "+moveLabel(s,true):s.num+". "+plain(s.name||"[["+s.place+"]]")+(s.start?" ("+s.start+")":"")):"the whole day"};},
     lang:function(){return en()?"en":"zh";}};
   document.dispatchEvent(new CustomEvent("trip:view"));
 }
