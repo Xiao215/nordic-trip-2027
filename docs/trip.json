@@ -257,6 +257,17 @@
    "ll": [
     60.1242,
     6.74
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1505312917212-9db5bde78aff?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8M3x8VHJvbGx0dW5nYSUyME5vcndheXxlbnwxfDB8fHwxNzkxMTg0MjI0fDA&ixlib=rb-4.1.0",
+     "w": 4928,
+     "h": 3264,
+     "author": "Dong Zhang",
+     "author_link": "https://unsplash.com/@perfumekiller",
+     "page": "https://unsplash.com/photos/brown-and-green-rock-mountain-during-day-time-ILYVeUgPkmI",
+     "alt": "brown and green rock mountain during day time"
+    }
    ]
   },
   "flam": {
@@ -352,6 +363,17 @@
    "ll": [
     64.1418,
     -21.9267
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1615130767419-e9ff3afa5a15?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8Nnx8SGFsbGdyJUMzJUFEbXNraXJramElMjBJY2VsYW5kfGVufDF8MHx8fDE3OTExODQxOTd8MA&ixlib=rb-4.1.0",
+     "w": 5463,
+     "h": 3008,
+     "author": "Einar H. Reynis",
+     "author_link": "https://unsplash.com/@einarr05",
+     "page": "https://unsplash.com/photos/aerial-view-of-city-buildings-during-daytime-lm6qmb_VuSo",
+     "alt": "aerial view of city buildings during daytime"
+    }
    ]
   },
   "skolavordustigur": {
@@ -428,6 +450,26 @@
    "ll": [
     64.2555,
     -21.1285
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1680361931368-154a31441f4b?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8MXx8JUMzJTlFaW5ndmVsbGlyJTIwTmF0aW9uYWwlMjBQYXJrJTIwSWNlbGFuZHxlbnwxfDB8fHwxNzkxMTg0MTk4fDA&ixlib=rb-4.1.0",
+     "w": 4624,
+     "h": 3468,
+     "author": "Zuzana K",
+     "author_link": "https://unsplash.com/@reunion83",
+     "page": "https://unsplash.com/photos/a-scenic-view-of-a-valley-with-mountains-in-the-background-zxnwT9Yz9HE",
+     "alt": "a scenic view of a valley with mountains in the background"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1507386418011-c40054c3c852?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8Mnx8JUMzJTlFaW5ndmVsbGlyJTIwTmF0aW9uYWwlMjBQYXJrJTIwSWNlbGFuZHxlbnwxfDB8fHwxNzkxMTg0MTk4fDA&ixlib=rb-4.1.0",
+     "w": 5184,
+     "h": 3456,
+     "author": "Ruslan Valeev",
+     "author_link": "https://unsplash.com/@postrobotbox",
+     "page": "https://unsplash.com/photos/house-near-lake-under-white-sky-during-daytime-0XN_IhVrW3w",
+     "alt": "house near lake under white sky during daytime"
+    }
    ]
   },
   "almannagja": {
@@ -504,6 +546,35 @@
    "ll": [
     64.3252,
     -20.1307
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1705956659280-bb5e61e5a0c7?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8M3x8R3VsbGZvc3MlMjBJY2VsYW5kfGVufDF8MHx8fDE3OTExODQyMDF8MA&ixlib=rb-4.1.0",
+     "w": 5468,
+     "h": 3316,
+     "author": "Martti Salmi",
+     "author_link": "https://unsplash.com/@marttisalmi",
+     "page": "https://unsplash.com/photos/a-waterfall-with-a-rainbow-in-the-middle-of-it-AXh5eEGa9ko",
+     "alt": "a waterfall with a rainbow in the middle of it"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1603226851957-1768f812309b?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8MXx8R3VsbGZvc3MlMjBJY2VsYW5kfGVufDF8MHx8fDE3OTExODQyMDF8MA&ixlib=rb-4.1.0",
+     "w": 6000,
+     "h": 4000,
+     "author": "Sarah Thorenz",
+     "author_link": "https://unsplash.com/@sari_thz",
+     "page": "https://unsplash.com/photos/water-falls-on-brown-and-green-mountain-under-white-clouds-during-daytime-2ALdMuvRD0w",
+     "alt": "water falls on brown and green mountain under white clouds during daytime"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1590869771616-11312c7fcd48?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8NXx8R3VsbGZvc3MlMjBJY2VsYW5kfGVufDF8MHx8fDE3OTExODQyMDF8MA&ixlib=rb-4.1.0",
+     "w": 5184,
+     "h": 3456,
+     "author": "Laila",
+     "author_link": "https://unsplash.com/@lailagebhard",
+     "page": "https://unsplash.com/photos/water-waves-hitting-the-shore-during-daytime-Rt4p0KMo86k",
+     "alt": "water waves hitting the shore during daytime"
+    }
    ]
   },
   "hella": {
@@ -539,7 +610,18 @@
    "climate": {
     "hi": 12,
     "lo": 4
-   }
+   },
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1477573829233-74cd1c17fa65?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8OHx8TGFuZG1hbm5hbGF1Z2FyJTIwSWNlbGFuZHxlbnwxfDB8fHwxNzkxMTg0MjAxfDA&ixlib=rb-4.1.0",
+     "w": 5472,
+     "h": 3648,
+     "author": "Jon Flobrant",
+     "author_link": "https://unsplash.com/@jonflobrant",
+     "page": "https://unsplash.com/photos/aerial-photography-of-mountain-at-daytime-tSsb28hzZSI",
+     "alt": "aerial photography of mountain at daytime"
+    }
+   ]
   },
   "brennisteinsalda": {
    "zh": "硫磺山",
@@ -588,6 +670,35 @@
    "ll": [
     63.6155,
     -19.9933
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1652043058252-7cfb295965c0?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8NXx8U2VsamFsYW5kc2Zvc3MlMjBJY2VsYW5kfGVufDF8MHx8fDE3OTExODQyMDN8MA&ixlib=rb-4.1.0",
+     "w": 5836,
+     "h": 3284,
+     "author": "Dmitri Zotov",
+     "author_link": "https://unsplash.com/@raldoc",
+     "page": "https://unsplash.com/photos/a-waterfall-in-a-valley-8LCcbrt2egY",
+     "alt": "a waterfall in a valley"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1472392036208-33c459d5c8b9?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8N3x8U2VsamFsYW5kc2Zvc3MlMjBJY2VsYW5kfGVufDF8MHx8fDE3OTExODQyMDN8MA&ixlib=rb-4.1.0",
+     "w": 6876,
+     "h": 3868,
+     "author": "Curren Podlesny",
+     "author_link": "https://unsplash.com/@curnpo",
+     "page": "https://unsplash.com/photos/landscape-photography-of-waterfalls-V7MplrFOU4E",
+     "alt": "landscape photography of waterfalls"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1595689747315-e414a125a0cb?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8NHx8U2VsamFsYW5kc2Zvc3MlMjBJY2VsYW5kfGVufDF8MHx8fDE3OTExODQyMDN8MA&ixlib=rb-4.1.0",
+     "w": 6960,
+     "h": 4640,
+     "author": "Yves Alarie",
+     "author_link": "https://unsplash.com/@yvesalarie",
+     "page": "https://unsplash.com/photos/water-falls-in-brown-rocky-mountain-during-daytime-CzAu99JfJJE",
+     "alt": "water falls in brown rocky mountain during daytime"
+    }
    ]
   },
   "gljufrabui": {
@@ -662,6 +773,17 @@
    "ll": [
     63.4043,
     -19.0453
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1587400364540-b78883d60470?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8NHx8UmV5bmlzZmphcmElMjBibGFjayUyMHNhbmQlMjBiZWFjaCUyMEljZWxhbmR8ZW58MXwwfHx8MTc5MTE4NDIwNnww&ixlib=rb-4.1.0",
+     "w": 5729,
+     "h": 3819,
+     "author": "Rémy Penet",
+     "author_link": "https://unsplash.com/@remypnt",
+     "page": "https://unsplash.com/photos/black-rock-formation-on-sea-under-white-clouds-during-daytime-f-fl0yNqEsU",
+     "alt": "black rock formation on sea under white clouds during daytime"
+    }
    ]
   },
   "vik": {
@@ -693,6 +815,26 @@
    "ll": [
     63.7712,
     -18.1714
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1503673508983-5f2fbaf1df4d?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8MXx8RmphJUMzJUIwciVDMyVBMXJnbGolQzMlQkFmdXIlMjBjYW55b24lMjBJY2VsYW5kfGVufDF8MHx8fDE3OTExODQyMDd8MA&ixlib=rb-4.1.0",
+     "w": 7952,
+     "h": 5304,
+     "author": "Serey Morm",
+     "author_link": "https://unsplash.com/@serey",
+     "page": "https://unsplash.com/photos/green-mossy-cliff-with-river-in-the-middle-Z9G2Cm3n080",
+     "alt": "green mossy cliff with river in the middle"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1480498244787-3b777eae847c?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8NHx8RmphJUMzJUIwciVDMyVBMXJnbGolQzMlQkFmdXIlMjBjYW55b24lMjBJY2VsYW5kfGVufDF8MHx8fDE3OTExODQyMDd8MA&ixlib=rb-4.1.0",
+     "w": 5472,
+     "h": 3648,
+     "author": "Jon Flobrant",
+     "author_link": "https://unsplash.com/@jonflobrant",
+     "page": "https://unsplash.com/photos/body-of-water-between-mountain-oRUQsTX9Zv0",
+     "alt": "body of water between mountain"
+    }
    ]
   },
   "svinafellsjokull": {
@@ -934,6 +1076,17 @@
    "ll": [
     65.8146,
     -16.3849
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/flagged/photo-1569254673946-fc73f377fce3?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8M3x8RGV0dGlmb3NzJTIwSWNlbGFuZHxlbnwxfDB8fHwxNzkxMTg0MjEyfDA&ixlib=rb-4.1.0",
+     "w": 3888,
+     "h": 2592,
+     "author": "Richard Dorran",
+     "author_link": "https://unsplash.com/@dozza88",
+     "page": "https://unsplash.com/photos/dettifoss-waterfall-in-iceland-JFW-P9IMgxo",
+     "alt": "Dettifoss waterfall in Iceland"
+    }
    ]
   },
   "hverir": {
@@ -1028,6 +1181,17 @@
    "ll": [
     65.6055,
     -16.8728
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1663206950304-6ac585f8669d?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8Mnx8SHZlcmZqYWxsJTIwY3JhdGVyJTIwSWNlbGFuZHxlbnwxfDB8fHwxNzkxMTg0MjEzfDA&ixlib=rb-4.1.0",
+     "w": 5333,
+     "h": 3000,
+     "author": "Jane Sakharova",
+     "author_link": "https://unsplash.com/@canareica",
+     "page": "https://unsplash.com/photos/a-large-sand-dune-IvFwQ8Iec9A",
+     "alt": "a large sand dune"
+    }
    ]
   },
   "grjotagja": {
@@ -1064,6 +1228,26 @@
    "ll": [
     65.6828,
     -17.5502
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1568374534873-b7d4d23f2324?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8M3x8R28lQzMlQjBhZm9zcyUyMEljZWxhbmR8ZW58MXwwfHx8MTc5MTE4NDIxNnww&ixlib=rb-4.1.0",
+     "w": 3888,
+     "h": 2592,
+     "author": "Richard Dorran",
+     "author_link": "https://unsplash.com/@dozza88",
+     "page": "https://unsplash.com/photos/waterfalls-beside-grasses-pyIGuqVX6k4",
+     "alt": "waterfalls beside grasses"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1682884345494-8e95f7152f1b?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8N3x8R28lQzMlQjBhZm9zcyUyMEljZWxhbmR8ZW58MXwwfHx8MTc5MTE4NDIxNnww&ixlib=rb-4.1.0",
+     "w": 5099,
+     "h": 3399,
+     "author": "Jean Vella",
+     "author_link": "https://unsplash.com/@jean_vella",
+     "page": "https://unsplash.com/photos/a-large-waterfall-with-a-man-standing-on-top-of-it-vxkmPriSZtI",
+     "alt": "a large waterfall with a man standing on top of it"
+    }
    ]
   },
   "akureyrarkirkja": {
@@ -1073,6 +1257,26 @@
    "ll": [
     65.6797,
     -18.0912
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1755279100460-b7c44c9296a4?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8MXx8QWt1cmV5cmklMjBDaHVyY2glMjBJY2VsYW5kfGVufDF8MHx8fDE3OTExODQyMTd8MA&ixlib=rb-4.1.0",
+     "w": 6048,
+     "h": 4032,
+     "author": "Julia Taubitz",
+     "author_link": "https://unsplash.com/@justmejuliee",
+     "page": "https://unsplash.com/photos/coastal-town-with-modern-buildings-and-boats-XZzn7K0tkEg",
+     "alt": "Coastal town with modern buildings and boats"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1533491234113-15f548aeb265?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8Mnx8QWt1cmV5cmklMjBDaHVyY2glMjBJY2VsYW5kfGVufDF8MHx8fDE3OTExODQyMTd8MA&ixlib=rb-4.1.0",
+     "w": 5954,
+     "h": 3359,
+     "author": "Lachlan Gowen",
+     "author_link": "https://unsplash.com/@lachlangowen",
+     "page": "https://unsplash.com/photos/low-angle-photography-of-brown-painted-church-bW2ny2UD08s",
+     "alt": "low angle photography of brown painted church"
+    }
    ]
   },
   "glaumbaer": {
@@ -1091,6 +1295,35 @@
    "ll": [
     65.6062,
     -20.6355
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1653504682992-8d3844a6adcc?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8NXx8SHYlQzMlQUR0c2Vya3VyJTIwc2VhJTIwc3RhY2slMjBJY2VsYW5kfGVufDF8MHx8fDE3OTExODQyMTl8MA&ixlib=rb-4.1.0",
+     "w": 4608,
+     "h": 3456,
+     "author": "Antonio Morillas",
+     "author_link": "https://unsplash.com/@el_morillas",
+     "page": "https://unsplash.com/photos/a-rock-formation-in-the-middle-of-a-body-of-water-vvMQscp-7E0",
+     "alt": "a rock formation in the middle of a body of water"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1518621884765-0229c3468a2c?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8NHx8SHYlQzMlQUR0c2Vya3VyJTIwc2VhJTIwc3RhY2slMjBJY2VsYW5kfGVufDF8MHx8fDE3OTExODQyMTl8MA&ixlib=rb-4.1.0",
+     "w": 5184,
+     "h": 3456,
+     "author": "Rocco Casadei",
+     "author_link": "https://unsplash.com/@roccobot",
+     "page": "https://unsplash.com/photos/rock-monolith-surrounded-body-of-water-V5nICghBiuM",
+     "alt": "rock monolith surrounded body of water"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1754348065809-fa72daf8c6ad?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8MXx8SHYlQzMlQUR0c2Vya3VyJTIwc2VhJTIwc3RhY2slMjBJY2VsYW5kfGVufDF8MHx8fDE3OTExODQyMTl8MA&ixlib=rb-4.1.0",
+     "w": 5767,
+     "h": 3845,
+     "author": "Juliann Hervio",
+     "author_link": "https://unsplash.com/@ramaccess",
+     "page": "https://unsplash.com/photos/a-tall-unique-rock-formation-sits-in-the-ocean-onoPry9Y5S0",
+     "alt": "A tall, unique rock formation sits in the ocean"
+    }
    ]
   },
   "hvammstangi": {
@@ -1174,6 +1407,35 @@
    "ll": [
     64.767,
     -23.6227
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1723993171764-311b4145f1b9?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8NXx8QXJuYXJzdGFwaSUyMEljZWxhbmR8ZW58MXwwfHx8MTc5MTE4NDIyMHww&ixlib=rb-4.1.0",
+     "w": 4509,
+     "h": 3000,
+     "author": "Piotr Musioł",
+     "author_link": "https://unsplash.com/@szamanm",
+     "page": "https://unsplash.com/photos/a-white-house-sitting-on-top-of-a-lush-green-hillside-S0EyBA1m8TQ",
+     "alt": "A white house sitting on top of a lush green hillside"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1723993171746-2aba52591341?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8Nnx8QXJuYXJzdGFwaSUyMEljZWxhbmR8ZW58MXwwfHx8MTc5MTE4NDIyMHww&ixlib=rb-4.1.0",
+     "w": 4509,
+     "h": 3000,
+     "author": "Piotr Musioł",
+     "author_link": "https://unsplash.com/@szamanm",
+     "page": "https://unsplash.com/photos/a-rock-formation-on-the-shore-of-a-body-of-water-1wPHwqrmscI",
+     "alt": "A rock formation on the shore of a body of water"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1498008122250-bcb854c8462d?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8MXx8QXJuYXJzdGFwaSUyMEljZWxhbmR8ZW58MXwwfHx8MTc5MTE4NDIyMHww&ixlib=rb-4.1.0",
+     "w": 5472,
+     "h": 3648,
+     "author": "Cassie Boca",
+     "author_link": "https://unsplash.com/@cassieboca",
+     "page": "https://unsplash.com/photos/white-house-near-brown-mountain-and-body-of-water-06jGTfErpWo",
+     "alt": "white house near brown mountain and body of water"
+    }
    ]
   },
   "budakirkja": {
@@ -1239,6 +1501,35 @@
    "ll": [
     60.3975,
     5.3244
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1609951022212-7aff21c1ab1f?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8M3x8QnJ5Z2dlbiUyME5vcndheXxlbnwxfDB8fHwxNzkxMTg0MjIyfDA&ixlib=rb-4.1.0",
+     "w": 4032,
+     "h": 3024,
+     "author": "Agent J",
+     "author_link": "https://unsplash.com/@agentj",
+     "page": "https://unsplash.com/photos/houses-near-body-of-water-under-blue-sky-during-daytime-w4KkOsqV4tI",
+     "alt": "houses near body of water under blue sky during daytime"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1645564386021-0db0dd3e2ad7?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8NXx8QnJ5Z2dlbiUyME5vcndheXxlbnwxfDB8fHwxNzkxMTg0MjIyfDA&ixlib=rb-4.1.0",
+     "w": 6016,
+     "h": 4000,
+     "author": "Annika Ashley",
+     "author_link": "https://unsplash.com/@annikaashley",
+     "page": "https://unsplash.com/photos/a-group-of-boats-floating-on-top-of-a-body-of-water-CP8_CR9R4Ko",
+     "alt": "a group of boats floating on top of a body of water"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1580946443359-1126222f9224?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8NHx8QnJ5Z2dlbiUyME5vcndheXxlbnwxfDB8fHwxNzkxMTg0MjIyfDA&ixlib=rb-4.1.0",
+     "w": 5388,
+     "h": 3592,
+     "author": "MAO YUQING",
+     "author_link": "https://unsplash.com/@mussaoimao",
+     "page": "https://unsplash.com/photos/houses-near-body-of-water-and-mountain-during-daytime-15_sm282qAE",
+     "alt": "houses near body of water and mountain during daytime"
+    }
    ]
   },
   "fisketorget": {
@@ -1313,6 +1604,17 @@
    "ll": [
     60.4279,
     7.2515
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1628344253777-f73a64d8f983?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8Nnx8ViVDMyVCOHJpbmdzZm9zc2VuJTIwTm9yd2F5fGVufDF8MHx8fDE3OTExODQyMjV8MA&ixlib=rb-4.1.0",
+     "w": 4928,
+     "h": 3264,
+     "author": "Leon L",
+     "author_link": "https://unsplash.com/@l0nsett",
+     "page": "https://unsplash.com/photos/water-falls-on-rocky-mountain--Pko3nCZX2c",
+     "alt": "water falls on rocky mountain"
+    }
    ]
   },
   "tvindefossen": {
@@ -1358,6 +1660,17 @@
    "ll": [
     60.9078,
     7.2101
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1504519733529-35b35d10eee2?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8Mnx8U3RlZ2FzdGVpbiUyMHZpZXdwb2ludCUyME5vcndheXxlbnwxfDB8fHwxNzkxMTg0MjI5fDA&ixlib=rb-4.1.0",
+     "w": 3968,
+     "h": 2645,
+     "author": "Robert Bye",
+     "author_link": "https://unsplash.com/@robertbye",
+     "page": "https://unsplash.com/photos/people-standing-on-bridge-looking-through-mountain-surrounded-by-water-xjQhTrxyVBw",
+     "alt": "people standing on bridge looking through mountain surrounded by water"
+    }
    ]
   },
   "snovegen": {
@@ -1385,6 +1698,26 @@
    "ll": [
     59.3274,
     18.0543
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1719882609648-588f0c976a79?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8M3x8U3RvY2tob2xtJTIwQ2l0eSUyMEhhbGwlMjBTd2VkZW58ZW58MXwwfHx8MTc5MTE4NDIzMnww&ixlib=rb-4.1.0",
+     "w": 7008,
+     "h": 4672,
+     "author": "Andriy Oliynyk",
+     "author_link": "https://unsplash.com/@oliynykan",
+     "page": "https://unsplash.com/photos/a-large-body-of-water-with-a-clock-tower-in-the-background-3rSBCU6gsRM",
+     "alt": "A large body of water with a clock tower in the background"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1730653710961-51b08c68173f?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8Nnx8U3RvY2tob2xtJTIwQ2l0eSUyMEhhbGwlMjBTd2VkZW58ZW58MXwwfHx8MTc5MTE4NDIzMnww&ixlib=rb-4.1.0",
+     "w": 3840,
+     "h": 2560,
+     "author": "Dawid Tkocz",
+     "author_link": "https://unsplash.com/@dawidtkocz",
+     "page": "https://unsplash.com/photos/a-large-building-sitting-on-top-of-a-body-of-water-z1n96VUO55s",
+     "alt": "A large building sitting on top of a body of water"
+    }
    ]
   },
   "gamla_stan": {
@@ -1394,6 +1727,35 @@
    "ll": [
     59.325,
     18.0707
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1593020410096-c9beaa863bfb?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8Nnx8R2FtbGElMjBzdGFuJTIwU3dlZGVufGVufDF8MHx8fDE3OTExODQyMzF8MA&ixlib=rb-4.1.0",
+     "w": 3264,
+     "h": 2448,
+     "author": "Hannah Lind",
+     "author_link": "https://unsplash.com/@hkblind",
+     "page": "https://unsplash.com/photos/brown-concrete-building-under-white-clouds-during-daytime-z457Bp6K4yE",
+     "alt": "brown concrete building under white clouds during daytime"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1497217968520-7d8d60b7bc25?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8MXx8R2FtbGElMjBzdGFuJTIwU3dlZGVufGVufDF8MHx8fDE3OTExODQyMzF8MA&ixlib=rb-4.1.0",
+     "w": 5472,
+     "h": 3648,
+     "author": "Jon Flobrant",
+     "author_link": "https://unsplash.com/@jonflobrant",
+     "page": "https://unsplash.com/photos/rover-near-road-and-buildings-GRIEUEaCr5w",
+     "alt": "rover near road and buildings"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1551073693-7cb658017ff5?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8M3x8R2FtbGElMjBzdGFuJTIwU3dlZGVufGVufDF8MHx8fDE3OTExODQyMzF8MA&ixlib=rb-4.1.0",
+     "w": 6000,
+     "h": 4000,
+     "author": "Andreas M",
+     "author_link": "https://unsplash.com/@nextvoyage_pl",
+     "page": "https://unsplash.com/photos/yellow-painted-building-Do9pE8hI6BI",
+     "alt": "yellow painted building"
+    }
    ]
   },
   "kungliga_slottet": {
@@ -1423,6 +1785,26 @@
    "ll": [
     59.328,
     18.0914
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1675068176923-d2fa965ed360?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8Mnx8VmFzYSUyME11c2V1bSUyMFN3ZWRlbnxlbnwxfDB8fHwxNzkxMTg0MjMzfDA&ixlib=rb-4.1.0",
+     "w": 4032,
+     "h": 2268,
+     "author": "Casper Hildebrand",
+     "author_link": "https://unsplash.com/@cashil",
+     "page": "https://unsplash.com/photos/a-model-of-a-ship-in-a-museum-Lr9PlVUih_0",
+     "alt": "a model of a ship in a museum"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1710766331102-1b8cdc6060cb?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8MXx8VmFzYSUyME11c2V1bSUyMFN3ZWRlbnxlbnwxfDB8fHwxNzkxMTg0MjMzfDA&ixlib=rb-4.1.0",
+     "w": 3427,
+     "h": 2569,
+     "author": "Hongbin",
+     "author_link": "https://unsplash.com/@hbsun2013",
+     "page": "https://unsplash.com/photos/a-large-building-with-a-tall-boat-on-top-of-it-rFErChXo_qQ",
+     "alt": "a large building with a tall boat on top of it"
+    }
    ]
   },
   "skansen": {
@@ -1515,6 +1897,26 @@
    "ll": [
     57.6418,
     18.2963
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1682261801818-7c29acd16ecb?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8Mnx8VmlzYnklMjBDYXRoZWRyYWwlMjBTd2VkZW58ZW58MXwwfHx8MTc5MTE4NDIzNXww&ixlib=rb-4.1.0",
+     "w": 4032,
+     "h": 3024,
+     "author": "Tony Hanks",
+     "author_link": "https://unsplash.com/@tony_hanks",
+     "page": "https://unsplash.com/photos/a-large-white-building-with-two-towers-surrounded-by-trees-zVx9erWznkY",
+     "alt": "a large white building with two towers surrounded by trees"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1693945474787-568046260d02?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8MXx8VmlzYnklMjBDYXRoZWRyYWwlMjBTd2VkZW58ZW58MXwwfHx8MTc5MTE4NDIzNXww&ixlib=rb-4.1.0",
+     "w": 5981,
+     "h": 3987,
+     "author": "Casper van Battum",
+     "author_link": "https://unsplash.com/@cvbattum",
+     "page": "https://unsplash.com/photos/the-sun-is-setting-over-a-small-town-ZTGGdBgeCeE",
+     "alt": "the sun is setting over a small town"
+    }
    ]
   },
   "ringmuren": {
@@ -1524,6 +1926,35 @@
    "ll": [
     57.644,
     18.295
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1774552768607-b2e02a3e578d?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8M3x8VmlzYnklMjBjaXR5JTIwd2FsbCUyMFN3ZWRlbnxlbnwxfDB8fHwxNzkxMTg0MjM2fDA&ixlib=rb-4.1.0",
+     "w": 7728,
+     "h": 5152,
+     "author": "Magnus Jonasson",
+     "author_link": "https://unsplash.com/@magnusjonasson",
+     "page": "https://unsplash.com/photos/medieval-stone-towers-and-walls-with-a-pathway-GrvdLUk7StU",
+     "alt": "Medieval stone towers and walls with a pathway"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1774554105264-7a3604403c78?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8Mnx8VmlzYnklMjBjaXR5JTIwd2FsbCUyMFN3ZWRlbnxlbnwxfDB8fHwxNzkxMTg0MjM2fDA&ixlib=rb-4.1.0",
+     "w": 7728,
+     "h": 5152,
+     "author": "Magnus Jonasson",
+     "author_link": "https://unsplash.com/@magnusjonasson",
+     "page": "https://unsplash.com/photos/stone-ruins-of-a-castle-behind-houses-GfIYJSc0QE8",
+     "alt": "Stone ruins of a castle behind houses"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1786883542378-e807fd86ab8e?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8NHx8VmlzYnklMjBjaXR5JTIwd2FsbCUyMFN3ZWRlbnxlbnwxfDB8fHwxNzkxMTg0MjM2fDA&ixlib=rb-4.1.0",
+     "w": 6473,
+     "h": 5113,
+     "author": "Magnus Jonasson",
+     "author_link": "https://unsplash.com/@magnusjonasson",
+     "page": "https://unsplash.com/photos/canvas-tents-below-medieval-stone-towers-84Odw6QmoSY",
+     "alt": "Canvas tents in a grassy field below medieval stone towers and walls"
+    }
    ]
   },
   "farosund": {
@@ -1641,6 +2072,17 @@
    "ll": [
     56.6583,
     16.3567
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1675265010868-4d3b93c047dc?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8Mnx8S2FsbWFyJTIwQ2FzdGxlJTIwU3dlZGVufGVufDF8MHx8fDE3OTExODQyMzh8MA&ixlib=rb-4.1.0",
+     "w": 3543,
+     "h": 2514,
+     "author": "Göran Erlandsson",
+     "author_link": "https://unsplash.com/@gorerl",
+     "page": "https://unsplash.com/photos/a-large-castle-sitting-on-top-of-a-lake-under-a-cloudy-sky-lyGF-Ei1RDg",
+     "alt": "a large castle sitting on top of a lake under a cloudy sky"
+    }
    ]
   },
   "kbh_h": {
@@ -1668,6 +2110,35 @@
    "ll": [
     55.6858,
     12.5772
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1757134779128-f35a8e09c92f?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8Mnx8Um9zZW5ib3JnJTIwQ2FzdGxlJTIwRGVubWFya3xlbnwxfDB8fHwxNzkxMTg0MjM5fDA&ixlib=rb-4.1.0",
+     "w": 5712,
+     "h": 4284,
+     "author": "Roger Suen",
+     "author_link": "https://unsplash.com/@lilynroger",
+     "page": "https://unsplash.com/photos/a-historic-castle-with-formal-gardens-on-a-sunny-day-2R3wQmGooKg",
+     "alt": "A historic castle with formal gardens on a sunny day"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1594907912929-884e283e28a7?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8MXx8Um9zZW5ib3JnJTIwQ2FzdGxlJTIwRGVubWFya3xlbnwxfDB8fHwxNzkxMTg0MjM5fDA&ixlib=rb-4.1.0",
+     "w": 6000,
+     "h": 4000,
+     "author": "Javier Rincón",
+     "author_link": "https://unsplash.com/@mj_rincon",
+     "page": "https://unsplash.com/photos/brown-and-blue-concrete-building-under-blue-sky-during-daytime-3GvnmppxG3k",
+     "alt": "brown and blue concrete building under blue sky during daytime"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1694344311279-01aa81faafa3?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8N3x8Um9zZW5ib3JnJTIwQ2FzdGxlJTIwRGVubWFya3xlbnwxfDB8fHwxNzkxMTg0MjM5fDA&ixlib=rb-4.1.0",
+     "w": 6240,
+     "h": 4160,
+     "author": "Ari Dinar",
+     "author_link": "https://unsplash.com/@aridinar",
+     "page": "https://unsplash.com/photos/a-group-of-people-standing-on-top-of-a-lush-green-field-Kv0j0Mq6IuQ",
+     "alt": "a group of people standing on top of a lush green field"
+    }
    ]
   },
   "rundetaarn": {
@@ -1715,6 +2186,26 @@
    "ll": [
     55.6761,
     12.5799
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1652033763970-c58725425def?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8NHx8Q2hyaXN0aWFuc2JvcmclMjBQYWxhY2UlMjBUb3dlciUyMERlbm1hcmt8ZW58MXwwfHx8MTc5MTE4NDI0MHww&ixlib=rb-4.1.0",
+     "w": 4897,
+     "h": 3029,
+     "author": "Lucas Santos",
+     "author_link": "https://unsplash.com/@_staticvoid",
+     "page": "https://unsplash.com/photos/a-group-of-buildings-with-christiansborg-palace-Kncub0w65sQ",
+     "alt": "a group of buildings with Christiansborg Palace"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1788610830620-8a1877d5defa?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8N3x8Q2hyaXN0aWFuc2JvcmclMjBQYWxhY2UlMjBUb3dlciUyMERlbm1hcmt8ZW58MXwwfHx8MTc5MTE4NDI0MHww&ixlib=rb-4.1.0",
+     "w": 5960,
+     "h": 3973,
+     "author": "Mustafa Turhan",
+     "author_link": "https://unsplash.com/@mustaphaturhan",
+     "page": "https://unsplash.com/photos/christiansborg-palace-central-tower-and-facade-ujNn6GOmIuI",
+     "alt": "Christiansborg Palace with its central tower and stone facade under a cloudy sky"
+    }
    ]
   },
   "nyhavn": {
@@ -1724,6 +2215,35 @@
    "ll": [
     55.6798,
     12.5904
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1573767648864-4a4b9474cbe3?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8NXx8TnloYXZuJTIwRGVubWFya3xlbnwxfDB8fHwxNzkxMTg0MjQxfDA&ixlib=rb-4.1.0",
+     "w": 6500,
+     "h": 4333,
+     "author": "Einar Jónsson",
+     "author_link": "https://unsplash.com/@jons_einar",
+     "page": "https://unsplash.com/photos/boats-on-body-of-water-during-daytime-KdB8OBcICEA",
+     "alt": "boats on body of water during daytime"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1683054310226-f33515a4e020?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8Mnx8TnloYXZuJTIwRGVubWFya3xlbnwxfDB8fHwxNzkxMTg0MjQxfDA&ixlib=rb-4.1.0",
+     "w": 4032,
+     "h": 3024,
+     "author": "Daniel Diemer",
+     "author_link": "https://unsplash.com/@danieldiemer",
+     "page": "https://unsplash.com/photos/a-harbor-filled-with-lots-of-boats-next-to-tall-buildings-Yv2vi87HTOg",
+     "alt": "a harbor filled with lots of boats next to tall buildings"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1673018335130-f5f2f357624d?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8NHx8TnloYXZuJTIwRGVubWFya3xlbnwxfDB8fHwxNzkxMTg0MjQxfDA&ixlib=rb-4.1.0",
+     "w": 4160,
+     "h": 3120,
+     "author": "Oleksandr",
+     "author_link": "https://unsplash.com/@pan_snig",
+     "page": "https://unsplash.com/photos/a-group-of-boats-that-are-sitting-in-the-water-zTbFEhBhGQs",
+     "alt": "a group of boats that are sitting in the water"
+    }
    ]
   },
   "christiania": {
