@@ -1,0 +1,7190 @@
+{
+ "title": "北欧之旅 2027",
+ "titleEn": "Nordic Trip 2027",
+ "eyebrow": "冰岛 · 挪威 · 瑞典 · 丹麦 · 2027 年 7 月 4 日 – 8 月 1 日",
+ "lede": "四周北欧自助游：先在[[is]]租四驱车，走黄金圈、进高地露营、沿南岸看瀑布和冰川；之后飞往[[no]]峡湾，再去[[stockholm]]、哥特兰岛的[[visby]]，最后在[[kobenhavn]]收尾回家。",
+ "dates": {
+  "start": "2027-07-04",
+  "end": "2027-08-01"
+ },
+ "countries": {
+  "is": {
+   "zh": "冰岛",
+   "local": "Ísland",
+   "en": "Iceland",
+   "color": "#2F6C8F",
+   "tz": "Atlantic/Reykjavik",
+   "center": [
+    64.9,
+    -18.6
+   ],
+   "zoom": 6,
+   "climate": {
+    "hi": 14,
+    "lo": 9,
+    "rain": 10
+   }
+  },
+  "fo": {
+   "zh": "法罗群岛",
+   "local": "Føroyar",
+   "en": "Faroe Islands",
+   "color": "#4E7A5A",
+   "tz": "Atlantic/Faroe",
+   "center": [
+    62.0,
+    -6.9
+   ],
+   "zoom": 8
+  },
+  "no": {
+   "zh": "挪威",
+   "local": "Norge",
+   "en": "Norway",
+   "color": "#B8473A",
+   "tz": "Europe/Oslo",
+   "center": [
+    60.6,
+    6.8
+   ],
+   "zoom": 7,
+   "climate": {
+    "hi": 18,
+    "lo": 12,
+    "rain": 14
+   }
+  },
+  "se": {
+   "zh": "瑞典",
+   "local": "Sverige",
+   "en": "Sweden",
+   "color": "#B9861C",
+   "tz": "Europe/Stockholm",
+   "center": [
+    58.6,
+    17.6
+   ],
+   "zoom": 6,
+   "climate": {
+    "hi": 23,
+    "lo": 14,
+    "rain": 7
+   }
+  },
+  "dk": {
+   "zh": "丹麦",
+   "local": "Danmark",
+   "en": "Denmark",
+   "color": "#7A4E9C",
+   "tz": "Europe/Copenhagen",
+   "center": [
+    55.68,
+    12.57
+   ],
+   "zoom": 9,
+   "climate": {
+    "hi": 21,
+    "lo": 14,
+    "rain": 8
+   }
+  }
+ },
+ "legs": [
+  {
+   "c": "is",
+   "from": "2027-07-04",
+   "to": "2027-07-10",
+   "short": "冰岛南部",
+   "title": "[[is]]：黄金圈、高地、南岸",
+   "wx": "reykjavik",
+   "body": "[[kef]]取车，[[reykjavik]]一晚，黄金圈，F208 进[[landmannalaugar]]高地露营一晚，F225 出来走南岸，一路到[[jokulsarlon]]和[[stokksnes]]。",
+   "items": [
+    "7/4 抵达[[is]] · [[reykjavik]]",
+    "7/5 黄金圈",
+    "7/6 进高地：F208 → [[landmannalaugar]]",
+    "7/7 徒步[[blahnukur]]，走 F225 出高地",
+    "7/8 南岸：瀑布、冰川、黑沙滩",
+    "7/9 苔原、峡谷、冰川、[[jokulsarlon]]",
+    "7/10 冰川徒步、[[stokksnes]]"
+   ]
+  },
+  {
+   "c": "is",
+   "from": "2027-07-11",
+   "to": "2027-07-15",
+   "short": "冰岛东北西",
+   "title": "[[is]]：东部峡湾、[[myvatn]]、[[akureyri]]、[[snaefellsnes]]",
+   "wx": "akureyri",
+   "body": "从[[hofn]]继续顺时针环岛，经东部峡湾到[[myvatn]]和[[akureyri]]，再向西到[[snaefellsnes]]，7/15 晚上回[[kef]]还车。这几晚都住民宿或青旅。",
+   "items": [
+    "7/11 [[hofn]] → 东部峡湾 → [[seydisfjordur]] → [[egilsstadir]]",
+    "7/12 [[studlagil]] 玄武岩峡谷 → [[dettifoss]] → [[myvatn]]",
+    "7/13 [[myvatn]] 火山一圈 → [[godafoss]] → [[akureyri]]",
+    "7/14 [[akureyri]] → [[hvitserkur]] → [[grundarfjordur]]",
+    "7/15 [[snaefellsnes]] 环半岛 → [[kef]] 还车"
+   ]
+  },
+  {
+   "c": "no",
+   "from": "2027-07-16",
+   "to": "2027-07-20",
+   "short": "挪威峡湾",
+   "title": "[[no]]峡湾：[[bergen]]、哈当厄尔、松恩",
+   "wx": "bergen",
+   "body": "7/16 冰岛航空直飞[[bergen]]（当天不用车），7/17 在卑尔根城里取车，走哈当厄尔峡湾和松恩峡湾，7/21 卑尔根机场还车。",
+   "items": [
+    "7/16 [[kef]] ✈ [[bergen]]：[[bryggen]] 与 [[floyen]]",
+    "7/17 [[bergen]] → 哈当厄尔峡湾 → [[odda]]",
+    "7/18 [[trolltunga]] 全天徒步",
+    "7/19 [[odda]] → [[voringsfossen]] → [[stalheim]] → [[flam]]",
+    "7/20 纳柔依峡湾游船 + [[stegastein]] + [[snovegen]]"
+   ]
+  },
+  {
+   "c": "se",
+   "from": "2027-07-21",
+   "to": "2027-07-23",
+   "short": "斯德哥尔摩",
+   "title": "[[stockholm]]",
+   "wx": "stockholm",
+   "body": "回卑尔根还车，直飞[[stockholm]]。",
+   "items": [
+    "7/21 [[flam]] → [[bgo]] 还车 ✈ [[stockholm]]",
+    "7/22 [[stadshuset]]、[[gamla_stan]]、[[vasamuseet]]、[[skansen]]",
+    "7/23 地铁艺术 + 群岛小镇 [[vaxholm]]"
+   ]
+  },
+  {
+   "c": "se",
+   "from": "2027-07-24",
+   "to": "2027-07-26",
+   "short": "维斯比",
+   "title": "[[gotland]]的[[visby]]",
+   "wx": "visby",
+   "body": "[[nynashamn]]坐 Destination Gotland 渡轮（约 3 小时 20 分），7/25 租车去弗罗岛，7/26 骑车去海崖。",
+   "items": [
+    "7/24 [[stockholm]] → [[nynashamn]] ⛴ [[visby]]",
+    "7/25 自驾 [[faro]]：海蚀柱和白沙滩",
+    "7/26 骑车去 [[hogklint]] + 古城慢游"
+   ]
+  },
+  {
+   "c": "dk",
+   "from": "2027-07-27",
+   "to": "2027-08-01",
+   "short": "哥本哈根",
+   "title": "[[kobenhavn]]",
+   "wx": "kobenhavn",
+   "body": "7/27 维斯比坐渡轮到[[oskarshamn]]，转汽车、火车到[[kobenhavn]]。住 5 晚，8/1 直飞多伦多。",
+   "items": [
+    "7/27 [[visby]] ⛴ [[oskarshamn]] → [[kalmar]] → [[kobenhavn]]",
+    "7/28 骑车游 [[kobenhavn]]：[[nyhavn]]、[[christiania]]、[[tivoli]]",
+    "7/29 [[louisiana]] + [[kronborg]] 一日游",
+    "7/30 自驾 [[stevns_klint]] + [[mons_klint]] 白垩海崖",
+    "7/31 [[dyrehaven]] 鹿园徒步 + 自由日 + [[reffen]]",
+    "8/1 [[cph]] ✈ 多伦多"
+   ]
+  }
+ ],
+ "places": {
+  "egilsstadir": {
+   "zh": "埃伊尔斯塔济",
+   "local": "Egilsstaðir",
+   "en": "Egilsstaðir",
+   "ll": [
+    65.2653,
+    -14.3948
+   ]
+  },
+  "myvatn": {
+   "zh": "米湖",
+   "local": "Mývatn",
+   "en": "Lake Mývatn",
+   "ll": [
+    65.6416,
+    -16.9135
+   ]
+  },
+  "akureyri": {
+   "zh": "阿克雷里",
+   "local": "Akureyri",
+   "en": "Akureyri",
+   "ll": [
+    65.6835,
+    -18.0878
+   ]
+  },
+  "snaefellsnes": {
+   "zh": "斯奈山半岛",
+   "local": "Snæfellsnes",
+   "en": "Snæfellsnes Peninsula",
+   "ll": [
+    64.925,
+    -23.306
+   ]
+  },
+  "grundarfjordur": {
+   "zh": "格伦达菲厄泽",
+   "local": "Grundarfjörður",
+   "en": "Grundarfjörður",
+   "ll": [
+    64.9246,
+    -23.2621
+   ]
+  },
+  "bergen": {
+   "zh": "卑尔根",
+   "local": "Bergen",
+   "en": "Bergen",
+   "ll": [
+    60.3943,
+    5.3259
+   ]
+  },
+  "odda": {
+   "zh": "奥达",
+   "local": "Odda",
+   "en": "Odda",
+   "ll": [
+    60.0679,
+    6.5459
+   ]
+  },
+  "trolltunga": {
+   "zh": "恶魔之舌",
+   "local": "Trolltunga",
+   "en": "Trolltunga",
+   "ll": [
+    60.1242,
+    6.74
+   ]
+  },
+  "flam": {
+   "zh": "弗洛姆",
+   "local": "Flåm",
+   "en": "Flåm",
+   "ll": [
+    60.8628,
+    7.1137
+   ]
+  },
+  "stockholm": {
+   "zh": "斯德哥尔摩",
+   "local": "Stockholm",
+   "en": "Stockholm",
+   "ll": [
+    59.3251,
+    18.0711
+   ]
+  },
+  "visby": {
+   "zh": "维斯比",
+   "local": "Visby",
+   "en": "Visby",
+   "ll": [
+    57.6409,
+    18.296
+   ]
+  },
+  "gotland": {
+   "zh": "哥特兰岛",
+   "local": "Gotland",
+   "en": "Gotland",
+   "ll": [
+    57.47,
+    18.49
+   ]
+  },
+  "kobenhavn": {
+   "zh": "哥本哈根",
+   "local": "København",
+   "en": "Copenhagen",
+   "ll": [
+    55.6761,
+    12.5683
+   ]
+  },
+  "kef": {
+   "zh": "凯夫拉维克机场",
+   "local": "Keflavíkurflugvöllur",
+   "en": "Keflavík Airport",
+   "ll": [
+    63.985,
+    -22.6056
+   ]
+  },
+  "lotus_kef": {
+   "zh": "Lotus 租车行",
+   "local": "Lotus Car Rental",
+   "en": "Lotus Car Rental",
+   "ll": [
+    63.997,
+    -22.579
+   ]
+  },
+  "bonus_fitjar": {
+   "zh": "Bónus 超市（Fitjar 店）",
+   "local": "Bónus Fitjum",
+   "en": "Bónus Fitjar",
+   "ll": [
+    63.9728,
+    -22.5436
+   ]
+  },
+  "reykjavik": {
+   "zh": "雷克雅未克",
+   "local": "Reykjavík",
+   "en": "Reykjavík",
+   "ll": [
+    64.1466,
+    -21.9426
+   ],
+   "climate": {
+    "hi": 15,
+    "lo": 9,
+    "rain": 10
+   }
+  },
+  "hallgrimskirkja": {
+   "zh": "哈尔格林姆斯教堂",
+   "local": "Hallgrímskirkja",
+   "en": "Hallgrímskirkja",
+   "ll": [
+    64.1418,
+    -21.9267
+   ]
+  },
+  "skolavordustigur": {
+   "zh": "彩虹街",
+   "local": "Skólavörðustígur",
+   "en": "Rainbow Street",
+   "ll": [
+    64.1455,
+    -21.9306
+   ]
+  },
+  "sun_voyager": {
+   "zh": "太阳航海者",
+   "local": "Sólfar",
+   "en": "Sun Voyager",
+   "ll": [
+    64.1476,
+    -21.9223
+   ]
+  },
+  "harpa": {
+   "zh": "哈帕音乐厅",
+   "local": "Harpa",
+   "en": "Harpa",
+   "ll": [
+    64.1504,
+    -21.9329
+   ]
+  },
+  "thingvellir": {
+   "zh": "辛格韦德利国家公园",
+   "local": "Þingvellir",
+   "en": "Þingvellir National Park",
+   "ll": [
+    64.2555,
+    -21.1285
+   ]
+  },
+  "almannagja": {
+   "zh": "众人峡",
+   "local": "Almannagjá",
+   "en": "Almannagjá",
+   "ll": [
+    64.259,
+    -21.124
+   ]
+  },
+  "oxararfoss": {
+   "zh": "斧头河瀑布",
+   "local": "Öxarárfoss",
+   "en": "Öxarárfoss",
+   "ll": [
+    64.2658,
+    -21.118
+   ]
+  },
+  "silfra": {
+   "zh": "Silfra 大裂缝",
+   "local": "Silfra",
+   "en": "Silfra fissure",
+   "ll": [
+    64.2555,
+    -21.1243
+   ]
+  },
+  "bruarfoss": {
+   "zh": "蓝色秘境瀑布",
+   "local": "Brúarfoss",
+   "en": "Brúarfoss",
+   "ll": [
+    64.2621,
+    -20.5209
+   ]
+  },
+  "geysir": {
+   "zh": "间歇泉",
+   "local": "Geysir",
+   "en": "Geysir",
+   "ll": [
+    64.3094,
+    -20.3019
+   ]
+  },
+  "gullfoss": {
+   "zh": "黄金瀑布",
+   "local": "Gullfoss",
+   "en": "Gullfoss",
+   "ll": [
+    64.3252,
+    -20.1307
+   ]
+  },
+  "hella": {
+   "zh": "海拉",
+   "local": "Hella",
+   "en": "Hella",
+   "ll": [
+    63.8355,
+    -20.3987
+   ],
+   "climate": {
+    "hi": 14,
+    "lo": 8
+   }
+  },
+  "ljotipollur": {
+   "zh": "丑湖",
+   "local": "Ljótipollur",
+   "en": "Ljótipollur crater",
+   "ll": [
+    64.0355,
+    -18.9985
+   ]
+  },
+  "landmannalaugar": {
+   "zh": "兰德曼纳劳卡",
+   "local": "Landmannalaugar",
+   "en": "Landmannalaugar",
+   "ll": [
+    63.9907,
+    -19.0583
+   ],
+   "climate": {
+    "hi": 12,
+    "lo": 4
+   }
+  },
+  "brennisteinsalda": {
+   "zh": "硫磺山",
+   "local": "Brennisteinsalda",
+   "en": "Brennisteinsalda",
+   "ll": [
+    63.9809,
+    -19.0955
+   ]
+  },
+  "blahnukur": {
+   "zh": "蓝峰",
+   "local": "Bláhnúkur",
+   "en": "Bláhnúkur",
+   "ll": [
+    63.9768,
+    -19.0692
+   ]
+  },
+  "landmannahellir": {
+   "zh": "兰德曼纳洞小屋",
+   "local": "Landmannahellir",
+   "en": "Landmannahellir hut",
+   "ll": [
+    64.0511,
+    -19.2886
+   ]
+  },
+  "hvolsvollur": {
+   "zh": "赫沃斯沃吕尔",
+   "local": "Hvolsvöllur",
+   "en": "Hvolsvöllur",
+   "ll": [
+    63.7508,
+    -20.2238
+   ],
+   "climate": {
+    "hi": 14,
+    "lo": 8
+   }
+  },
+  "seljalandsfoss": {
+   "zh": "塞里雅兰瀑布",
+   "local": "Seljalandsfoss",
+   "en": "Seljalandsfoss",
+   "ll": [
+    63.6155,
+    -19.9933
+   ]
+  },
+  "gljufrabui": {
+   "zh": "秘密瀑布",
+   "local": "Gljúfrabúi",
+   "en": "Gljúfrabúi",
+   "ll": [
+    63.6208,
+    -19.9863
+   ]
+  },
+  "skogafoss": {
+   "zh": "斯科加瀑布",
+   "local": "Skógafoss",
+   "en": "Skógafoss",
+   "ll": [
+    63.5269,
+    -19.5114
+   ]
+  },
+  "solheimajokull": {
+   "zh": "索尔黑马冰川",
+   "local": "Sólheimajökull",
+   "en": "Sólheimajökull glacier",
+   "ll": [
+    63.53,
+    -19.3715
+   ]
+  },
+  "dyrholaey": {
+   "zh": "迪霍拉里海岬",
+   "local": "Dyrhólaey",
+   "en": "Dyrhólaey",
+   "ll": [
+    63.404,
+    -19.129
+   ]
+  },
+  "reynisfjara": {
+   "zh": "黑沙滩",
+   "local": "Reynisfjara",
+   "en": "Reynisfjara black sand beach",
+   "ll": [
+    63.4043,
+    -19.0453
+   ]
+  },
+  "vik": {
+   "zh": "维克",
+   "local": "Vík",
+   "en": "Vík",
+   "ll": [
+    63.4175,
+    -18.9991
+   ],
+   "climate": {
+    "hi": 13,
+    "lo": 8
+   }
+  },
+  "eldhraun": {
+   "zh": "苔原熔岩",
+   "local": "Eldhraun",
+   "en": "Eldhraun lava field",
+   "ll": [
+    63.6936,
+    -18.2201
+   ]
+  },
+  "fjadrargljufur": {
+   "zh": "羽毛峡谷",
+   "local": "Fjaðrárgljúfur",
+   "en": "Fjaðrárgljúfur canyon",
+   "ll": [
+    63.7712,
+    -18.1714
+   ]
+  },
+  "svinafellsjokull": {
+   "zh": "斯维纳山冰川",
+   "local": "Svínafellsjökull",
+   "en": "Svínafellsjökull glacier",
+   "ll": [
+    64.0084,
+    -16.8801
+   ]
+  },
+  "mulagljufur": {
+   "zh": "穆拉峡谷",
+   "local": "Múlagljúfur",
+   "en": "Múlagljúfur canyon",
+   "ll": [
+    63.9905,
+    -16.4244
+   ]
+  },
+  "smyrlabjorg": {
+   "zh": "Smyrlabjörg 酒店",
+   "local": "Hótel Smyrlabjörg",
+   "en": "Hotel Smyrlabjörg",
+   "ll": [
+    64.2173,
+    -15.7179
+   ],
+   "climate": {
+    "hi": 13,
+    "lo": 8
+   }
+  },
+  "jokulsarlon": {
+   "zh": "冰河湖",
+   "local": "Jökulsárlón",
+   "en": "Jökulsárlón glacier lagoon",
+   "ll": [
+    64.048,
+    -16.1797
+   ]
+  },
+  "diamond_beach": {
+   "zh": "钻石沙滩",
+   "local": "Breiðamerkurfjara",
+   "en": "Diamond Beach",
+   "ll": [
+    64.0428,
+    -16.1828
+   ]
+  },
+  "fjallsarlon": {
+   "zh": "菲亚尔沙龙冰河湖",
+   "local": "Fjallsárlón",
+   "en": "Fjallsárlón glacier lagoon",
+   "ll": [
+    64.0109,
+    -16.3885
+   ]
+  },
+  "hali": {
+   "zh": "哈利（冰川徒步集合点）",
+   "local": "Hali",
+   "en": "Hali",
+   "ll": [
+    64.1298,
+    -16.0179
+   ]
+  },
+  "stokksnes": {
+   "zh": "蝙蝠山",
+   "local": "Vestrahorn",
+   "en": "Vestrahorn (Stokksnes)",
+   "ll": [
+    64.2552,
+    -14.9937
+   ]
+  },
+  "hofn": {
+   "zh": "霍芬",
+   "local": "Höfn",
+   "en": "Höfn",
+   "ll": [
+    64.2539,
+    -15.2082
+   ],
+   "climate": {
+    "hi": 13,
+    "lo": 8
+   }
+  },
+  "hvalnes": {
+   "zh": "赫瓦尔内斯灯塔",
+   "local": "Hvalnesviti",
+   "en": "Hvalnes Lighthouse",
+   "ll": [
+    64.4049,
+    -14.5392
+   ]
+  },
+  "djupivogur": {
+   "zh": "都皮沃古尔鸟蛋雕塑",
+   "local": "Eggin í Gleðivík",
+   "en": "The Eggs of Merry Bay, Djúpivogur",
+   "ll": [
+    64.6609,
+    -14.2866
+   ]
+  },
+  "steinasafn": {
+   "zh": "佩特拉石头收藏馆",
+   "local": "Steinasafn Petru",
+   "en": "Petra's Stone Collection",
+   "ll": [
+    64.8327,
+    -13.8775
+   ]
+  },
+  "gufufoss": {
+   "zh": "古夫瀑布",
+   "local": "Gufufoss",
+   "en": "Gufufoss",
+   "ll": [
+    65.2471,
+    -14.0478
+   ]
+  },
+  "seydisfjordur": {
+   "zh": "塞济斯菲厄泽彩虹街",
+   "local": "Seyðisfjörður (Regnbogagatan)",
+   "en": "Seyðisfjörður Rainbow Street",
+   "ll": [
+    65.2602,
+    -14.0091
+   ]
+  },
+  "studlagil": {
+   "zh": "斯图兹拉峡谷（东岸）",
+   "local": "Stuðlagil",
+   "en": "Stuðlagil Canyon (east side)",
+   "ll": [
+    65.1559,
+    -15.2958
+   ]
+  },
+  "modrudalur": {
+   "zh": "默兹鲁达吕尔山间咖啡",
+   "local": "Möðrudalur Fjallakaffi",
+   "en": "Möðrudalur mountain café",
+   "ll": [
+    65.3738,
+    -15.8833
+   ]
+  },
+  "dettifoss": {
+   "zh": "黛提瀑布（西岸）",
+   "local": "Dettifoss",
+   "en": "Dettifoss (west side)",
+   "ll": [
+    65.8146,
+    -16.3849
+   ]
+  },
+  "hverir": {
+   "zh": "地热区",
+   "local": "Hverir (Námaskarð)",
+   "en": "Hverir geothermal area",
+   "ll": [
+    65.6411,
+    -16.8094
+   ]
+  },
+  "myvatn_baths": {
+   "zh": "米湖温泉",
+   "local": "Jarðböðin við Mývatn",
+   "en": "Mývatn Nature Baths",
+   "ll": [
+    65.6309,
+    -16.8482
+   ]
+  },
+  "krafla_viti": {
+   "zh": "克拉夫拉维蒂火口湖",
+   "local": "Víti (Krafla)",
+   "en": "Víti crater, Krafla",
+   "ll": [
+    65.7186,
+    -16.7553
+   ]
+  },
+  "leirhnjukur": {
+   "zh": "莱尔赫纽库尔熔岩区",
+   "local": "Leirhnjúkur",
+   "en": "Leirhnjúkur lava field",
+   "ll": [
+    65.715,
+    -16.793
+   ]
+  },
+  "hverfjall": {
+   "zh": "赫维尔火山口",
+   "local": "Hverfjall",
+   "en": "Hverfjall crater",
+   "ll": [
+    65.6055,
+    -16.8728
+   ]
+  },
+  "grjotagja": {
+   "zh": "格约塔加温泉洞",
+   "local": "Grjótagjá",
+   "en": "Grjótagjá cave",
+   "ll": [
+    65.6264,
+    -16.8836
+   ]
+  },
+  "dimmuborgir": {
+   "zh": "黑色城堡熔岩区",
+   "local": "Dimmuborgir",
+   "en": "Dimmuborgir lava formations",
+   "ll": [
+    65.5917,
+    -16.9111
+   ]
+  },
+  "skutustadagigar": {
+   "zh": "斯库图斯塔济假火山口",
+   "local": "Skútustaðagígar",
+   "en": "Skútustaðir pseudocraters",
+   "ll": [
+    65.5718,
+    -17.0393
+   ]
+  },
+  "godafoss": {
+   "zh": "众神瀑布",
+   "local": "Goðafoss",
+   "en": "Goðafoss",
+   "ll": [
+    65.6828,
+    -17.5502
+   ]
+  },
+  "akureyrarkirkja": {
+   "zh": "阿克雷里教堂",
+   "local": "Akureyrarkirkja",
+   "en": "Akureyri Church",
+   "ll": [
+    65.6797,
+    -18.0912
+   ]
+  },
+  "glaumbaer": {
+   "zh": "格劳姆拜尔草皮屋",
+   "local": "Glaumbær",
+   "en": "Glaumbær turf farm",
+   "ll": [
+    65.6107,
+    -19.505
+   ]
+  },
+  "hvitserkur": {
+   "zh": "白色巨人海蚀柱",
+   "local": "Hvítserkur",
+   "en": "Hvítserkur sea stack",
+   "ll": [
+    65.6062,
+    -20.6355
+   ]
+  },
+  "hvammstangi": {
+   "zh": "赫瓦姆斯唐吉",
+   "local": "Hvammstangi",
+   "en": "Hvammstangi",
+   "ll": [
+    65.3963,
+    -20.9444
+   ]
+  },
+  "kirkjufellsfoss": {
+   "zh": "草帽山瀑布",
+   "local": "Kirkjufellsfoss",
+   "en": "Kirkjufell & Kirkjufellsfoss",
+   "ll": [
+    64.9417,
+    -23.3075
+   ]
+  },
+  "saxholl": {
+   "zh": "萨克斯霍尔火山口",
+   "local": "Saxhóll",
+   "en": "Saxhóll crater",
+   "ll": [
+    64.8512,
+    -23.926
+   ]
+  },
+  "djupalonssandur": {
+   "zh": "黑卵石滩",
+   "local": "Djúpalónssandur",
+   "en": "Djúpalónssandur beach",
+   "ll": [
+    64.753,
+    -23.8976
+   ]
+  },
+  "londrangar": {
+   "zh": "伦德朗加尔玄武岩柱",
+   "local": "Lóndrangar",
+   "en": "Lóndrangar basalt cliffs",
+   "ll": [
+    64.7368,
+    -23.775
+   ]
+  },
+  "arnarstapi": {
+   "zh": "阿尔纳斯塔皮",
+   "local": "Arnarstapi",
+   "en": "Arnarstapi",
+   "ll": [
+    64.767,
+    -23.6227
+   ]
+  },
+  "budakirkja": {
+   "zh": "布济尔黑教堂",
+   "local": "Búðakirkja",
+   "en": "Búðir Black Church",
+   "ll": [
+    64.8216,
+    -23.3843
+   ]
+  },
+  "gerduberg": {
+   "zh": "盖尔杜贝格玄武岩墙",
+   "local": "Gerðuberg",
+   "en": "Gerðuberg basalt cliffs",
+   "ll": [
+    64.8614,
+    -22.362
+   ]
+  },
+  "bgo": {
+   "zh": "卑尔根弗莱斯兰机场",
+   "local": "Bergen lufthavn Flesland",
+   "en": "Bergen Airport Flesland",
+   "ll": [
+    60.2934,
+    5.2181
+   ]
+  },
+  "bryggen": {
+   "zh": "布吕根",
+   "local": "Bryggen",
+   "en": "Bryggen",
+   "ll": [
+    60.3975,
+    5.3244
+   ]
+  },
+  "fisketorget": {
+   "zh": "卑尔根鱼市",
+   "local": "Fisketorget",
+   "en": "Bergen Fish Market",
+   "ll": [
+    60.3948,
+    5.325
+   ]
+  },
+  "floyen": {
+   "zh": "弗洛伊恩山",
+   "local": "Fløyen",
+   "en": "Mount Fløyen",
+   "ll": [
+    60.3945,
+    5.3443
+   ]
+  },
+  "steinsdalsfossen": {
+   "zh": "斯泰恩斯达尔瀑布",
+   "local": "Steinsdalsfossen",
+   "en": "Steinsdalsfossen",
+   "ll": [
+    60.3711,
+    6.114
+   ]
+  },
+  "buerbreen": {
+   "zh": "布尔冰川步道口",
+   "local": "Buerbreen (Buer)",
+   "en": "Buerbreen glacier trailhead",
+   "ll": [
+    60.0458,
+    6.461
+   ]
+  },
+  "trolltunga_p3": {
+   "zh": "恶魔之舌 P3 停车场",
+   "local": "Mågelitopp (P3)",
+   "en": "Trolltunga P3 Mågelitopp",
+   "ll": [
+    60.12,
+    6.645
+   ]
+  },
+  "trolltunga_p2": {
+   "zh": "恶魔之舌 P2 停车场",
+   "local": "Skjeggedal (P2)",
+   "en": "Trolltunga P2 Skjeggedal",
+   "ll": [
+    60.1256,
+    6.6093
+   ]
+  },
+  "voringsfossen": {
+   "zh": "沃林瀑布",
+   "local": "Vøringsfossen",
+   "en": "Vøringsfossen",
+   "ll": [
+    60.4279,
+    7.2515
+   ]
+  },
+  "tvindefossen": {
+   "zh": "特温德瀑布",
+   "local": "Tvindefossen",
+   "en": "Tvindefossen",
+   "ll": [
+    60.7268,
+    6.4706
+   ]
+  },
+  "stalheim": {
+   "zh": "斯塔尔海姆观景台",
+   "local": "Stalheim",
+   "en": "Stalheim viewpoint",
+   "ll": [
+    60.8381,
+    6.6843
+   ]
+  },
+  "gudvangen": {
+   "zh": "古德旺恩",
+   "local": "Gudvangen",
+   "en": "Gudvangen",
+   "ll": [
+    60.8786,
+    6.841
+   ]
+  },
+  "brekkefossen": {
+   "zh": "布雷克瀑布",
+   "local": "Brekkefossen",
+   "en": "Brekkefossen",
+   "ll": [
+    60.8545,
+    7.111
+   ]
+  },
+  "stegastein": {
+   "zh": "斯特加斯坦观景台",
+   "local": "Stegastein",
+   "en": "Stegastein viewpoint",
+   "ll": [
+    60.9078,
+    7.2101
+   ]
+  },
+  "snovegen": {
+   "zh": "奥兰山雪路",
+   "local": "Aurlandsfjellet (Snøvegen)",
+   "en": "Aurlandsfjellet Snow Road",
+   "ll": [
+    60.95,
+    7.38
+   ]
+  },
+  "arn": {
+   "zh": "斯德哥尔摩阿兰达机场",
+   "local": "Stockholm Arlanda flygplats",
+   "en": "Stockholm Arlanda Airport",
+   "ll": [
+    59.6498,
+    17.9238
+   ]
+  },
+  "stadshuset": {
+   "zh": "斯德哥尔摩市政厅",
+   "local": "Stockholms stadshus",
+   "en": "Stockholm City Hall",
+   "ll": [
+    59.3274,
+    18.0543
+   ]
+  },
+  "gamla_stan": {
+   "zh": "老城",
+   "local": "Gamla stan (Stortorget)",
+   "en": "Gamla stan",
+   "ll": [
+    59.325,
+    18.0707
+   ]
+  },
+  "kungliga_slottet": {
+   "zh": "斯德哥尔摩王宫",
+   "local": "Kungliga slottet",
+   "en": "Royal Palace",
+   "ll": [
+    59.3268,
+    18.0717
+   ]
+  },
+  "vasamuseet": {
+   "zh": "瓦萨沉船博物馆",
+   "local": "Vasamuseet",
+   "en": "Vasa Museum",
+   "ll": [
+    59.328,
+    18.0914
+   ]
+  },
+  "skansen": {
+   "zh": "斯堪森露天博物馆",
+   "local": "Skansen",
+   "en": "Skansen open-air museum",
+   "ll": [
+    59.3266,
+    18.1036
+   ]
+  },
+  "monteliusvagen": {
+   "zh": "蒙特柳斯观景步道",
+   "local": "Monteliusvägen",
+   "en": "Monteliusvägen viewpoint",
+   "ll": [
+    59.3204,
+    18.0637
+   ]
+  },
+  "t_centralen": {
+   "zh": "中央车站地铁艺术",
+   "local": "T-Centralen",
+   "en": "T-Centralen metro art",
+   "ll": [
+    59.3313,
+    18.0598
+   ]
+  },
+  "stromkajen": {
+   "zh": "斯特伦码头",
+   "local": "Strömkajen",
+   "en": "Strömkajen pier",
+   "ll": [
+    59.3297,
+    18.076
+   ]
+  },
+  "vaxholm": {
+   "zh": "瓦克斯霍尔姆",
+   "local": "Vaxholm",
+   "en": "Vaxholm",
+   "ll": [
+    59.4025,
+    18.3513
+   ]
+  },
+  "nynashamn": {
+   "zh": "尼奈斯港渡轮码头",
+   "local": "Nynäshamn",
+   "en": "Nynäshamn ferry terminal",
+   "ll": [
+    58.9006,
+    17.953
+   ]
+  },
+  "almedalen": {
+   "zh": "阿尔梅达伦公园",
+   "local": "Almedalen",
+   "en": "Almedalen park",
+   "ll": [
+    57.6403,
+    18.2884
+   ]
+  },
+  "stora_torget": {
+   "zh": "大广场与圣卡琳教堂废墟",
+   "local": "Stora torget / S:t Karins ruin",
+   "en": "Stora torget & St Karin ruin",
+   "ll": [
+    57.6393,
+    18.2947
+   ]
+  },
+  "visby_domkyrkan": {
+   "zh": "维斯比大教堂",
+   "local": "Visby domkyrka (S:ta Maria)",
+   "en": "Visby Cathedral",
+   "ll": [
+    57.6418,
+    18.2963
+   ]
+  },
+  "ringmuren": {
+   "zh": "维斯比城墙",
+   "local": "Ringmuren",
+   "en": "Visby city wall",
+   "ll": [
+    57.644,
+    18.295
+   ]
+  },
+  "farosund": {
+   "zh": "弗勒松德渡口",
+   "local": "Fårösund",
+   "en": "Fårösund ferry",
+   "ll": [
+    57.8644,
+    19.0556
+   ]
+  },
+  "faro": {
+   "zh": "弗罗岛",
+   "local": "Fårö",
+   "en": "Fårö",
+   "ll": [
+    57.9153,
+    19.129
+   ]
+  },
+  "digerhuvud": {
+   "zh": "迪格胡武德海蚀柱",
+   "local": "Digerhuvud",
+   "en": "Digerhuvud rauks",
+   "ll": [
+    57.923,
+    19.092
+   ]
+  },
+  "langhammars": {
+   "zh": "朗哈马尔斯海蚀柱",
+   "local": "Langhammars",
+   "en": "Langhammars rauks",
+   "ll": [
+    57.965,
+    19.223
+   ]
+  },
+  "sudersand": {
+   "zh": "苏德桑德沙滩",
+   "local": "Sudersand",
+   "en": "Sudersand beach",
+   "ll": [
+    57.953,
+    19.249
+   ]
+  },
+  "jungfrun": {
+   "zh": "利克斯港少女石",
+   "local": "Jungfrun (Lickershamn)",
+   "en": "Jungfrun rauk, Lickershamn",
+   "ll": [
+    57.8272,
+    18.5117
+   ]
+  },
+  "hogklint": {
+   "zh": "赫格克林特海崖",
+   "local": "Högklint",
+   "en": "Högklint cliff",
+   "ll": [
+    57.611,
+    18.2418
+   ]
+  },
+  "gotlands_museum": {
+   "zh": "哥特兰博物馆",
+   "local": "Gotlands Museum (Fornsalen)",
+   "en": "Gotland Museum",
+   "ll": [
+    57.6397,
+    18.2934
+   ]
+  },
+  "botaniska": {
+   "zh": "维斯比植物园",
+   "local": "Botaniska trädgården",
+   "en": "Visby Botanical Garden",
+   "ll": [
+    57.6436,
+    18.291
+   ]
+  },
+  "galgberget": {
+   "zh": "绞刑台山自然保护区",
+   "local": "Galgberget",
+   "en": "Galgberget nature reserve",
+   "ll": [
+    57.6555,
+    18.3045
+   ]
+  },
+  "oskarshamn": {
+   "zh": "奥斯卡港",
+   "local": "Oskarshamn",
+   "en": "Oskarshamn",
+   "ll": [
+    57.2645,
+    16.452
+   ]
+  },
+  "kalmar": {
+   "zh": "卡尔马",
+   "local": "Kalmar",
+   "en": "Kalmar",
+   "ll": [
+    56.6614,
+    16.3628
+   ]
+  },
+  "kalmar_slott": {
+   "zh": "卡尔马城堡",
+   "local": "Kalmar slott",
+   "en": "Kalmar Castle",
+   "ll": [
+    56.6583,
+    16.3567
+   ]
+  },
+  "kbh_h": {
+   "zh": "哥本哈根中央车站",
+   "local": "Københavns Hovedbanegård",
+   "en": "Copenhagen Central Station",
+   "ll": [
+    55.6726,
+    12.5646
+   ]
+  },
+  "torvehallerne": {
+   "zh": "托维哈勒市场",
+   "local": "Torvehallerne",
+   "en": "Torvehallerne food market",
+   "ll": [
+    55.6838,
+    12.5699
+   ]
+  },
+  "rosenborg": {
+   "zh": "罗森堡宫",
+   "local": "Rosenborg Slot",
+   "en": "Rosenborg Castle",
+   "ll": [
+    55.6858,
+    12.5772
+   ]
+  },
+  "rundetaarn": {
+   "zh": "圆塔",
+   "local": "Rundetårn",
+   "en": "Round Tower",
+   "ll": [
+    55.6813,
+    12.5759
+   ]
+  },
+  "christiansborg": {
+   "zh": "克里斯蒂安堡宫塔楼",
+   "local": "Christiansborg Slot (Tårnet)",
+   "en": "Christiansborg Palace Tower",
+   "ll": [
+    55.6761,
+    12.5799
+   ]
+  },
+  "nyhavn": {
+   "zh": "新港",
+   "local": "Nyhavn",
+   "en": "Nyhavn",
+   "ll": [
+    55.6798,
+    12.5904
+   ]
+  },
+  "christiania": {
+   "zh": "克里斯蒂安尼亚自由城",
+   "local": "Christiania",
+   "en": "Freetown Christiania",
+   "ll": [
+    55.6736,
+    12.599
+   ]
+  },
+  "tivoli": {
+   "zh": "蒂沃利乐园",
+   "local": "Tivoli",
+   "en": "Tivoli Gardens",
+   "ll": [
+    55.6737,
+    12.5681
+   ]
+  },
+  "louisiana": {
+   "zh": "路易斯安那现代艺术博物馆",
+   "local": "Louisiana Museum for Moderne Kunst",
+   "en": "Louisiana Museum of Modern Art",
+   "ll": [
+    55.969,
+    12.5427
+   ]
+  },
+  "kronborg": {
+   "zh": "克伦堡宫",
+   "local": "Kronborg Slot",
+   "en": "Kronborg Castle",
+   "ll": [
+    56.039,
+    12.6213
+   ]
+  },
+  "stevns_klint": {
+   "zh": "斯泰温斯崖（霍耶鲁普老教堂）",
+   "local": "Stevns Klint (Højerup Gamle Kirke)",
+   "en": "Stevns Klint",
+   "ll": [
+    55.3254,
+    12.4495
+   ]
+  },
+  "mons_klint": {
+   "zh": "默恩崖",
+   "local": "Møns Klint",
+   "en": "Møns Klint (GeoCenter)",
+   "ll": [
+    54.9675,
+    12.545
+   ]
+  },
+  "dyrehaven": {
+   "zh": "鹿园（猎宫）",
+   "local": "Jægersborg Dyrehave (Eremitagen)",
+   "en": "Dyrehaven deer park",
+   "ll": [
+    55.79,
+    12.564
+   ]
+  },
+  "reffen": {
+   "zh": "雷芬街头美食",
+   "local": "Reffen",
+   "en": "Reffen street food",
+   "ll": [
+    55.6935,
+    12.609
+   ]
+  },
+  "cph": {
+   "zh": "哥本哈根凯斯楚普机场",
+   "local": "Københavns Lufthavn, Kastrup",
+   "en": "Copenhagen Airport",
+   "ll": [
+    55.618,
+    12.6508
+   ]
+  },
+  "yyz": {
+   "zh": "多伦多皮尔逊机场",
+   "local": "Toronto Pearson",
+   "en": "Toronto Pearson International Airport",
+   "ll": [
+    43.6777,
+    -79.6248
+   ]
+  }
+ },
+ "kinds": {
+  "visit": "景点",
+  "hike": "徒步",
+  "glacier": "冰川",
+  "water": "水上",
+  "city": "城市漫步",
+  "food": "吃饭",
+  "shop": "补给",
+  "stay": "住宿",
+  "camp": "露营",
+  "start": "出发"
+ },
+ "conditions": [
+  [
+   "冰岛拟收自然费",
+   "2027-05-01 起，18 岁以上每人 4,500 ISK，黄金圈三地通用",
+   "warn"
+  ],
+  [
+   "冰岛 7 月",
+   "几乎极昼，凌晨 3 点日出、近午夜日落"
+  ]
+ ],
+ "days": [
+  {
+   "date": "2027-07-04",
+   "c": "is",
+   "title": "抵达[[is]] · [[reykjavik]]",
+   "short": "抵达 · 雷克雅未克",
+   "sub": "落地提车、买三天口粮，下午逛[[reykjavik]]：教堂、彩虹街、海边散步。",
+   "stay": "reykjavik",
+   "stayNote": "市中心，选有停车位的",
+   "segs": [
+    {
+     "t": "stop",
+     "place": "kef",
+     "start": "06:30",
+     "end": "07:30",
+     "kind": "start",
+     "name": "抵达[[kef]]",
+     "verb": "刚落地，取行李",
+     "body": "落地时间按多伦多出发的过夜航班估计（约 6:30），订好机票后再改。出到达大厅，按 Lotus 的指引去等免费班车。"
+    },
+    {
+     "t": "move",
+     "mode": "bus",
+     "path": [
+      "kef",
+      "lotus_kef"
+     ],
+     "start": "07:30",
+     "end": "07:45",
+     "note": "Lotus 免费班车，约 5 分钟（另加等车时间）"
+    },
+    {
+     "t": "stop",
+     "place": "lotus_kef",
+     "start": "07:45",
+     "end": "09:00",
+     "kind": "start",
+     "name": "[[lotus_kef]]提车",
+     "verb": "在 Lotus 提车",
+     "body": "至少 SUV、四驱，全险必须买。要开 F208/F225，就要 Lotus 标注“可上 F 路”的四驱车，并选 **Platinum** 保险：只有它包涉水损坏。",
+     "facts": [
+      [
+       "地址",
+       "Flugvellir 6-10, 230 Keflavík（Reykjanesbær）"
+      ],
+      [
+       "夏季营业时间",
+       "05:00–02:00"
+      ],
+      [
+       "机场接驳",
+       "免费班车往返机场与门店"
+      ],
+      [
+       "保险档位",
+       "Silver（含，自付额 150,000 ISK）/ Gold（自付额 65,000 ISK，加砾石、沙尘险）/ Platinum（自付额 0，含涉水保护和 F 路保险）"
+      ],
+      [
+       "F 路规定",
+       "只有 Lotus 标注可上 F 路的四驱车才能开 F 路；两驱、9 座车和电动车一律禁止"
+      ]
+     ],
+     "tips": [
+      "提车时绕车拍照、录像，记录已有划痕（底盘和轮胎也拍）。",
+      "取车时让工作人员在合同上写明这辆车可以开 F 路，并确认保险是 Platinum（含涉水）。",
+      "拍照记录车身、底盘和轮胎现状；在 Parka App 里登记车牌，后面一周的停车费基本都用它付。"
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "lotus_kef",
+      "bonus_fitjar"
+     ],
+     "start": "09:00",
+     "end": "09:10",
+     "note": "Reykjanesbær 市内约 4 km",
+     "geom": "}jreKv|xhC~TkLrOdFdWyYxMmTdMqXnKmYnUyb@pMuVvHq_@xDcc@eFhO",
+     "km": 4
+    },
+    {
+     "t": "stop",
+     "place": "bonus_fitjar",
+     "start": "09:10",
+     "end": "10:10",
+     "kind": "shop",
+     "name": "[[bonus_fitjar]]买 3 天口粮",
+     "verb": "在 Bónus 采购",
+     "body": "冰岛最便宜的连锁超市。买好到 7/7 高地出来前的吃的：高地两天没有商店。",
+     "facts": [
+      [
+       "地址",
+       "Fitjar, 260 Reykjanesbær（Njarðvík）"
+      ],
+      [
+       "营业时间",
+       "官网一页写每天 09:00–21:00，另一页写每天 10:00–20:00（以出发前查询为准）"
+      ],
+      [
+       "备选",
+       "Krónan Fitjabraut 5，每天 08:00–21:00"
+      ]
+     ],
+     "tips": [
+      "Bónus 可能 10 点才开门；没开就去旁边的 Krónan（Fitjabraut 5，8 点开）。",
+      "高地两天没有商店，要在这里或 Selfoss/Hella 一次买够 7/6–7/7 的食物和露营燃料（燃料能否买到未核实，可去户外店买）。"
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "bonus_fitjar",
+      "reykjavik"
+     ],
+     "start": "10:10",
+     "end": "11:00",
+     "note": "41 号公路 Reykjanesbraut，约 44 km",
+     "geom": "eumeKlbrhCnGua@xDo{@tCal@tCeo@nD}w@hDqv@jCck@hDsn@lDqe@fEsj@fEuk@dDad@xB}i@?kt@S{k@uAsk@aB_f@_Bci@aBih@uCmk@iFsk@kFch@eH_l@cHu_@wLyg@qJy`@eK{h@gJuj@iHoc@mLys@uL{t@mIqh@}Hqj@kGye@gIem@iJ{k@uJei@wJgk@wGif@cFgg@mFau@}HsoA_Fsn@mIew@kIcp@uJyu@cIgn@kH{k@uFub@gJqa@uMqXuIs_@{E{{@iBke@}Cmv@iDgo@kFuf@eL{j@mIga@{Eqh@gDgp@mDge@cIia@cJu`@kKkw@aIk^gJw[gG{aAgD{|@gE_l@cG{b@aI_b@sJgf@{Jog@wH_b@}Gki@uGwt@}IwgAuDah@aFqi@wD}e@_Hsz@kHkn@uCuf@qJa[_RiFcP_BqR|DsR|D}OhDsXjFuPzDuOoPwLcVsLk\\_Ke\\gPsRiN_P_NeYwHu^gHu`@uOyMqY~TaPNaMe`@}MsVaRx@mSzBaPdB}PfB{P{CmOl[{D~e@}Dxc@_@ph@l@pe@eDzd@oJr[wMd^cNvR{LeUwEeG",
+     "km": 45
+    },
+    {
+     "t": "stop",
+     "place": "reykjavik",
+     "start": "11:00",
+     "end": "12:45",
+     "kind": "stay",
+     "name": "放行李、午饭、休息",
+     "verb": "在雷克雅未克休整",
+     "body": "过夜航班后先休整一下。7/4 是周日，教堂上午有礼拜，下午再去。"
+    },
+    {
+     "t": "move",
+     "mode": "walk",
+     "path": [
+      "reykjavik",
+      "hallgrimskirkja"
+     ],
+     "start": "12:45",
+     "end": "13:00"
+    },
+    {
+     "t": "stop",
+     "place": "hallgrimskirkja",
+     "start": "13:00",
+     "end": "14:00",
+     "kind": "visit",
+     "name": "[[hallgrimskirkja]]",
+     "verb": "在教堂、上塔楼",
+     "body": "雷克雅未克的地标，塔楼能俯瞰全城彩色屋顶。带学生卡有优惠。",
+     "facts": [
+      [
+       "塔楼票（2026-06-01 起）",
+       "成人 1,500 ISK；学生 1,300 ISK（凭有效学生证）；7–16 岁 200 ISK"
+      ],
+      [
+       "夏季开放",
+       "教堂 09:00–20:00；塔楼 09:00–19:45"
+      ],
+      [
+       "周日",
+       "约 10:30–12:30 因 11:00 礼拜关闭（7/4 正好是周日）"
+      ],
+      [
+       "预约",
+       "塔楼票不能提前预订，在教堂入口左侧的商店现场买"
+      ]
+     ],
+     "tips": [
+      "7/4 是周日，上午 10:30–12:30 不开放；下午去最稳妥。"
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "walk",
+     "path": [
+      "hallgrimskirkja",
+      "skolavordustigur"
+     ],
+     "start": "14:00",
+     "end": "14:05",
+     "note": "下坡约 300 m"
+    },
+    {
+     "t": "stop",
+     "place": "skolavordustigur",
+     "start": "14:05",
+     "end": "15:00",
+     "kind": "city",
+     "name": "逛[[skolavordustigur]]",
+     "verb": "逛彩虹街",
+     "body": "彩虹路面在靠近 Laugavegur 的下段，两边是小店和咖啡馆。",
+     "tips": [
+      "想拍到完整的彩虹路面加教堂，就从 Laugavegur 路口往坡上拍。"
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "walk",
+     "path": [
+      "skolavordustigur",
+      "sun_voyager"
+     ],
+     "start": "15:00",
+     "end": "15:15",
+     "note": "约 1 km 走到海边"
+    },
+    {
+     "t": "stop",
+     "place": "sun_voyager",
+     "start": "15:15",
+     "end": "15:45",
+     "kind": "city",
+     "name": "海边：[[sun_voyager]]",
+     "verb": "在海边看太阳航海者",
+     "body": "沿 Sæbraut 海滨步道散步，对岸是 Esja 山。免费。"
+    },
+    {
+     "t": "move",
+     "mode": "walk",
+     "path": [
+      "sun_voyager",
+      "harpa"
+     ],
+     "start": "15:45",
+     "end": "16:00",
+     "note": "沿海滨步道约 0.8 km"
+    },
+    {
+     "t": "stop",
+     "place": "harpa",
+     "start": "16:00",
+     "end": "17:00",
+     "kind": "city",
+     "name": "[[harpa]]",
+     "verb": "在哈帕音乐厅",
+     "body": "玻璃幕墙的音乐厅，大厅免费进。之后在老港一带吃晚饭，早点睡倒时差。",
+     "tips": [
+      "7 月几乎是极昼：7/4 雷克雅未克日出约 03:11、日落约 23:52，带上眼罩。"
+     ]
+    }
+   ]
+  },
+  {
+   "date": "2027-07-05",
+   "c": "is",
+   "title": "黄金圈",
+   "short": "黄金圈",
+   "sub": "[[thingvellir]]徒步（可选 [[silfra]] 浮潜），然后[[bruarfoss]]、[[geysir]]、[[gullfoss]]，晚上住[[hella]]。",
+   "stay": "hella",
+   "stayNote": "离 F208 最近的小镇；也可住 Hrauneyjar 高地中心",
+   "segs": [
+    {
+     "t": "stop",
+     "place": "reykjavik",
+     "start": "08:00",
+     "end": "08:00",
+     "kind": "start",
+     "name": "从[[reykjavik]]出发",
+     "verb": "从雷克雅未克出发"
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "reykjavik",
+      "thingvellir"
+     ],
+     "start": "08:00",
+     "end": "08:50",
+     "note": "1 号 → 36 号公路，约 48 km",
+     "geom": "ksofKvt|dChO{PpQoDxOhB|Ju]nC}e@w@_g@`Ayk@bGsq@`Euc@xDaf@~Fes@dE}e@jGwp@`Hut@zEig@fGkp@nCae@tAyk@@_k@Wms@Okh@Som@Umu@Ywh@}Beg@eJck@wKe`@uLcb@mMaWmPwOgOsIkQ{JqQ_UwQge@}Ny[_NcVuLyU{Ja[_J{\\cKo_@kNwQmJ_`@Iog@t@si@uD{c@cLqZuEwd@qNcW{PgL_QsG{Jq[wCmkAgB}r@cAep@Ssf@Ygn@Uwr@[kbA[_~@dAgi@_Aqg@sEqd@oCuh@iHqf@_Fae@aBeg@oBak@uFgb@aKok@}Icg@cHs`@qH_b@{Gqb@qDon@{Dud@}Iuf@uHic@}Cih@q@ij@mEof@gJo\\}Haa@yDqd@cFmq@iEa|@oAuf@nAcf@|Hyd@jGy`@dCqd@iA_p@mFqi@oGka@mIog@wF}b@iHgj@yE{u@mBif@lBae@pFie@xFgaAxEsf@tDcd@Cgf@|Ami@{@}y@gCmg@dBuh@Dkg@iEse@yFqd@mJmf@uIs]gPyo@cIm^sJgh@cHkb@sDed@sKc^wJy\\gIy]sNeRoQgWyNeTwNkWiOuNoP}_AmIkk@qO}i@sLmf@_Hwc@kGca@\\}f@eEwb@",
+     "km": 48
+    },
+    {
+     "t": "stop",
+     "place": "thingvellir",
+     "start": "08:50",
+     "end": "09:10",
+     "kind": "visit",
+     "name": "[[thingvellir]] Hakið 观景台",
+     "verb": "在辛格韦德利观景台",
+     "body": "UNESCO 世界遗产：北美板块和欧亚板块在这里裂开，也是冰岛最早的议会所在地。",
+     "facts": [
+      [
+       "停车费（2026）",
+       "5 座及以下小车 1,000 ISK/天，园内 P1、P2、P5 通用"
+      ],
+      [
+       "付款",
+       "现场缴费机或 checkit.is；Hakið 有车牌识别"
+      ],
+      [
+       "门票",
+       "2026 年不收门票"
+      ],
+      [
+       "2027 拟收新费",
+       "2027-05-01 起，18 岁以上、非冰岛税务居民须交“自然与基础设施费”：旺季（6/1–10/30）4,500 ISK，电子二维码一年有效，Geysir、Gullfoss、Þingvellir 三地通用；Þingvellir 的停车费届时取消。截至 2026-09-22 仍是公开征求意见中的草案"
+      ]
+     ],
+     "tips": [
+      "7/5 是周一，尽量 9 点前到，避开大巴团。",
+      "如果 2027 年的自然费法案通过，就要提前在网上买二维码通行证（一张就够这三个景点）；还没有官方购票网址。"
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "walk",
+     "path": [
+      "thingvellir",
+      "almannagja",
+      "oxararfoss"
+     ],
+     "start": "09:10",
+     "end": "09:50",
+     "note": "沿峡谷步道下行，约 1.5–2 km"
+    },
+    {
+     "t": "stop",
+     "place": "oxararfoss",
+     "start": "09:50",
+     "end": "10:20",
+     "kind": "hike",
+     "name": "徒步：[[almannagja]] → [[oxararfoss]]",
+     "verb": "在辛格韦德利徒步",
+     "body": "沿着板块裂缝走到瀑布。看完原路走回 Hakið 停车场取车（约 30 分钟）。",
+     "facts": [
+      [
+       "推荐短线",
+       "Hakið 观景台 → Almannagjá 峡谷 → Öxarárfoss，单程约 1.5–2.3 km，45–60 分钟（多个来源的估算）"
+      ],
+      [
+       "停车",
+       "P2 Fossplan，步行 2–3 分钟"
+      ]
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "thingvellir",
+      "silfra"
+     ],
+     "start": "10:20",
+     "end": "10:45",
+     "note": "走回 Hakið 取车，开到 P5 Valhöll 停车场（Silfra 集合点），约 5 分钟车程",
+     "geom": "q|dgKl}}_CbEve@Kpf@{M{RqSgTkSua@{NcTkN}^iLu_@yMw]kM_]kKi]cHed@hQLpMfYvNhVvZrM|PfNnPr@zJx[fP`FdAjg@vBvQ",
+     "km": 8
+    },
+    {
+     "t": "stop",
+     "place": "silfra",
+     "start": "10:45",
+     "end": "13:15",
+     "kind": "water",
+     "name": "可选：[[silfra]]浮潜 / 潜水",
+     "verb": "在 Silfra 浮潜",
+     "body": "能看清 100 m 外的冰川融水裂缝。不潜的话就在园区野餐、多走一段步道。",
+     "facts": [
+      [
+       "浮潜要求",
+       "不需要证书；要会游泳；年满 12 岁（18 岁以下须有成人同团）；身高 150–200 cm、体重 45–120 kg（穿干衣的限制）"
+      ],
+      [
+       "潜水要求",
+       "年满 18 岁；Open Water（可下潜到 18 m）或同等证书；另需干衣认证，或近 2 年内至少 10 次有记录的干衣潜水（须有教练签字证明）"
+      ],
+      [
+       "价格区间",
+       "浮潜约 US$110–225/人（现场集合便宜，含雷市接送贵）；潜水约 US$285 起"
+      ],
+      [
+       "Silfra 入场费",
+       "1,500 ISK/人，通常已含在团费里"
+      ],
+      [
+       "运营商",
+       "DIVE.IS、Arctic Adventures、Troll Expeditions、Adventure Vikings 等"
+      ],
+      [
+       "集合点",
+       "P5 Valhöll 停车场，提前 15 分钟到"
+      ]
+     ],
+     "tips": [
+      "7 月要提前 1–2 个月订。想潜水就把干衣认证或签字的潜水日志带上（纸质或电子都行），否则会被拒。",
+      "水温常年约 2–4 °C；干衣里面穿薄羊毛打底，带一套干衣服换。"
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "silfra",
+      "bruarfoss"
+     ],
+     "start": "13:30",
+     "end": "14:25",
+     "note": "36 → 365 → Laugarvatn → 37 号，约 48 km",
+     "geom": "_{dgKlz|_CoA_f@gOyTuJs[sPkCaP{MgSmEeRmPgL_Z{Qy[cLkXZuf@jHch@rNkQpNaT|Jc\\dPiQ~M{]dMe\\jM_TrE}d@z@_g@tHka@zK}ZfOqJhMoTjSvGrPv@nUjRtPjHvPs@jOxKrDdd@`Fnc@|Cte@zWvX~RvEfPhAryAivA`e@_o@~MeX~Iab@bD_g@a@oo@eEkeBc@e|@nA}p@|FugAnIyqAlCeg@hBck@G}z@uAof@eDef@wKq}@wHa~@eD{bAiCug@sFqq@aDam@a@oq@Cei@{Dgx@iEsq@]m}@jByo@Oye@sC}f@yNaw@sGyf@yByg@gE_g@{Cyi@yEgi@oGoc@eBee@iEec@yMmReOaL{NgRoRa\\qMsUgZah@mN_ZaQac@eMs]mIm]qDep@yAsg@Faf@\\ah@lKkhAlFye@|Eic@~H}b@~MoVtT{JtO}DlI{_@pCwm@vCeg@gK}m@aCye@fBim@|A_g@E_k@kF_f@wSq[cQe[eYop@oL_Y_Fcd@Sev@wOrDaOwLcRgC{Og@mP_CoSqImOkNiK{h@wBgN",
+     "km": 47
+    },
+    {
+     "t": "stop",
+     "place": "bruarfoss",
+     "start": "14:25",
+     "end": "15:15",
+     "kind": "visit",
+     "name": "打卡[[bruarfoss]]",
+     "verb": "在蓝色秘境瀑布",
+     "body": "冰川融水冲出的亮蓝色瀑布。",
+     "facts": [
+      [
+       "停车费",
+       "小车 750 ISK/4 小时（Parka）；超过 4 小时每小时 2,000 ISK"
+      ],
+      [
+       "步行",
+       "新停车场（2023 年启用）到瀑布约 300–500 m，5–10 分钟"
+      ]
+     ],
+     "tips": [
+      "旧的 7 km 往返步道停车场已经不用；导航要设到 “Brúarfoss Parking”。"
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "bruarfoss",
+      "geysir"
+     ],
+     "start": "15:15",
+     "end": "15:40",
+     "note": "37 → 35 号，约 19 km",
+     "geom": "sdfgKx}f|B~Jd_@nShg@|PzExNtM`TwDzP`DhP|KvOsDYoaAO{l@eCkh@mGib@oPsf@kP{]_[_c@gQgd@kM_c@aLmYeU}V{OcT}Neg@iZ_wAgJcc@_Ik^iEsf@Gyk@|@af@xEyb@bGge@lCom@~Ggh@`Fyd@e@}g@yEae@sBa}@eFec@_Ma[yYk^wW{XqYmQaW{MeYqOeVwMkOsPaLef@eH_f@kGac@qHag@`AiK",
+     "km": 19
+    },
+    {
+     "t": "stop",
+     "place": "geysir",
+     "start": "15:40",
+     "end": "16:40",
+     "kind": "visit",
+     "name": "打卡[[geysir]]",
+     "verb": "在看间歇泉",
+     "body": "老 Geysir 现在很少喷，旁边的 Strokkur 每 5–10 分钟喷一次。",
+     "facts": [
+      [
+       "停车费",
+       "1–7 座 1,080 ISK/8 小时（Parka）"
+      ],
+      [
+       "门票",
+       "2026 年免费（2027 年可能要交新的自然费，见 Þingvellir）"
+      ]
+     ],
+     "tips": [
+      "站在 Strokkur 的上风处，以免被热水雾淋到。"
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "geysir",
+      "gullfoss"
+     ],
+     "start": "16:40",
+     "end": "16:50",
+     "note": "35 号，约 10 km",
+     "geom": "okogK|c|zBuMoS_IafAsC}m@yAoi@rAaf@`Dwf@rGoc@tDcg@tB}o@jBil@fBwg@zDuoAfCuv@vBoo@~Bmi@~Baj@P}o@s@ah@mLec@oLqXcPs_@{Ou^{Icf@_Ke\\kNyOoOyHcD_O",
+     "km": 10
+    },
+    {
+     "t": "stop",
+     "place": "gullfoss",
+     "start": "16:50",
+     "end": "17:50",
+     "kind": "visit",
+     "name": "打卡[[gullfoss]]",
+     "verb": "在黄金瀑布",
+     "body": "两级落差的大瀑布，上下两层观景台都值得走。",
+     "facts": [
+      [
+       "停车费",
+       "1–7 座 1,080 ISK/4 小时（Parka）"
+      ],
+      [
+       "门票",
+       "2026 年免费（2027 年可能要交新的自然费）"
+      ]
+     ],
+     "tips": [
+      "傍晚光线最好；从这里到 Hella 还要 75 分钟。"
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "gullfoss",
+      "hella"
+     ],
+     "start": "18:00",
+     "end": "19:15",
+     "note": "35 → 30 → 1 号公路，约 83 km",
+     "geom": "iorgKbwzyBbNtWhRpKnKdY|Fta@jKlYrYtq@nLpXbKz[|Ajo@Atf@oChs@_Cli@wBno@oB`m@yCp`A_Cds@tPtm@hLpXjYjDrPiHrNoX|NaLlNyUtRs`@|QkCjTj@dPp@vQzCnPcDzOz@lQsNnPnBdOaLiPsZ{Gid@sVsvAjHy_@fOpLd\\~M`_@fTr`@l[rK|YhUf]rMdXbKva@xIb_@dKr`@rLt]hOd]fMnVxMrTdLlY~OrQpW`ObPjMvZ`YbRtQjPxQrX|Qp`@~EhUOpPtBnVdQbRjN`OxKpPnBxPeGxPbD`TlZ~LfZ`a@rn@xKzZxG|b@zLxXdc@h[xRtMbYtRfQLxOuHvPoJfKk[bR_MnS~ElQGjSMpZjJhZla@dR~XnPzI~Y_RzQ}M|UcOtQgHf[uLpQ}BjPbKr^zg@~PrVpTbWxO|O`NjV`J|b@hGbg@xI~b@pJ~[dJ~\\~N|wAxIp|@`MpnAvGrb@xLp]lE~c@`Czh@vHra@tKtZnM|m@nInc@xFvb@pJf~AjPplCrGzs@vGlm@jG~b@zHx`@nRrXhSbRpOnMtP`[fMlVtWda@xPbWdOnUbOfU~f@n^td@dnApb@rtAnPzw@hJna@bMh`@|Mt`@zOfq@~H~_@~Kvi@hDpg@Tpw@v@rf@bFbf@xIv`@jHzk@hI|c@xFvc@dDp_AzK{^bT{b@jPi^|Nc_@hN}ShV}JlPsElSaOtN}M`OoOrOiWtQuh@jJee@jFmc@fGem@dQ_gBnHmv@pGej@~Ki[hOwSfQiGfN_SxIsl@tFea@dK{t@hGsd@dGoc@nGkp@hDcd@tFgc@hUogA~Pyw@bIw^nIo^tMyn@bUsdAjQky@~M_n@lDan@\\ml@fEcd@rL_YrRw\\tSg^`Si]|OyXpNkVtMu\\pPe[rNkOzSaGrNeSPc]",
+     "km": 83
+    },
+    {
+     "t": "stop",
+     "place": "hella",
+     "start": "19:15",
+     "end": "19:45",
+     "kind": "shop",
+     "name": "[[hella]]：加满油、补给",
+     "verb": "在海拉补给",
+     "body": "进高地前的最后一站。",
+     "facts": [
+      [
+       "超市",
+       "Hella 有超市（具体店名和营业时间未核实）；Selfoss 有 Krónan（每天 8–21 点）和 Bónus"
+      ]
+     ],
+     "tips": [
+      "高地补给最后一站：加满油（高地没有加油站）。Landmannalaugar 营地只有一个夏季小卖车（Mountain Mall，品种和营业时间未核实）。"
+     ]
+    }
+   ]
+  },
+  {
+   "date": "2027-07-06",
+   "c": "is",
+   "title": "进高地：F208 → [[landmannalaugar]]",
+   "short": "高地露营",
+   "sub": "走 F208 北段进高地，看[[ljotipollur]]，在[[landmannalaugar]]扎营，下午徒步[[brennisteinsalda]]，泡天然温泉。",
+   "stay": "landmannalaugar",
+   "stayNote": "FÍ 营地，约 3,400 ISK/人",
+   "wx": "landmannalaugar",
+   "segs": [
+    {
+     "t": "stop",
+     "place": "hella",
+     "start": "08:30",
+     "end": "08:30",
+     "kind": "start",
+     "name": "从[[hella]]出发",
+     "verb": "从海拉出发",
+     "body": "油箱加满，水和食物带够。"
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "hella",
+      "ljotipollur"
+     ],
+     "start": "08:30",
+     "end": "10:30",
+     "note": "26 号公路往北到 Sigalda，转 F208 北段（不用涉水）。约 115 km，F 路约 25 km，只能开 20–40 km/h",
+     "geom": "a{rdKxbo{BhNeSpKka@nF_b@xHik@|Hsj@{Eim@iLsb@uResAwRksAik@sjCsSgpAgJui@gSokAqQceA}QagA}lBxa@}Qx@mQsAaRsDqO_K{O}[wPaYeTw]cNaV_Vug@sOy[kKwh@iIgh@eQaXkOmT}LoWoFie@_MqZiTcTwP{WkRul@eTyn@qNec@mG{m@uAwi@{Ees@{QamAoUe~AuS}}@yGwa@wEqo@_Ic}BgPalBaHuq@gAgh@eCsk@uAal@dDod@bG}c@dHkk@zH_g@hBgg@aWih@wQuUiWy\\qPgRoWlF}WbHsOoEmOaWyRi`AkKga@eJ{f@cLmd@yAml@}Dwe@yAyj@oEyh@}Hoe@cPwIoN_OkQkMsR}d@yQuSoJ{e@gJpa@sRjHa\\vx@aZeZwN{\\sLs^}Ke_@gLwd@yDcc@_GodAaEah@_RqcA{H{a@oJag@mJ{f@iNer@yMo_@a`@qs@qVec@iKoYuG{f@}b@{pAkQy]eUmU_a@y[k}AarAi@}e@fF_i@tHqc@jEah@xByh@jBmg@\\oj@Pef@X_h@t@cj@oAmi@gBah@_Cih@cDoo@vBef@K_f@|Fsc@bDme@rE}b@~Amh@fBce@vCce@dG}b@hAgf@`Eac@Juf@wLuVmFmf@Yai@fMsSnDwe@M_i@|Eyg@vMoU~PAxGyd@d@qe@T}e@sAsi@yEsb@_Fcb@mBaf@tB_f@vDsf@jHc`@rBkf@tGo`@nNuWfFuc@sAef@oC}e@q@me@}Aoi@eCoe@jHc_@fGsa@F_g@rEod@pCid@xE{b@[kf@|Fia@|NcR`Iw^bGmd@fLsX|OqF~OuDnQcNjO{HjNsSvMyStGcc@d@cj@gHa`@tDmh@zAae@`Fag@jJgnAfDmf@`K{]fM{Y~LwZ`Hea@pCkh@`Eqg@iAgo@aFwb@mH{^yLyWiM{So@qf@\\eh@xH_f@bEgc@pCch@lHmb@tGcd@hCke@aDid@_@}f@rDcd@Hif@gJq]cDse@yE_d@o@yl@eKiZaN}PhEsc@xJ_\\`Kg`@Lye@kEub@dI}]wHsb@xC{f@}Dge@sEic@y@el@aDyc@jFib@}Cuh@hKsl@nGkI",
+     "km": 92
+    },
+    {
+     "t": "stop",
+     "place": "ljotipollur",
+     "start": "10:30",
+     "end": "11:15",
+     "kind": "visit",
+     "name": "[[ljotipollur]]火山口湖",
+     "verb": "在丑湖火山口",
+     "body": "红色火山口里的蓝绿色湖，名字叫“丑湖”其实很美。",
+     "facts": [
+      [
+       "费用",
+       "免费（未核实）"
+      ],
+      [
+       "路况",
+       "F 路，路面坑洼多，但不用涉水"
+      ]
+     ],
+     "tips": [
+      "从 F208 拐进支路的路口没有明显标志，出发前把坐标存进离线地图。"
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "ljotipollur",
+      "landmannalaugar"
+     ],
+     "start": "11:15",
+     "end": "11:35",
+     "note": "F208 → F224 最后 2.5 km 有两处涉水；没把握就停 P1 Námskvísl 走人行桥",
+     "geom": "wuxeKh_esBjQuJrPdIrM|XbMtY`OlNbMiTvO{KzOtCxM{QzOYpHz`@vFva@~OdHxI|d@hO`OhOkM~A`@",
+     "km": 6
+    },
+    {
+     "t": "stop",
+     "place": "landmannalaugar",
+     "start": "11:35",
+     "end": "13:00",
+     "kind": "camp",
+     "name": "[[landmannalaugar]]扎营、午饭",
+     "verb": "在营地扎营",
+     "body": "彩色流纹岩山包围的营地。记得订好车位（停车预约）和营位。",
+     "facts": [
+      [
+       "停车预约（2026）",
+       "6/20–9/13，自驾在 9:00–16:00 之间到达必须提前预约；9 点前或 16 点后到不用约，但全天都要交服务费"
+      ],
+      [
+       "服务费（2026）",
+       "5 座及以下 1,500 ISK/车（一次预约，填入住和离开日期）"
+      ],
+      [
+       "预约平台",
+       "Parka（parka.is）或 ust.is/reservations；2026 年 4 月 1 日开放预订"
+      ],
+      [
+       "名额",
+       "每天约 140 个预约名额，2024 年几乎天天约满"
+      ],
+      [
+       "改期和退款",
+       "到达前 7 天以上可以改期或取消；遇天气预警可改期，或保留 3 天有效"
+      ],
+      [
+       "车牌",
+       "摄像头核验，必须填对车牌（可在确认邮件里补填）"
+      ],
+      [
+       "营地（FÍ）",
+       "成人 3,400 ISK/晚（2026 价格），7–17 岁 1,700 ISK，淋浴另收 1,100 ISK；必须预订，每单最多 6 人"
+      ],
+      [
+       "营地退订",
+       "入住前 2 天以上全额退款；前 1 天或当天不退"
+      ],
+      [
+       "温泉",
+       "营地旁有天然温泉（免费，含在设施费里）"
+      ],
+      [
+       "F208 北段开通日",
+       "2023：6/1；2024：6/12；2025：5/23；历年平均 6/2，最晚 6/23"
+      ],
+      [
+       "F208（Landmannalaugar–Eldgjá 南段）开通日",
+       "2023：6/16；2024：6/25；2025：6/19；平均 6/25，最晚 7/6"
+      ]
+     ],
+     "tips": [
+      "露营的人也要单独预约停车（服务费），并在 FÍ 订营位：这是两套独立的系统。",
+      "中型 SUV、对涉水没把握，就停在 P1 Námskvísl 走人行桥过去，营地近在眼前，不必冒险。",
+      "高地夜间可能接近 0 °C，风很大：要带四季帐、零度睡袋和防风外套。",
+      "F 路限速最高 80 km/h（冰岛常见规定，未针对本条另行核实），实际只能开 20–40 km/h。"
+     ]
+    },
+    {
+     "t": "stop",
+     "place": "brennisteinsalda",
+     "start": "13:30",
+     "end": "16:30",
+     "kind": "hike",
+     "name": "徒步：Laugahraun 熔岩 → [[brennisteinsalda]]",
+     "verb": "在硫磺山徒步",
+     "body": "黑曜石熔岩原、冒烟的地热口和五彩山坡，也是 Laugavegur 徒步线的开头。",
+     "facts": [
+      [
+       "Laugahraun 环线",
+       "约 4.3 km，1.5–2 小时，爬升约 115 m"
+      ],
+      [
+       "Brennisteinsalda 环线",
+       "约 6.5 km，2–3 小时，爬升约 255 m"
+      ],
+      [
+       "和 Bláhnúkur 连走",
+       "约 11 km，4–6 小时，爬升约 620 m"
+      ]
+     ],
+     "tips": [
+      "这段就是 Laugavegur 徒步线的开头，人多；建议顺时针走：先过 Laugahraun 熔岩，上 Brennisteinsalda，再从 Grænagil 回来。"
+     ]
+    },
+    {
+     "t": "stop",
+     "place": "landmannalaugar",
+     "start": "17:00",
+     "end": "18:00",
+     "kind": "water",
+     "name": "泡天然温泉",
+     "verb": "在泡温泉",
+     "body": "营地旁的天然温泉，免费。之后做饭，带眼罩睡觉：这里几乎不天黑。"
+    }
+   ]
+  },
+  {
+   "date": "2027-07-07",
+   "c": "is",
+   "title": "徒步[[blahnukur]]，走 F225 出高地",
+   "short": "徒步 · 出高地",
+   "sub": "早上爬[[blahnukur]]，中午拔营，沿 F225 出高地，晚上住[[hvolsvollur]]。",
+   "stay": "hvolsvollur",
+   "stayNote": "离塞里雅兰瀑布 20 分钟",
+   "wx": "landmannalaugar",
+   "segs": [
+    {
+     "t": "stop",
+     "place": "blahnukur",
+     "start": "08:00",
+     "end": "11:00",
+     "kind": "hike",
+     "name": "徒步：[[blahnukur]]",
+     "verb": "在爬蓝峰",
+     "body": "营地南边的蓝灰色山，山顶能看到整片彩色山谷。",
+     "facts": [
+      [
+       "Bláhnúkur 环线",
+       "约 5.7 km，2.5–3.5 小时，爬升约 320 m；下山段是陡坡碎石"
+      ]
+     ],
+     "tips": [
+      "早上上山，午前出发开 F225，才能在晚饭前到 Hvolsvöllur。"
+     ]
+    },
+    {
+     "t": "stop",
+     "place": "landmannalaugar",
+     "start": "11:00",
+     "end": "12:00",
+     "kind": "camp",
+     "name": "拔营、午饭",
+     "verb": "在拔营"
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "landmannalaugar",
+      "landmannahellir"
+     ],
+     "start": "12:00",
+     "end": "12:35",
+     "note": "F208 往西 → F225 Landmannaleið，约 25 km",
+     "geom": "wdqeKdgisBgO|JePqHyH}_@yNsMqIg]sHef@{OaFeMlUoPsCmOxJuLtUiQkNyLeWyLcZ_OyLwNtNeVnS_A~g@zB~d@kCxe@vAzk@x@nk@rEtc@nB`e@|@~e@Xze@S~g@~@hh@gJ|^aJf`@yJd[pMfZ~Mt\\jAdi@|Drg@bDre@fJp]Ihf@sDbd@^|f@`Dhd@iCje@uGbd@mHlb@qCbh@cEfc@aHp_@o@|e@Rth@dLlX`MtUvHv_@bGbe@jBfg@iD|g@oDjf@wHtk@_MvZeLlWaK~\\iEvi@eE~l@cEtd@qElf@gBdh@_Eld@qJo\\hAsi@Bgf@_Ewe@yKaZgOoOmJkc@_JeX",
+     "km": 25
+    },
+    {
+     "t": "stop",
+     "place": "landmannahellir",
+     "start": "12:35",
+     "end": "13:00",
+     "kind": "visit",
+     "name": "[[landmannahellir]]歇脚",
+     "verb": "在 F225 上歇脚",
+     "body": "F225 比 F208 北段难开：路窄、坡多，有两处小涉水。",
+     "facts": [
+      [
+       "F225 开通日",
+       "2023：6/9；2024：6/18；2025：6/11；平均 6/16，最晚 6/24（7 月初基本都已开通）"
+      ],
+      [
+       "涉水",
+       "论坛反馈：F225 上有两处小涉水，正常水量下小型 SUV（Duster 级）能过"
+      ],
+      [
+       "路况",
+       "比 F208 北段更难开：要求离地间隙较高，路窄、坡多"
+      ]
+     ],
+     "tips": [
+      "中型四驱 SUV 在天气正常、开 Lotus 允许上 F 路的车时，一般可以走 F225；大雨后先看 umferdin.is 和 safetravel.is 的路况。",
+      "涉水前先下车看水深：超过轮高的 3/4 就不要过；午后冰川融水会让水位上涨，早上过最好。",
+      "千万不要往南开 F208（经 Eldgjá），那一段涉水多而深。"
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "landmannahellir",
+      "hvolsvollur"
+     ],
+     "start": "13:00",
+     "end": "14:25",
+     "note": "F225 经 Dómadalur → 26 号 → 1 号公路，约 80 km",
+     "geom": "m~|eKxhvtBlMna@jIt^pPdP`Jd\\dCln@{Ajh@vDnk@`MbVr@nk@yBre@mM|WgNrTuO~HsOvQyOrFePjC}NbTsHr`@kGn`@uN~VaLzYpBhe@aFhb@oDxg@mFta@Dpg@qEvd@oJ~^^re@tDlc@Lff@dBhe@bCxf@eA`g@{Jt\\{KjZkDbe@aG`b@yEfd@kB`e@eEnd@pIx^lFdc@hCxk@Xxh@Sve@yA~h@mOhKmPhGaKf`@Gxk@Mff@_O`MiBtg@xApf@rHb`@hIn]aBxh@{C~d@oDvc@aEjf@eDxd@oBzj@u@dg@mEfc@qGbf@aAbf@yBvf@r@fg@~B~g@fBzh@`Dhh@c@xe@g@pg@Qhh@Hjg@kAbi@yBlh@qCxh@yFzb@yGle@iCbf@ftAfeBjk@xd@dUlUjQx]v[z{@vK|o@vIz\\f[vk@``@ps@xMn_@hNdr@lJzf@nJ`g@zHza@dM|o@|Grk@zDjq@vDpo@lF`c@tMvb@fNde@hUdk@fTfg@hX{v@lQmNxN_QtPlLxQtStLdY|MxQzO|OpOvItMhSzE~f@lC|k@dFzg@Ydk@zGlc@|Lvn@|M|h@hRf~@jLx\\bRdLnVqF`YqHvOhLd\\vb@vQtUrOtSfGn`@cFvg@cKdi@wF~m@uGfb@z@`aAdCrk@fAfh@`Htq@hLdiAlJpjCfH~dAxGva@nOxn@tYhmBvKnu@nHxh@bDrz@fCvl@xSju@dTxn@jRtl@vPzWvPnNnNtYpFfe@|N`^jOlTjOzRbKlm@vGra@vMdYrXvl@~PvZdTv]vP`YzMbYpQxM`RrDlQrA|Qy@tkBma@dStfApQbeAfSnkAfJti@~Nl`A`l@~lCrVx`BtRdsAlJn_@bMxVvMc`@|NaYdRwXvNuZfNaa@bNwV|MgVpRoa@|n@evAdLcXhQ}h@~K_\\jOsXdX}d@pQmZ`T}ZfPcT`NiR|LkX`g@utApTkm@rMyYrUub@tO}XbH{c@mF{a@AO",
+     "km": 87
+    },
+    {
+     "t": "stop",
+     "place": "hvolsvollur",
+     "start": "14:30",
+     "end": "15:30",
+     "kind": "shop",
+     "name": "[[hvolsvollur]]：补给、洗车、休息",
+     "verb": "在赫沃斯沃吕尔休整",
+     "body": "从高地出来洗个澡、补充补给，晚上早点休息。",
+     "facts": [
+      [
+       "超市",
+       "Krónan Hvolsvelli（Austurvegur 4），每天 9:00–19:00"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "date": "2027-07-08",
+   "c": "is",
+   "title": "南岸：瀑布、冰川、黑沙滩",
+   "short": "南岸 · 维克",
+   "sub": "[[seljalandsfoss]] + [[gljufrabui]]、[[skogafoss]]、[[solheimajokull]]、[[dyrholaey]]看灯塔和海鹦、[[reynisfjara]]，晚上住[[vik]]。",
+   "stay": "vik",
+   "stayNote": "7 月很紧，提前半年订",
+   "segs": [
+    {
+     "t": "stop",
+     "place": "hvolsvollur",
+     "start": "08:30",
+     "end": "08:30",
+     "kind": "start",
+     "name": "从[[hvolsvollur]]出发",
+     "verb": "出发"
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "hvolsvollur",
+      "seljalandsfoss"
+     ],
+     "start": "08:30",
+     "end": "08:50",
+     "note": "1 号公路，约 22 km",
+     "geom": "_kbdKv~lzBnFjb@hNbRvVpB|PbBlb@`EpThA|Uu@lRaBjR_C`Q_J`YoY~QqRfRsRzOsP~O}PnNgSxNsW~Pi\\tLkVbx@weD~e@wrBdIye@vSqjBhGk`@nOci@fTeh@jSwf@dO}^`N{_@zJs\\vIe^`Lyh@pIca@dIc`@nIga@`Js_@fM}`@dQ_`@tN}TlQqRvX_WrX{VdOcQjMcVbMg^fJka@pOgs@}Duc@qXwb@dQiLrCcA",
+     "km": 22
+    },
+    {
+     "t": "stop",
+     "place": "seljalandsfoss",
+     "start": "08:50",
+     "end": "09:40",
+     "kind": "visit",
+     "name": "[[seljalandsfoss]]",
+     "verb": "在塞里雅兰瀑布",
+     "body": "能绕到瀑布后面走一圈，会全身湿。",
+     "facts": [
+      [
+       "停车费（Checkit 官网）",
+       "小车 900 ISK/天（午夜到午夜），停不到 10 分钟免费"
+      ],
+      [
+       "付款",
+       "现场缴费机，或 checkit.is；不付的话账单会通过租车公司转来，还可能被加收手续费"
+      ]
+     ],
+     "tips": [
+      "穿雨衣，给相机套防水罩。去 Gljúfrabúi 要涉浅水进窄缝，穿防水鞋或凉鞋。"
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "walk",
+     "path": [
+      "seljalandsfoss",
+      "gljufrabui"
+     ],
+     "start": "09:40",
+     "end": "09:50",
+     "note": "沿崖壁小路往北约 600 m"
+    },
+    {
+     "t": "stop",
+     "place": "gljufrabui",
+     "start": "09:50",
+     "end": "10:20",
+     "kind": "visit",
+     "name": "[[gljufrabui]]",
+     "verb": "在秘密瀑布",
+     "body": "藏在岩缝里的瀑布，要踩着浅水走进去。",
+     "facts": [
+      [
+       "费用",
+       "和 Seljalandsfoss 共用同一个停车场，免费步行过去"
+      ]
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "gljufrabui",
+      "skogafoss"
+     ],
+     "start": "10:20",
+     "end": "10:50",
+     "note": "1 号公路，约 30 km",
+     "geom": "mbicK`__yBjF`b@dSr[zNzW~PoFbLoZzUsf@fe@y_AdT{b@zLge@zJgg@rSyeAbZ}zAjHie@vCkc@`Die@|Sc|Ab`@mqCrJap@lHof@xIil@lGsb@nGqb@fG{t@`Dgn@~Aap@fCoe@xF_a@hHea@|Hoa@|H}a@|Mus@lKck@|G{{@tBwe@hBwp@|Cmc@hGw`@tBao@hEoo@pDqc@Ieh@~Aek@jDyd@d@eh@n@kl@Vue@cBog@g@}e@xBen@nE{b@vMcg@jMuf@tHc`@vFka@tLqaAdIyp@nHgm@dFqa@nKu{@hJuu@vFed@dBye@eCkg@mAwaAa@oi@Lag@xEav@fDyr@vCsn@~B_d@iPs]gNpWcItL",
+     "km": 30
+    },
+    {
+     "t": "stop",
+     "place": "skogafoss",
+     "start": "10:50",
+     "end": "12:30",
+     "kind": "hike",
+     "name": "[[skogafoss]] + 瀑布顶步道",
+     "verb": "在斯科加瀑布",
+     "body": "先在瀑布下面看，再爬东侧台阶到顶，沿 Fimmvörðuháls 步道往上走一段，能看到好几座瀑布。顺便午饭。",
+     "facts": [
+      [
+       "停车费",
+       "小车 1,000 ISK/5 小时（Parka）"
+      ],
+      [
+       "Fimmvörðuháls 步道前段",
+       "东侧台阶上到瀑布顶（约 60 m 高差），再往上游走，第一座 Hestavaðsfoss 约在 200 m 处，Fosstorfufoss 约在 600 m 处；往返走 1–2 小时能看到 4–6 座瀑布"
+      ]
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "skogafoss",
+      "solheimajokull"
+     ],
+     "start": "12:30",
+     "end": "12:45",
+     "note": "1 号 → 221 号，约 12 km",
+     "geom": "crvbKfyavBfL{XdTW|`@urFdEgd@|Jik@pHua@nJih@zNsx@xa@q|BlJin@nG}h@_QmZaLk`@cLo^qOiGkPM{NeUmOiOcP~BeIs^wOaDcOmKmPmFkHfQ",
+     "km": 12
+    },
+    {
+     "t": "stop",
+     "place": "solheimajokull",
+     "start": "12:45",
+     "end": "13:45",
+     "kind": "glacier",
+     "name": "沿 221 路看一眼[[solheimajokull]]",
+     "verb": "在看冰川",
+     "body": "停车场走 15–25 分钟到冰川前缘。",
+     "facts": [
+      [
+       "停车费",
+       "A 类私家车 750 ISK/天（Parka）"
+      ],
+      [
+       "自己走",
+       "停车场到冰川前缘约 0.8–1.2 km，15–25 分钟；没有向导不要踏上冰面"
+      ],
+      [
+       "冰川徒步团",
+       "约 9,000–16,900 ISK（2024 年报价），3–4 小时"
+      ]
+     ],
+     "tips": [
+      "冰川退得很快，前缘的冰湖和冰崖很危险，只站在观景点看；想上冰面就报向导团。"
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "solheimajokull",
+      "dyrholaey"
+     ],
+     "start": "13:45",
+     "end": "14:10",
+     "note": "1 号 → 218 号（上灯塔一段陡坡砾石路），约 25 km",
+     "geom": "kewbK`ofuB|NwVdNrPfOnJtOhStPhEbRtNvOvT`RxBpOhGbLn^zIn\\dUpSli@wsExNooArF}c@|Gu_@nKkd@dIyc@`Cwh@~Bod@jDac@vJanAnJ}kAfUgsCtFac@jKi]nb@kuA`K{a@dJmc@bu@{fBrPwQhhAqcArN}MvL_ZpE_f@tOuJtZ~ApIoj@vAci@tLqXf@ue@}Aae@fScWvN_QvP}hAbIsj@tKuaAfOhMfId^{E`b@~DrN",
+     "km": 25
+    },
+    {
+     "t": "stop",
+     "place": "dyrholaey",
+     "start": "14:10",
+     "end": "15:30",
+     "kind": "visit",
+     "name": "[[dyrholaey]]：灯塔和海鹦",
+     "verb": "在迪霍拉里看海鹦",
+     "body": "海蚀拱门、灯塔，7 月初正是海鹦季。",
+     "facts": [
+      [
+       "停车费",
+       "5 座及以下 750 ISK（Parka）"
+      ],
+      [
+       "筑巢季管制",
+       "5/1–6/25 期间政府可以限制进入；常见做法是上层灯塔区 19:00–09:00 关闭。7/8 已过管制期"
+      ],
+      [
+       "海鹦",
+       "约 4 月底到 8 月中在崖上筑巢，7 月初正是观赏期"
+      ],
+      [
+       "道路",
+       "上灯塔的一段陡而窄，是砾石路；夏天两驱车也能开"
+      ]
+     ],
+     "tips": [
+      "上层灯塔区看拱门和海鹦，下层看 Reynisdrangar 方向；风大时注意手机和帽子。"
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "dyrholaey",
+      "reynisfjara"
+     ],
+     "start": "15:30",
+     "end": "15:50",
+     "note": "218 → 1 → 215 号，约 20 km",
+     "geom": "yq~aKpbwsByCmc@cAee@aNeUqJdl@wFdb@mTvzAqNxZwOfIyFfb@hDrl@eMx[gCng@uDjh@o`@dIqObHeB_e@gNor@mIo_@{Jc]mHm_@qHc`@gPsZkMcTmF}b@_@um@]oh@iE{f@{Hoa@kCqc@sEce@uHu^aGc{@yBee@`B{e@dJm\\eEib@q@ei@v`@lMfN~RlNtNbWpGdPHpNaTpQcPrPiMrRm@lUaJ~OeHhQd@xPOfSz@|RiAzOyF~AmG",
+     "km": 20
+    },
+    {
+     "t": "stop",
+     "place": "reynisfjara",
+     "start": "15:50",
+     "end": "17:00",
+     "kind": "visit",
+     "name": "[[reynisfjara]]：玄武岩柱和海蚀柱 Reynisdrangar",
+     "verb": "在黑沙滩",
+     "body": "玄武岩柱、黑沙滩和海里的 Reynisdrangar 海蚀柱。**疯狗浪会死人**，看入口的预警灯。",
+     "facts": [
+      [
+       "停车费",
+       "9 座及以下 1,000 ISK/4 小时（Parka）"
+      ],
+      [
+       "疯狗浪预警灯",
+       "入口处有绿/黄/红灯：绿 = 风险低；黄 = 不要进入黄区，远离水线；红 = 禁止下到沙滩"
+      ],
+      [
+       "2025 新规",
+       "2025 年 8 月一名 9 岁儿童遇难后，红灯触发门槛调低；红灯时在观景台关闸，玄武岩柱和 Hálsanefshellir 洞都禁止进入"
+      ]
+     ],
+     "tips": [
+      "任何时候都不要背对大海，与水线保持 30 m 以上距离；红灯时只在观景台看。"
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "reynisfjara",
+      "vik"
+     ],
+     "start": "17:00",
+     "end": "17:15",
+     "note": "215 → 1 号，约 11 km",
+     "geom": "ys~aKdxfsBeQfOuQrA_QE_Vo@aPOgQnGqPdIiSl@yTdNyO~MeM`TiSx@oQsC}O{LoMmSqWoW_OuMbDqe@lNqXfPuCzPdCxOsEzNeQvWqb@vNoXxMiSnPnAzQwDpNuQ~KoYlHu^lIq]bBgR",
+     "km": 11
+    },
+    {
+     "t": "stop",
+     "place": "vik",
+     "start": "17:15",
+     "end": "18:00",
+     "kind": "shop",
+     "name": "[[vik]]：补充补给",
+     "verb": "在维克补给",
+     "facts": [
+      [
+       "超市",
+       "Krónan Vík（Austurvegur 20），每天 9:00–21:00"
+      ]
+     ],
+     "tips": [
+      "维克住宿少、贵，7 月要至少提前半年订。"
+     ]
+    }
+   ]
+  },
+  {
+   "date": "2027-07-09",
+   "c": "is",
+   "title": "苔原、峡谷、冰川、[[jokulsarlon]]",
+   "short": "峡谷 · 冰河湖",
+   "sub": "沿 1 号公路开过[[eldhraun]]，看[[fjadrargljufur]]、[[svinafellsjokull]]，徒步[[mulagljufur]]，傍晚顺路看[[fjallsarlon]]、[[jokulsarlon]]和[[diamond_beach]]，住[[smyrlabjorg]]。",
+   "stay": "smyrlabjorg",
+   "stayNote": "约 US$140–310/晚（双人房）",
+   "segs": [
+    {
+     "t": "stop",
+     "place": "vik",
+     "start": "08:30",
+     "end": "08:30",
+     "kind": "start",
+     "name": "从[[vik]]出发",
+     "verb": "出发"
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "vik",
+      "eldhraun"
+     ],
+     "start": "08:30",
+     "end": "09:15",
+     "note": "1 号公路往东，约 55 km",
+     "geom": "{fabKdw}rBm@am@a@we@k@cq@y@o`Ai@il@u@ig@sAih@oFifByBef@kKyrAuEej@oDyc@mGmb@eK{a@oe@cmB}Ha^}Ekf@oAgp@Qqo@R_r@v@ar@f@wg@Tkk@Eqh@k@os@u@yd@mA_e@_Cgo@eCig@cKe|AcEym@uC}h@}EgjA}Boy@qCktAaBej@sCys@iDwo@uDqk@mDud@{Foo@oFkh@yFef@oLo{@iIkh@{I{f@sH_`@gMqk@iRov@mNin@yK}i@gKil@}Jwo@iJgp@iGa`@eJoe@aLee@}Kq_@oLw\\mVyk@ySmi@eQsh@wSio@qRci@aRad@kMqXmRe_@oOcW}OaV{Wg]cSwTo\\u[wRmOgQgN{Ww[yQaYoYiWoOsJm{@uc@aWCmcBz^mQlJyN`NyVpU_UfQ_UjKkQ`EkSpAaPa@uS_EeQ}GkRaM_XaXmUeZs[kb@gOyRmUoZaU{Y_T{XmNkQuUgU{RkOgUsMuVoJuOyDiX{FqS_HgQgMwQ_UkMgVoPce@mJ}`@mH_b@kk@sjDiImf@mIkg@eIac@aOsi@}Kaa@yKe`@yeAigF{u@ssD",
+     "km": 57
+    },
+    {
+     "t": "stop",
+     "place": "eldhraun",
+     "start": "09:15",
+     "end": "09:35",
+     "kind": "visit",
+     "name": "开过[[eldhraun]]",
+     "verb": "在苔原停靠",
+     "body": "1783 年 Laki 火山喷发留下的熔岩，上面盖满厚厚的绿苔。",
+     "facts": [
+      [
+       "费用",
+       "免费"
+      ],
+      [
+       "规定",
+       "苔藓极其脆弱，法律禁止踩踏；只能在指定停靠点和步道上看"
+      ]
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "eldhraun",
+      "fjadrargljufur"
+     ],
+     "start": "09:35",
+     "end": "09:50",
+     "note": "1 号 → 206 号，约 3 km 砾石路",
+     "geom": "es{cKbplnBwj@goCon@e|C}WsqA}WqqAsJo_@iKcZ{JmZmJwa@qXcnA_ZsrAaJm`@aOgY}KeXaRpCeMjVqJl[~Crc@{@ny@gCzd@@dg@{Bji@iHdb@[xB",
+     "km": 12
+    },
+    {
+     "t": "stop",
+     "place": "fjadrargljufur",
+     "start": "09:50",
+     "end": "10:50",
+     "kind": "hike",
+     "name": "[[fjadrargljufur]]",
+     "verb": "在羽毛峡谷",
+     "body": "沿峡谷边缘走到尽头的观景台，峡谷像羽毛一样蜿蜒。",
+     "facts": [
+      [
+       "停车费",
+       "下层停车场 1,000 ISK/天（Parka）"
+      ],
+      [
+       "步道",
+       "沿峡谷边缘往返约 2–3 km，45–60 分钟"
+      ],
+      [
+       "关闭情况",
+       "过去曾在春季因植被受损临时关闭；2026 年无限制报道"
+      ]
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "fjadrargljufur",
+      "svinafellsjokull"
+     ],
+     "start": "10:50",
+     "end": "12:05",
+     "note": "经 Kirkjubæjarklaustur（可加油、买午饭），约 80 km",
+     "geom": "chfdK~b|mBfHqb@pEqb@qAke@rC{c@g@og@Miw@Tgf@tPuFdJq\\cCwg@uIwg@aEub@oA}e@m@uo@{A_f@kLo^mMqU{Nih@eKga@oJi\\gOqMmL_`@sFqc@{Ju\\iP_GkQdFoQrD_Vy`@ctAs|ByQ{ZgLmW{Kkk@oNaz@wG{_@_Qmf@qMgYcRaKuPlAeS{JwK{ZgBsf@{Iqu@cEkc@wGse@mGcq@iBmj@gEke@}LifAiFmq@uFyt@sDk|ApFsq@dFkc@lBcy@iCyf@oRwbAmJ}]kLmZuMyZuLi\\aMeh@{Is_@eOwn@_Uw`AgRc}@}I{a@mKmc@uQcu@eHs_@sJi\\{MsU}T}MwQaGsO}EuQiC_PcFaZwg@wT{c@{LeUwN_Nys@c_@yh@eX{PoKuMaSuJs[iGee@uCkd@iFsh@_PmdAqGci@}Dwj@cBoe@q@}l@]mk@gAo{AsD{j@mMoz@uMkg@mIw^gFce@wCqq@iDsnBw@kh@bByxCb@sx@h@cu@t@ieAd@}v@h@sy@m@io@m@so@t@af@tMy_B|uAgcMpFef@nSeiBrE}c@dAgj@}CyyAoCknAqC}oAkAog@gA{f@cDem@}Egc@uJgs@qNwdAqN}dAyFab@uFqa@_i@}wC{`@}xBq]cmBaGia@mE{k@ac@o}IaBqk@cCm~Hu@sl@wAuq@q@eq@Qug@D}i@`@ok@l@ke@Kej@cDkf@}Hq_@gMaWsYwTsfBejA{OiKgMaZsBci@fByh@dJ{]|z@o~B}Iu]wM}RqHyM",
+     "km": 79
+    },
+    {
+     "t": "stop",
+     "place": "svinafellsjokull",
+     "start": "12:05",
+     "end": "12:50",
+     "kind": "glacier",
+     "name": "[[svinafellsjokull]]：星际穿越取景地",
+     "verb": "在看冰川",
+     "body": "近距离看冰舌和冰川湖。",
+     "facts": [
+      [
+       "停车",
+       "998 号路尽头，免费（2026 年报道）"
+      ],
+      [
+       "步行",
+       "到观景点约 10–15 分钟"
+      ],
+      [
+       "山体滑坡风险",
+       "自 2018 年起，因 Svínafellsheiði 山体裂缝有滑坡风险，冰川徒步团无限期暂停；民防部门建议在冰舌观景点只作短暂停留"
+      ]
+     ],
+     "tips": [
+      "出发前查 safetravel.is：如有新的滑坡警告，就别去了，改去 Skaftafell 的 Svartifoss（S2 环线约 5.8 km，2 小时）。"
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "svinafellsjokull",
+      "mulagljufur"
+     ],
+     "start": "12:50",
+     "end": "13:25",
+     "note": "1 号公路约 41 km，最后约 1.5 km 砾石便道",
+     "geom": "w`seKnmbfB|MnRtK~XtVcM`Mg]zL{\\~Gqe@tDkd@lOs]zMyXxPaTbSsD~WsDbWiD`SsCtSiCjPgJdNmYpHwa@fGia@zD{z@pd@grDfKs[~Xi]jRoItr@aWh\\gOfKcZlEqk@rE_k@lx@ioFrIck@nIk`@bMsWvOoQpLs^lMmZfOcJnRuCxS_OxOqWrOqPdGyb@N{g@jEsi@nD}c@{Bwk@eH{cAv@ae@wHio@yJy[uPsOkSmNsMsTsQwh@wQkf@eLm]sIw_@aGqa@}Fqj@sEcd@aI_y@mLkkAcGwn@uW{kCsGkq@cG}d@uZulAg`@qjCaIal@ac@{_DsGie@yHwa@mOiSafDem@uRyDyQ}Dg_Bs{C{Fvi@uFdkAv@dq@`AvM",
+     "km": 41
+    },
+    {
+     "t": "stop",
+     "place": "mulagljufur",
+     "start": "13:30",
+     "end": "16:30",
+     "kind": "hike",
+     "name": "徒步[[mulagljufur]]（3–4 小时）",
+     "verb": "在穆拉峡谷徒步",
+     "body": "峡谷深处有两条瀑布，尽头能远眺冰川。**天气不好别去。**",
+     "facts": [
+      [
+       "停车费",
+       "1–7 座 1,000 ISK/4 小时（Parka 7203 区）；停不到 10 分钟免费"
+      ],
+      [
+       "徒步",
+       "单程约 3.5–3.8 km，35–60 分钟，往返 2–3 小时；爬升约 190 m"
+      ],
+      [
+       "难度",
+       "简单到中等：小路窄，有碎石，过两条小溪，最后一段是陡坡"
+      ]
+     ],
+     "tips": [
+      "带防水登山鞋；冰川融水让第二条小溪在下午变深。"
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "mulagljufur",
+      "fjallsarlon"
+     ],
+     "start": "16:30",
+     "end": "16:40",
+     "note": "1 号公路，约 5 分钟",
+     "geom": "{cqeKt{fcBeDoq@dEuv@dDkq@yO{aAic@{bAkNvYwSrKeQb@mSiCkDt\\",
+     "km": 5
+    },
+    {
+     "t": "stop",
+     "place": "fjallsarlon",
+     "start": "16:40",
+     "end": "17:30",
+     "kind": "glacier",
+     "name": "[[fjallsarlon]]",
+     "verb": "在菲亚尔沙龙冰河湖",
+     "body": "比冰河湖人少，冰川离得更近。",
+     "facts": [
+      [
+       "停车费",
+       "1–7 座 1,000 ISK/4 小时（Parka 7204 区），停不到 10 分钟免费"
+      ],
+      [
+       "注意",
+       "要在 4 小时内付款，否则加收 1,960 ISK"
+      ]
+     ],
+     "tips": [
+      "比 Jökulsárlón 人少，冰川离得更近；从停车场步行约 5 分钟上湖岸。"
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "fjallsarlon",
+      "jokulsarlon"
+     ],
+     "start": "17:30",
+     "end": "17:45",
+     "note": "1 号公路往东，约 13 km",
+     "geom": "}bueKfz_cB~NaX~Zm@vSsKbGwf@mXqh@gOiWaPgVyNiSuOwR}QqTiOc[iL}b@ihAebHgYcgBgGyk@mCao@cGy`FaAyx@o@al@}A{j@sGmy@gEge@aEgc@gE}d@{I~S",
+     "km": 14
+    },
+    {
+     "t": "stop",
+     "place": "jokulsarlon",
+     "start": "17:45",
+     "end": "19:00",
+     "kind": "glacier",
+     "name": "[[jokulsarlon]]",
+     "verb": "在冰河湖",
+     "body": "冰川崩下来的蓝色浮冰漂在湖里，有时能看到海豹。傍晚人比白天少，光线也好（日落约 23:15）。",
+     "facts": [
+      [
+       "停车费（瓦特纳冰川国家公园）",
+       "A 类私家车 1,110 ISK，当天午夜前有效，可随时进出（Parka 或现场缴费机）"
+      ],
+      [
+       "覆盖范围",
+       "Jökulsárlón 和东、西两段 Fellsfjara（钻石沙滩）属于同一收费区"
+      ],
+      [
+       "优惠",
+       "同一天已在 Skaftafell 付过全价，这里打五折（反之亦然），须用同一种付款方式"
+      ]
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "jokulsarlon",
+      "diamond_beach"
+     ],
+     "start": "19:00",
+     "end": "19:05",
+     "note": "过桥约 1 km",
+     "geom": "yj|eK|awaBbP|ObN~A",
+     "km": 1
+    },
+    {
+     "t": "stop",
+     "place": "diamond_beach",
+     "start": "19:05",
+     "end": "19:45",
+     "kind": "visit",
+     "name": "[[diamond_beach]]",
+     "verb": "在钻石沙滩",
+     "body": "浮冰被冲上黑沙滩，像散落的钻石。",
+     "facts": [
+      [
+       "费用",
+       "已含在 Jökulsárlón 的停车费里"
+      ]
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "diamond_beach",
+      "smyrlabjorg"
+     ],
+     "start": "19:45",
+     "end": "20:15",
+     "note": "1 号公路往东，约 34 km",
+     "geom": "qj{eKzuwaBgPuNoFcj@mLyp@wJe\\ce@e`Aoq@aqAsMw[au@}`CgNoQa{A{g@uRaHs^uM{P_G{RqJeR_Q{MoRkMsV{Os[gWah@gOsZoXej@}Kk[mDq{@w@_k@lE{j@zFwf@qD{g@mG}d@}B{i@eBok@aD{c@cF}c@qG_e@_Ji_@yLee@cKu]eS{^uOeVaMiU{LqXwNi`@wQmo@_Mid@qN{h@sVc_A}Mug@u^_uAyGwg@qFoj@qEuf@aEui@sAc|AzCmu@p@wi@{Jyh@iMgk@cKyc@wDaf@n@_o@vD}h@fJ_{@dIof@fE}d@@ch@cGea@iLy\\cKia@ej@}r@}P^mPNoS_g@i`@iv@_Tas@eWkb@yLa\\_Ir_@cBrH",
+     "km": 34
+    },
+    {
+     "t": "stop",
+     "place": "smyrlabjorg",
+     "start": "20:15",
+     "end": "20:30",
+     "kind": "start",
+     "name": "从[[smyrlabjorg]]出发",
+     "verb": "出发",
+     "tips": [
+      "酒店餐厅约 20:30 关门，晚饭可能来不及：在 Kirkjubæjarklaustur 或 Höfn 买好吃的，或者提前打电话问。"
+     ]
+    }
+   ]
+  },
+  {
+   "date": "2027-07-10",
+   "c": "is",
+   "title": "冰川徒步、[[stokksnes]]",
+   "short": "冰川 · 蝙蝠山",
+   "sub": "上午从[[hali]]跟团冰川徒步，下午去[[stokksnes]]，住[[hofn]]。",
+   "stay": "hofn",
+   "stayNote": "离斯托克角约 20 分钟",
+   "segs": [
+    {
+     "t": "stop",
+     "place": "smyrlabjorg",
+     "start": "09:00",
+     "end": "09:00",
+     "kind": "start",
+     "name": "从[[smyrlabjorg]]出发",
+     "verb": "出发",
+     "body": "冰河湖昨晚已经看过，今天不用往回开，可以睡个懒觉。"
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "smyrlabjorg",
+      "hali"
+     ],
+     "start": "09:00",
+     "end": "09:20",
+     "note": "1 号公路往西，约 18 km",
+     "geom": "qm}fKt}|~ApI}_@jOvRzMlQbQzi@vg@xgAbUfk@bPvD`P_Ehb@jd@dM~ThJp`@jL`\\dFjc@_@pi@sFde@mRx{AwD|h@w@pf@vBvd@lJpc@xHlc@pMlb@nDbi@aDji@FdwBhEns@pEtf@xEfe@rElc@ra@p~A|Mtg@rVb_A`Kh_@tMhf@dK``@vKj]~Nx_@tLlWvNvVpQlXtNvZxMxf@~Ih]~Jbg@xFrb@zEng@pCnh@dAbi@lFpk@zFoD",
+     "km": 20
+    },
+    {
+     "t": "stop",
+     "place": "hali",
+     "start": "09:30",
+     "end": "13:30",
+     "kind": "glacier",
+     "name": "冰川徒步（Breiðamerkurjökull）",
+     "verb": "在冰川徒步",
+     "body": "从[[hali]]出发的向导团，穿冰爪上 Breiðamerkurjökull 冰川。集合时间以订到的场次为准，这里按上午场排。",
+     "facts": [
+      [
+       "Glacier Adventure（Breiðamerkurjökull）",
+       "成人 15,500 ISK，10–12 岁 9,900 ISK；最低 10 岁；全程 3.5–4 小时（冰上 1–1.5 小时）；5–9 月每天多班"
+      ],
+      [
+       "Icelandic Mountain Guides（Skaftafell，Falljökull 冰川）",
+       "Blue Ice Discovery 3.5 小时约 US$116–149，最低 10 岁；Glacier Adventure 4.5 小时约 US$160，最低 14 岁"
+      ]
+     ],
+     "tips": [
+      "7/10 住在东边，冰川徒步选 Hali 出发的 Breiðamerkurjökull 团最顺路；Skaftafell 的团要往西折返约 1 小时。或者 7/9 路过 Skaftafell 时就去徒步。",
+      "要穿防水登山鞋（冰爪要绑在鞋上），7 月就该订。"
+     ]
+    },
+    {
+     "t": "stop",
+     "place": "hali",
+     "start": "13:30",
+     "end": "14:15",
+     "kind": "food",
+     "name": "午饭：Þórbergssetur",
+     "verb": "在哈利吃午饭",
+     "body": "冰川徒步集合点旁边的餐厅和小博物馆。"
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "hali",
+      "stokksnes"
+     ],
+     "start": "14:15",
+     "end": "15:05",
+     "note": "1 号公路过 Höfn 路口，再走约 5 km 砾石路到 Viking Café，约 61 km",
+     "geom": "ailfKnpw`B_MyWsA{g@aCwm@mEgh@sHcl@_Kcg@_Ji]mKia@}Mw[sO{UgNcU_N_XaLsX_Mc^iNag@_Mid@qN{h@sVc_A}Mug@u^_uAyGwg@qFoj@qEuf@aEui@sAc|AzCmu@p@wi@{Jyh@iMgk@cKyc@wDaf@n@_o@vD}h@fJ_{@dIof@fE}d@@ch@cGea@iLy\\cKia@ej@}r@}P^mPNoS_g@i`@iv@_Tas@eWkb@yLa\\yM}b@ag@aoA{W_p@eOuL{Sn@}OyB_PwPyTiFcRoWyI}^uG_vA_Ekt@{OiiCkCog@cI}|AmLe{Bef@siJuEgo@cHom@eI_g@uKmb@aQgi@w`@gnAqJw\\qIca@oIcn@aGqw@iB_j@]}o@Tmi@H{h@gA_o@gDii@oJ}q@aJsd@_Hme@wG}t@}Cip@y@ch@EabA@_k@Haq@?e`AP{r@vAom@lCmg@`Eye@xK{x@|Fwi@bEel@hC{n@hD}p@~Fmr@|F{f@jLev@tGci@nEog@tDgp@~@si@_Aum@mDmd@}Hmd@yIc`@}Dge@g@ci@eCeo@qHkk@qJed@yG}o@wDaf@uKcbB_B{k@v@_i@fB{e@dEee@y@og@nBef@|Cmk@xCih@jGgd@bLom@nFcd@dF_f@vG_f@fNeS|PsU~OeHzOoGrPsN~J{_@zPgh@tJue@zU_d@pJe\\\\sU",
+     "km": 61
+    },
+    {
+     "t": "stop",
+     "place": "stokksnes",
+     "start": "15:05",
+     "end": "17:30",
+     "kind": "visit",
+     "name": "看[[stokksnes]]（Stokksnes）",
+     "verb": "在看蝙蝠山",
+     "body": "黑沙丘和草丛后面是锯齿状的 Vestrahorn 山。",
+     "facts": [
+      [
+       "门票",
+       "约 1,000 ISK/人（2024–2026 多个来源；有一处说 2026 年是 1,100 ISK），16 岁以下免费"
+      ],
+      [
+       "买票",
+       "Viking Café 店内；打烊后有自助售票机"
+      ],
+      [
+       "包含",
+       "沙滩、步道、维京村布景和厕所"
+      ]
+     ],
+     "tips": [
+      "Vestrahorn 的倒影要在退潮、无风时拍，可以看潮汐表挑时间。"
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "stokksnes",
+      "hofn"
+     ],
+     "start": "17:30",
+     "end": "17:50",
+     "note": "约 15 km",
+     "geom": "uydgKhmozAsB|d@oRf[oOj_@kQjt@gJ|]iNpVeOtO_PfEwQjPsR`SkKtZeDrl@yFdc@uGtc@aI~_@cJ|fA}Clk@oBdf@x@ng@eEde@gBze@w@~h@~Azk@nGxeA|HjbApEze@dJne@dHrb@`Exk@t@rr@zCrh@lHx_@hI`a@vSra@bQbFbQT`PmCzOf@jVlJpPpJhNhQ|EqC",
+     "km": 15
+    },
+    {
+     "t": "stop",
+     "place": "hofn",
+     "start": "17:50",
+     "end": "19:30",
+     "kind": "food",
+     "name": "[[hofn]]：晚饭",
+     "verb": "在霍芬吃晚饭",
+     "body": "霍芬以龙虾（海螯虾）出名，可以奖励自己一顿。"
+    }
+   ]
+  },
+  {
+   "date": "2027-07-11",
+   "c": "is",
+   "title": "[[hofn]] → 东部峡湾 → [[seydisfjordur]] → [[egilsstadir]]",
+   "short": "东部峡湾",
+   "sub": "沿 1 号公路穿过东部峡湾，下午翻山去塞济斯菲厄泽，晚上住埃伊尔斯塔济。",
+   "stay": "egilsstadir",
+   "stayNote": "民宿或青旅，约 20,000–35,000 ISK/间（青旅床位约 8,000–11,000 ISK/人）",
+   "segs": [
+    {
+     "t": "stop",
+     "place": "hofn",
+     "start": "08:00",
+     "end": "08:30",
+     "kind": "start",
+     "name": "[[hofn]] 出发",
+     "verb": "退房、加油",
+     "body": "在 N1 加满油，Nettó 补点午餐。东部峡湾一带加油站不多。"
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "hofn",
+      "hvalnes"
+     ],
+     "start": "08:30",
+     "end": "09:15",
+     "note": "1 号公路往东北，过 Almannaskarð 隧道",
+     "km": 50,
+     "geom": "_tdgKlgy{A_RqIySwMsQ}IiPu@yPnBcPH{Os@aOqRqK_\\eJ_a@}Gef@uAgg@sA}q@}Fom@_J_c@cHaf@oHw}@uKcbB_B{k@v@_i@fB{e@dEee@y@og@nBef@|Cmk@xCih@jGgd@bLom@nFcd@~Cid@Ocf@qGoe@sP{Tg\\yB_QwJ_Ny[iI}a@iJ{d@sTk`A}Neh@}Oak@sUqy@uIa^cQaxA_T{aAkKeZa`@se@gQaNkPoEqPeC}OsLqVwHcSiIsPsMyOiCk\\|AsQQePtFqQwA{OyHkk@~CoQvTyLj\\sO|GcT_Ro]a_@_PiMkc@{ZwNuPsT{\\sM_T{u@oiA{Ka[cJa`@kIq_@tFip@rK}e@lJg_@nDer@aQgu@wGqa@qGyi@aEkd@oCqu@{Agp@qC}m@_H{q@uAqg@jPkJbP{QpJ}^fD}g@lAii@fAyh@c@og@g@ct@t@ej@yBwh@yNyr@iNaX{QyXaJg`@_Mo~@yEej@kGix@}Fkd@wKsd@iFec@~Agi@bG_c@|X_bA|I}a@`Fmc@xAgf@fLi`@rNsWpI_f@fEik@xIcc@lJo^tG}`@nKi_@vI_a@fIqc@Acf@zF{f@lN_ZnGye@~BsQ"
+    },
+    {
+     "t": "stop",
+     "place": "hvalnes",
+     "start": "09:15",
+     "end": "09:45",
+     "kind": "visit",
+     "name": "[[hvalnes]]",
+     "verb": "看灯塔和砾石滩",
+     "body": "橙色小灯塔在一道长长的砾石沙洲上，背后是 Eystrahorn 山，天气好时跟 Vestrahorn 一样上镜，但几乎没人。",
+     "tips": [
+      "路边有小停车区，海边风很大，注意帽子。"
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "hvalnes",
+      "djupivogur"
+     ],
+     "start": "09:45",
+     "end": "10:30",
+     "note": "1 号公路，沿 Álftafjörður、Hamarsfjörður",
+     "km": 54,
+     "geom": "m`bhKl~vwAkTqMuReIgP^sSzGcVoBmOuHgNsSuMeR}KkXaNcZ_Iab@sHuc@sJq]{NoM}O~N}NlRoOpMeQnEePoJwQsAkRhCcPcEwM}TqN{Y}OkKePcOqPyBsRCgQc@uNsVgKy[yRmTwSq_@iOkTcUpHeKb_@gK`g@sQdWgMbXiL|^iIr_@uQlTiPzUkXtt@qMj^cM|g@sFdf@{Nhj@mH`d@qHfsAmFtq@yNt\\oVrVcN`WgIt^kEhg@kC`e@aIt`@aObKcPb@sY{b@_Vu^uPgWkQcn@}h@qO_T@oQgE_PaO_M_XcP{a@{KcYcKq_@iHqb@vJucBjI__@e@yl@{Gw_A{Gwa@cHo`@yAet@gCoi@oCwi@Ewr@oA_m@sDkf@wEaf@}A}m@s@gg@tAwi@bAmm@}E{e@wBgg@ka@ap@i[KqPeE}PxHqQpU{Nz`@_L|]mM`W_NjSqGlb@Hhf@qDxg@eEnf@_Ipa@yDxi@wJp\\mL|Y{Q||@cFhd@aEne@kMlXmOfL}P_@_NyWyHwg@[kh@wKyd@gEkd@vAqf@vAuj@fD{h@f@wg@iGcb@yB_g@_@_i@qB_h@qBkg@~Aog@aCyg@tA}e@cAcf@lEeoB|Acq@nBue@hGsh@dI{q@Rmp@uJumAgBut@}Dok@cL{XeDse@pBwh@_Buf@"
+    },
+    {
+     "t": "stop",
+     "place": "djupivogur",
+     "start": "10:30",
+     "end": "11:15",
+     "kind": "visit",
+     "name": "[[djupivogur]]",
+     "verb": "看 34 颗石蛋",
+     "body": "海边码头旁一排 34 颗花岗岩鸟蛋雕塑，每颗对应当地一种鸟。小镇是慢城 (Cittaslow)，可以在港口喝杯咖啡。"
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "djupivogur",
+      "steinasafn"
+     ],
+     "start": "11:15",
+     "end": "12:30",
+     "note": "1 号公路沿海经 Breiðdalsvík",
+     "km": 78,
+     "geom": "}_tiKtkevA~Atf@kBpg@Ulg@iMdXkV|q@aI~`@oLtf@kIb^kFvh@}KjX_j@thA}Tbb@{Vv]}Ll[sFbd@mq@z~@}Pr]gQzMmQnIwT~R{^w@{OFcRpKmNtSaNfc@oMvTeOpPoMbVaNhXwL|WoLp]qIj`@eJx\\aKvZoGhc@Qlj@eHpa@kNfZkNvTaP~NqPdFmP{LsLa^uKe\\ePoE{ObLeQ|NkOpXuK`b@yJl^qGha@sPcFsKgg@|@qj@|E}i@^{g@iB_m@tAgs@bGie@nLe]~O_SvPaJnMiTnOkZtHgi@pHqm@tGec@tKi_@tM}UbRqKrOeInOuVbM_i@|Ki]`M_XpO{TdOaQ~Osf@nJy`@nNw^|LoUhKu_@`O}U~OsGjK_\\pLsYdQmG~OzDfSeErQaKxP_RdN{SrFuc@rJ}`@hMcW^}iAlHap@n[ojB|F{r@zA}f@iBkh@lBwzA`B{kAmB}qAmAqp@g@ug@Sei@sGyi@gH}c@wGic@cGwn@{F}k@eE_g@gB}m@{@{j@y@sh@aE_h@aDaj@gKqj@iEyc@oCue@}Gwh@_Haa@kGap@cEqj@mFkd@gIkb@uHke@gCqf@iC_l@iHwn@wHmq@uEsd@uKuf@sHmd@aOcXyPiKcR|BqQtc@eNxg@mKp`@qMpVePfEmQhFwPlTeMpa@mHhk@oEhn@iFbl@_Lja@cNjQcRrDqSkI{PoMiUeSkVaWwOoRaTuYuN_UoMgUuMsZcLw_@gIia@kGaf@kBaf@P_g@d@{g@hBsl@tFgd@bCwn@~Icf@bFuj@bHov@dBsq@uCck@kGcg@eAem@Asg@wGud@eHmb@~@si@aGif@aFmc@aHyb@}I__@cKs^iOjOoJf`@uJb^eMpYgKpi@eMdr@oJ~`@yJp]oF|e@uDxp@cHtc@gJ~t@uFrd@mFjr@cK~d@{NfQyRrBwNkSaEcx@Y}m@jAmu@tEocA~Bcf@tD_w@rDqv@zCue@tGei@jIi_@fEbH"
+    },
+    {
+     "t": "stop",
+     "place": "steinasafn",
+     "start": "12:30",
+     "end": "13:30",
+     "kind": "visit",
+     "name": "[[steinasafn]]",
+     "verb": "看矿石收藏、吃午饭",
+     "body": "一位当地老奶奶 Petra 花一辈子在东部山里捡的石头和矿物，堆满了房子和花园。院子里可以野餐。",
+     "facts": [
+      [
+       "门票",
+       "约 2,000 ISK（以现场为准）"
+      ],
+      [
+       "夏季开放",
+       "约 9:00–18:00"
+      ]
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "steinasafn",
+      "egilsstadir"
+     ],
+     "start": "13:30",
+     "end": "14:45",
+     "note": "1 号公路：Fáskrúðsfjörður 隧道 → Reyðarfjörður → Fagradalur",
+     "km": 73,
+     "geom": "isujKnmusA?_m@rAmf@pB{k@hGkl@lIg_@nH{_@iGgc@sCee@mH_b@{I_`@eP_XwNaYkOo]gLgf@wJgv@_N_a@kX}m@qO}XaOiYuMiYyOkCeT}BiRrDsPzXwIt]iElh@gIxs@aFhh@wYdlAaMpXoFvi@kI|d@uHdm@qG`d@uMba@mL`c@iJ|\\gLp^mIlp@mDtd@aBpf@wBln@v@hm@m@th@aGpe@oC|m@wEfo@@ph@_CltAiC~l@aCth@iDzg@cBrn@kF~|@cCff@wFhs@oFzd@}Fnh@eDdj@kBfh@uFpf@}Lt[}NdVoJv\\qJxb@gDvj@{Jp`@gSr^mO}JmKi]qIt`@kAlf@sB`|@cAvt@oDpg@cIhb@mUfr@kK~^oNlo@cLxp@yFxd@yGxw@yHza@cM~\\uIdc@sCxe@gFxh@sKj\\clHdiCsOzKkNz^}Fnf@cC|h@_Gvg@eG`k@_C|k@gKlk@eKz^gWjeAiLbZbDrg@bAll@Qnu@Wb~@c@|j@wE|j@oIlb@wEbg@qDlg@iClf@yHjd@cNrQoPbKwPxJcPpEoP_HaQSiRcMcPwIaR{BiRkAcQ[yQmI{P_PsPqI_RgBcRqI{OcK_PeMaP{MoP_FaPyB_\\n@{Tt@{OpBmT`HaQ`GqRhCmPHqQ`AuRtDq^pGoXnDqP|BgPvF{S`IuPBySW{Tl@yTn@yP]iUeCqQoBaSkB_SrGwQ`EuQNqUeBiQg@cT|E{RnG{SeAyVuCuQ{BcTSoPhDeP~GaNrUwPnVmQdBsRiDgP_BkScJaPyFu^fDaWvD_OvOwNxPuQvKqKv_@wCff@kKhd@uKf]uMlSkJr^eAlg@cIla@cRcDeHkL"
+    },
+    {
+     "t": "stop",
+     "place": "egilsstadir",
+     "start": "14:45",
+     "end": "15:30",
+     "kind": "shop",
+     "name": "[[egilsstadir]] 补给",
+     "verb": "超市采购、加油",
+     "body": "镇上有 Bónus 和 Nettó，是去米湖前最后一个大超市。买够两天的早餐和午餐。"
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "egilsstadir",
+      "gufufoss"
+     ],
+     "start": "15:30",
+     "end": "16:00",
+     "note": "93 号公路翻越 Fjarðarheiði 山口（约 620 m，夏天也可能有雪墙和雾）",
+     "km": 24,
+     "geom": "y`jmKnqzvAjNtOx@mo@}Bkk@wP{QqMqXcPgIyAyh@cAon@pDsn@tKea@fJc`@_Aeh@cMq[uQ}XkUyY|@yg@qFce@jUqg@pTqJuF_k@aOsSjMo\\nKm[_@og@fCmk@`Fyc@bNgh@`J{a@xKghAzGky@hEmg@tGag@zIwf@rHoj@fGoc@dMaZbOsa@|RcX|NqNrI{^`Gsf@pFgf@tAqr@h@yj@zDgh@hEkm@fIwg@rNoQaHqi@gOmNaHea@hOapAxLe_@lHaw@_PnAnEed@{XhFaKu_@}L_WkGac@fFae@uAkk@iFid@aLmM"
+    },
+    {
+     "t": "stop",
+     "place": "gufufoss",
+     "start": "16:00",
+     "end": "16:15",
+     "kind": "visit",
+     "name": "[[gufufoss]]",
+     "verb": "路边看瀑布",
+     "body": "下山快到镇上时路边的一道瀑布，停车 10 分钟就够。"
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "gufufoss",
+      "seydisfjordur"
+     ],
+     "start": "16:15",
+     "end": "16:25",
+     "note": "93 号公路下山",
+     "km": 2,
+     "geom": "cafmKjmutAmJc`@sBif@eF_g@mOmYaPmSyOwPwPaMqFeI"
+    },
+    {
+     "t": "stop",
+     "place": "seydisfjordur",
+     "start": "16:25",
+     "end": "18:30",
+     "kind": "city",
+     "name": "[[seydisfjordur]]",
+     "verb": "逛彩虹街和蓝色教堂",
+     "body": "峡湾尽头的小镇：彩虹石板路尽头是浅蓝色木教堂，周围是彩色木屋和瀑布。可以沿 Búðará 河往上走一小段看瀑布，然后吃晚饭。",
+     "tips": [
+      "这是诺罗纳号渡轮 (Norröna) 停靠的港口，周四船来时人会多。"
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "seydisfjordur",
+      "egilsstadir"
+     ],
+     "start": "18:30",
+     "end": "19:00",
+     "note": "93 号公路原路翻山回去",
+     "km": 27,
+     "geom": "_cimK`dotAdO`QjOdI`RbXdNrQnKj[vBfg@jGhj@jLz[rLnWxAbh@cEfg@bAdi@|MfUvFfd@tSpBrN`UfD|h@sK|`@cPlaA{Ele@hI~c@jUtLDbh@sPxXeGdj@}Frt@aCvi@@ng@_D~r@sH~f@gFpd@}OvX}SlUiTfj@eM`ZgGnc@sHnj@{Ivf@uG`g@iElg@{Gjy@mFpj@gFre@kMre@}Ij_@{Fvh@eAnl@Y`i@qMlUhDvk@`LvZ}YxZcPrHaPdFlMj\\^ng@jLlm@|NzRlNpTbLh\\Ztg@kMpd@cJjd@sBdn@fAfh@`Fjf@|MbRlRdPbMx[Gbk@{Kd`@oBuK"
+    },
+    {
+     "t": "stop",
+     "place": "egilsstadir",
+     "start": "19:00",
+     "end": "19:30",
+     "kind": "stay",
+     "name": "入住[[egilsstadir]]",
+     "verb": "入住",
+     "body": "入住民宿或青旅；选带厨房的，可以自己做饭省钱。"
+    }
+   ]
+  },
+  {
+   "date": "2027-07-12",
+   "c": "is",
+   "title": "[[studlagil]] 玄武岩峡谷 → [[dettifoss]] → [[myvatn]]",
+   "short": "玄武岩峡谷",
+   "sub": "上午徒步去看蓝绿色河水和玄武岩柱，下午看欧洲水量最大的瀑布之一，晚上泡米湖温泉。",
+   "stay": "myvatn",
+   "stayNote": "民宿或青旅，约 20,000–35,000 ISK/间（青旅床位约 8,000–11,000 ISK/人）",
+   "segs": [
+    {
+     "t": "stop",
+     "place": "egilsstadir",
+     "start": "08:00",
+     "end": "08:00",
+     "kind": "start",
+     "name": "[[egilsstadir]] 出发",
+     "verb": "出发",
+     "body": "早点出发，Stuðlagil 上午人少、光线好。"
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "egilsstadir",
+      "studlagil"
+     ],
+     "start": "08:00",
+     "end": "09:15",
+     "note": "1 号公路 → 923 号公路 (Jökuldalsvegur)，最后一段过 Klaustursel 桥走碎石路去东岸停车场，四驱没问题",
+     "km": 73,
+     "geom": "y`jmKnqzvAjNtO|Hha@kRrOaP{DgPlKaNtRmP`OiO`Q{Vzo@kLvWkPtPiOrOuN|NoRnZmOvYyKv[oCvf@gJn_@gVnGgOfMePfNkS`GeO`KsQnSqe@zb@_PvN_YxV}NtSkMbTge@dTmOxIsSxNkRrTcTxPqK~YkGpe@wKri@oN~TyZtF_PrAmPxC}UfHwShAuR|BmWrXcPrNsPxAeVqD_R`BiQdImTpRiOdTcM|]kFte@eGjc@uGbu@eBdk@uIdf@iOlNySbCoQxAmQVwLd^j@pk@jE~e@|Knb@bOzKbSnBjVbVpQvPtPx\\tJhc@pIdm@dO~`@`Nd_@|Kxb@bOh^~K|b@vItc@lIrb@pIbb@bKbe@lIx_@hM`^`LbY|I|f@`Dxg@D~k@bDfs@~Cxt@jD~r@xFts@|Dhl@pGph@~F|u@hGpv@fClg@xFlq@lClk@tGhl@xExn@`G~d@pGns@bCti@pCrg@vFxu@pCzk@|EpgA`Cpn@zDjf@pEjd@lKjgApCpw@Tjt@vEdt@lFde@bBxx@tAhq@lCdh@rAbl@hFbr@nH`e@jGbe@|K~|@`N|fAp^|uCxR|}AfHnj@zHxk@tFfc@jQte@fM`XxMxi@hOht@`Pj~@jF~e@~Bfi@fDpe@lFji@dJtf@tNtm@tIvb@rLd`@nLd^hNzPnUfKhPtP|MhTxPxFfR|BlPbHdO|LpO~LxOdIzQlPrO~FrQfI`T`FbPvB|WgArOtKvRpPjO~K`NfQjRfInRhDvb@nQxOpJbd@dq@xRne@xMpU~[~YdYrXnRjNvTnFja@v`@bSxMtMdT~PfHdOpUxM~a@rLx`@zVtq@lOd}@lNze@dL`r@nM``@rZdYjIuV"
+    },
+    {
+     "t": "stop",
+     "place": "studlagil",
+     "start": "09:15",
+     "end": "12:15",
+     "kind": "hike",
+     "name": "[[studlagil]] 东岸徒步",
+     "verb": "徒步走进玄武岩峡谷",
+     "body": "从东岸停车场沿河走，路过 Stuðlafoss 瀑布（也是玄武岩柱），然后下到峡谷底部的河边，近距离看六角形石柱。",
+     "facts": [
+      [
+       "距离",
+       "往返约 5 km（较远的停车场约 10 km）"
+      ],
+      [
+       "时长",
+       "2–3 h"
+      ],
+      [
+       "难度",
+       "易–中，最后下河边的一段有陡坡"
+      ]
+     ],
+     "tips": [
+      "西岸 (Grund) 只有观景台和楼梯，下不到谷底，所以去东岸。",
+      "河水在 8 月以后可能被上游水库放水变浑，7 月中一般还是蓝绿色。"
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "studlagil",
+      "modrudalur"
+     ],
+     "start": "12:15",
+     "end": "13:00",
+     "note": "回到 1 号公路往西，进入 Möðrudalsöræfi 高原荒漠",
+     "km": 60,
+     "geom": "afvlKvcm|A_e@oAoMa`@cImg@{L_c@sNm{@wS}n@uSwn@}Ki_@mQuZqPmHgOsUcSyMmReUs[cPqPcF{UuTee@kc@}QiZ}Mm\\e]wk@_U{Ts]oPkSoFwOaDmPeKsP_ScQaLaPyQgUkCqTAoPiDkScGcRqIcPyGoUeSgTsOeO}LmPcHgR}ByPyF}MiTaOsOiOiIeP_I_Ocb@iK{[qKkd@iIcc@nEjx@fHzj@xH`i@jB~j@nIjw@|Clf@lD|iAt@bp@Ubp@Pn~@|Cnz@lGne@zFzi@f@`o@mBbx@wCb{@cCbl@uDdi@}Hfd@qFtc@gDzi@{Fzj@|Bdi@xBto@e@`jAoHjk@qItg@iBpwA\\fj@~Fze@bJvb@vKdb@hJ`l@|H~e@dI~g@rHph@hEvn@fDxh@dDjf@xH`i@rEjg@uO`dA}Nz{@mEfl@yPhdGuDvpADfr@iCtnAcBlk@iH~g@eDlxA{@hkAuF~b@aP~T}U`\\yVxi@kEhe@hKtq@`Kbl@`Gvb@sMl^mOlSsN~OkMl]oOfj@iOz]cRzLsMhr@oHbd@_Bfg@qDnm@yMhaBsJ`lAeFrg@}H`k@cEdk@{Eff@fAfg@bElt@dJz`@dSxSnHxk@dAfj@uCtg@sMlc@wMjU_]feAoNjb@cOxY{Ynd@{PvWoTr]_b@nsAmMfd@iM`d@uDvM"
+    },
+    {
+     "t": "stop",
+     "place": "modrudalur",
+     "start": "13:00",
+     "end": "13:45",
+     "kind": "food",
+     "name": "[[modrudalur]]",
+     "verb": "吃午饭",
+     "body": "冰岛海拔最高的农场，草皮屋顶的咖啡馆，有羊肉汤和自制面包。也可以在车上吃自带午餐。"
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "modrudalur",
+      "dettifoss"
+     ],
+     "start": "13:45",
+     "end": "14:45",
+     "note": "1 号公路 → 862 号公路（柏油路）北上到西岸停车场",
+     "km": 66,
+     "geom": "aj_nKtc}_BiNbPsScBij@cHePeBiuAxzAeShKuQFsk@oC}VdGsOlGiVi@mb@b[u_@x]oG`d@}Bnj@yF`c@yFte@Epi@sClh@aLn^cQdJ_TaL}TyJc`AwHmPcH{O_DoQfHef@bo@kU~ZiQ`TkUzMe]bQi]tQgT`N{SxOkSdOmRlGeREgQ~EsQxQqOlIkRiBiQsEmRxCwOlGqS~DyRr@eR~D_P`Q{PnNuOf\\wLnWuLnYsJna@iHvi@uHnc@wNzb@uMpY{Pti@oInd@cKru@aI|c@kOjm@{Prd@sR`d@qOjj@kL`v@}G|x@uFph@yG~a@wJfb@cKt[_Upd@mOpYoNh]iNp^iPr\\wWj\\iQbNqQpJwNrPcK~a@yMvRiPuSuQgo@cT}u@gRkp@yJa]iDwg@gGqk@aP_I{K|p@}Jpf@iHdb@_`@~\\eq@vc@sZzSyUvOm^h_@yNhRiWd\\w_@df@cOfWcH|l@gFph@eNrX_OtPuCbm@v@pl@~KxaAbIxh@hIli@zEbe@cBrk@qC`i@wAvo@iAru@eC|fAyArm@yAhk@wCxj@oKx]gPtIqQ|EsQxEmS|@oc@hCkP~CwOjPcSK_QdA{fArG}PxKmRtCuNgNgQsN}Sw@sPhLmJn]qOhh@uNfP{OiAqQcFoQxCsOlFyPvG_P~IyQ~DwPf@{SoAiZyBe]mFq[oMgPqDkd@nYgR|XmNlf@oLjm@w@dj@pPtLtHxD"
+    },
+    {
+     "t": "stop",
+     "place": "dettifoss",
+     "start": "14:45",
+     "end": "16:15",
+     "kind": "hike",
+     "name": "[[dettifoss]] + 塞尔瀑布 (Selfoss)",
+     "verb": "看瀑布",
+     "body": "Dettifoss 落差 44 m、宽 100 m，灰色的冰川水轰鸣而下。从停车场走到瀑布，再沿河往上游走约 1 km 到 Selfoss。",
+     "facts": [
+      [
+       "步行",
+       "环线约 2.5–3 km"
+      ],
+      [
+       "费用",
+       "免费（停车可能收费）"
+      ]
+     ],
+     "tips": [
+      "水雾很大，穿防水外套。",
+      "西岸路好、观景点多；东岸 864 号是碎石路。"
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "dettifoss",
+      "hverir"
+     ],
+     "start": "16:15",
+     "end": "17:00",
+     "note": "862 号南下 → 1 号公路往西",
+     "km": 65,
+     "geom": "{fvpKva~bBmQRkMq^pLcs@jHql@j]ej@pf@c\\fPpDjVnKvWxFhTdBd`@tCpPSvR_DpSqKxPwGrOmFnQyCpQbFzOhAtNgPpKe^dJ}]`PqT`PoApQhIhOnNhOfM`QyQrqAuL~PeAbSJvOkPjP_Dnc@iClS}@rQyEpQ}EfPuInKy]vCyj@xAik@xAsm@tA_n@zAmq@j@mj@zEokAbBsk@{Ece@iImi@cIyh@wGgb@_Dar@k@}k@nH}a@pOuMvKo_@`Gwr@pK}c@f\\mb@jXo]pZg`@~NkRfe@u\\rZ{Sdq@wc@xX_R|Kma@nJwc@rM_z@jP_A`Hjb@rAli@rN`k@vJd]zPfm@vT~v@hKt^xPrFjEpf@rJla@vOnNtLbXjAjt@rC~|@Fvw@cFpj@_Jvb@s\\|yAsM`l@kf@fyBoHpa@}Dvf@cBng@sCri@iIhfAok@ltHeMhaBgLf{AwDrj@mDds@cC~v@kAtp@a@hx@Gzm@k@dp@eCdq@uD~j@gEzl@kCdw@Wnl@f@zw@Cvp@}@lh@uB|f@eDhh@uCpz@Nrw@dA|g@k@vw@Mrm@~D~g@|Knf@bHvd@hCps@jDlk@~Gze@|Mtj@hIzb@pFbe@jDrj@`Blw@pAvg@xDhu@pBji@h@fq@Yjj@y@jqAe@b{@wGxr@{Inr@uEtk@y@hp@u@jt@t@hq@d@jp@hF|dA`Ezr@xChg@r@hh@nPvHvPqMlP}GdMlWkNzg@oKr_@eJbL"
+    },
+    {
+     "t": "stop",
+     "place": "hverir",
+     "start": "17:00",
+     "end": "17:45",
+     "kind": "visit",
+     "name": "[[hverir]]",
+     "verb": "看泥浆池和喷气孔",
+     "body": "火星一样的橙色地热区，冒泡的泥浆池和呼呼作响的喷气孔，硫磺味很重。",
+     "tips": [
+      "只走围绳以内的步道，地面可能是烫的薄壳。"
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "hverir",
+      "myvatn_baths"
+     ],
+     "start": "17:45",
+     "end": "17:55",
+     "note": "1 号公路下坡",
+     "km": 7,
+     "geom": "_rsoKtrqeBnNiZ~Je_@|Gob@iNuPqPlI}PfP{B|aAlC~f@wLpZkDji@Vnk@pQtLdJf^|Lj[d@jj@bPdCnOkHnP`BKpD"
+    },
+    {
+     "t": "stop",
+     "place": "myvatn_baths",
+     "start": "18:00",
+     "end": "20:00",
+     "kind": "water",
+     "name": "[[myvatn_baths]]",
+     "verb": "泡温泉",
+     "body": "北方版蓝湖：比蓝湖便宜、人少，乳蓝色的地热水，可以看到湖景。夏天开到很晚。",
+     "facts": [
+      [
+       "票价",
+       "成人约 6,500 ISK，学生约 4,300 ISK（2026 年参考价，需核实）"
+      ],
+      [
+       "预订",
+       "官网提前 1–3 天订"
+      ]
+     ],
+     "tips": [
+      "带上学生卡。",
+      "近年改名或扩建为 Earth Lagoon Mývatn，订票时以官网为准。"
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "myvatn_baths",
+      "myvatn"
+     ],
+     "start": "20:00",
+     "end": "20:10",
+     "note": "回到 Reykjahlíð",
+     "km": 4,
+     "geom": "qrqoKdsyeBcPsGoOjHkMnVcCdmAXdk@bB|~Ac@pw@iC`tA}J~M"
+    },
+    {
+     "t": "stop",
+     "place": "myvatn",
+     "start": "20:15",
+     "end": "20:45",
+     "kind": "stay",
+     "name": "入住[[myvatn]]",
+     "verb": "入住",
+     "body": "入住民宿或青旅；选带厨房的，可以自己做饭省钱。"
+    }
+   ]
+  },
+  {
+   "date": "2027-07-13",
+   "c": "is",
+   "title": "[[myvatn]] 火山一圈 → [[godafoss]] → [[akureyri]]",
+   "short": "米湖火山",
+   "sub": "火口湖、还在冒烟的熔岩、爬火山口、熔岩迷宫和假火山口，下午众神瀑布，晚上到北部首府。",
+   "stay": "akureyri",
+   "stayNote": "民宿或青旅，约 20,000–35,000 ISK/间（青旅床位约 8,000–11,000 ISK/人）",
+   "segs": [
+    {
+     "t": "stop",
+     "place": "myvatn",
+     "start": "07:30",
+     "end": "07:45",
+     "kind": "start",
+     "name": "[[myvatn]] 出发",
+     "verb": "退房",
+     "body": "早上先去最远的克拉夫拉。"
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "myvatn",
+      "krafla_viti"
+     ],
+     "start": "07:45",
+     "end": "08:05",
+     "note": "1 号公路往东 → 863 号公路，经过地热电站",
+     "km": 15,
+     "geom": "ctsoKjbffB~N{}At@{i@}AqbBe@qh@L_|Ap@_i@{Boh@cM}UeWed@eFcd@pEog@tL}[qAur@aDqh@q[{XmUmG{P|HkTxPgP}@uLuZc_@}YwO}K}ReOgUkY}Uq\\cO_LgQ|@oOzHqUz@{QY{X_NgPn@}QFuPhHcNiS{D{e@sOaLeHsX"
+    },
+    {
+     "t": "stop",
+     "place": "krafla_viti",
+     "start": "08:05",
+     "end": "08:30",
+     "kind": "visit",
+     "name": "[[krafla_viti]]",
+     "verb": "看蓝绿色火口湖",
+     "body": "Víti 在冰岛语里是「地狱」，1724 年爆发后留下的火口湖，可沿口沿走一段。"
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "krafla_viti",
+      "leirhnjukur"
+     ],
+     "start": "08:30",
+     "end": "08:35",
+     "note": "863 号公路尽头的停车场",
+     "km": 1,
+     "geom": "kobpK||geBvL~ZfNnUxB`g@qBvO"
+    },
+    {
+     "t": "stop",
+     "place": "leirhnjukur",
+     "start": "08:35",
+     "end": "10:00",
+     "kind": "hike",
+     "name": "[[leirhnjukur]] 熔岩环线",
+     "verb": "走在新熔岩上",
+     "body": "1975–84 年「克拉夫拉之火」喷出的黑色熔岩，局部仍在冒蒸汽，旁边是彩色的硫磺山。",
+     "facts": [
+      [
+       "距离",
+       "环线约 2.5 km"
+      ],
+      [
+       "时长",
+       "1–1.5 h"
+      ]
+     ],
+     "tips": [
+      "只走木栈道和标记步道。"
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "leirhnjukur",
+      "hverfjall"
+     ],
+     "start": "10:00",
+     "end": "10:25",
+     "note": "回 1 号公路，绕到湖东侧",
+     "km": 19,
+     "geom": "crapKfhkeBpPmHtPiH|QGfPo@tQjJ`YlC`QSpQqH|PeCpP|JzNnSpObT|RlTxRdN`\\jU~NvO`LpYxToDtTuPdQcD`h@j^nGnk@lC~f@wLpZkDji@Vnk@pQtLdJf^|Lj[d@jj@k@zhBXdk@bB|~Ac@pw@iC`tAtMtVtLd\\xS~HpO{HpSfDdSrArQ{@pOqOdR_DhT|JrFuk@bAsg@tHea@xFmc@wL}[}JyW"
+    },
+    {
+     "t": "stop",
+     "place": "hverfjall",
+     "start": "10:30",
+     "end": "12:00",
+     "kind": "hike",
+     "name": "爬 [[hverfjall]]",
+     "verb": "爬火山口、绕口沿走",
+     "body": "约 2,500 年前形成的巨大碗状火山口，直径约 1 km。爬上去约 20 分钟，口沿一圈约 3 km，能俯瞰整个米湖。",
+     "facts": [
+      [
+       "爬升",
+       "约 150 m"
+      ],
+      [
+       "时长",
+       "1–1.5 h"
+      ]
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "hverfjall",
+      "grjotagja"
+     ],
+     "start": "12:00",
+     "end": "12:10",
+     "note": "碎石小路",
+     "km": 6,
+     "geom": "mpmoK`s`fB|LvZtJt\\qGpb@{Hvb@Wjm@uPxXmYT}NzLcPbEoE_e@~Fse@|@sj@cDgf@Hgi@{Kq\\iOuIhAjL"
+    },
+    {
+     "t": "stop",
+     "place": "grjotagja",
+     "start": "12:10",
+     "end": "12:40",
+     "kind": "visit",
+     "name": "[[grjotagja]]",
+     "verb": "钻进地下温泉洞",
+     "body": "地裂缝里的蓝色温泉洞，《权力的游戏》取景地。现在水温太高，禁止下水。"
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "grjotagja",
+      "dimmuborgir"
+     ],
+     "start": "12:40",
+     "end": "12:55",
+     "note": "848 号公路",
+     "km": 6,
+     "geom": "mspoK`l`fBrPbB`Fhd@nDze@N`i@s@zj@yExd@rLnXxRyPlS_EhT|Jl\\`[d\\|YfOmKlNsQfKo\\xN{RJmE"
+    },
+    {
+     "t": "stop",
+     "place": "dimmuborgir",
+     "start": "12:55",
+     "end": "14:15",
+     "kind": "hike",
+     "name": "[[dimmuborgir]]",
+     "verb": "走熔岩迷宫、吃午饭",
+     "body": "熔岩湖排空后留下的高大熔岩柱和拱洞，传说是冰岛 13 个圣诞小精灵的家。走「教堂环线」(Kirkjuhringur)，入口有咖啡馆。",
+     "facts": [
+      [
+       "距离",
+       "约 2.3 km 环线"
+      ]
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "dimmuborgir",
+      "skutustadagigar"
+     ],
+     "start": "14:15",
+     "end": "14:30",
+     "note": "848 号公路沿湖南岸",
+     "km": 12,
+     "geom": "g{ioKzdffBwLdWqKx\\cNpRlCtf@|RrPdRjUzOlP|Pv]hQ|OfPvQbQBnOqMbPrExK}[lPgC`Q_K~OlYnKvd@~Odr@jN~\\xJx]Oph@ia@toAoKt]yHt`@cFle@wEz|@kGdg@cHja@uChg@qEnk@uCiC"
+    },
+    {
+     "t": "stop",
+     "place": "skutustadagigar",
+     "start": "14:30",
+     "end": "15:15",
+     "kind": "hike",
+     "name": "[[skutustadagigar]]",
+     "verb": "绕假火山口走一圈",
+     "body": "熔岩流到湿地上、水汽爆炸形成的一个个小火山口，旁边是湖和鸟。",
+     "facts": [
+      [
+       "距离",
+       "环线约 1 km"
+      ]
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "skutustadagigar",
+      "godafoss"
+     ],
+     "start": "15:15",
+     "end": "15:50",
+     "note": "1 号公路往西",
+     "km": 38,
+     "geom": "mmeoKdg_gBgB|j@iJ|a@qA`m@z@ns@~Bdh@iD~l@eUxc@qUzs@eJh^_Irq@eFv~@{F|l@{Cfn@cDxf@w@fh@_Hhb@kPjh@uI~_@uDre@qFbf@qD|i@mCzh@sKr\\sQpM_QnVyQxSkOnXkNpWcQvMiSfMgNda@sExg@P|m@aEhf@cRlRmYxNgPfJ{VpYiOdR}OvJwOlFgPrScL|[kR|_@sMjVcNtVsLx\\{G~c@}Dxf@iNvs@kLxf@yLt_@gYpz@{Qji@qKzZkMlUys@rXoWhC}QzBsZta@mO~PgVjNgp@t^mSpNeTrQ}P|NkNvQwOvj@wKjd@sTv|@oLr]hAth@dPhKzJ`a@}Dll@mLd\\f@bn@lR|UdO`QfK`i@|Fnm@|Idc@~N~Xvd@tQ|P~HdPrPrNfVvLx\\hRry@dNdb@vMfWjSzU|O|O~NjYvHxe@|@vnAMpi@zE|b@"
+    },
+    {
+     "t": "stop",
+     "place": "godafoss",
+     "start": "15:50",
+     "end": "16:45",
+     "kind": "visit",
+     "name": "[[godafoss]]",
+     "verb": "看众神瀑布",
+     "body": "公元 1000 年冰岛皈依基督教，传说议长把异教神像扔进了这道马蹄形瀑布。东西两岸都有步道，西岸可以下到水边。"
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "godafoss",
+      "akureyri"
+     ],
+     "start": "16:45",
+     "end": "17:30",
+     "note": "1 号公路，经 Vaðlaheiðargöng 隧道（收费，需在 veggjald.is 网上付费）；不想付费可走旧路 Víkurskarð，多约 15 分钟",
+     "km": 35,
+     "geom": "ie|oKx}ajBkU|XoKza@wGfj@qM|iA_Htd@eIvi@yQznAkGno@sCxi@yC~j@q@fi@Sfi@kAvk@uA~q@sBlg@_Alk@kDdj@eHxc@yFjd@Mfj@sAlh@wFtc@wBzm@uFbh@eJt^eC`i@nAd}@hCxh@}Bxm@sJ`m@sJnm@eGlo@w@~v@iCjh@eQtv@gIfc@k]rrCqK|c@uP`e@gHjb@uDdf@sFtn@yGhd@kMhl@_Ofl@aJp`@oBfi@lC||@nB|i@pJda@hR~M`SzJbQfCdRyL|P}B~QvTzJhe@fH|x@zGrp@hLh~@nJps@pLfv@jRndAtOfv@|Gjb@hR`iAhMhbA|Pj}AfExg@pGhg@tL|Z`QpG~PgJjSgGtReFxOiGhQgJxQ_HvPjAjLp^tClg@mDly@_Ddl@_@vi@kOn[qNvOcPf@aP{BuOtGFgC"
+    },
+    {
+     "t": "stop",
+     "place": "akureyrarkirkja",
+     "start": "17:30",
+     "end": "19:00",
+     "kind": "city",
+     "name": "逛 [[akureyri]]",
+     "verb": "逛城、吃晚饭",
+     "body": "爬上阿克雷里教堂前的台阶看峡湾，逛免费的 Lystigarður 植物园，看看主街上的心形红灯。"
+    },
+    {
+     "t": "move",
+     "mode": "walk",
+     "path": [
+      "akureyrarkirkja",
+      "akureyri"
+     ],
+     "start": "19:00",
+     "end": "19:15",
+     "note": "步行或开车回住处"
+    },
+    {
+     "t": "stop",
+     "place": "akureyri",
+     "start": "19:15",
+     "end": "19:45",
+     "kind": "stay",
+     "name": "入住[[akureyri]]",
+     "verb": "入住",
+     "body": "入住民宿或青旅；选带厨房的，可以自己做饭省钱。"
+    }
+   ]
+  },
+  {
+   "date": "2027-07-14",
+   "c": "is",
+   "title": "[[akureyri]] → [[hvitserkur]] → [[grundarfjordur]]",
+   "short": "西行长途",
+   "sub": "一路往西开 400 多公里：草皮屋、白色巨人海蚀柱，傍晚到草帽山。",
+   "stay": "grundarfjordur",
+   "stayNote": "民宿或青旅，约 20,000–35,000 ISK/间（青旅床位约 8,000–11,000 ISK/人）",
+   "segs": [
+    {
+     "t": "stop",
+     "place": "akureyri",
+     "start": "08:00",
+     "end": "08:00",
+     "kind": "start",
+     "name": "[[akureyri]] 出发",
+     "verb": "出发",
+     "body": "加满油，Bónus 补给。"
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "akureyri",
+      "glaumbaer"
+     ],
+     "start": "08:00",
+     "end": "09:15",
+     "note": "1 号公路翻越 Öxnadalsheiði",
+     "km": 102,
+     "geom": "wy{oK~xkmB_MdWqI`c@iIv_@iKr_@yK`c@wIti@iO~dAgJfo@eJfk@sJl_@uNrXkOtS{M|ScQxX_OxUiNzToOhVyNtQ{OlNiQ|Lcr@lf@yQvWuN~XqLdc@kJlc@wBtk@sAfk@mAlh@jEvy@~Bhm@b@ht@vDdn@dJlh@pJzg@hIjc@nLh`@bKb_@zKz[~Od`@rQng@~Qfg@pNt^nKj\\hKv_@jK|e@lJve@rJde@nOlk@rM|]pWlj@lV`f@pRjc@rRtf@fMf\\vLb[jMx[|LjX~NvSvQ`NrR~E~RPjQnH`Yxc@~Urb@nPn\\vKfb@jKf\\hTvWpQbYhNjUtOhRnO~]jMlWbQp[tMj^xUze@vTfVzNnOlN|R~Sha@bQt\\bQzRpS`KhR~EjUjPf]lZdSxMlNpPzNf^zMfc@lQd\\pPlUpMjV|O|LjSNbP`GxQvDlVdCp]|ApWtGlQbKlQjPpN`Rj`@`x@tOrXpQ`RbZnNfRnQnO|^nJdc@jJz]fLfXzNjS|UnOnSdOn[lp@zNrV~NvNvO|TnMn^vJxb@tLh_@~N~SdP~UvR`YpMtWrLv^tMnXbN|]hKv^rCnh@dIh`@hG|h@R|j@qAbi@nAxl@aAfqBi@ho@S~j@p@fj@lBfh@bCpg@bBfh@bAxh@nE`k@|B~k@~B~j@fA`k@fEfh@pCjh@w@di@y@di@gAng@mBhs@_Cvo@w@hp@z@jn@`Dbo@rC~v@hCji@h@lk@sBxg@t@pi@pE`i@fGrc@~Ejn@tCdg@`Fth@jCbh@hG`g@nBlv@xDrg@|Ipc@rL|YzJf_@pFfp@dKxf@tFjh@|Dpl@~Ivh@jKn^tIre@dMth@hKd^hH`b@jH~d@vGzb@fCdh@a@zs@Tju@Evw@oBtm@qFvt@eE|f@uD~k@aCvj@aDziA{D~q@iJxgAuEnf@eGtd@oIhg@wK~g@_O|h@{O|c@yKj[yO|g@kNni@sKhb@qK~]{Nv`@eQd`@_Px\\aOx^sOld@cOnc@_Rba@oOpUcTvToTzMyR|FgQlAkSNyQzGuQrPeU~KiR~BaQvLgThRcOzNaTjTqPjQ}PxUoTnUiSrTgN|Yq_@dk@qTbVaRnSoNbRgKv_@yCdf@~Afm@|G`kAvDrq@jDrm@hA|m@yAli@iFrg@aQjtA}Gvk@m@vh@fBxj@gEfe@gUvYgThWgNfRyHnjAmIlg@cPjYcTt`@yQnSeZp[sb@nd@aPdE_RcC{[hD_a@zF{UbCkRnBuGQ"
+    },
+    {
+     "t": "stop",
+     "place": "glaumbaer",
+     "start": "09:15",
+     "end": "10:00",
+     "kind": "visit",
+     "name": "[[glaumbaer]]",
+     "verb": "参观草皮屋",
+     "body": "18–19 世纪的草皮农舍群，现在是博物馆，能看到当年冰岛人怎么过冬。",
+     "facts": [
+      [
+       "门票",
+       "约 2,500 ISK（只看外观免费）"
+      ]
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "glaumbaer",
+      "hvitserkur"
+     ],
+     "start": "10:00",
+     "end": "12:00",
+     "note": "1 号公路往西 → Víðidalur 转 716/711 号碎石路约 30 km",
+     "km": 113,
+     "geom": "}pmoK|r`vBrSw@|P{Ajm@iIlR_DnUjAnPAbh@ei@dZq[xQoSbTu`@bPkYlImg@vAcn@|Qqj@jN{Q`Q{QvNeVpNaUhOyObPtGzFpk@vDfpAD`i@iMrc@cLz[s@dh@nN|f@fz@z_BdQ|QzNvLdKh_@pHfm@hQ~~@zFfe@xClm@tE`f@rG`e@~I|f@bK`y@rFlg@nBlj@qDdr@mGjc@gJpb@cEth@Bph@fC`vAhDreBYdl@a@jh@rDzj@pIb`@jO|VfOrNnJb_@[rm@iEff@{BvjAeBpbAaAvk@Ylk@pFnj@v@rj@sIha@iK`\\aHze@qJz_@sJ|]_K|[qLra@mGfd@vCbk@dAhj@~Adl@Xli@bBjh@gAbj@rDne@Enj@Fri@yIf`@x`@pRxPMpWWzPkBtP{L|N{UnSoZlS{X~QqMfPqD`@th@eJj`@qCvj@cAfl@iGtl@q[dqBcL`t@gKzzAme@tdBp^tt@vPb]sm@~dGcKxk@oFf{@zGfm@|Kri@~Dhi@tFbt@hTl`@zLdgBfJt|DqP|LmPzL_RjNwQlAcm@zMaOlOuR~q@gMng@eMhl@eIlj@oDhh@_Dvf@sKdv@eM`~@qJh]kB~|@sBxiAuA~s@gBh|@uD~iBaG|uCyAhr@}N|rAmSvyA}Epj@kS|yAuIpe@gPr`@kHna@xDrj@|N`TnQpFrRdNdQcDnQyNtRoG`PjCvPlFrR~BxOiHpSaIzOkKpQe@|O{FfPf@tMxYdKzm@rIfg@xH`e@pLdr@pD|g@mBpl@rE`k@jKni@~Mp`@vOlXhMxZlI~^xLdi@dM~c@jRxd@hKn[hF~f@fDni@xFxk@bKl`@~MvXtKx_@xFvv@lFv_AzEr{@bEjm@`Gte@hKhi@~c@`uBfK~e@nL~h@zPzg@pN``@jO`b@zLnZbPrYpO~XpNlSzOzMnQlFlQfGnOdVtJra@fJ|a@nLpYj_@~x@dM|XpPhWy@ho@aHbg@aLt^kNbVoTdLaSrJuSoBo^mFiVcDqMxg@~Brf@xLdXx@rg@a[nxA_QkEgToMo[kC{RTyRqAiSbL}SxZkPBaPrC}OvEkUnLePhHiR}CeSkC_Th@yToEaPsCmPaCwN}NkF_m@cEss@mHka@sQwW{MqUwRiQyNgMeRyO{OqNmMaYgPeKgWsLmSoBwSlAoPrJqJra@eMjUyPbGgVoCaVeCwSkByQ}Bkf@{FeTY}Ov@kRkAaQ{A_TiBcRuEwToFqP_@}Yh@gPk@oQwIeOqJyOoJ|Aob@"
+    },
+    {
+     "t": "stop",
+     "place": "hvitserkur",
+     "start": "12:00",
+     "end": "12:45",
+     "kind": "visit",
+     "name": "[[hvitserkur]]",
+     "verb": "看海蚀柱",
+     "body": "15 m 高的玄武岩海蚀柱，像一头低头喝水的犀牛或恐龙。可以走小路下到沙滩，退潮时看得更近。",
+     "tips": [
+      "附近的 Illugastaðir 有时能看到海豹。"
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "hvitserkur",
+      "hvammstangi"
+     ],
+     "start": "12:45",
+     "end": "13:30",
+     "note": "711 号碎石路往南",
+     "km": 43,
+     "geom": "qfloKtd~|B?~g@vOfFtPzLdPbGjYPrQeAdV`CzRbGdPnCbX~B|RfBbPVhQcB|f@~FzOlB|OfBhX~BxW`DfQZpOkJxKm_@lM}ZjRsCdPs@`WnGxTlJ~O`ThX~\\dRxOxNfMdPrNzMnUnNxPxKf]hE`p@|Chj@`Lr\\tWlI`PrCvOpDtSHtPf@vRhEvRgD`SkKdQ}GfR}DxQRbO_TlP}PzPsBx^bAnP_@bQlI`QbKvVdPbQ|Gd[pFjW~BrUi@vSgB`_@fM~Ox@bRwK`WiBjTk@tQhBnYfI`RdLjQhNfOlL|N~MrPbPbR~^fNzZdOtStP~TjQpSpR`TnOhSzSja@lRtVNrg@dJ|e@`Jr`@xRf{@fH|e@fC~r@^~`AXpo@Uzj@gDzk@aIhmAyC`f@oGv_AmHjp@gIjk@{F`e@Wnl@tF`e@iOdRiPdGgQjN}[~s@eN~WkQdS{MhTm_@dm@}Vf`@sSzXiQdTuMfSqMzVcNvRyDfQ"
+    },
+    {
+     "t": "stop",
+     "place": "hvammstangi",
+     "start": "13:30",
+     "end": "14:15",
+     "kind": "food",
+     "name": "[[hvammstangi]]",
+     "verb": "吃午饭、加油",
+     "body": "海边小镇，有超市、加油站和海豹中心。"
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "hvammstangi",
+      "kirkjufellsfoss"
+     ],
+     "start": "14:15",
+     "end": "17:15",
+     "note": "1 号公路 → 60 号经 Búðardalur → 54 号（部分碎石路）进半岛北岸",
+     "km": 186,
+     "geom": "cucnKnsy~BdO_^zNkXbQwXhO_RjO_SdQwWp`@em@xTw_@bOkQ|MkSnTei@~OaYnW_O~OgK|OxO|LlYlQzRjQpFnQqAjRsEtPdA~O~Tr^rl@rM|WxK|`@zGtb@tHfc@|Kxc@xK`c@jIn`@~Ize@|Njo@pJt^|Iha@~Ixg@rIng@rJtb@pMnb@hMvi@|Gzf@dInw@pEjd@hMjfA|Gtd@bPvf@~Kx`@hMfh@xIng@bHlf@tXfs@rMxZ|L`V|OjOzPlAbS{FtSkCzP{ArQfAhShDjRoAzO_IfRcSl\\}`@`TcWfPyM`R}ClRuBjRuCjk@cSjSgIzTaQnO{L~PmF`Ps@pQ_@dULpQhBxPr@|RcFtOuExPmAbPd@vQd@|OR`Tq@~OX`R|CvShI~MnQdLp[pIt`@aEpd@mQxFyNjNsH~_@oKtZiT`EmPhG{PlEaQZaPNeQ^sV`@uPoD_QpDuPmAgQ`AgOvMsPlKaQ`GwR`CcRYcP_E}Qb@cP~AuPvMoMtUwKl`@{Jr[kJ`e@uGth@gDfeAcArp@M`m@sBny@jBvrAfD|qAzCllAbHtyCtA`k@zOn{@vRvu@`Lx\\xK`_@nQloAtMj_AvAdq@vCjg@nDve@wAxg@Y`n@gEpn@}ZvlBsFzj@Hjl@zIte@lLhXbGdo@zBddAtAtn@x@lfAzAtq@`Mfu@nI`i@pC`l@pFlc@xKz`@fP|ZrQxTlOlTtRvr@zN~k@vLlj@`Jzd@`ZxdAf_@h}@lUhi@bPd`@vKdd@rQdYdLzXvJjc@rPtfAxI~j@lEdi@~NlaAzJ~_@hXd[nV`y@hNxb@fNd\\vJjf@zCxk@|Fjh@lJhq@dDng@lG`m@vE|c@zMxd@pKr]vu@jeCtJ~b@rV|s@dY`o@fVfa@dMhYhLj]vMb`ApFfd@xOb\\jQ~g@n_@zuAnK|^pS`@xQkLnSgVtNcThHgn@lEeh@pJcz@zHst@tEqq@dBel@lDce@dHgm@fJw`@~ZeMtQ{Fhz@f}CpLxf@jq@~sCtQaBpNbQdShhBtS`jBxG`m@tH|r@hBlk@uCtp@_FbjAmAth@x@rm@tBbu@rA`v@xBvg@nG`o@lGdc@`Flg@`Bvx@q@xj@wDbs@aF`w@kF`n@mF~j@aDdh@iBdf@sAvn@uBpf@sIfsA_HzdAkDti@Vtl@lBdr@Qz{@yExxAkA|o@_A`g@_Gdh@kC~i@_Eto@gFjl@sCrg@iAjh@Thi@aCtk@uGxb@s@`g@|@ju@Pj~@G~dAg@js@qBzn@W~h@`Efd@xC|l@{Dvf@D~t@zGjaAtJtc@dLxXgPvm@gNf\\uPlSe^vfAkOn_@_Md^aH`n@yNf`@aIf_@mGjdAsGjn@iGvf@cMrm@oEhj@Nji@tKbi@~Fpe@`Cbi@ZxkAbG~aAnLrb@rOxjAbDxg@jBxi@lDpcAKfiA\\nfAlCfl@o@rwA}Ap|@cBhvAPho@g@zv@oP`kAoDjv@Xxp@jGrgAxI~a@dVb`AlPjLdKq]nQgNdM`V~TtArPhRjVboAfFlgApBb|@f@p_AvGpa@bMp\\lR|R`QbHfP`@vTiYhLyYxLoXlOiQnOk]~O}QfPgXtNcPlM_`@~VyQlOuQfPxhAuCfz@gN|_@oQrOyNnz@_R~XoPnDa]f^eAvcAvFjq@zD~j@_Blf@mG|b@eJh]_LfYiKh_@e@fh@_K`d@oOlm@_Ib_@{@xh@qHvf@Jfk@rF~g@rCdi@lHz`@fLza@dDxe@kGdf@wChg@yFxb@tIpb@lPpa@rPna@`M|\\tIbc@zDzf@t@jw@p@dx@jBdf@hDde@zIpq@~Ilc@tKl_@|Ozg@hM~`@xKdYtLnZjJx`@nFfc@tD`w@Bxw@}Cpo@yI`j@sPpf@iG~b@yCds@zA~o@tFlf@pQ|gAbKpk@xGdb@|B~j@uB`k@aJzg@eDjl@n@vu@~Afn@vFjb@vLlZvMxRfQxZfKj_@fAfk@wFvg@eEri@qC|j@oDxm@}Ans@y@jl@cEdr@}Hhy@mGrn@qErn@yBdj@d@vh@jGff@bKv`@|Mv\\jPjUbQzIrPnW|Hti@bCxk@fHhf@jKl`@hIlg@nLdg@pQvXxQ`MrYpN|RvAhPvP|J|_@bGhi@jBzn@nBvf@xAh{@i@lh@aP``@uClf@nEvi@vFvf@dDje@s@zq@eGvf@eKr\\uKt]cI|_@iQxPaLzS"
+    },
+    {
+     "t": "stop",
+     "place": "kirkjufellsfoss",
+     "start": "17:15",
+     "end": "18:15",
+     "kind": "visit",
+     "name": "[[kirkjufellsfoss]]",
+     "verb": "拍草帽山",
+     "body": "冰岛出镜率最高的山，前景是小瀑布。可以绕瀑布走一圈。",
+     "facts": [
+      [
+       "停车",
+       "收费，约 1,000 ISK（需核实）"
+      ]
+     ],
+     "tips": [
+      "7 月日落约 23:30，晚上光线最好，可以吃完饭再回来拍。"
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "kirkjufellsfoss",
+      "grundarfjordur"
+     ],
+     "start": "18:15",
+     "end": "18:25",
+     "note": "54 号公路",
+     "km": 3,
+     "geom": "imikKzjimCzOoWhOyMbIge@`Mc^tJs`@xE_i@e@mu@aGwf@yEek@H}["
+    },
+    {
+     "t": "stop",
+     "place": "grundarfjordur",
+     "start": "18:30",
+     "end": "19:00",
+     "kind": "stay",
+     "name": "入住[[grundarfjordur]]",
+     "verb": "入住",
+     "body": "入住民宿或青旅；选带厨房的，可以自己做饭省钱。"
+    }
+   ]
+  },
+  {
+   "date": "2027-07-15",
+   "c": "is",
+   "title": "[[snaefellsnes]] 环半岛 → [[kef]] 还车",
+   "short": "斯奈山半岛",
+   "sub": "半岛西端的火山口、黑卵石滩和海岸步道，下午开回凯夫拉维克，晚上还车。",
+   "stay": "kef",
+   "stayNote": "机场附近酒店或青旅，约 18,000–28,000 ISK/间",
+   "segs": [
+    {
+     "t": "stop",
+     "place": "grundarfjordur",
+     "start": "07:30",
+     "end": "07:30",
+     "kind": "start",
+     "name": "[[grundarfjordur]] 出发",
+     "verb": "退房",
+     "body": "今天车程长，早点出发。"
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "grundarfjordur",
+      "saxholl"
+     ],
+     "start": "07:30",
+     "end": "08:30",
+     "note": "54 号经 Ólafsvík → 574 号绕半岛西端",
+     "km": 46,
+     "geom": "eqgkKfk~lCfAhl@pE`f@fFtk@s@zq@eGvf@eKr\\uKt]cGnf@aFfd@yHld@uH`f@yHv`@{Edp@uFpp@oD~j@gDdp@eE~k@qFbc@yJ~_@cGbb@mBfg@g@xi@{Cll@wCti@mAho@\\zg@b@|f@}@hx@cCdg@gBzk@Vfi@uHha@bBdm@~Frd@zPld@dR~WzSpXtPhOlQ|Kz\\zY|TvWzTbb@~Ohc@fK``@zL`m@xFlb@|Gfp@zNt`AxHhe@pHfd@nRpj@rUjg@rMvW`Tn\\xK~YBri@uCph@Dxk@bH|q@xDxt@Qjl@{H~h@qEbk@bBxl@Q~l@Z`m@l@|h@gD`n@cGbg@qK`\\iIp^}Crg@gI|g@oFjg@uBrg@yAdf@cCfh@Lvg@wAll@eAvh@oC`k@gH~h@sK`_@cNh`@oPp]cM~WuMb\\yHz`@qD~s@_Bpp@tA|k@tFjl@|Fho@jApf@f@hi@tDty@hCnh@hDxi@xDlf@zQxj@fKh`@`Gbc@tIjb@|Jxh@~Hj_@nObs@bK|i@vHdb@lHj`@dM`VzReA`QzBrUC~NkM`L{b@hRazAxE_d@bCqe@fCeh@fPug@jQa]jPwHpQrCbPnI`QbDxPjAhNh`@wExn@kBnA"
+    },
+    {
+     "t": "stop",
+     "place": "saxholl",
+     "start": "08:30",
+     "end": "09:00",
+     "kind": "hike",
+     "name": "[[saxholl]]",
+     "verb": "爬火山口",
+     "body": "约 400 级铁台阶上到火山口边，能看到斯奈山冰川 (Snæfellsjökull) 和熔岩原。"
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "saxholl",
+      "djupalonssandur"
+     ],
+     "start": "09:00",
+     "end": "09:15",
+     "note": "574 号公路",
+     "km": 14,
+     "geom": "ufyjKbw_qCvQg\\xu@||AjOrg@zKt]~Pz_@lOx]|Lh_@xN~QzPaGzTaZtPg\\ty@olBrNg\\fPu]v_BqlCnNsUdNqRdO}SdLgb@vJ}`@fJ{e@fL{ZhPqB`Prb@lPnLjOxRpJjb@pNlTbEtQ"
+    },
+    {
+     "t": "stop",
+     "place": "djupalonssandur",
+     "start": "09:15",
+     "end": "10:30",
+     "kind": "hike",
+     "name": "[[djupalonssandur]]",
+     "verb": "逛黑卵石滩",
+     "body": "黑色鹅卵石海滩上散落着 1948 年英国渔船的锈铁残骸。入口有四块「举力石」，以前用来测试渔民的力气。可以翻过小山走到 Dritvík 湾再回来。",
+     "facts": [
+      [
+       "步行",
+       "往返约 2 km"
+      ]
+     ],
+     "tips": [
+      "浪很大，不要靠近水边。"
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "djupalonssandur",
+      "londrangar"
+     ],
+     "start": "10:30",
+     "end": "10:45",
+     "note": "574 号公路",
+     "km": 8,
+     "geom": "edfjKp`zpCkJ{\\uO_XmG{a@uSeDyNyUoKc]|M{]|Lq\\dKka@pK}`@tKoh@~Ho_@dKe_@lMqb@hL{j@xJih@rNae@zKy\\lG}i@rHoz@tEki@pCc_@"
+    },
+    {
+     "t": "stop",
+     "place": "londrangar",
+     "start": "10:45",
+     "end": "11:15",
+     "kind": "visit",
+     "name": "[[londrangar]]",
+     "verb": "看玄武岩柱",
+     "body": "两根巨大的火山颈岩柱立在海边，夏天满是海鸟。"
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "londrangar",
+      "arnarstapi"
+     ],
+     "start": "11:15",
+     "end": "11:30",
+     "note": "574 号公路",
+     "km": 8,
+     "geom": "y_cjKdtbpCeHcr@kE{y@_Gwh@iImg@uZ{bB_Isc@eIid@kNqv@aMkr@aKgk@kLg\\wKg[}Fgt@iA_h@_Fch@iIe_@mB{j@eEgg@tDet@wEym@iAmZ"
+    },
+    {
+     "t": "stop",
+     "place": "arnarstapi",
+     "start": "11:30",
+     "end": "13:30",
+     "kind": "hike",
+     "name": "[[arnarstapi]]–赫德纳 (Hellnar) 海岸步道",
+     "verb": "沿海崖走、吃午饭",
+     "body": "从 Arnarstapi 的巨人 Bárður 雕像和 Gatklettur 拱石出发，沿玄武岩海崖走到 Hellnar，在海边的 Fjöruhúsið 咖啡馆吃午饭（鱼汤很有名），再原路走回。",
+     "facts": [
+      [
+       "距离",
+       "单程约 2.5 km，往返约 5 km"
+      ],
+      [
+       "时长",
+       "约 2 h（含午饭）"
+      ]
+     ],
+     "tips": [
+      "海崖上有大量三趾鸥 (kittiwake) 筑巢。"
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "arnarstapi",
+      "budakirkja"
+     ],
+     "start": "13:30",
+     "end": "13:50",
+     "note": "574 号公路往东",
+     "km": 19,
+     "geom": "w}hjKjzdoC|Dth@d@rs@aOhOkQ`IkTdKoQv@yRtDsP?sPaMwSyP}QuIkOwIoUmYgMm`@sLc_@gHir@qJax@mLg~@}Jei@eXkv@kKcb@eGev@mL}r@_OyiAeIut@uHmw@{F{d@sGciAmCui@oBmo@~EgqBrBsl@dC_k@vGae@`Nmm@~B{j@{Iy^sOmToKq^oFor@eHkd@dD{g@vRmJ|Js\\tEkc@lEod@xMaVhFa@"
+    },
+    {
+     "t": "stop",
+     "place": "budakirkja",
+     "start": "13:50",
+     "end": "14:20",
+     "kind": "visit",
+     "name": "[[budakirkja]]",
+     "verb": "看黑教堂",
+     "body": "熔岩原中一座孤零零的黑色小木教堂。"
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "budakirkja",
+      "gerduberg"
+     ],
+     "start": "14:20",
+     "end": "14:50",
+     "note": "54 号公路",
+     "km": 60,
+     "geom": "ansjK~gvmCgO`JeDnh@cJr_@gGbb@cYvQiOkJ_NqTyRqJeMu^aG_u@mCex@Jcw@fDmdA~Eu}AhIoiCdEws@pH}f@nR__AxQi|@xIqc@dDme@fB{q@Ccm@hAaj@p@sgAbAam@vPk{@pEoc@~FuaB|Fgv@|F}n@vEmg@~J}s@hGer@lEeyAlF}p@vAuj@rA_l@h[sdAhKq]qGefAqEck@z@a~A\\mu@bBacAh@_t@bAop@hEou@Tcw@iC_x@mIik@mLik@aSkZ{SuX}S}^oN}VyWiCwW_Ri]{z@}Fuf@qCiv@iEcs@`Cam@bUud@vIya@RqkAaDkw@_Iks@pK_gC~Duh@yAaj@{Mqo@yCeh@jHuuAvCse@aCgv@aFgm@Xmn@\\}g@gEwxA{Ekj@eLuf@sV}r@iOsa@kJmb@cDyd@w@km@wBcl@mB}e@Yiu@`DukAlC{w@t@gj@_@gg@lCmk@pJ_h@nMec@fGwj@tCcf@r@gg@Fag@_DagDk@al@p@wf@pIcu@xFqc@jGmm@~Gyh@bHuc@~RygBrJqx@tG{b@|Eqd@|Cen@`Dug@~J_g@fHea@oAwq@cE{d@_F_d@cGej@q`@wq@gZq_A{a@ew@mLg^sGwl@yF_u@qCyw@c@wv@~@et@fDqt@C_u@sU}LkR~FmPYwKyYcMy\\qByN"
+    },
+    {
+     "t": "stop",
+     "place": "gerduberg",
+     "start": "14:50",
+     "end": "15:15",
+     "kind": "visit",
+     "name": "[[gerduberg]]",
+     "verb": "看玄武岩墙",
+     "body": "路边一整排整齐的玄武岩柱悬崖，停 15 分钟。"
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "gerduberg",
+      "kef"
+     ],
+     "start": "15:15",
+     "end": "17:45",
+     "note": "54 → 1 号公路经 Borgarnes、Hvalfjörður 隧道（免费）、雷克雅未克 → 41 号公路",
+     "km": 162,
+     "geom": "ma{jK~fngCpH|`@`LnX~MlSrQeIj]iKbAyuAgAiw@Dqh@jQelAxKof@nImd@vMagAdG{e@vLqf@`Mme@hMaa@zMiUr]m^jW_X|PgQlOuIz\\zA`P~AzRfCr\\lD~Q`Cp]`ErTr@|O?bQP~O?dQAbQDx`@VjS{HxRse@jPqa@nMsZtNo]|Qgd@lQwh@hPik@|Iua@bDeh@lK}q@dJib@xHwa@tKwa@pN}]jMmUfPcP|SsPzRgh@lLca@lLka@|Ly^`V}Xv\\iQnU}Z~K}a@lIer@vAkx@lHak@fTmf@xMg_@~Pe]fMa^`P_`@dPc]hQq_@lOcOfQ~AzOu@fUaBzPoApPqAbV}MdT_OtP_EvOzCjR`PlQrHzYmFvWlAzPgK`LsYxR}\\~OqYbSsFzYoRhRkBvScDtGub@pJcd@|Fyh@jGmb@fLea@xLkb@~Qox@zCkk@lFae@dLsZ|PyCzNoRdDcj@vJsf@tQu]dQg]bNw_@dKg`@vKg`@rN__@nUac@hMiZnDchAOwk@Q}k@rP_@|LjU~SbU~NfQdPs@pOaKzOuAxNwP~Kk]bJi_@bLk^rMgYdOoJjZbKdR~DhQrGxNhWpKrq@|Dti@|Enk@hLr^hMdWjw@~}AhUh`@lSvT`nB`gBtThHvQaEhT{Gfl@qJp\\{Djr@aG|WqBz|@yHvOmKxKw[|Jsg@vKo_@lG{c@`Lik@jN}]`PkStOqJvRoRfNoS|Nwr@|G_j@pFavA`Bme@~Dgj@|Hcy@`Ky`@nPqLfO{OlQrBzNrSrQtDnOyOpJy^bKw`@rM}]~Ni\\lKc[zLge@`Ls_@tLyY~NoN`QdCjOlTxO`NbSpPzPlWfLlZpKzc@xIf_@fObf@bMpb@fI~a@~Lbe@vGfe@hHxd@vJ~^lLn`@~MbTnNhTrJt\\hI`t@jHve@dKhZRog@wZqn@{Gy`@~F{gArKyZrWwOj~@g}Bxs@emBpOkKhOtQ~LtTfQh@lQiApNkRpPaK`UwEbQiBbWwBfP_D|OmIdPgCzTH`SDhPeCrXq`@pP}TzOkMxRuLhPsKhNaR|LkZxKwd@hMcs@vLuq@hHea@bIab@|Jk]nJo[vJs^rF}h@}@uh@yEiu@{Cgl@yCyg@Jsg@xHe`@hO}NlTvAfOmKfOs_@jKk`@~Lab@bPoXtOsMlPwT`SmKrQyFbRmBzPzKhM|TlFva@nJb_@vFnd@{@|e@Hli@xI|_@~MzPjIn]pLta@bKt[rLdV~Ql\\zNz]~Lz[vRjVdO~JxQlIjOfO|MhWpQ~n@tJh_@rFtc@jBff@T`n@R|r@Zly@V`s@Rdm@c@dg@mBte@}Edb@`P{QjPwEfOwJ|PmHnTfDpOlKtLn\\dEtg@nAfi@rDne@pIr`@pKpZnNlYlNzSvPfQnO~GrPbAlPjExNdW~Jva@vJbi@fGta@bFfe@vAff@bArg@bF~a@fU_FtPgDxV~ApPhGhInc@dGtq@pIx}@tFpr@tEvg@|F`w@hEnh@~E~m@nEnf@vGxf@|Ije@~L`o@jKni@rHbd@`Fdi@|C|o@hCdo@|Chj@`Lrd@fI`^`Fbc@nJlf@rIl^vFrc@nCth@rC`h@hGze@vIp_@xHba@fFze@hC`e@tDr_AnBxe@rBxg@rFxf@dMtZdMr]xJrr@dHjk@nH~j@`Inn@fHhj@jHvm@|Enh@hIbmAjEds@hE|j@rFvg@`Lju@xJri@jJpi@|Grd@lIfo@rHzj@`Jrl@fQvfAhItg@jKro@hJtj@hIzb@vI`_@bKxa@zIhc@xHjk@hHtr@fF`k@xC|k@|Ahh@jBnn@dC`w@p@bo@Lhk@a@ph@kDhk@cEzj@mD~e@cHr_AiDpn@aKn{BmCdm@yFnnAcDhr@qCrh@yE`f@}Jb[}Tp^pBxd@C`k@Epe@aAbe@d@jF"
+    },
+    {
+     "t": "stop",
+     "place": "kef",
+     "start": "17:45",
+     "end": "19:00",
+     "kind": "shop",
+     "name": "加油、还 Lotus 车",
+     "verb": "加满油、清车、还车",
+     "body": "按合同加满油，清掉车里的垃圾和沙子，还车时绕车拍一圈照片和视频，然后坐接驳车去酒店或机场。",
+     "tips": [
+      "提前跟 Lotus 确认晚上的还车时间和地点。",
+      "冰岛酒精很贵，没喝完的也不能带上飞机，可以送给营地的人。"
+     ]
+    },
+    {
+     "t": "stop",
+     "place": "kef",
+     "start": "19:00",
+     "end": "19:30",
+     "kind": "stay",
+     "name": "机场附近住宿",
+     "verb": "入住、早睡",
+     "body": "明早飞卑尔根，要 6 点前到机场。"
+    }
+   ]
+  },
+  {
+   "date": "2027-07-16",
+   "c": "no",
+   "title": "[[kef]] ✈ [[bergen]]：[[bryggen]] 与 [[floyen]]",
+   "short": "飞卑尔根",
+   "sub": "早班机飞卑尔根（比冰岛快 2 小时），下午逛汉萨木屋，傍晚徒步上弗洛伊恩山。",
+   "stay": "bergen",
+   "stayNote": "青旅床位约 400–600 NOK/人",
+   "segs": [
+    {
+     "t": "stop",
+     "place": "kef",
+     "start": "06:00",
+     "end": "08:20",
+     "kind": "start",
+     "name": "[[kef]] 值机",
+     "verb": "值机、过安检",
+     "body": "冰岛和挪威都在申根区，这一段不用过边检，但要带护照。"
+    },
+    {
+     "t": "move",
+     "mode": "flight",
+     "path": [
+      "kef",
+      "bgo"
+     ],
+     "start": "08:20",
+     "end": "12:40",
+     "note": "冰岛航空 KEF→BGO 直飞，飞行约 2 h 20 min（2026 年早班约 08:20–10:10 起飞，2027 年时刻待定）；时区 +2 h",
+     "mins": 140
+    },
+    {
+     "t": "stop",
+     "place": "bgo",
+     "start": "12:40",
+     "end": "13:15",
+     "kind": "start",
+     "name": "抵达 [[bgo]]",
+     "verb": "取行李",
+     "body": "今天先不取车，明早在城里取，省一天租金和停车费。"
+    },
+    {
+     "t": "move",
+     "mode": "train",
+     "path": [
+      "bgo",
+      "bryggen"
+     ],
+     "start": "13:15",
+     "end": "14:05",
+     "note": "Bybanen 轻轨 1 号线到市中心 Byparken，约 45 min，Skyss 单程票（在 app 里买）"
+    },
+    {
+     "t": "stop",
+     "place": "bryggen",
+     "start": "14:30",
+     "end": "16:00",
+     "kind": "city",
+     "name": "[[bryggen]]",
+     "verb": "钻木屋小巷",
+     "body": "世界遗产，汉萨同盟时代的彩色木屋码头。从正面拍完后，一定要钻进后面的木头小巷和院子。放好行李再来。"
+    },
+    {
+     "t": "move",
+     "mode": "walk",
+     "path": [
+      "bryggen",
+      "fisketorget"
+     ],
+     "start": "16:00",
+     "end": "16:10",
+     "note": "沿港口步行"
+    },
+    {
+     "t": "stop",
+     "place": "fisketorget",
+     "start": "16:10",
+     "end": "16:45",
+     "kind": "food",
+     "name": "[[fisketorget]]",
+     "verb": "逛鱼市、吃点东西",
+     "body": "鱼市很贵，看看就好，或者分一份鱼汤或鱼饼。超市的熟食更划算。"
+    },
+    {
+     "t": "move",
+     "mode": "walk",
+     "path": [
+      "fisketorget",
+      "floyen"
+     ],
+     "start": "16:45",
+     "end": "17:45",
+     "note": "从 Fløibanen 缆车下站旁的小路徒步上山，约 3 km、爬升约 300 m；不想走也可以坐缆车"
+    },
+    {
+     "t": "stop",
+     "place": "floyen",
+     "start": "17:45",
+     "end": "19:30",
+     "kind": "hike",
+     "name": "[[floyen]]",
+     "verb": "看卑尔根全景",
+     "body": "山顶观景台俯瞰整个港口和七座山。还有力气可以继续往里走到 Skomakerdiket 小湖。",
+     "facts": [
+      [
+       "缆车",
+       "单程约 100 NOK（需核实）"
+      ]
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "walk",
+     "path": [
+      "floyen",
+      "bergen"
+     ],
+     "start": "19:30",
+     "end": "20:15",
+     "note": "步行下山（或坐缆车）"
+    },
+    {
+     "t": "stop",
+     "place": "bergen",
+     "start": "20:15",
+     "end": "20:45",
+     "kind": "stay",
+     "name": "[[bergen]] 住宿",
+     "verb": "休息",
+     "body": "卑尔根一年下雨 200 多天，雨衣放在随手能拿到的地方。"
+    }
+   ]
+  },
+  {
+   "date": "2027-07-17",
+   "c": "no",
+   "title": "[[bergen]] → 哈当厄尔峡湾 → [[odda]]",
+   "short": "哈当厄尔",
+   "sub": "在卑尔根取车，沿哈当厄尔峡湾开到奥达，下午走布尔冰川步道，为明天恶魔之舌养精蓄锐。",
+   "stay": "odda",
+   "stayNote": "营地或小木屋（Odda / Tyssedal），营地约 250–400 NOK/人；Trolltunga 一带的青旅和酒店更贵",
+   "segs": [
+    {
+     "t": "stop",
+     "place": "bergen",
+     "start": "08:00",
+     "end": "08:45",
+     "kind": "start",
+     "name": "[[bergen]] 取车",
+     "verb": "取租车",
+     "body": "在城里的租车点取车，约好 7/21 在机场还车。路上的电子收费 (AutoPASS) 租车公司会事后扣款。"
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "bergen",
+      "steinsdalsfossen"
+     ],
+     "start": "08:45",
+     "end": "10:00",
+     "note": "7 号公路经 Norheimsund",
+     "km": 72,
+     "geom": "{wroJwbo_@_OrMgJtXgM`VwEw^uOiG}OcBwP}DeQxC}OpIwId[yGh\\kQhZeN~NuPqA_g@et@qLsb@cJuZ_OoLcQsEcUbG_YvFaTdOqPpL{Pb@cOmPuNmQcPmE}RuQgOkRqNuMeIe]l@_c@vCqe@tJ{^~Ho\\xKgc@pKaXbOs[vN}PnMiVbL_UnCu`@_Baa@yCa`@o@ce@pA}a@w@ye@bAab@xBq`@~KsWrEc_@tKoVzQgG`OuItPgMvOuJhVgCdSBhPkAtOcH|PkJhPmMlN{NrUmQxE{^lBua@}R{yA_Pk~@gCka@dCod@`D_a@bIa[tC{_@}C{`@aFq^_Aif@Fod@Hei@wB}c@gHw\\mGc^{JwY}Cqf@Z}b@lFab@zD{c@gBmi@c@ka@v@mf@{@ia@rLaVlMqXbO_I|LsRtOyH~TkI`RgHhNmNjOyJhMmRxMwTlOsRbOkJ`C}a@_@{b@gG_`@wKoUoA}h@r@_b@Jaf@dAwa@jNaNcPeEiPwWqF}a@yGq\\iLoUwDk_@xK_WlIg[tF_`@oB}i@iHu\\`Ee`@`McU|KkUtOiIhKy\\tMyWpOcOh]s\\vMqPm@ea@vF{a@aAwa@zEm^Tmf@s@}`@oB{b@f@_d@cEc_@iP_GwNcMeQ@}OmKcPmEbNoOdIkZlMaSjMiRxNgYzB_c@eA}g@Lya@uFy^rA{h@qC}_@qK}V{LqUyKaXoJ}XsKuU_PqJiCi`@bRuu@nBia@wBo`@eB_b@a@}g@r@ma@xJoW|NcN|IiYUka@Mqa@zJsWhKcXbLcU~OrFfPE`OhJhI}ZfAga@iF}]mI{ZnAeb@`M{S|KaVhHc\\qAib@yFo]sMmSbC{`@`SrDdPiIpOkGsCia@nIi\\uIwYpDe`@dAmb@eG_]aCa`@eDc`@iH}e@{Ee^gE}_@gE__@X_f@iDcA"
+    },
+    {
+     "t": "stop",
+     "place": "steinsdalsfossen",
+     "start": "10:00",
+     "end": "10:40",
+     "kind": "visit",
+     "name": "[[steinsdalsfossen]]",
+     "verb": "走到瀑布后面",
+     "body": "步道可以绕到瀑布水帘后面，从里往外看。"
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "steinsdalsfossen",
+      "odda"
+     ],
+     "start": "10:40",
+     "end": "13:00",
+     "note": "7 号公路沿峡湾北岸 → 哈当厄尔大桥 (Hardangerbrua) → 13 号公路沿 Sørfjorden 南下，经 Kinsarvik、Lofthus",
+     "km": 59,
+     "geom": "{cnoJocid@~Dk_@Vma@yCm`@}Cga@mGq\\tAw`@zO}DdPvBxJyYrImZpJaXbMaSxM{RvLyRlNgOfLm[rJc[lDg`@oCcb@~Fu^vBwa@`Gm^nHs\\fOiLjNsNnNiM~OU~O|F~G~[tD``@zFn]jDj_@pJpXbA~d@bD``@vGl]pM~PjM`Q|Hp\\zIn[~LpR~OnHlM{Q|JyWbKoY|K{d@loCkxL`Fob@tGb]zNpNnL~WzO`MxOkDhOjJ`PhN|F`b@rBv`@x@`c@n@ra@e@zb@vPtD~PhAvLwSzPB~Pn@xO|JnPSdRoHlPgGrNgMhOyQxM}PxQaWtP}VpOsVxMeU~LyTlL}TrOm[xTkf@nX}m@tKcVfN_ZxMgXxLqU|MeVpMuT|NsUnOeUhNsRpS{WpP_SpNyOzOuNdOeJtPRtIxZtDj`@~J`WvJzY|NzJvOfEzO`EvXoRbQvHvObFfP[xImYtC_b@m@ac@Waa@t@mb@rBy`@lBs`@uCo_@aLgVw@y`@kE}_@p@uh@pD}e@rFeo@jGyn@`Hen@vHum@lIam@dJkl@xJuk@lK}j@dLej@vLki@pe@ipBbLef@~Lsk@fKyh@bKik@lJal@xIul@bIim@jH{m@vGon@pEkf@nAmb@fCm`@rOoLnOaQjPRnPPrPw@tK_W|KwUbOoJxJa[pHiH"
+    },
+    {
+     "t": "stop",
+     "place": "odda",
+     "start": "13:00",
+     "end": "13:45",
+     "kind": "shop",
+     "name": "[[odda]] 午饭、采购",
+     "verb": "吃午饭、买徒步干粮",
+     "body": "去 Rema 1000 / Coop 买明天的午餐、零食和水。",
+     "tips": [
+      "7 月是哈当厄尔的樱桃季，路边果园小摊有现摘的樱桃和苹果汁。"
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "odda",
+      "buerbreen"
+     ],
+     "start": "13:45",
+     "end": "14:00",
+     "note": "Buer 山谷小路",
+     "km": 8,
+     "geom": "o~rmJqn}f@rOoGxRyFfPpCnNaR~KgUe@ha@rBt`@pP?lO|HpK|UjKhVxGp]Qja@Ova@w@la@qA|a@`Abc@k@|`@pAdb@aBh`@gDp_@jB~`@cAta@DzA"
+    },
+    {
+     "t": "stop",
+     "place": "buerbreen",
+     "start": "14:00",
+     "end": "17:00",
+     "kind": "glacier",
+     "name": "[[buerbreen]] 冰川步道",
+     "verb": "徒步到冰川舌",
+     "body": "Folgefonna 冰盖垂下来的一条冰川舌。沿河谷走过草地和石坡，最后一段有铁链和铁梯，走到冰川前的观景点。不要上冰。",
+     "facts": [
+      [
+       "距离",
+       "往返约 6–8 km"
+      ],
+      [
+       "时长",
+       "约 3 h"
+      ]
+     ],
+     "tips": [
+      "明天要走 10 小时，累的话就跳过，在奥达休息，或者只去看 Låtefossen 双瀑布（往南约 20 分钟）。"
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "buerbreen",
+      "odda"
+     ],
+     "start": "17:00",
+     "end": "17:15",
+     "note": "回奥达",
+     "km": 8,
+     "geom": "conmJuknf@fA}a@gB}`@rCoa@fBaa@qAeb@j@}`@o@u`@x@ab@r@y`@b@ka@p@u`@eEq^_M_SuIyZeOqHoPa@}Fo]`Bm`@aNlPoLlSePuD}OfC{OlGuCjB"
+    },
+    {
+     "t": "stop",
+     "place": "odda",
+     "start": "17:15",
+     "end": "17:45",
+     "kind": "camp",
+     "name": "[[odda]] 住宿",
+     "verb": "早吃早睡",
+     "body": "明早 5:30 起床，今晚把背包、头灯、水准备好。"
+    }
+   ]
+  },
+  {
+   "date": "2027-07-18",
+   "c": "no",
+   "title": "[[trolltunga]] 全天徒步",
+   "short": "恶魔之舌",
+   "sub": "挪威最有名的徒步之一：从 P3 往返约 20 km，站上悬在湖面 700 m 高处的「恶魔之舌」。",
+   "stay": "odda",
+   "stayNote": "同前一晚（奥达），连住两晚",
+   "segs": [
+    {
+     "t": "stop",
+     "place": "odda",
+     "start": "05:30",
+     "end": "06:00",
+     "kind": "start",
+     "name": "[[odda]] 出发",
+     "verb": "吃早饭、出发",
+     "body": "看一眼天气和 Trolltunga 官方的路况与安全提示，大雾或暴雨就改天或请向导。"
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "odda",
+      "trolltunga_p2"
+     ],
+     "start": "06:00",
+     "end": "06:20",
+     "note": "经 Tyssedal 上 Skjeggedal 山路，窄而陡",
+     "km": 11,
+     "geom": "o~rmJqn}f@{Gk\\cOeKePs@aP|BiPs@cNpNePoCgQ~AeTtGqP}@_QxGgSgH{MmTePgOuPyK_OqJgOoJaPsCaBy`@sDa_@yObFhC{_@wA}`@Zca@kKoZcL{T{L_ToFeL"
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "trolltunga_p2",
+      "trolltunga_p3"
+     ],
+     "start": "06:20",
+     "end": "06:40",
+     "note": "P2 → P3 的单车道私人收费路，约 7 km；没订到 P3 就停 P2，坐接驳车（约 150–200 NOK）或多走 4 km",
+     "km": 3,
+     "geom": "ss~mJodhg@iO{JmIqYgDq_@sCo`@g@_a@vCec@jEa_@`I}^fJw^hEs^Di@"
+    },
+    {
+     "t": "stop",
+     "place": "trolltunga_p3",
+     "start": "06:40",
+     "end": "06:50",
+     "kind": "start",
+     "name": "[[trolltunga_p3]]",
+     "verb": "停车、上山",
+     "body": "按预约时间停车，入口看一眼路线标志和最晚折返时间。"
+    },
+    {
+     "t": "move",
+     "mode": "walk",
+     "path": [
+      "trolltunga_p3",
+      "trolltunga"
+     ],
+     "start": "06:50",
+     "end": "10:30",
+     "note": "红色 T 标记，起伏的高原路线，单程约 10 km"
+    },
+    {
+     "t": "stop",
+     "place": "trolltunga",
+     "start": "10:30",
+     "end": "12:00",
+     "kind": "hike",
+     "name": "站上 [[trolltunga]]",
+     "verb": "排队拍照、午餐",
+     "body": "悬在 Ringedalsvatnet 湖面上方约 700 m 的一块平石舌。夏天拍照常要排 30–90 分钟，可以先找块石头吃午饭。",
+     "facts": [
+      [
+       "往返",
+       "从 P3 约 20 km / 8–10 h；从 P2 约 27 km / 10–12 h"
+      ],
+      [
+       "海拔",
+       "约 1,180 m"
+      ],
+      [
+       "季节",
+       "无向导约 6 月中至 9 月中"
+      ]
+     ],
+     "tips": [
+      "带 2–3 L 水（沿途溪水可补）、头灯、保暖层和防水外套。",
+      "7 月初高处可能还有残雪，穿抓地好的徒步鞋。",
+      "下午 1 点前必须往回走（以官方折返时间为准）。"
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "walk",
+     "path": [
+      "trolltunga",
+      "trolltunga_p3"
+     ],
+     "start": "12:00",
+     "end": "15:45",
+     "note": "原路返回"
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "trolltunga_p3",
+      "odda"
+     ],
+     "start": "15:45",
+     "end": "16:30",
+     "note": "P3 → P2 → 奥达",
+     "km": 14,
+     "geom": "qr~mJ{sqg@oE|_@aIv[gJ|a@kE`_@wCdc@f@~`@rCn`@fDp_@lIpYhOzJ~K`UlMbQlJvZ|Ex^rC`a@kGt\\iBn`@bMsTdIkZyBj`@`Fp^s@~`@bPIlTvK~NpJtPxK`OdMpMjUpOpJrO}FrQGdPi@pOsGxOcElQ|BrOkLrPxArP]rQjF`Dj_@dHbA"
+    },
+    {
+     "t": "stop",
+     "place": "odda",
+     "start": "16:30",
+     "end": "17:00",
+     "kind": "camp",
+     "name": "[[odda]] 休息",
+     "verb": "洗澡、拉伸、吃顿好的",
+     "body": "今晚可以在奥达吃顿热饭犒劳自己。"
+    }
+   ]
+  },
+  {
+   "date": "2027-07-19",
+   "c": "no",
+   "title": "[[odda]] → [[voringsfossen]] → [[stalheim]] → [[flam]]",
+   "short": "瀑布公路",
+   "sub": "一路看瀑布：挪威最出名的沃林瀑布、路边的特温德瀑布，再从斯塔尔海姆俯瞰纳柔依山谷，傍晚到弗洛姆。",
+   "stay": "flam",
+   "stayNote": "Flåm Camping & Hostel，营地约 300 NOK/人，床位约 450–600 NOK（很抢手）",
+   "segs": [
+    {
+     "t": "stop",
+     "place": "odda",
+     "start": "08:30",
+     "end": "08:30",
+     "kind": "start",
+     "name": "[[odda]] 出发",
+     "verb": "出发",
+     "body": "腿可能还酸，今天主要是开车和短距离步行。"
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "odda",
+      "voringsfossen"
+     ],
+     "start": "08:30",
+     "end": "10:15",
+     "note": "13 号公路北上到 Brimnes → 7 号公路经 Eidfjord，上 Måbødalen 山谷",
+     "km": 89,
+     "geom": "o~rmJqn}f@{Gk\\cOeKePs@aP|BiPs@cNpNePoCgQ~AeTtGqP}@_QxGgSgH{MmTePgOuPyK_OqJgOoJ}OxByNxM}O{@mQcEaPsBwQKgQ_HaMcReOsLwKsUcOqKsQnAoOtIeP}A{NqKiP}AkNsNqOaFePKeOmNeO_MyOoKeOaIkQiHyRwFwPoDqOkFcPlCqOgH{N{K{OkA{OoGkMeRaPwIuMgQoPP}OeDiPBwPRuVsEgOeIuLwSyNgKyMkOsM_R_MkRsP}CaPp@oQvCuP~FsObEqQdHaMmSgMgQkOsJiQ{ByO~FkPhI{OdEwNlKcPaC}OiEyPiIcO}KqOcGwHs[yIeZaM}QiOsMqPcD_PoHcP_JeOyL{O}L}N_M{MaQkOyJ_PeAgPDsM_ToPvCuO~HkPzMkQbBwPmHcPqFyPgLcReLgQ}EcOiM{LkSiNyMcM{R_PiD_NcPeMuQmPkGyP{GsOiKwOyFuRkNmPuA_Gi]jLuTvK{XrLqWjL_XtJ{WmAaa@uB}`@gM{TwOfJoMbVgNpOcOtIsOfLeMtQuTA{MgOqLyWmK_WcHg]_He\\oJ_ZaNoOgOwOkOyGoN}LcNcQaOoJyPoEePg@aNyPsNkNaGu^i@ab@wAoa@sJeXmO{MuMwSgIa\\yJeZmJeXqDu_@{Gk\\eM_ReOkKiOkNyNaLuM}RkMsUgGch@sO{EoF{b@l@ii@iAub@Esg@gBob@fBad@`F}^Vma@xAob@p@gk@a@sa@gIy\\cCca@{Eu_@U_b@Mia@b@kj@Iga@Wsb@oAmb@mHg\\_Ic^wGy]sHk[kHm_@oIw[}Bm`@zAaa@sAgc@mCq`@rCka@~Baa@`Cib@nB{`@bEk`@dGk_@xIk]`Gk_@rGu\\tMyQpMkQpIk[pL{SZ{c@kHa]tEi_@`Is[lNwPxNyK|Fe^bAga@xOpBbO_KrLkStMaQbIqZzNoNzR`NjPrFrv@}XzMeRzCu_@rCcq@b@ib@~@oa@bFu^bOgKdM_SdGwa@aB_b@yB_a@aCub@sEy_@wJ}X}Do_@rAsa@fLwTnMmPsEm`@Jeb@qIy[mMpQrC_a@g@ga@bIwZMoa@gP_MuLwS`JsZsLmUJeb@hNuO`Dca@dIk[{OeAaPpFyJvV"
+    },
+    {
+     "t": "stop",
+     "place": "voringsfossen",
+     "start": "10:15",
+     "end": "11:30",
+     "kind": "visit",
+     "name": "[[voringsfossen]]",
+     "verb": "走阶梯桥看瀑布",
+     "body": "落差 163 m 的大瀑布。2020 年新建的阶梯桥横跨峡谷，可以从不同高度看瀑布，Fossli 酒店前还有经典观景台。",
+     "facts": [
+      [
+       "费用",
+       "免费"
+      ]
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "voringsfossen",
+      "tvindefossen"
+     ],
+     "start": "11:30",
+     "end": "13:15",
+     "note": "7 号公路回 Eidfjord → 哈当厄尔大桥 → 13 号公路经 Granvin、Voss → E16",
+     "km": 84,
+     "geom": "qgyoJa|gk@lK{XrQsFzO_CgIrZmC`a@eMxSmL`TjLjTvBj`@rA`a@pPhD|F`_@uHn]q@pa@qHn[xMmP`Kj]vBpb@^|a@cIr[oLxTaAxa@fIji@zI~YzEv^x@fb@lBjb@uAja@eFr^sNrMqMfUeDz_@Jja@iBve@sBne@iF|`@kw@bb@yPx@eXmQ_QlEqI|YeNjUeMvR_NxN{OkE{Cn`@}Er^{O~MaN|O_Ix[mGp]dI`^z@ha@sLpSaIr[kMtQuMhPeIr]qGv`@eI|[qGf^cEt`@qC~e@yBba@gCfb@sCja@lCp`@rAfc@{A`a@|Bl`@nIv[~Gn\\~Hh^vGx]~Hb^lHf\\nAlb@Vrb@Hfa@m@~b@Tpa@Bra@~Ed_@hBv`@dHl\\nBv`@h@`b@{Dz`@bBla@sGz\\kCf`@Ala@~@fq@fBt`@c@de@e@lc@hKxY`Ea`@}JgXmPgCmTbV}u@~aAoNjN}PaEaOxOmJ`\\}Nbe@iM|^oKhYcRzd@eS`d@gLtUg_@`r@oVh`@yTz^mOvYqOr]eM~[gL`]sFz_@yAva@cOlLmLhXoLzVmIf[cPcBsNkRoOoJcPkJ_OeJ_P}AuMbRsPpFqNdPeQdGiQEoQrMoHt[Kvc@jJzzArEf_@|Fl]Ebc@kFrg@oFjf@iGhi@iFxb@iGzf@}Gxh@sIxn@gIjk@eH`f@}Fn^}HzZaIpZ_O|[qLhVgFfa@g@ja@bBla@yBxr@uLjs@{Il\\qG~a@_JpYkLfWuM`TkO~LyPtNyObKmP`FcP|E{QxHkNbOmOzF}Hp\\l@xc@@`b@fDjc@_Bha@cCj`@oEb_@qCfc@{Gd^eGv]_Fj_@{Gp\\aAjg@|A~`@jAda@Gfb@oM~UkOzKeQdBiSv@oTo@yOyBcQpCiPs@cPcAoOmO}LqVqLoWwLoTqM_QgPtAiNmPyO{RoNaP_PqAeOcNqOsTiPqXoNyNeQkGkOqLeOsL{NcQkMkQsPl@kQyDsPiJuS{PePqDgO~IaQeBaOfJrPnInIrZdJ~XwKhWeQ^|Lj\\hBvE"
+    },
+    {
+     "t": "stop",
+     "place": "tvindefossen",
+     "start": "13:15",
+     "end": "13:45",
+     "kind": "food",
+     "name": "[[tvindefossen]]",
+     "verb": "瀑布前野餐",
+     "body": "路边阶梯状的大瀑布，旁边有营地，可以野餐。"
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "tvindefossen",
+      "stalheim"
+     ],
+     "start": "13:45",
+     "end": "14:15",
+     "note": "E16 往东",
+     "km": 28,
+     "geom": "s{sqJsknf@kK{W|RmHxPqBwJqXmKwXmJgYsPkBdPyP~OdBaPkCmPx@qPV{OlBiP_BgQkBwM_TsLkXwNqOgP\\yN~NoLxTsK|ViOiHkPeDwOtK_NhQoOlGmPfL_SaDgPsM_M{Sg@oa@oLyT{McPsLaUoFy_@C}b@eBea@p@se@pAob@wBoa@rGu_@bN}UpNqMxNgNjHy\\hHu\\Lcb@gF{^Mwe@eJ{Y_H{`@wFo^yJ{W_I}ZcKaX_@_b@uC{c@uHe_@_Ho]qHw\\iIg\\sNoPiJyYiB{b@cHka@_Gg^cF_`@cBka@yHm[uLeXqJ{YaOaOaPaFaPxEiPTkOzJoHf^mMbQyMaTcS{PwGuA"
+    },
+    {
+     "t": "stop",
+     "place": "stalheim",
+     "start": "14:15",
+     "end": "15:15",
+     "kind": "visit",
+     "name": "[[stalheim]]",
+     "verb": "俯瞰纳柔依山谷",
+     "body": "Stalheim 酒店后院的观景台能看到 U 形的 Nærøydalen 山谷。旁边的 Stalheimskleiva 是挪威最陡的公路之一（13 个急弯）。",
+     "tips": [
+      "Stalheimskleiva 有时因落石封闭，开不了就走 E16 隧道。"
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "stalheim",
+      "flam"
+     ],
+     "start": "15:15",
+     "end": "16:00",
+     "note": "E16 经 Gudvangen 隧道（11.4 km）",
+     "km": 30,
+     "geom": "emirJqsxg@}ORmHw]vJa_@w@ab@uGgb@gDa`@wGu\\Ggb@Uec@oFi^mJ{[sIk_@}Hq[sKsVeJq^eMo]sAoc@dAsc@dCu`@kDe`@qBkb@}Ei`@{Dga@oBya@yHkf@uFsa@cLoUsOcMeKkZiOkOiOeQcKsYqH}b@oGw]sBqjAc@kc@_Bux@uBgp@eEsbAyBil@mC{z@sB}v@oBi_AkA_u@kAmaAiFotCcBym@eDubA}GgfBmCko@yBqr@mBsiAw@mwAsE__@aPmIqPqHoHo\\tJ_e@lN{\\lMiXbNq\\pYiy@nMg[hPa\\fN{TpRaW~RgSzTuP|O^dIh\\fKfWpOfGuHk\\aBk]"
+    },
+    {
+     "t": "stop",
+     "place": "flam",
+     "start": "16:00",
+     "end": "17:30",
+     "kind": "camp",
+     "name": "[[flam]] 入住",
+     "verb": "入住、买菜",
+     "body": "弗洛姆村很小，白天有邮轮，傍晚游客走了就安静了。超市 Coop 在火车站旁边。"
+    },
+    {
+     "t": "move",
+     "mode": "walk",
+     "path": [
+      "flam",
+      "brekkefossen"
+     ],
+     "start": "17:30",
+     "end": "18:00",
+     "note": "从村子往山谷里走，过农场后开始陡坡"
+    },
+    {
+     "t": "stop",
+     "place": "brekkefossen",
+     "start": "18:00",
+     "end": "19:00",
+     "kind": "hike",
+     "name": "[[brekkefossen]]（可选）",
+     "verb": "爬坡看瀑布和峡湾",
+     "body": "很陡但很短的小路，上面能同时看到瀑布和弗洛姆峡湾。",
+     "facts": [
+      [
+       "往返",
+       "约 3 km，1–1.5 h"
+      ]
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "walk",
+     "path": [
+      "brekkefossen",
+      "flam"
+     ],
+     "start": "19:00",
+     "end": "19:30",
+     "note": "原路下山"
+    },
+    {
+     "t": "stop",
+     "place": "flam",
+     "start": "19:30",
+     "end": "20:00",
+     "kind": "camp",
+     "name": "[[flam]] 住宿",
+     "verb": "做晚饭",
+     "body": ""
+    }
+   ]
+  },
+  {
+   "date": "2027-07-20",
+   "c": "no",
+   "title": "纳柔依峡湾游船 + [[stegastein]] + [[snovegen]]",
+   "short": "峡湾游船",
+   "sub": "坐电动游船穿过世界遗产纳柔依峡湾，下午开上 650 m 高的观景台和夏天才开放的雪路。",
+   "stay": "flam",
+   "stayNote": "同前一晚（弗洛姆），连住两晚",
+   "segs": [
+    {
+     "t": "stop",
+     "place": "flam",
+     "start": "08:30",
+     "end": "09:30",
+     "kind": "start",
+     "name": "[[flam]] 码头",
+     "verb": "吃早饭、去码头",
+     "body": "提前 20 分钟到码头。"
+    },
+    {
+     "t": "move",
+     "mode": "ferry",
+     "path": [
+      "flam",
+      "gudvangen"
+     ],
+     "start": "09:30",
+     "end": "11:30",
+     "note": "The Fjords 电动游船（Future/Vision of the Fjords），弗洛姆 → 古德旺恩约 2 h，经 Aurlandsfjord 进入纳柔依峡湾；2025 年夏季单程 640 NOK，2027 年时刻和票价待定"
+    },
+    {
+     "t": "stop",
+     "place": "gudvangen",
+     "start": "11:30",
+     "end": "12:15",
+     "kind": "visit",
+     "name": "[[gudvangen]]",
+     "verb": "在峡湾尽头走走",
+     "body": "峡湾尽头的小村子，两边是上千米高的峭壁和瀑布。旁边的维京村 Njardarheimr 要另外买票，可选。"
+    },
+    {
+     "t": "move",
+     "mode": "bus",
+     "path": [
+      "gudvangen",
+      "flam"
+     ],
+     "start": "12:15",
+     "end": "12:40",
+     "note": "巴士回弗洛姆（约 20 分钟，常与游船配套卖票）"
+    },
+    {
+     "t": "stop",
+     "place": "flam",
+     "start": "12:40",
+     "end": "13:30",
+     "kind": "food",
+     "name": "[[flam]] 午饭",
+     "verb": "吃午饭",
+     "body": "Ægir 啤酒馆很有特色但贵，自己做三明治更省钱。"
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "flam",
+      "stegastein"
+     ],
+     "start": "13:30",
+     "end": "14:00",
+     "note": "经 Aurland 上 243 号公路 (Aurlandsfjellet)，窄而急弯多",
+     "km": 17,
+     "geom": "_fnrJ_llj@dDl`@tPgJzEke@_E{f@wWcZgKs\\kCab@uIiZwRmDoOgIePkAsHm\\cMaUaOmLiP\\iO_IgPQaKwX_LoU}MoPmNkMmNeOeJw]Meb@kJoYeNeNwNoLoMqReOqIqNqPsNePyNuNxPgDzOvEmK{V{MwP}OP`MeR|O|BdQdF_K_XpO|H`OdMnPfA`IcD"
+    },
+    {
+     "t": "stop",
+     "place": "stegastein",
+     "start": "14:00",
+     "end": "14:45",
+     "kind": "visit",
+     "name": "[[stegastein]]",
+     "verb": "站在悬空观景台上",
+     "body": "伸出悬崖 30 m 的木头观景台，离峡湾面约 650 m，俯瞰 Aurlandsfjord。"
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "stegastein",
+      "snovegen"
+     ],
+     "start": "14:45",
+     "end": "15:30",
+     "note": "继续走 243 号上高原（夏季开放，约 6–10 月）",
+     "km": 13,
+     "geom": "cewrJeu_k@qD_`@{JmYoQcRkNcRqH}a@_Dkk@{Awg@kD}f@eCed@uGgg@iL}XdRiRhOiJnQiIwN_WqOyEmLaWdO_I|OoAcKy]_MwS}J}XqB{d@_@{a@Tkk@e@qg@eGe^{Jsa@oIsa@sDq`@eI}[iOoPiOeIqZ}Ned@uLeQuCw@K"
+    },
+    {
+     "t": "stop",
+     "place": "snovegen",
+     "start": "15:30",
+     "end": "16:30",
+     "kind": "hike",
+     "name": "[[snovegen]]",
+     "verb": "在雪墙间散步",
+     "body": "林木线以上的高原，7 月路边常有几米高的雪墙和融雪湖。在国家风景路线的休息点下车随便走走。"
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "snovegen",
+      "flam"
+     ],
+     "start": "16:30",
+     "end": "17:30",
+     "note": "原路下山",
+     "km": 31,
+     "geom": "{n_sJaw|k@|R`DfW~DrYrN|OxFlQbNxMrQrGx_@xCl`@`L~`@xHn]vEbd@Rjh@Khb@`A|j@vCpa@tSh`@nKf]kPbMjHz[xO`LeKfZiOhJ}OfH`Iv_@pGha@nCrg@zCdc@lBfd@bBfa@vC`c@nJt\\hRhV~MfPrKzV_H`]gPg@yNgLuOoKzLvSuPm@iPuBePbHlOtGxOhHnKzWkQ^eR|A`NrNlMhRdNpNzO|InMvTbPrIfNhP`KjWThc@rHd]nNtLxNfOhMjQ|LrT|JhYxPfAhPjIhP]`OlLbM`UrHl\\dPjAnOfIrP`B~J~WjCra@tGj]lPvL`M|WbBfg@qGbg@}KvU}E{^YkU"
+    },
+    {
+     "t": "stop",
+     "place": "flam",
+     "start": "17:30",
+     "end": "18:00",
+     "kind": "camp",
+     "name": "[[flam]] 住宿",
+     "verb": "收拾行李",
+     "body": "明天中午前要到卑尔根机场还车。",
+     "tips": [
+      "备选（有一项特别想做时）：坐弗洛姆铁路 (Flåmsbana) 上 Myrdal，租自行车沿 Rallarvegen 骑 20 km 下坡回弗洛姆，约半天。"
+     ]
+    }
+   ]
+  },
+  {
+   "date": "2027-07-21",
+   "c": "no",
+   "title": "[[flam]] → [[bgo]] 还车 ✈ [[stockholm]]",
+   "short": "飞斯德哥尔摩",
+   "sub": "上午开回卑尔根机场还车，下午直飞斯德哥尔摩，晚上逛老城。",
+   "stay": "stockholm",
+   "stayNote": "青旅床位约 350–550 SEK/人",
+   "segs": [
+    {
+     "t": "stop",
+     "place": "flam",
+     "start": "08:00",
+     "end": "08:00",
+     "kind": "start",
+     "name": "[[flam]] 出发",
+     "verb": "出发",
+     "body": "留足时间，路上可能遇到修路和羊群。"
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "flam",
+      "bgo"
+     ],
+     "start": "08:00",
+     "end": "11:15",
+     "note": "E16 经 Gudvangen、Voss，过 Bergen 环城收费后去 Flesland 机场",
+     "km": 169,
+     "geom": "_fnrJ_llj@dDl`@yOnDgHy]oOmMcSfMiTdSwRxUwO|UyLxTmO`]u_@teAcNp\\mMhXmNz\\aJp\\zDpa@jO~H`PjGnIj[`A``Bt@ti@pDnrAlCjo@|GffBvArb@pDzmAhFntCjAlaAjA~t@nBh_ArB|v@lCzz@xBhl@dErbAtBfp@~Atx@b@jc@Xdo@`Dhc@jGb^rHt^`Qx]|QbShMvUbMjT`OhOtIjj@zGta@|B`b@`Ebb@~Ef_@pAva@hEt_@kBba@e@va@g@jb@zJ~]vJhYbKn[zIf[tIlZbIv^~Gl\\fD``@wAtb@tEd`@`G~c@bEp_@rHx\\}IvZsBlb@fNzOnQLhOlHdKjYxOiCtH{`@|MwPbQwAnPkDpP`AzNxKdJtYrL~UnJtZfCta@nGni@~Ff^|Gb]xArb@nJn]hN~NjItZ|Gj\\tGr\\jIz\\jDz_@cAha@zIx[~KpYbI|ZvI~YpDf`@`JfZfA|a@~Ef_@fBjb@kIn^aCp`@qNpRwNtM}NvM{IdZEhh@Kfc@q@nc@v@pi@Bhb@zDv`@rL`TbNzSbNjP`Aha@|JzX|OnMzO~F|O}F|NsKpQmOfMoQhPpCpOrHdNcPzKgVtNePzPiBdQbOnKzVxMhThRpChP~AzOmBpPWlPy@~OpBxOyGhPtAnOhMhOrL|OrDtPj@fQnJbMpSzOfKdO|LjOtK|O`IhNfQpObXxNnS`R|C~N`L|MfPnMvRdPdAfO`K~OrRvK|ZtMnV`MxS|OjCjP~AvP}ClThAtVbAdQs@dIl[pGd`@`Sll@`Qvg@~N~b@lLvTlNpMdHf]tG~^xGv\\zHz\\jIr[|JnXjHl_@tIr[zEd`@mDxc@kFb`@qLp[{I|[{Kvh@cH`\\mJ|[{H~[{Ajh@U`b@Mbb@gGr_@aGl^gFtc@{@tb@_Cjg@}Avd@Gxg@|Afa@uJfZuLjUyDf`@fFtc@lIn\\`En_@Jta@gDbi@iMfTcKlW}Bna@zEn_@Oji@{Dx_@tDv`@}Abb@_K|g@}LrTgKz`@oKd\\sD~a@Xxa@xC~a@{Dfb@Nra@bA~a@gCba@`Cbq@tBtq@`@xb@_Ara@Z|b@cD|`@Gja@dGd]|Ev_@pQfW`Gx^yBbf@qF`^hCzb@q@lb@}Hh[uJb[wJjYx@ra@jCd`@t@xa@jHv\\eC|a@{@da@~Hf[zPjEbO~IxIlY}Bz`@s@va@Wpb@|Fzb@rEr`@lEj`@nA~a@|Rps@vNlRjFz^kAda@bDtc@qB|a@xC`j@nE|a@|K|UtHd[xCdf@|e@boBtGb^nBxb@`@tb@|LlXvOlIbQhD`OpJfOfL`O~NlOhOdOzH|OwFfN|P~Hv_@jFj^|B~b@hC`d@hGl^|Cre@xDf_@`NbQtPxEzp@~m@dNbPbNrStLxTrI~[hKxWrKjVnKnVxKfYhMxYrLvUlJrXbPdJnPvDtOqG~NwKjRqCpReBvP]hQ_ArOgEfQ^dPl@|ObHlPwG~OgGtNuPjOiH`PiBhOkJzOw@lQvA|c@yx@tOiFrP\\`ReH|OaGzPWjPzG~SxVpNrP|MnSrH`\\jEt_@zGl^oE|_@}@|b@~Fh]~@`j@]td@sF`_@cI|ZuEv^hGf_@~dAvoEhL`V~PtEfSqGzPyFzQyB~Pl@dNbOlDra@eIb\\uFx_@Tzf@Y~h@`Cpl@yDbk@mF`b@[|b@xBz`@hIbZdHd]xHh\\|Cxa@A|j@Etf@Vnb@lEj_@zDt_@u@db@cJb[gEtg@_Cr`@bBta@|P|aAvOd}@tAta@kAna@rPx@jScBxPaAtPiHfPiArOvFrPtClOiHrScUtPvJlPnKbOhJ|NtJjOrU~LhRhOnNfPzBjPkAvO`CzPdAhOfJlRzG~O~D`KdYOpb@pAz`@~Afa@tFj_@xKtVNfa@dGnb@zIr[dKbWlKdWvNpOlP~JfO|SxLdUxPd`@vL~VjPdZ~MlVbM~RpLhWjFr]nOtInKx]tFx_@bEz_@bInZ~NlKfOrHjMpRdPxHdMlQ`Glb@jEx`@y@ba@`Anb@lD~`@Bvd@^|b@fBdb@rBzg@~Aba@jHz\\hHp\\tKjVjEb_@xIr\\zDh_@rBha@`Gn`@y@`a@mR~HyOzGmQtBkPhDeQhEw@J"
+    },
+    {
+     "t": "stop",
+     "place": "bgo",
+     "start": "11:15",
+     "end": "12:00",
+     "kind": "shop",
+     "name": "[[bgo]] 还车",
+     "verb": "加满油、还车",
+     "body": "机场附近加油站加满油，还车时拍照。"
+    },
+    {
+     "t": "move",
+     "mode": "flight",
+     "path": [
+      "bgo",
+      "arn"
+     ],
+     "start": "13:30",
+     "end": "15:00",
+     "note": "SAS / Norwegian 直飞约 1 h 20 min，具体航班和时间待定"
+    },
+    {
+     "t": "move",
+     "mode": "train",
+     "path": [
+      "arn",
+      "stockholm"
+     ],
+     "start": "15:30",
+     "end": "16:15",
+     "note": "Arlanda Express 18 分钟（贵）/ SL 通勤火车经 Arlanda C 站约 40 min（便宜，但要加机场站费）/ Flygbussarna 机场大巴约 45 min"
+    },
+    {
+     "t": "stop",
+     "place": "stockholm",
+     "start": "16:30",
+     "end": "17:30",
+     "kind": "stay",
+     "name": "[[stockholm]] 入住",
+     "verb": "入住",
+     "body": "去游客中心或 SL app 买 72 小时交通卡，三天都能用。"
+    },
+    {
+     "t": "move",
+     "mode": "walk",
+     "path": [
+      "stockholm",
+      "gamla_stan"
+     ],
+     "start": "17:30",
+     "end": "17:50",
+     "note": "步行或地铁"
+    },
+    {
+     "t": "stop",
+     "place": "gamla_stan",
+     "start": "17:50",
+     "end": "20:00",
+     "kind": "city",
+     "name": "[[gamla_stan]] 黄昏",
+     "verb": "老城散步、晚饭",
+     "body": "傍晚游客少，石板巷子很好看。晚饭可以吃瑞典肉丸。"
+    },
+    {
+     "t": "move",
+     "mode": "train",
+     "path": [
+      "gamla_stan",
+      "stockholm"
+     ],
+     "start": "20:00",
+     "end": "20:20",
+     "note": "地铁"
+    },
+    {
+     "t": "stop",
+     "place": "stockholm",
+     "start": "20:20",
+     "end": "20:30",
+     "kind": "stay",
+     "name": "[[stockholm]] 住宿",
+     "verb": "休息",
+     "body": ""
+    }
+   ]
+  },
+  {
+   "date": "2027-07-22",
+   "c": "se",
+   "title": "[[stadshuset]]、[[gamla_stan]]、[[vasamuseet]]、[[skansen]]",
+   "short": "老城与博物馆",
+   "sub": "市政厅塔楼、老城和王宫卫兵换岗、瓦萨沉船博物馆、斯堪森露天博物馆，傍晚在南岛看日落。",
+   "stay": "stockholm",
+   "stayNote": "同前一晚",
+   "segs": [
+    {
+     "t": "stop",
+     "place": "stockholm",
+     "start": "08:45",
+     "end": "09:00",
+     "kind": "start",
+     "name": "出发",
+     "verb": "出发",
+     "body": ""
+    },
+    {
+     "t": "move",
+     "mode": "walk",
+     "path": [
+      "stockholm",
+      "stadshuset"
+     ],
+     "start": "09:00",
+     "end": "09:15",
+     "note": "步行或地铁到 Rådhuset 站"
+    },
+    {
+     "t": "stop",
+     "place": "stadshuset",
+     "start": "09:15",
+     "end": "10:30",
+     "kind": "visit",
+     "name": "[[stadshuset]]",
+     "verb": "登塔看全城",
+     "body": "诺贝尔奖晚宴在这里的蓝厅举行。塔楼高 106 m，能看到老城和梅拉伦湖。",
+     "facts": [
+      [
+       "票价",
+       "塔楼约 90–150 SEK（需核实），限时段，现场或网上买"
+      ]
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "walk",
+     "path": [
+      "stadshuset",
+      "gamla_stan"
+     ],
+     "start": "10:30",
+     "end": "10:50",
+     "note": "过桥进老城"
+    },
+    {
+     "t": "stop",
+     "place": "gamla_stan",
+     "start": "10:50",
+     "end": "12:00",
+     "kind": "city",
+     "name": "[[gamla_stan]]",
+     "verb": "逛大广场和小巷",
+     "body": "Stortorget 广场上的彩色山墙房、只有 90 cm 宽的 Mårten Trotzigs gränd 小巷、大教堂。"
+    },
+    {
+     "t": "stop",
+     "place": "kungliga_slottet",
+     "start": "12:00",
+     "end": "12:45",
+     "kind": "visit",
+     "name": "[[kungliga_slottet]] 卫兵换岗",
+     "verb": "看卫兵换岗",
+     "body": "夏天大约中午 12:15 开始（周日 13:15），在外院看，免费。"
+    },
+    {
+     "t": "stop",
+     "place": "gamla_stan",
+     "start": "12:45",
+     "end": "13:30",
+     "kind": "food",
+     "name": "午饭",
+     "verb": "吃工作日套餐",
+     "body": "找挂「Dagens lunch」牌子的餐馆，约 130–160 SEK，含沙拉、面包和咖啡。"
+    },
+    {
+     "t": "move",
+     "mode": "ferry",
+     "path": [
+      "gamla_stan",
+      "vasamuseet"
+     ],
+     "start": "13:30",
+     "end": "13:50",
+     "note": "Slussen 坐 Djurgårdsfärjan 渡轮到动物园岛，SL 交通卡可用"
+    },
+    {
+     "t": "stop",
+     "place": "vasamuseet",
+     "start": "14:00",
+     "end": "16:00",
+     "kind": "visit",
+     "name": "[[vasamuseet]]",
+     "verb": "看 1628 年的战舰",
+     "body": "首航 20 分钟就沉没的皇家战舰，98% 是原件，在海底躺了 333 年。",
+     "facts": [
+      [
+       "票价",
+       "成人约 230 SEK，学生有优惠（需核实）"
+      ]
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "walk",
+     "path": [
+      "vasamuseet",
+      "skansen"
+     ],
+     "start": "16:00",
+     "end": "16:15",
+     "note": "步行"
+    },
+    {
+     "t": "stop",
+     "place": "skansen",
+     "start": "16:15",
+     "end": "18:30",
+     "kind": "visit",
+     "name": "[[skansen]]",
+     "verb": "逛露天博物馆",
+     "body": "世界上第一个露天博物馆：从全国搬来的老农舍和手工作坊，还有北欧动物园，能看到驼鹿、熊、狼獾。",
+     "facts": [
+      [
+       "票价",
+       "随季节变化，约 200–300 SEK（需核实）"
+      ]
+     ],
+     "tips": [
+      "预算紧可以跳过，改去免费的 Rosendals 花园喝下午茶。"
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "train",
+     "path": [
+      "skansen",
+      "monteliusvagen"
+     ],
+     "start": "18:30",
+     "end": "19:15",
+     "note": "7 号电车 + 地铁到 Slussen，步行上坡"
+    },
+    {
+     "t": "stop",
+     "place": "monteliusvagen",
+     "start": "19:15",
+     "end": "20:30",
+     "kind": "visit",
+     "name": "[[monteliusvagen]]",
+     "verb": "看老城日落",
+     "body": "南岛 (Södermalm) 崖边的小步道，正对市政厅和骑士岛。附近有很多便宜的餐馆。"
+    },
+    {
+     "t": "move",
+     "mode": "train",
+     "path": [
+      "monteliusvagen",
+      "stockholm"
+     ],
+     "start": "20:30",
+     "end": "20:50",
+     "note": "地铁回住处"
+    },
+    {
+     "t": "stop",
+     "place": "stockholm",
+     "start": "20:50",
+     "end": "21:00",
+     "kind": "stay",
+     "name": "[[stockholm]] 住宿",
+     "verb": "休息",
+     "body": ""
+    }
+   ]
+  },
+  {
+   "date": "2027-07-23",
+   "c": "se",
+   "title": "地铁艺术 + 群岛小镇 [[vaxholm]]",
+   "short": "群岛一日",
+   "sub": "上午看「世界上最长的美术馆」地铁站，中午坐船进群岛，到木屋小镇瓦克斯霍尔姆。",
+   "stay": "stockholm",
+   "stayNote": "同前一晚",
+   "segs": [
+    {
+     "t": "stop",
+     "place": "t_centralen",
+     "start": "09:00",
+     "end": "10:30",
+     "kind": "visit",
+     "name": "[[t_centralen]] 等地铁站",
+     "verb": "逛地铁艺术",
+     "body": "蓝线 T-Centralen 的藤蔓图案、Kungsträdgården 的洞穴遗迹、Solna Centrum 的红色森林、Stadion 的彩虹。交通卡随便坐。"
+    },
+    {
+     "t": "move",
+     "mode": "walk",
+     "path": [
+      "t_centralen",
+      "stromkajen"
+     ],
+     "start": "10:30",
+     "end": "10:50",
+     "note": "步行到大酒店前的码头"
+    },
+    {
+     "t": "move",
+     "mode": "ferry",
+     "path": [
+      "stromkajen",
+      "vaxholm"
+     ],
+     "start": "11:00",
+     "end": "12:00",
+     "note": "Waxholmsbolaget 群岛船约 1 h，在群岛间穿行；单程约 90 SEK（需核实，SL 卡一般不适用）"
+    },
+    {
+     "t": "stop",
+     "place": "vaxholm",
+     "start": "12:00",
+     "end": "16:00",
+     "kind": "city",
+     "name": "[[vaxholm]]",
+     "verb": "逛群岛小镇",
+     "body": "彩色木屋、海边步道、小码头。可以坐 5 分钟小船去对岸 16 世纪的瓦克斯霍尔姆要塞，再找家店来个 fika（咖啡 + 肉桂卷）。"
+    },
+    {
+     "t": "move",
+     "mode": "ferry",
+     "path": [
+      "vaxholm",
+      "stromkajen"
+     ],
+     "start": "16:00",
+     "end": "17:00",
+     "note": "坐船回城（或 670 路巴士约 50 min，可用 SL 卡）"
+    },
+    {
+     "t": "stop",
+     "place": "stockholm",
+     "start": "17:15",
+     "end": "21:00",
+     "kind": "city",
+     "name": "南岛 (Södermalm) 自由活动",
+     "verb": "自由活动、晚饭",
+     "body": "南岛有很多二手店、咖啡馆和便宜的餐馆。Fotografiska 摄影博物馆开到很晚，可选。"
+    }
+   ]
+  },
+  {
+   "date": "2027-07-24",
+   "c": "se",
+   "title": "[[stockholm]] → [[nynashamn]] ⛴ [[visby]]",
+   "short": "渡轮去哥特兰",
+   "sub": "通勤火车去尼奈斯港，坐 3 小时渡轮到中世纪城墙小城维斯比，傍晚逛古城。",
+   "stay": "visby",
+   "stayNote": "青旅或民宿，旺季约 500–900 SEK/人",
+   "segs": [
+    {
+     "t": "stop",
+     "place": "stockholm",
+     "start": "08:30",
+     "end": "09:15",
+     "kind": "start",
+     "name": "退房",
+     "verb": "退房、去车站",
+     "body": ""
+    },
+    {
+     "t": "move",
+     "mode": "train",
+     "path": [
+      "stockholm",
+      "nynashamn"
+     ],
+     "start": "09:15",
+     "end": "10:20",
+     "note": "SL 通勤火车 (pendeltåg) 从 Stockholm City 到 Nynäshamn 约 1 h，SL 票可用；也可以坐渡轮公司的大巴（从 Cityterminalen 发车）"
+    },
+    {
+     "t": "stop",
+     "place": "nynashamn",
+     "start": "10:20",
+     "end": "11:00",
+     "kind": "start",
+     "name": "[[nynashamn]] 码头",
+     "verb": "登船",
+     "body": "步行乘客通常要在开船前约 20–30 分钟到码头。"
+    },
+    {
+     "t": "move",
+     "mode": "ferry",
+     "path": [
+      "nynashamn",
+      "visby"
+     ],
+     "start": "11:25",
+     "end": "14:45",
+     "note": "Destination Gotland，约 3 h 15 min（2026 年夏季参考班次 11:25 / 14:10 / 20:10，2027 年时刻待定）"
+    },
+    {
+     "t": "stop",
+     "place": "visby",
+     "start": "15:00",
+     "end": "15:30",
+     "kind": "stay",
+     "name": "[[visby]] 入住",
+     "verb": "放行李",
+     "body": ""
+    },
+    {
+     "t": "stop",
+     "place": "almedalen",
+     "start": "15:30",
+     "end": "16:15",
+     "kind": "city",
+     "name": "[[almedalen]]",
+     "verb": "公园散步",
+     "body": "城墙边的公园和水池。每年 6 月底的政治周就在这里，但我们来的时候已经结束。"
+    },
+    {
+     "t": "move",
+     "mode": "walk",
+     "path": [
+      "almedalen",
+      "stora_torget"
+     ],
+     "start": "16:15",
+     "end": "16:25",
+     "note": "步行"
+    },
+    {
+     "t": "stop",
+     "place": "stora_torget",
+     "start": "16:25",
+     "end": "17:30",
+     "kind": "city",
+     "name": "[[stora_torget]] 与古城小巷",
+     "verb": "逛废墟和玫瑰小巷",
+     "body": "大广场上 13 世纪的圣卡琳教堂废墟没有屋顶。往海边走，Fiskargränd 等小巷里种满了玫瑰。"
+    },
+    {
+     "t": "move",
+     "mode": "walk",
+     "path": [
+      "stora_torget",
+      "visby_domkyrkan"
+     ],
+     "start": "17:30",
+     "end": "17:40",
+     "note": "上坡"
+    },
+    {
+     "t": "stop",
+     "place": "visby_domkyrkan",
+     "start": "17:40",
+     "end": "18:15",
+     "kind": "visit",
+     "name": "[[visby_domkyrkan]]",
+     "verb": "参观大教堂",
+     "body": "古城里唯一还在用的中世纪教堂，三座黑色尖塔。"
+    },
+    {
+     "t": "move",
+     "mode": "walk",
+     "path": [
+      "visby_domkyrkan",
+      "ringmuren"
+     ],
+     "start": "18:15",
+     "end": "18:30",
+     "note": "走到北门 (Norderport)"
+    },
+    {
+     "t": "stop",
+     "place": "ringmuren",
+     "start": "18:30",
+     "end": "20:00",
+     "kind": "hike",
+     "name": "[[ringmuren]] 环城散步",
+     "verb": "绕城墙走",
+     "body": "3.4 km 长的中世纪城墙，还保留着 27 座塔楼。从城墙外的草地绕一圈，最后回到海边。",
+     "tips": [
+      "7 月下旬日落约 21:30，晚饭后去海边看日落。"
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "walk",
+     "path": [
+      "ringmuren",
+      "visby"
+     ],
+     "start": "20:00",
+     "end": "20:15",
+     "note": "步行"
+    },
+    {
+     "t": "stop",
+     "place": "visby",
+     "start": "20:15",
+     "end": "20:30",
+     "kind": "stay",
+     "name": "[[visby]] 住宿",
+     "verb": "晚饭、休息",
+     "body": "试试哥特兰的特色甜点：番红花布丁配黑莓酱 (saffranspannkaka)。"
+    }
+   ]
+  },
+  {
+   "date": "2027-07-25",
+   "c": "se",
+   "title": "自驾 [[faro]]：海蚀柱和白沙滩",
+   "short": "弗罗岛",
+   "sub": "租车去哥特兰最北边的弗罗岛，看石灰岩海蚀柱 (raukar)、在波罗的海游泳，回程看「少女石」。",
+   "stay": "visby",
+   "stayNote": "同前一晚",
+   "segs": [
+    {
+     "t": "stop",
+     "place": "visby",
+     "start": "08:00",
+     "end": "08:30",
+     "kind": "start",
+     "name": "[[visby]] 取租车",
+     "verb": "取车",
+     "body": "在港口附近的租车公司取车（7 月要提前订）。"
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "visby",
+      "farosund"
+     ],
+     "start": "08:30",
+     "end": "09:30",
+     "note": "149 / 148 号公路往东北",
+     "km": 56,
+     "geom": "}}x~IoltnB{McQ_KoV~@w`@gAcb@}@ua@Cs_@A}`@fGo_@{B}]{G{\\eDm]M{`@K}_@{E}c@yB_`@kBaa@uCg^mHm[oIk\\_HkZ}Fw\\eGe_@}Fg^oFu\\{E{[gAiq@Mod@kCmj@}Cm]aE}d@}Esd@iGe]oGi\\uGe]cGq[_Fi\\uPaT_MmVwJaYgPuNkMiS{N}K{PuDySnFyOyDoKeVgLkToRgDcOoJ_IeZUm`@`@wa@sCcd@kIcZmIoX}J_VcL{UeM_XcKcUiLmYqKaXkFk[mEi^mG{`@cJue@kHqa@}Eq_@qH{Z{Fo]wG{ZwGeZoC{_@mKuc@uI{ZeLob@gF{^q@__@iFq^oEi]wBu`@Ea_@rAm_@lBg_@|Bg^`Aq^}Ag`@eFu[}Ey_@mDu_@kBu_@}Ayc@s@m_@q@i_@yB}_@}Cq]}Eo_@aH}^iKee@sPqb@aRaTyScOqMoQyLeYyNuToPyI{QqGqO_GyLkZcIcZuFs^}Ae^mKi\\sOwWaN}McO{IcNaQqN_WuR_a@kLiVeJuWoHc^cEe_@uCsm@gDyc@gIyb@kJ}VoJoWoG}]{C}f@sCe_@yGg\\yLgXkMsPuMs_@_Kg^yJea@qIam@cE}\\aKg]_Ika@{Dk]aAga@h@k_@aGo`@_JsY{LqVgMeRuIec@gHa^gIsXwHmZiHa]sEi`@}Bma@Mka@j@mc@bJeq@tBy_@iCob@qFm`@qIuc@wH{ZkHa[{MgN{FP"
+    },
+    {
+     "t": "move",
+     "mode": "ferry",
+     "path": [
+      "farosund",
+      "faro"
+     ],
+     "start": "09:30",
+     "end": "09:50",
+     "note": "免费汽车渡轮约 8 分钟，班次很密，夏天可能要排队"
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "faro",
+      "digerhuvud"
+     ],
+     "start": "09:50",
+     "end": "10:10",
+     "note": "岛西岸小路",
+     "km": 5,
+     "geom": "mun`JibwsBtObKjFl_@v@~d@xEx^_Bz_@eE``@bBl_@y@nf@gCd^mIpZyO{KiM_UoJ_Y"
+    },
+    {
+     "t": "stop",
+     "place": "digerhuvud",
+     "start": "10:10",
+     "end": "11:15",
+     "kind": "hike",
+     "name": "[[digerhuvud]]",
+     "verb": "沿海岸看海蚀柱",
+     "body": "西海岸一长排灰白色的石灰岩柱，可以沿砾石滩一路走过去。"
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "digerhuvud",
+      "langhammars"
+     ],
+     "start": "11:15",
+     "end": "11:40",
+     "note": "岛北部小路",
+     "km": 15,
+     "geom": "_vo`JehosBnJ~XhM~TlNvMhIsXpDq]x@{c@cBq`@bCe`@`H_ZkHk]oA}g@eCe_@qI}YmFa]gP_PoNmLsMoPmOmLeL{R_LiX_JqYgKyT_Csa@yBcj@k@uc@vA_d@yCwf@sGm_@aJeYaO_UkOaMgRyJ{O_KeMiPgLcW{IaXqHq]kCe_@Twg@}OyKcT|B_PnGdBl^pH~]"
+    },
+    {
+     "t": "stop",
+     "place": "langhammars",
+     "start": "11:40",
+     "end": "13:00",
+     "kind": "hike",
+     "name": "[[langhammars]]",
+     "verb": "看海蚀柱、野餐",
+     "body": "弗罗岛最有名的海蚀柱群，造型最奇特。电影导演伯格曼 (Ingmar Bergman) 晚年就住在这座岛上。"
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "langhammars",
+      "sudersand"
+     ],
+     "start": "13:00",
+     "end": "13:30",
+     "note": "往东",
+     "km": 3,
+     "geom": "uex`JiajtBiFw[mDu`@~OoG|OyDrOfEbP}FrNcWjBq]"
+    },
+    {
+     "t": "stop",
+     "place": "sudersand",
+     "start": "13:30",
+     "end": "15:00",
+     "kind": "water",
+     "name": "[[sudersand]]",
+     "verb": "沙滩、游泳",
+     "body": "细白沙滩，波罗的海 7 月下旬水温约 18–20°C。"
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "sudersand",
+      "farosund"
+     ],
+     "start": "15:00",
+     "end": "15:45",
+     "note": "回渡口坐渡轮",
+     "km": 18,
+     "geom": "w{u`JmfntBaEvd@eFd_@Ppd@lEv_@hDja@vAp^hLfUrMjSdSdKnU|P`O~T`JdYrGl_@jDh]mBp`@n@pp@hAz`@rBnd@tKnXlKf\\vKxWlLjSlOlLrMnPnNlL~NtM|Fp\\pI`Z|Cza@p@``@rGr^jOfYzMdObSri@bMzP~OhCzPwAbP|HvPdIvXjDbP~DhQxElQzGfRO|Pr@hGv\\zNdyApCbo@xDnQ"
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "farosund",
+      "jungfrun"
+     ],
+     "start": "15:45",
+     "end": "16:30",
+     "note": "走 149 号公路沿西海岸回程",
+     "km": 43,
+     "geom": "atd`JowhsB|PjGzI~W~Ir]fHj]hFh\\hEl]p@l_@gIhi@wCrd@k@be@h@j`@jCx_@rEb^nIf_@~HrZdJp[dHhc@bJbZ~MdS~JxUdJx[lD|]_Afa@rC~e@fF|_@xHfZxHpY`Hdm@nHzb@xLnc@dKt`@pMbWvMxRtKz[fF~^~Bfd@tD``@tHvZzKjXpIzY`F~[hDjm@rBd`@~Era@fIz]jLdZtQh_@tLfVrNpVhOdOfOhJrMnPjNjVrHlYzAj_@qGjZ}RdG{NpLaHj`@qGfZmFf]sAf^mDpa@}Dl^uLpScEr^sIn\\{HdZeIb[iKda@wJr_@iIhYmCj`@kO~PwQ|PsSlQ{QbP_OpN{R~TqObRgMnP}OdDyLtSuP{@eJhWcQ~F{Dtp@fCx_@\\hf@f@lg@hDxb@pH`\\jM~Z~L`c@tM|`@vPlZvCh`@Sh_@nKbVlMxRlI~`@jEh\\Xjg@fCxf@dRrw@tFdb@p@jl@dE|^tArk@|Add@fLjVfOpL~MhQtK~Z}A`f@mNtRmRdPiOfMqSnQwK`M"
+    },
+    {
+     "t": "stop",
+     "place": "jungfrun",
+     "start": "16:30",
+     "end": "17:15",
+     "kind": "visit",
+     "name": "[[jungfrun]]",
+     "verb": "看少女石",
+     "body": "立在海崖边、高约 26 m 的海蚀柱，旁边是小渔港 Lickershamn。"
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "jungfrun",
+      "visby"
+     ],
+     "start": "17:15",
+     "end": "18:00",
+     "note": "149 号公路",
+     "km": 27,
+     "geom": "ae}_Jus~oBfUoUfQgOrNyLbOgMjQ}Y~NfOtPvDpRfKfSlk@|Jbj@dLn^~Fjd@nCb^tF|]xF~d@nCz^d@fb@lCfa@jEl]nPtSnT|BlQxI`OnJzNbVvKvWdLf_@rJr`@zLrRbOpIjOpKpRhAxPnIbRrKjQvJxNrNrLnSjNxPnNrOtO|HzOvMjPvCtPlC~OxEpSx\\nKnUtLbVbNdXnMdP~PrE|QlIdSdG|SnGxOzEhSzGjJ`WxLnVnMfSzEb^pIbZdJ~VjLjW`MlUzNrMlQbC`PnPnMnOlQ`LdPnHjPrQ|Q`^pPnV~MzNbNtQpOl]|J|VxBt^jIjYnK~TfBeJ"
+    },
+    {
+     "t": "stop",
+     "place": "visby",
+     "start": "18:15",
+     "end": "18:45",
+     "kind": "stay",
+     "name": "还车、回住处",
+     "verb": "还车",
+     "body": "晚饭可以试试哥特兰羊肉。"
+    }
+   ]
+  },
+  {
+   "date": "2027-07-26",
+   "c": "se",
+   "title": "骑车去 [[hogklint]] + 古城慢游",
+   "short": "海崖骑行",
+   "sub": "骑车沿海岸去南边的赫格克林特海崖，下午看维京图石、逛植物园，傍晚走北边的绞刑台山。",
+   "stay": "visby",
+   "stayNote": "同前一晚",
+   "segs": [
+    {
+     "t": "stop",
+     "place": "visby",
+     "start": "09:00",
+     "end": "09:30",
+     "kind": "start",
+     "name": "租自行车",
+     "verb": "租车",
+     "body": "维斯比租车点很多，一天约 150–250 SEK。"
+    },
+    {
+     "t": "move",
+     "mode": "bike",
+     "path": [
+      "visby",
+      "hogklint"
+     ],
+     "start": "09:30",
+     "end": "10:15",
+     "note": "骑车约 30–45 min（约 8 km，沿海岸经 Fridhem）"
+    },
+    {
+     "t": "stop",
+     "place": "hogklint",
+     "start": "10:15",
+     "end": "12:00",
+     "kind": "hike",
+     "name": "[[hogklint]]",
+     "verb": "在海崖上散步",
+     "body": "48 m 高的石灰岩海崖，能俯瞰海和维斯比古城。崖顶有森林小路，可以往南一直走到 Fridhem。"
+    },
+    {
+     "t": "move",
+     "mode": "bike",
+     "path": [
+      "hogklint",
+      "visby"
+     ],
+     "start": "12:00",
+     "end": "12:45",
+     "note": "骑车回城"
+    },
+    {
+     "t": "stop",
+     "place": "gotlands_museum",
+     "start": "13:00",
+     "end": "15:00",
+     "kind": "visit",
+     "name": "[[gotlands_museum]]",
+     "verb": "看维京图石和银器宝藏",
+     "body": "哥特兰出土的维京时代银币和窖藏比北欧任何地方都多，还有一屋子雕花的图像石。",
+     "facts": [
+      [
+       "票价",
+       "约 150–200 SEK（需核实）"
+      ]
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "walk",
+     "path": [
+      "gotlands_museum",
+      "botaniska"
+     ],
+     "start": "15:00",
+     "end": "15:15",
+     "note": "步行"
+    },
+    {
+     "t": "stop",
+     "place": "botaniska",
+     "start": "15:15",
+     "end": "16:00",
+     "kind": "visit",
+     "name": "[[botaniska]]",
+     "verb": "逛植物园",
+     "body": "免费的海边植物园，里面有教堂废墟和很多玫瑰。"
+    },
+    {
+     "t": "move",
+     "mode": "walk",
+     "path": [
+      "botaniska",
+      "galgberget"
+     ],
+     "start": "16:00",
+     "end": "16:30",
+     "note": "出北门沿海边往北"
+    },
+    {
+     "t": "stop",
+     "place": "galgberget",
+     "start": "16:30",
+     "end": "18:00",
+     "kind": "hike",
+     "name": "[[galgberget]]",
+     "verb": "走海崖森林步道",
+     "body": "中世纪的绞刑台石柱，旁边是海崖上的松林步道，能远眺维斯比。"
+    },
+    {
+     "t": "move",
+     "mode": "walk",
+     "path": [
+      "galgberget",
+      "visby"
+     ],
+     "start": "18:00",
+     "end": "18:30",
+     "note": "原路返回、还车"
+    },
+    {
+     "t": "stop",
+     "place": "visby",
+     "start": "18:30",
+     "end": "19:00",
+     "kind": "stay",
+     "name": "[[visby]] 最后一晚",
+     "verb": "收拾行李",
+     "body": "明早坐早班渡轮，今晚把行李收好。"
+    }
+   ]
+  },
+  {
+   "date": "2027-07-27",
+   "c": "se",
+   "title": "[[visby]] ⛴ [[oskarshamn]] → [[kalmar]] → [[kobenhavn]]",
+   "short": "移动日",
+   "sub": "渡轮回瑞典本土，汽车到卡尔马看城堡，再坐火车穿过厄勒海峡大桥到哥本哈根。",
+   "stay": "kobenhavn",
+   "stayNote": "青旅床位约 300–450 DKK/人",
+   "segs": [
+    {
+     "t": "stop",
+     "place": "visby",
+     "start": "06:30",
+     "end": "07:00",
+     "kind": "start",
+     "name": "去码头",
+     "verb": "退房、去码头",
+     "body": ""
+    },
+    {
+     "t": "move",
+     "mode": "ferry",
+     "path": [
+      "visby",
+      "oskarshamn"
+     ],
+     "start": "07:30",
+     "end": "10:30",
+     "note": "Destination Gotland 维斯比 → 奥斯卡港约 3 h（每天约 1–2 班，2027 年时刻待定，按实际时刻调整当天计划）"
+    },
+    {
+     "t": "move",
+     "mode": "bus",
+     "path": [
+      "oskarshamn",
+      "kalmar"
+     ],
+     "start": "11:00",
+     "end": "12:25",
+     "note": "Kalmar Länstrafik 区域巴士约 1 h 20 min（或按时刻表转火车）",
+     "km": 85
+    },
+    {
+     "t": "stop",
+     "place": "kalmar_slott",
+     "start": "12:45",
+     "end": "14:30",
+     "kind": "visit",
+     "name": "[[kalmar_slott]]",
+     "verb": "参观城堡、吃午饭",
+     "body": "1397 年卡尔马联盟签订的地方，护城河环绕的文艺复兴城堡，在城墙边的公园吃午饭。",
+     "facts": [
+      [
+       "门票",
+       "约 150–200 SEK（只看外观免费，需核实）"
+      ]
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "walk",
+     "path": [
+      "kalmar_slott",
+      "kalmar"
+     ],
+     "start": "14:30",
+     "end": "14:50",
+     "note": "步行去 Kalmar C 火车站"
+    },
+    {
+     "t": "move",
+     "mode": "train",
+     "path": [
+      "kalmar",
+      "kbh_h"
+     ],
+     "start": "15:05",
+     "end": "19:15",
+     "note": "Öresundståg 约 4 h（经 Växjö、Hässleholm、Malmö，过厄勒海峡大桥），约每 2 小时一班，可能要在 Malmö 换车；入境丹麦可能查证件"
+    },
+    {
+     "t": "stop",
+     "place": "kbh_h",
+     "start": "19:15",
+     "end": "19:45",
+     "kind": "start",
+     "name": "到达 [[kbh_h]]",
+     "verb": "去住处",
+     "body": "买张 City Pass 或用 DOT app 买票，市区地铁和火车都能用。"
+    },
+    {
+     "t": "stop",
+     "place": "kobenhavn",
+     "start": "19:45",
+     "end": "20:15",
+     "kind": "stay",
+     "name": "[[kobenhavn]] 入住",
+     "verb": "入住",
+     "body": ""
+    }
+   ]
+  },
+  {
+   "date": "2027-07-28",
+   "c": "dk",
+   "title": "骑车游 [[kobenhavn]]：[[nyhavn]]、[[christiania]]、[[tivoli]]",
+   "short": "哥本哈根",
+   "sub": "像本地人一样骑车：王宫、圆塔、免费的议会塔楼、新港运河，晚上去蒂沃利。",
+   "stay": "kobenhavn",
+   "stayNote": "同前一晚",
+   "segs": [
+    {
+     "t": "stop",
+     "place": "torvehallerne",
+     "start": "09:00",
+     "end": "09:45",
+     "kind": "food",
+     "name": "[[torvehallerne]]",
+     "verb": "早餐和咖啡",
+     "body": "玻璃顶的美食市场，来个丹麦面包 (wienerbrød) 或开放三明治 (smørrebrød)。"
+    },
+    {
+     "t": "move",
+     "mode": "walk",
+     "path": [
+      "torvehallerne",
+      "rosenborg"
+     ],
+     "start": "09:45",
+     "end": "10:00",
+     "note": "骑车或步行（租车用 Donkey Republic 等 app，一天约 100–150 DKK）"
+    },
+    {
+     "t": "stop",
+     "place": "rosenborg",
+     "start": "10:00",
+     "end": "11:00",
+     "kind": "visit",
+     "name": "[[rosenborg]]",
+     "verb": "逛国王花园",
+     "body": "童话般的文艺复兴宫殿，地下室收着丹麦王冠珠宝。花园免费，宫殿要买票。"
+    },
+    {
+     "t": "move",
+     "mode": "walk",
+     "path": [
+      "rosenborg",
+      "rundetaarn"
+     ],
+     "start": "11:00",
+     "end": "11:15",
+     "note": "骑车"
+    },
+    {
+     "t": "stop",
+     "place": "rundetaarn",
+     "start": "11:15",
+     "end": "12:00",
+     "kind": "visit",
+     "name": "[[rundetaarn]]",
+     "verb": "走螺旋坡道上塔",
+     "body": "17 世纪的天文台，里面不是楼梯，而是 209 m 长的螺旋坡道。",
+     "facts": [
+      [
+       "门票",
+       "约 40 DKK（需核实）"
+      ]
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "walk",
+     "path": [
+      "rundetaarn",
+      "christiansborg"
+     ],
+     "start": "12:00",
+     "end": "12:15",
+     "note": "骑车"
+    },
+    {
+     "t": "stop",
+     "place": "christiansborg",
+     "start": "12:15",
+     "end": "13:15",
+     "kind": "visit",
+     "name": "[[christiansborg]] 塔楼",
+     "verb": "登上免费的塔楼",
+     "body": "议会大楼的塔楼可以免费上，是市中心最高的观景台，塔顶有餐厅。"
+    },
+    {
+     "t": "move",
+     "mode": "walk",
+     "path": [
+      "christiansborg",
+      "nyhavn"
+     ],
+     "start": "13:15",
+     "end": "13:30",
+     "note": "骑车"
+    },
+    {
+     "t": "stop",
+     "place": "nyhavn",
+     "start": "13:30",
+     "end": "15:30",
+     "kind": "water",
+     "name": "[[nyhavn]] + 运河游船",
+     "verb": "坐船游运河",
+     "body": "彩色房子的老港口。坐 1 小时运河游船，能看到小美人鱼、歌剧院和克里斯蒂安港。",
+     "facts": [
+      [
+       "运河游船",
+       "约 120–150 DKK（需核实）"
+      ]
+     ],
+     "tips": [
+      "新港餐厅很贵，在码头边买个热狗就好。"
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "walk",
+     "path": [
+      "nyhavn",
+      "christiania"
+     ],
+     "start": "15:30",
+     "end": "15:50",
+     "note": "骑车过 Inderhavnsbroen 步行桥"
+    },
+    {
+     "t": "stop",
+     "place": "christiania",
+     "start": "16:00",
+     "end": "17:30",
+     "kind": "city",
+     "name": "[[christiania]]",
+     "verb": "逛自由城",
+     "body": "1971 年起的嬉皮自治社区，有壁画、手作房屋和湖边小路。",
+     "tips": [
+      "Pusher Street 一带禁止拍照，尊重当地规矩。"
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "walk",
+     "path": [
+      "christiania",
+      "tivoli"
+     ],
+     "start": "17:30",
+     "end": "18:00",
+     "note": "骑车去中央车站对面，还车"
+    },
+    {
+     "t": "stop",
+     "place": "tivoli",
+     "start": "18:00",
+     "end": "22:30",
+     "kind": "visit",
+     "name": "[[tivoli]]",
+     "verb": "逛游乐园、看夜景",
+     "body": "1843 年开的老游乐园，晚上亮灯后最美。只买门票逛园子也够，机动游戏另外付费。",
+     "facts": [
+      [
+       "门票",
+       "约 150–200 DKK，游乐设施另算（需核实）"
+      ]
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "walk",
+     "path": [
+      "tivoli",
+      "kobenhavn"
+     ],
+     "start": "22:30",
+     "end": "22:45",
+     "note": "步行或地铁"
+    },
+    {
+     "t": "stop",
+     "place": "kobenhavn",
+     "start": "22:45",
+     "end": "23:00",
+     "kind": "stay",
+     "name": "[[kobenhavn]] 住宿",
+     "verb": "休息",
+     "body": ""
+    }
+   ]
+  },
+  {
+   "date": "2027-07-29",
+   "c": "dk",
+   "title": "[[louisiana]] + [[kronborg]] 一日游",
+   "short": "城堡与美术馆",
+   "sub": "坐沿海铁路北上：上午在海边的路易斯安那现代艺术博物馆，下午去哈姆雷特的克伦堡宫。",
+   "stay": "kobenhavn",
+   "stayNote": "同前一晚",
+   "segs": [
+    {
+     "t": "stop",
+     "place": "kobenhavn",
+     "start": "08:45",
+     "end": "09:15",
+     "kind": "start",
+     "name": "出发",
+     "verb": "去中央车站",
+     "body": "买到 Helsingør 的往返票，或者买可以中途下车的车票。"
+    },
+    {
+     "t": "move",
+     "mode": "train",
+     "path": [
+      "kbh_h",
+      "louisiana"
+     ],
+     "start": "09:15",
+     "end": "10:00",
+     "note": "沿海铁路 (Kystbanen) 到 Humlebæk 约 40 min，再步行约 10 min"
+    },
+    {
+     "t": "stop",
+     "place": "louisiana",
+     "start": "10:00",
+     "end": "13:30",
+     "kind": "visit",
+     "name": "[[louisiana]]",
+     "verb": "看展、在海边草坪野餐",
+     "body": "建在海边的现代艺术博物馆，有贾科梅蒂、草间弥生等人的作品，雕塑公园正对厄勒海峡和瑞典。",
+     "facts": [
+      [
+       "门票",
+       "约 165 DKK，学生有优惠（需核实）"
+      ]
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "train",
+     "path": [
+      "louisiana",
+      "kronborg"
+     ],
+     "start": "13:45",
+     "end": "14:15",
+     "note": "Humlebæk → Helsingør 约 10 min，再步行约 15 min"
+    },
+    {
+     "t": "stop",
+     "place": "kronborg",
+     "start": "14:15",
+     "end": "16:30",
+     "kind": "visit",
+     "name": "[[kronborg]]",
+     "verb": "参观城堡和地下暗堡",
+     "body": "莎士比亚《哈姆雷特》中艾尔西诺城堡的原型，世界遗产。别错过地下暗堡和沉睡的勇士霍尔格·丹斯克 (Holger Danske) 雕像。",
+     "facts": [
+      [
+       "门票",
+       "约 140–160 DKK（需核实）"
+      ]
+     ],
+     "tips": [
+      "旁边由废弃船坞改建的海事博物馆 (M/S Museet for Søfart) 建筑设计很有名。",
+      "渡轮 20 分钟就能到瑞典的赫尔辛堡 (Helsingborg)。"
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "train",
+     "path": [
+      "kronborg",
+      "kbh_h"
+     ],
+     "start": "17:00",
+     "end": "17:50",
+     "note": "沿海铁路回哥本哈根"
+    },
+    {
+     "t": "stop",
+     "place": "kobenhavn",
+     "start": "18:00",
+     "end": "18:30",
+     "kind": "stay",
+     "name": "[[kobenhavn]] 住宿",
+     "verb": "晚饭、休息",
+     "body": ""
+    }
+   ]
+  },
+  {
+   "date": "2027-07-30",
+   "c": "dk",
+   "title": "自驾 [[stevns_klint]] + [[mons_klint]] 白垩海崖",
+   "short": "白垩海崖",
+   "sub": "租一天车往南：先看世界遗产斯泰温斯崖和半塌的老教堂，再去默恩崖走海滩和崖顶森林。",
+   "stay": "kobenhavn",
+   "stayNote": "同前一晚",
+   "segs": [
+    {
+     "t": "stop",
+     "place": "kobenhavn",
+     "start": "08:00",
+     "end": "08:30",
+     "kind": "start",
+     "name": "取租车",
+     "verb": "取车",
+     "body": "城里或机场取车，一天约 500–700 DKK。"
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "kobenhavn",
+      "stevns_klint"
+     ],
+     "start": "08:30",
+     "end": "09:30",
+     "note": "E20 / 151 号公路往南",
+     "km": 68,
+     "geom": "seyrIstukAcN~OdLxRrKzUzI~UW`^nFn]`FzZ~OpBfO~GxIra@A`]vCf\\tCn\\t@d`@t@x\\hAr]|C`\\lAx^tGtZdP~OnOqG`@l]`B|`@tBj_@tD~]`Ep^zEvc@bEbj@|Clb@xDjb@jGxe@zEn\\nGfd@vCj_@j@jb@sCrwAgAze@gAvn@Kv]Fpi@j@jc@v@t\\zCrz@~Cr]|Gp]|HdXdL|UfStOpQzEjV`ExSvDdPtChR~DhOtK~LhT~JbWzMt\\jLxYnJfVnJrXxJj]hH~ZnHz]fJh^nNfc@rNn]~NrYdObVrOhSlMjQdQbZfRp`@pPz[~T|\\pMrOtUxTxSdO~QjJpRxIdPpMdN|QzLrWrMlc@`KpWvNzUtSnR|SbJ|QxBvPhBtQdHzRdP~MpR~MbYhRjXjObMjXbLxOtFzi@tRzPlGlOxKpIpWtOqG~Ge`@dEw_@jH}t@pSf@xOaDnR}C|M{L`Pj@rPwD|Pl@zOrFhQhFzOtCpO_LnM_OrNySr_@kf@`Vo[dVu[~NsR|Q}UpTwX~MiNgDq[pDe[tFeZfGeYfKiT|Oe@xMgN~MiOnLaSnK_V|M{SzKwTzMeRpKiThLqQtMcRhOwIvMuMjNqN~OmK~NuNlHsW`K_TJm^pCc]jDi]~Fs^tIuf@|Cw`@bGi\\vDa\\tBk\\hLkVrGg\\lIab@|Ho`@z_@ss@lGe\\~Dq`@eDg[rDo_@~FwYbLkUfJcW~HkYlNsMrOaHdYkX~MuTzN_IpPaGrBm]kHya@Kg`@zCc]~C_cAbNoC"
+    },
+    {
+     "t": "stop",
+     "place": "stevns_klint",
+     "start": "09:30",
+     "end": "10:45",
+     "kind": "visit",
+     "name": "[[stevns_klint]]",
+     "verb": "看白垩崖和半塌的教堂",
+     "body": "世界遗产海崖，岩层里清楚地留着 6,600 万年前恐龙灭绝的那层「鱼黏土」。霍耶鲁普老教堂的一部分已经塌进了海里。"
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "stevns_klint",
+      "mons_klint"
+     ],
+     "start": "10:45",
+     "end": "12:15",
+     "note": "南下经 E47 → 亚历山德琳王后大桥 (Dronning Alexandrines Bro) 上默恩岛，经 Stege",
+     "km": 107,
+     "geom": "oztpIoj~jAkPbk@|HlZpRbC|SpCfTtC`M|a@aIl~AiExi@`JtXvCb\\|Cn\\_Av\\rO~FhOsFxTbMhKp\\nHpYfMfg@rMdn@jJtd@rMjt@jGt]xGvXzKv\\fLh]~Iv]zHha@|Ex]nDv^fCbd@hAxf@Phu@h@~k@hDvoAhC`~@tAnh@Vt`@[ld@sBds@sAfv@cCfzAWb^Bp_@b@zrBOr_@sBr^tHzWbEzZ|E`\\xJdc@jHj\\nG``@lDf^hAl`@Ehb@fAlb@tDr_@~Hp`@zIlVpKbSjQ`SzTtLjM~SnCv]Af`@iFho@Ox]s@zb@y@z\\uAv_@cGznAuBn`@Mr`@Frf@jErZc@pp@Tvb@D`d@w@fb@zMrSvOpKtQ~HvQzFtPdEjSpDnV|CpSnCnQjEnQjHlOrIjQzJhQjGrSrCjR?rVwCjPuB~Po@jT|AbPbElObHxRhObOfP|TfVxOlLrP`IdUbHvUpE~\\zCjQzBtP|EtPjItOfLbPrPdMtPnOvRzMhMfQnLtPpHlOvExV~F`ZzDjUzAlRWfUqDrT_DjQo@v\\?dSm@tP{A|PuC`V{G`QaI|QiM|S}SjYea@~MkQtM{NtQwO~NgJlOgIpWyOdO}L~McN~MsPdQoVdMwOvQuQ~QgNzS_L`QsFhVeCbP\\jPdCb_@|MpVzFfXl@zPeBt[iIfPwFjQiIpRgJ|NeJlEqb@pDo[nDu]~Bo_@rC_]zAw]Ek^k@ml@gAg^eBgc@kAe\\Ec^Aa_@Ccg@Eof@Am\\^s`@w@{^uEib@?kj@dB_s@jCueAvAsj@z@i]Tq]cAme@aBoq@}@e`@zP_K`p@st@rOsRtIeVzFm\\lHi]nJsc@dJiUtO{IhRgUlMePjFyZkBa\\iEe[fAu\\jEm}@eAo\\eKyc@_I_XyIu_@yH{`@eJ{c@wG}ZgH{]{G{]kFoYqJuTmK_SwLyQmMePiKcUaHyWoFqY}Dc^m@i`@xBq^bCo\\p@}\\jFse@xB_^fAm]@a`@~Cc^jFe^lCe`@jAw`@}@e\\eA}`@xJ{ZfH{XdA_^bE{]p@u`@hDk^~Ci]h@cf@`@aj@cDg\\lU{k@dP}QtOor@xIyZ`Mej@~@i]tBkf@Pc^L_oA`QyG~KgRpIq[vGe_@lAy`@iCe^oB_\\h@}\\lLwRrDwZ_MqUeEiZ{KeRkNkLcDjF"
+    },
+    {
+     "t": "stop",
+     "place": "mons_klint",
+     "start": "12:15",
+     "end": "17:00",
+     "kind": "hike",
+     "name": "[[mons_klint]]",
+     "verb": "下到海滩、走崖顶步道",
+     "body": "128 m 高的白色白垩崖。先逛 GeoCenter 博物馆，再走约 500 级木台阶下到海滩，沿岸看崖壁和化石，然后从另一处台阶上来，穿过山毛榉林回去。",
+     "facts": [
+      [
+       "GeoCenter",
+       "约 150–200 DKK（只走步道免费，需核实）"
+      ],
+      [
+       "步行",
+       "环线约 5–7 km，3–4 h"
+      ]
+     ],
+     "tips": [
+      "海滩是碎石和燧石，穿徒步鞋。",
+      "下雨后台阶和崖边很滑。"
+     ]
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "mons_klint",
+      "kobenhavn"
+     ],
+     "start": "17:00",
+     "end": "19:00",
+     "note": "E47 / E20 北上回城",
+     "km": 138,
+     "geom": "qwnnIsdqkAvQ|@tKtRbGz]jOdGmDl\\uKpSuCxd@pB|\\hCfa@mAx`@wGd_@sHbZqKdSePM{Ib_ApGt[cAxf@sAz\\cKv~@sMhb@sJzd@gUp_@oPvQ{Cv\\nCho@c@|i@uCrg@mDp_@Yj]oEl_@mBxd@gHzXqJhWV~^hBf\\mAtd@wB|]eG|a@{Cn[@t^kAz^mBt^{Ez\\u@t]_Djf@yBp^l@h`@tDx\\vFzZ`HxWhKbUlMdPnLdQtKrSpJtTjFnYzGz]|FhY`In_@dJzc@xHz`@xIt_@~H~W|H|WxCn[gCzq@mBr`@Gp\\bFdZJv]aMnZsTdXcOjK{LpQyGd[yHj^eGn[uGdZ_MjTik@to@yObPcMlPnCtjA|@da@Kv_@_Aj_@cAr`@cCraAwAdk@_Bhq@pCh\\nDb]Yh_@C|g@B`a@Dbe@Bdk@D|e@jAd\\xAh_@rAdb@b@~]Pdb@y@b_@sC~[gBx^}Dl_@yDb^uDr[cMhO}NlLiYnN_P~FoPlEcSlDwQn@{UsBad@mOkTiF}QeAkQr@qSpEyOxGqQzKiQxN{R`TgMfQ_MxP}M~OoNdN{WlR_SvKuPvJoPfM{OpOyNrQ}StZgPfSeWtTePhJiQxGwS~EsUvCcZhAcVBaRZ{RpBmVfEkQbAcRg@{TwB}QwCyS_F}Q_GgPuH{SkOcNwNkOmSsMiPcQcPoOyJ_RuHwUoEsVmB}TwC{QeEuX}J{WkQ}TmVaOeP{ReOoOiHePgEqT{A_Qp@kPtBeRbCiQ\\}Q}AaRaFsWeNmOuIuQkHiQkEsSoCqV{CiSqDmPcE}QeGuQ{HoO}KiOiQ{OgWuNcV_QgQgR{I}OkCqTuDiUaJuRiMsOaMkOiMsWiT_QeMmQgKqPsHqOiFiRoEqS{CoPsByQeCgSkEeT{IaT}MiPmJaSoGuPsDaUcKiP_OcN{SsJkUqHkX{FuZmHoZcKsVwMoR{P_NyQaHoTgHmPcGsR{LqO{OkWe\\{PyPaQmLkQmHcTeEuTq@}RO_SSgRaE{OwI{RyIkPkD{UsAyQ{AwS_IgQoOiMkRcOeWsOcRqNeKePcGs[aF}RwCqPiC_P_C{OcAePr@gSjC}Qf@gToAmRyD{QiHoQqKiPoNqMcRoI_YgD{^aB{b@{Cq[kG_]yNwc@wQiZoOeOeOiIuv@mXuOuFqQ{GyQ_MkNkPoPa\\cOsVsMcNcSeLiTgE}OiAePoEuOgJsM{M_OgVgL}[{Ki^qNgZqNqQ_RaNgOqGaOsHmO_K}NuLkSgTiQsUmQcZgVkg@oKkS_RoY{PwT}OaVuM}UgK}TuOya@uK__@cIo\\aIs_@eHiY_Ku\\aKyXmMa\\eLiY}JiXoGmZsMmPuWgFe[yFgUeEiS}DgR_IeNgNiM{VyIeZ_GmZeEi\\mDs`@sAa]eAyg@Yq_@C}]Xud@vBkeA`Bcs@z@ob@Ee^wB{`@{G{h@wH{h@gF_a@wD}`@{Ewp@iCy\\_Hwn@gEg_@iDe`@sBid@s@m`@{PaBkPePuGuZeAq]_Da\\mAu]w@_^_@i]mCy[wCw\\[c`@l@c]]i^_Dmb@qCw_@}Aw\\yKu[oN}M{LiScJcViKnWy@rA"
+    },
+    {
+     "t": "stop",
+     "place": "kobenhavn",
+     "start": "19:15",
+     "end": "19:45",
+     "kind": "stay",
+     "name": "还车",
+     "verb": "还车、晚饭",
+     "body": "",
+     "tips": [
+      "不租车的话：火车到 Vordingborg + 巴士经 Stege 到默恩崖（夏季班次），单程约 2.5–3 h，就去不了斯泰温斯崖了。"
+     ]
+    }
+   ]
+  },
+  {
+   "date": "2027-07-31",
+   "c": "dk",
+   "title": "[[dyrehaven]] 鹿园徒步 + 自由日 + [[reffen]]",
+   "short": "自由日",
+   "sub": "上午去郊外的鹿园看野鹿和猎宫，下午买手信、收拾行李，晚上在雷芬吃告别晚餐。",
+   "stay": "kobenhavn",
+   "stayNote": "同前一晚",
+   "segs": [
+    {
+     "t": "stop",
+     "place": "kobenhavn",
+     "start": "09:00",
+     "end": "09:30",
+     "kind": "start",
+     "name": "出发",
+     "verb": "出发",
+     "body": ""
+    },
+    {
+     "t": "move",
+     "mode": "train",
+     "path": [
+      "kbh_h",
+      "dyrehaven"
+     ],
+     "start": "09:30",
+     "end": "10:00",
+     "note": "S-tog C 线到 Klampenborg 约 20 min，再步行进园"
+    },
+    {
+     "t": "stop",
+     "place": "dyrehaven",
+     "start": "10:00",
+     "end": "13:00",
+     "kind": "hike",
+     "name": "[[dyrehaven]]",
+     "verb": "在林间草地看鹿",
+     "body": "皇家狩猎林，世界遗产，林子里有 2,000 多头梅花鹿和马鹿，小山顶上是白色的猎宫 (Eremitagen)。入口旁边是 1583 年开的老游乐园 Bakken，免费入园。"
+    },
+    {
+     "t": "move",
+     "mode": "train",
+     "path": [
+      "dyrehaven",
+      "kobenhavn"
+     ],
+     "start": "13:15",
+     "end": "13:45",
+     "note": "S-tog 回城"
+    },
+    {
+     "t": "stop",
+     "place": "torvehallerne",
+     "start": "14:00",
+     "end": "15:00",
+     "kind": "food",
+     "name": "[[torvehallerne]] 午饭",
+     "verb": "吃开放三明治",
+     "body": ""
+    },
+    {
+     "t": "stop",
+     "place": "kobenhavn",
+     "start": "15:00",
+     "end": "18:00",
+     "kind": "shop",
+     "name": "Strøget 步行街和收拾行李",
+     "verb": "买手信、打包",
+     "body": "步行街和周边小店。离境退税：非欧盟居民在同一家店当天消费满一定金额可以退税，要保留单据。"
+    },
+    {
+     "t": "move",
+     "mode": "bus",
+     "path": [
+      "kobenhavn",
+      "reffen"
+     ],
+     "start": "18:00",
+     "end": "18:30",
+     "note": "港口巴士 (Havnebus) 或骑车"
+    },
+    {
+     "t": "stop",
+     "place": "reffen",
+     "start": "18:30",
+     "end": "21:00",
+     "kind": "food",
+     "name": "[[reffen]]",
+     "verb": "告别晚餐",
+     "body": "旧船厂改的海边街头美食市场，几十个小摊，看着日落干杯。"
+    },
+    {
+     "t": "move",
+     "mode": "bus",
+     "path": [
+      "reffen",
+      "kobenhavn"
+     ],
+     "start": "21:00",
+     "end": "21:30",
+     "note": "港口巴士或骑车回去"
+    },
+    {
+     "t": "stop",
+     "place": "kobenhavn",
+     "start": "21:30",
+     "end": "22:00",
+     "kind": "stay",
+     "name": "[[kobenhavn]] 最后一晚",
+     "verb": "收拾行李",
+     "body": ""
+    }
+   ]
+  },
+  {
+   "date": "2027-08-01",
+   "c": "dk",
+   "title": "[[cph]] ✈ 多伦多",
+   "short": "回家",
+   "sub": "退房，坐地铁去机场，直飞回多伦多。",
+   "stay": "cph",
+   "stayNote": "无（当天飞回多伦多）",
+   "segs": [
+    {
+     "t": "stop",
+     "place": "kobenhavn",
+     "start": "08:00",
+     "end": "09:00",
+     "kind": "start",
+     "name": "退房",
+     "verb": "退房",
+     "body": ""
+    },
+    {
+     "t": "move",
+     "mode": "train",
+     "path": [
+      "kobenhavn",
+      "cph"
+     ],
+     "start": "09:00",
+     "end": "09:20",
+     "note": "地铁 M2 线或 DSB 火车从中央车站到机场，约 15 分钟"
+    },
+    {
+     "t": "stop",
+     "place": "cph",
+     "start": "09:30",
+     "end": "12:00",
+     "kind": "start",
+     "name": "[[cph]] 值机",
+     "verb": "值机、退税、出境",
+     "body": "退税先到 Global Blue / Planet 柜台。离开申根区要过边检，出入境系统 (EES) 会登记。"
+    },
+    {
+     "t": "move",
+     "mode": "flight",
+     "path": [
+      "cph",
+      "yyz"
+     ],
+     "start": "12:00",
+     "end": "14:30",
+     "note": "SAS 或加航直飞约 8.5 h（多伦多比丹麦晚 6 小时）；具体航班和时间以出票为准",
+     "mins": 510
+    }
+   ]
+  }
+ ],
+ "bookings": [
+  {
+   "id": "flights-home",
+   "what": "跨大西洋机票：多伦多 → [[kef]]（7/4）、[[cph]] → 多伦多（8/1）",
+   "for": "7/4、8/1",
+   "when": "现在就能订",
+   "badge": "现在",
+   "hot": true,
+   "cost": "约 CAD 1,000–1,600/人（需核实）",
+   "summary": "订多城市票。CPH→YYZ 有 SAS 和加航直飞。中国护照持有人要先拿到机票行程单，才能递交签证。",
+   "key": [],
+   "tip": "",
+   "steps": [],
+   "links": []
+  },
+  {
+   "id": "schengen-visa",
+   "what": "申根签证（中国护照）：在 VFS 多伦多递交冰岛签证",
+   "for": "全程 7/4–8/1",
+   "when": "2027-01-04 起可以递交（入境前 6 个月），建议 1–3 月递交；最晚入境前 15 天",
+   "opens": "2027-01-04T00:00",
+   "badge": "最先办",
+   "hot": true,
+   "cost": "签证费 €90/人 + VFS 服务费",
+   "summary": "冰岛停留 12 晚，是停留最长的国家，所以申请冰岛签证；在加拿大由 VFS 多伦多/渥太华/温哥华受理，材料寄往冰岛驻华盛顿大使馆审理。",
+   "key": [
+    [
+     "签证费",
+     "€90（以加元收取）"
+    ],
+    [
+     "审理",
+     "一般 15 天，最长 45 天"
+    ],
+    [
+     "保险",
+     "医疗险 ≥ €30,000"
+    ]
+   ],
+   "tip": "提前准备好可免费取消的住宿预订和机票行程单；VFS 暑假前预约紧张，1 月就去约。",
+   "steps": [
+    "确认加拿大学签/工签 + TRV 在 2027-11 之后仍有效",
+    "填写冰岛申根签证申请表",
+    "预约 VFS 多伦多",
+    "准备材料：护照、照片、行程、机票、住宿、保险、近 3 个月银行流水、在读证明",
+    "现场录指纹、交费",
+    "在 VFS 取回护照"
+   ],
+   "links": [
+    [
+     "VFS 冰岛（加拿大）",
+     "https://visa.vfsglobal.com/one-pager/iceland/canada/english/"
+    ],
+    [
+     "冰岛外交部公告",
+     "https://mfa.is/ministries/diplomatic-missions/embassy-article/2025-02-06-Iceland-begins-accepting-Schengen-visa-applications-in-Canada"
+    ]
+   ]
+  },
+  {
+   "id": "trv-check",
+   "what": "中国护照持有人：检查加拿大 TRV（访客签证）有效期",
+   "for": "8/1 回加拿大",
+   "when": "现在就查；需要续签就马上申请",
+   "badge": "现在",
+   "hot": true,
+   "cost": "CAD 100（TRV 申请费，需核实）",
+   "summary": "学签本身不能用来入境加拿大，回多伦多时需要有效的 TRV 或 PR 卡；冰岛的签证清单也要求它在回到加拿大后仍有效至少 3 个月。",
+   "key": [
+    [
+     "要求",
+     "回到加拿大后仍有效 ≥3 个月（冰岛清单）"
+    ]
+   ],
+   "tip": "IRCC 审理可能要几周到几个月，必须在递交申根签证前办好。",
+   "steps": [
+    "看护照里 TRV 签证页的到期日",
+    "如果早于约 2027-11，在 IRCC 网上续签",
+    "拿到新签证页后再约 VFS"
+   ],
+   "links": [
+    [
+     "IRCC 在加拿大境内申请访客签证",
+     "https://www.canada.ca/en/immigration-refugees-citizenship/services/visit-canada.html"
+    ]
+   ]
+  },
+  {
+   "id": "lotus",
+   "hot": true,
+   "badge": "尽早",
+   "what": "[[lotus_kef]]四驱 SUV + Platinum 保险",
+   "for": "7/4–7/15 冰岛",
+   "when": "越早越好；7 月四驱车紧张，建议提前 6–9 个月订（经验建议，未核实）",
+   "cost": "看车型和保险；另按公里收道路税 6.95 ISK/km",
+   "summary": "至少 SUV、四驱，全险必须买。要开 F208/F225，所以要 Lotus 标注“可上 F 路”的车，并选 Platinum：只有它包涉水损坏。在 [[kef]] 取、[[kef]] 还，不用付异地还车费。",
+   "key": [
+    [
+     "保险",
+     "Platinum（自付额 0，含涉水和 F 路）"
+    ],
+    [
+     "取/还",
+     "[[kef]]"
+    ],
+    [
+     "里程税",
+     "6.95 ISK/km（2026）"
+    ]
+   ],
+   "tip": "预订时说明要开 F208/F225。只有 Platinum 含涉水保护和 F 路保险；Krossá（F249）永远不保。",
+   "links": [
+    [
+     "Lotus Car Rental",
+     "https://www.lotuscarrental.is/"
+    ],
+    [
+     "保险说明",
+     "https://www.lotuscarrental.is/insurance"
+    ],
+    [
+     "F 路指南",
+     "https://www.lotuscarrental.is/blog/how-to-drive-on-f-roads-in-iceland"
+    ]
+   ]
+  },
+  {
+   "id": "lmlparking",
+   "hot": true,
+   "opens": "2027-04-01T09:00",
+   "what": "[[landmannalaugar]]停车预约",
+   "for": "7/6–7/7 高地",
+   "when": "按 2026 年推测 4 月 1 日开放，开放当天就订",
+   "cost": "1,500 ISK/车（2026）",
+   "summary": "6/20–9/13 期间，9:00–16:00 之间开车到达必须预约；露营也要另外订（营地是另一套系统）。每天约 140 个名额，2024 年几乎天天约满。",
+   "key": [
+    [
+     "费用",
+     "1,500 ISK/车"
+    ],
+    [
+     "填写",
+     "入住、离开日期和车牌"
+    ],
+    [
+     "改期",
+     "到达前 7 天以上可改"
+    ]
+   ],
+   "tip": "开放日期是按 2026 年推测的，2027 年 3 月去 ust.is 确认。",
+   "links": [
+    [
+     "Parka 预约",
+     "https://parka.is/parking/landmannalaugar/"
+    ],
+    [
+     "ust.is 说明",
+     "https://www.ust.is/english/visiting-iceland/protected-areas/south/fjallabak-nature-reserve/landmannalaugar/"
+    ]
+   ]
+  },
+  {
+   "id": "lmlcamp",
+   "hot": true,
+   "badge": "开放就订",
+   "what": "[[landmannalaugar]]营地（FÍ）",
+   "for": "7/6 晚",
+   "when": "FÍ 开放 2027 年预订的日期未核实，开放就订",
+   "cost": "成人 3,400 ISK/晚，淋浴 1,100 ISK（2026）",
+   "summary": "必须预订，每单最多 6 人。高地夜里接近 0 °C，要带四季帐和零度睡袋。",
+   "key": [
+    [
+     "费用",
+     "3,400 ISK/人/晚"
+    ],
+    [
+     "退订",
+     "入住前 2 天以上全额退"
+    ]
+   ],
+   "links": [
+    [
+     "FÍ 营地预订",
+     "https://vinna.fi.is/en/vorur/tjaldsvaedi/sudurland-tjaldsvaedi/landmannalaugar-tjaldsvaedi"
+    ]
+   ]
+  },
+  {
+   "id": "lodging1",
+   "hot": true,
+   "badge": "提前半年",
+   "what": "冰岛第一周住宿（5 晚）",
+   "for": "7/4、7/5、7/7–7/10",
+   "when": "现在到 2027 年 1 月；维克和 Smyrlabjörg 最先满",
+   "cost": "未核实",
+   "summary": "7/6 住营地，其余 5 晚要订房。",
+   "select": [
+    [
+     "7/4",
+     "[[reykjavik]]"
+    ],
+    [
+     "7/5",
+     "[[hella]]"
+    ],
+    [
+     "7/7",
+     "[[hvolsvollur]]"
+    ],
+    [
+     "7/8",
+     "[[vik]]"
+    ],
+    [
+     "7/9",
+     "[[smyrlabjorg]]"
+    ],
+    [
+     "7/10",
+     "[[hofn]]"
+    ]
+   ],
+   "tip": "雷克雅未克选有停车位的；Hella 也可换成更靠近高地的 Hrauneyjar 高地中心。",
+   "links": [
+    [
+     "Hotel Smyrlabjörg",
+     "https://www.smyrlabjorg.is/"
+    ],
+    [
+     "Booking.com",
+     "https://www.booking.com/"
+    ]
+   ]
+  },
+  {
+   "id": "iceland-north-stays",
+   "what": "冰岛 7/11–7/15 住宿（[[egilsstadir]]、[[myvatn]]、[[akureyri]]、[[grundarfjordur]]、[[kef]]）",
+   "for": "7/11–7/15",
+   "when": "现在到 2027 年 1 月订；米湖和斯奈山半岛的房间最少",
+   "badge": "尽早",
+   "hot": true,
+   "cost": "约 20,000–35,000 ISK/间/晚",
+   "summary": "这 5 晚都住房间（民宿、青旅或酒店）。米湖和斯奈山半岛的房间很少，7 月很早就会订满。7/15 订机场附近、有接送的，方便还车和赶早班机。",
+   "key": [
+    [
+     "7/15 KEF",
+     "订有机场接送的酒店或青旅"
+    ]
+   ],
+   "tip": "先订可免费取消的，签证材料也用得上。",
+   "steps": [],
+   "links": [],
+   "select": [
+    [
+     "7/11",
+     "[[egilsstadir]]"
+    ],
+    [
+     "7/12",
+     "[[myvatn]]"
+    ],
+    [
+     "7/13",
+     "[[akureyri]]"
+    ],
+    [
+     "7/14",
+     "[[grundarfjordur]]"
+    ],
+    [
+     "7/15",
+     "[[kef]]"
+    ]
+   ]
+  },
+  {
+   "id": "insurance",
+   "what": "旅行医疗保险（全程，≥ €30,000）",
+   "for": "全程",
+   "when": "签证递交前买好（可以买出发后才生效的保单）",
+   "badge": "签证前",
+   "hot": false,
+   "cost": "约 CAD 80–200/人（4 周，需核实）",
+   "summary": "签证必须提供；加拿大护照持有人也强烈建议买。学校的 UHIP 或学生保险一般不覆盖海外旅行，或者额度不够。",
+   "key": [
+    [
+     "保额",
+     "≥ €30,000，含医疗遣返"
+    ],
+    [
+     "范围",
+     "全部申根国，7/4–8/1"
+    ]
+   ],
+   "tip": "确认保单包含徒步、冰川徒步这类户外活动。",
+   "steps": [],
+   "links": []
+  },
+  {
+   "id": "etias",
+   "what": "ETIAS（加拿大护照）",
+   "for": "7/4 入境冰岛",
+   "when": "等欧盟公布启用日期；如果启用了，出发前 1 个月申请",
+   "badge": "关注",
+   "hot": false,
+   "cost": "€20（18 岁以下和 70 岁以上免费）",
+   "summary": "原定 2026 年第 4 季度启用，2026 年 7 月官网撤下了这个时间，目前没有官方日期，普遍估计在 2027 年。启用后最初几个月应有过渡期，不强制。",
+   "key": [
+    [
+     "费用",
+     "€20"
+    ],
+    [
+     "有效期",
+     "3 年或护照到期"
+    ]
+   ],
+   "tip": "只在欧盟官网申请，第三方代办网站会多收钱。",
+   "steps": [
+    "2027 年春天看一眼 ETIAS 官网",
+    "若已强制：网上填表、交 €20",
+    "一般几分钟内批复"
+   ],
+   "links": [
+    [
+     "欧盟官方 ETIAS",
+     "https://travel-europe.europa.eu/etias_en"
+    ]
+   ]
+  },
+  {
+   "id": "glacier",
+   "badge": "提前2月",
+   "what": "冰川徒步（[[hali]]出发）",
+   "for": "7/10 上午",
+   "when": "7 月提前 1–2 个月",
+   "cost": "约 15,500 ISK/人",
+   "summary": "7/10 住东边，选 Hali 出发的 Breiðamerkurjökull 团最顺路。Skaftafell 出发的团要往西折返约 1 小时。",
+   "key": [
+    [
+     "时长",
+     "3.5–4 小时"
+    ],
+    [
+     "最低年龄",
+     "10 岁"
+    ]
+   ],
+   "tip": "按上午场排的（约 9:30–13:30）。订到的场次不同的话，改 7/10 的时间。",
+   "links": [
+    [
+     "Glacier Adventure",
+     "https://glacieradventure.is/"
+    ],
+    [
+     "Icelandic Mountain Guides",
+     "https://www.mountainguides.is/"
+    ]
+   ]
+  },
+  {
+   "id": "silfra",
+   "badge": "可选",
+   "what": "可选：[[silfra]]浮潜 / 潜水",
+   "for": "7/5 上午",
+   "when": "7 月提前 1–2 个月",
+   "cost": "浮潜约 US$110–225；潜水约 US$285 起",
+   "summary": "浮潜不要证书，会游泳就行；潜水要 Open Water 加干衣认证（或近 2 年 10 次干衣潜水记录）。",
+   "links": [
+    [
+     "DIVE.IS",
+     "https://www.dive.is/"
+    ],
+    [
+     "Arctic Adventures",
+     "https://adventures.com/iceland/tours/activities/diving/scuba-diving-in-silfra/"
+    ]
+   ]
+  },
+  {
+   "id": "myvatn-baths",
+   "what": "[[myvatn_baths]] 门票",
+   "for": "7/12 晚上",
+   "when": "提前 1–3 天网上订",
+   "badge": "提前几天",
+   "hot": false,
+   "cost": "成人约 6,500 ISK，学生约 4,300 ISK（需核实）",
+   "summary": "晚上时段一般不难订，网上订通常比现场便宜。",
+   "key": [],
+   "tip": "带学生卡。",
+   "steps": [],
+   "links": [
+    [
+     "Mývatn Nature Baths",
+     "https://myvatnnaturebaths.is/"
+    ]
+   ]
+  },
+  {
+   "id": "kef-bgo",
+   "what": "机票 [[kef]] → [[bergen]]（冰岛航空）",
+   "for": "7/16",
+   "when": "2027 年初，冰岛航空公布夏季时刻后",
+   "badge": "提前3月",
+   "hot": false,
+   "cost": "约 CAD 150–300/人（需核实）",
+   "summary": "冰岛航空每天一班直飞，卑尔根航线已改为全年运营。要选早班机，下午才能在卑尔根玩。",
+   "key": [
+    [
+     "航程",
+     "约 2 h 20 min"
+    ]
+   ],
+   "tip": "Light 票价不含托运行李，露营装备记得加行李额。",
+   "steps": [],
+   "links": [
+    [
+     "Icelandair",
+     "https://www.icelandair.com/"
+    ]
+   ]
+  },
+  {
+   "id": "norway-car",
+   "what": "挪威租车：7/17 卑尔根城里取车 → 7/21 机场还车",
+   "for": "7/17–7/21",
+   "when": "提前 4–6 个月",
+   "badge": "提前4月",
+   "hot": true,
+   "cost": "约 3,000–5,000 NOK 共 5 天（需核实），另加油费和过路费",
+   "summary": "司机必须持安省驾照。25 岁以下通常要交年轻司机附加费。异地还车（城里取、机场还）一般不加钱，订车时确认。",
+   "key": [
+    [
+     "司机",
+     "安省驾照持有人"
+    ],
+    [
+     "过路费",
+     "AutoPASS 电子收费，事后从押金扣"
+    ]
+   ],
+   "tip": "订带不限里程的套餐。",
+   "steps": [],
+   "links": []
+  },
+  {
+   "id": "odda-stay",
+   "what": "[[odda]] 两晚住宿",
+   "for": "7/17–7/18",
+   "when": "现在到 2027 年 2 月",
+   "badge": "尽早",
+   "hot": true,
+   "cost": "营地约 250–400 NOK/人，小木屋约 1,200–2,000 NOK/间",
+   "summary": "恶魔之舌带火了奥达，7 月的住处很紧张。",
+   "key": [],
+   "tip": "Tyssedal 离步道口更近。",
+   "steps": [],
+   "links": []
+  },
+  {
+   "id": "trolltunga-parking",
+   "what": "[[trolltunga]] 停车：P3 [[trolltunga_p3]]（或 P2 + 接驳车）",
+   "for": "7/18",
+   "when": "P3 只有约 30 个车位，开放后马上订；P2 和接驳车提前几天订",
+   "badge": "开放即订",
+   "hot": true,
+   "cost": "P2 全天约 600 NOK；P3 更贵；接驳车约 150–200 NOK/人（需核实）",
+   "summary": "从 P3 出发往返约 20 km，从 P2 出发约 27 km。P3 可以省下 2 小时左右，非常值得。",
+   "key": [
+    [
+     "P3",
+     "约 30 个车位"
+    ]
+   ],
+   "tip": "订不到 P3 就早上 6 点前到 P2。",
+   "steps": [],
+   "links": [
+    [
+     "Trolltunga 官方",
+     "https://www.trolltunga.com/"
+    ]
+   ]
+  },
+  {
+   "id": "flam-stay",
+   "what": "[[flam]] 两晚住宿",
+   "for": "7/19–7/20",
+   "when": "现在到 2027 年 2 月",
+   "badge": "尽早",
+   "hot": true,
+   "cost": "营地约 300 NOK/人，床位约 450–600 NOK",
+   "summary": "弗洛姆只有几家住处，Flåm Camping & Hostel 夏天经常订满。满了可以住隔壁的 Aurland。",
+   "key": [],
+   "tip": "",
+   "steps": [],
+   "links": []
+  },
+  {
+   "id": "fjord-cruise",
+   "what": "纳柔依峡湾游船（弗洛姆 → [[gudvangen]]）+ 回程巴士",
+   "for": "7/20",
+   "when": "提前 1–3 个月",
+   "badge": "提前2月",
+   "hot": false,
+   "cost": "单程约 640 NOK（2025 年夏季价）",
+   "summary": "邮轮停靠的日子很容易满。",
+   "key": [
+    [
+     "时长",
+     "约 2 h"
+    ]
+   ],
+   "tip": "订游船加巴士的组合票。",
+   "steps": [],
+   "links": [
+    [
+     "The Fjords / Norway's Best",
+     "https://www.norwaysbest.com/"
+    ]
+   ]
+  },
+  {
+   "id": "bgo-arn",
+   "what": "机票 [[bergen]] → [[stockholm]]（SAS / Norwegian）",
+   "for": "7/21",
+   "when": "提前 2–3 个月",
+   "badge": "提前3月",
+   "hot": false,
+   "cost": "约 600–1,500 NOK/人（需核实）",
+   "summary": "选下午起飞的航班，上午有时间从弗洛姆开回机场还车。",
+   "key": [],
+   "tip": "",
+   "steps": [],
+   "links": []
+  },
+  {
+   "id": "stockholm-stay",
+   "what": "[[stockholm]] 三晚住宿",
+   "for": "7/21–7/23",
+   "when": "提前约 3 个月",
+   "badge": "提前3月",
+   "hot": false,
+   "cost": "青旅约 350–550 SEK/人",
+   "summary": "住老城或中央车站附近最方便。",
+   "key": [],
+   "tip": "",
+   "steps": [],
+   "links": []
+  },
+  {
+   "id": "gotland-ferry",
+   "what": "Destination Gotland 渡轮：[[nynashamn]] → [[visby]]（7/24）、[[visby]] → [[oskarshamn]]（7/27）",
+   "for": "7/24、7/27",
+   "when": "开售就订（一般在年初公布夏季时刻）",
+   "badge": "开售即订",
+   "hot": true,
+   "cost": "步行乘客单程约 300–900 SEK，旺季越晚越贵（需核实）",
+   "summary": "7 月下旬是瑞典假期高峰，便宜的票会先卖光。两段一起订。",
+   "key": [
+    [
+     "航程",
+     "各约 3 h"
+    ]
+   ],
+   "tip": "有青年票（26 岁以下），订的时候选上。",
+   "steps": [],
+   "links": [
+    [
+     "Destination Gotland",
+     "https://www.destinationgotland.se/en/"
+    ]
+   ]
+  },
+  {
+   "id": "visby-stay",
+   "what": "[[visby]] 三晚住宿",
+   "for": "7/24–7/26",
+   "when": "现在到 2027 年 3 月",
+   "badge": "尽早",
+   "hot": true,
+   "cost": "约 500–900 SEK/人/晚",
+   "summary": "古城里的住处少，又贵；城外营地或民宿更便宜。",
+   "key": [],
+   "tip": "",
+   "steps": [],
+   "links": []
+  },
+  {
+   "id": "gotland-car",
+   "what": "哥特兰租车一天（弗罗岛）",
+   "for": "7/25",
+   "when": "提前 1–2 个月",
+   "badge": "提前2月",
+   "hot": false,
+   "cost": "约 700–1,000 SEK/天（需核实）",
+   "summary": "在维斯比港口附近取还。司机用安省驾照。",
+   "key": [],
+   "tip": "",
+   "steps": [],
+   "links": []
+  },
+  {
+   "id": "kalmar-cph-train",
+   "what": "火车 [[kalmar]] → [[kobenhavn]]（Öresundståg）",
+   "for": "7/27",
+   "when": "渡轮时刻确定后再订",
+   "badge": "提前1月",
+   "hot": false,
+   "cost": "约 300–600 SEK/人（需核实）",
+   "summary": "先确定渡轮几点到奥斯卡港，再订巴士和火车。",
+   "key": [],
+   "tip": "在 SJ 或 Öresundståg 的 app 上买。",
+   "steps": [],
+   "links": [
+    [
+     "Öresundståg",
+     "https://www.oresundstag.se/en/"
+    ]
+   ]
+  },
+  {
+   "id": "cph-stay",
+   "what": "[[kobenhavn]] 五晚住宿",
+   "for": "7/27–7/31",
+   "when": "提前 3–4 个月",
+   "badge": "提前3月",
+   "hot": false,
+   "cost": "青旅约 300–450 DKK/人",
+   "summary": "住在中央车站或 Vesterbro 附近，去哪都方便。",
+   "key": [],
+   "tip": "",
+   "steps": [],
+   "links": []
+  },
+  {
+   "id": "dk-car",
+   "what": "丹麦租车一天（[[stevns_klint]] + [[mons_klint]]）",
+   "for": "7/30",
+   "when": "提前 1–2 个月",
+   "badge": "提前2月",
+   "hot": false,
+   "cost": "约 500–700 DKK/天（需核实）",
+   "summary": "司机用安省驾照。",
+   "key": [],
+   "tip": "",
+   "steps": [],
+   "links": []
+  },
+  {
+   "id": "naturefee",
+   "badge": "待定",
+   "what": "冰岛自然与基础设施费（拟收）",
+   "for": "7/5 黄金圈起",
+   "when": "如果法案通过，去[[thingvellir]]之前在网上买",
+   "cost": "4,500 ISK/人（18 岁以上，一年有效）",
+   "summary": "截至 2026-09-22 还是公开征求意见中的草案，计划 2027-05-01 开始收；通过的话[[thingvellir]]停车费取消，购票网址还没公布。",
+   "links": [
+    [
+     "冰岛政府公告",
+     "https://www.stjornarradid.is/raduneyti/utanrikisraduneytid/utanrikisradherra/stok-raeda-utanrikirradherra/2026-09-22-frumvarp-um-natturu-og-innvidagjald-lagt-fram-i-samradsgatt"
+    ]
+   ]
+  },
+  {
+   "id": "parking",
+   "badge": "不用订",
+   "what": "景点停车费（Parka / Checkit）",
+   "for": "冰岛每天",
+   "when": "到了现场或 24 小时内付",
+   "cost": "每处约 750–1,110 ISK",
+   "summary": "大部分景点停车场用车牌识别收费：用 Parka App 或 checkit.is 付。不付的话罚款会通过租车公司转来，还会加手续费。",
+   "tip": "提车后马上在 Parka App 里登记车牌。[[fjallsarlon]]要在 4 小时内付。",
+   "links": [
+    [
+     "Parka",
+     "https://parka.is/"
+    ],
+    [
+     "Checkit",
+     "https://www.checkit.is/"
+    ]
+   ]
+  }
+ ],
+ "prep": [
+  {
+   "id": "docs",
+   "title": "证件",
+   "items": [
+    {
+     "t": "护照：离开申根区后还要有至少 3 个月有效期（到 2027-11-01 以后）",
+     "more": "护照要在离开申根区（8/1）后至少还有 3 个月有效（即到 2027-11-01 以后），且是 10 年内签发的。"
+    },
+    {
+     "t": "中国护照：申根签证（向冰岛申请，VFS 多伦多递交）",
+     "more": "向哪国申请：按停留时间最长的国家，即冰岛（12 晚；瑞典 6 晚、挪威 5 晚、丹麦 5 晚）。在加拿大：自 2025-02-10 起，冰岛签证由 VFS Global 多伦多/渥太华/温哥华中心受理，材料寄往冰岛驻华盛顿大使馆审理，丹麦不再代理。必须是加拿大的合法居民（持学签、工签或 PR）。 时间：最早在入境前 6 个月递交（2027-01-04 起），最晚入境前 15 天；一般 15 天出结果，最长 45 天。建议 2027 年 1–3 月就约 VFS 递交。 费用：签证费 €90/人（以加元收取），另加 VFS 服务费。学生免签证费只适用于以学习为目的的出行，旅游不免。 材料（以 VFS 冰岛加拿大清单为准）：申请表；护照（离开申根后至少还有 3 个月有效、10 年内签发、至少 2 页空白）和旧护照；照片；加拿大学签/工签或 PR 卡，以及有效的 TRV（回加拿大后至少还有 3 个月有效）；在读证明；往返机票行程单（含 KEF→BGO、BGO→ARN）；全程住宿预订；逐日行程表；旅行医疗保险（≥ €30,000，覆盖全部申根国和全程，含医疗遣返）；近 3 个月银行流水，冰岛的标准约 8,000 ISK/天（有人资助则约 4,000 ISK/天），28 天约 224,000 ISK；如果父母资助，要附资助信、父母的流水和亲属关系证明。"
+    },
+    {
+     "t": "中国护照：检查加拿大 TRV 到期日，回加拿大要用",
+     "more": "回加拿大：中国护照持有人必须有有效的 TRV 或 PR 卡，学签本身不能入境。现在就检查 TRV 到期日，需要续签的话在递交申根签证前办好。"
+    },
+    {
+     "t": "加拿大护照：免签；出发前查 ETIAS 是否已开始强制",
+     "more": "ETIAS：原定 2026 年第 4 季度启用，2026 年 7 月欧盟官网撤下了这个时间，到 2026 年 10 月还没有官方日期，普遍估计在 2027 年。按 ETIAS 条例，启用后有约 6 个月的过渡期，期间不强制。如果 2027 年 7 月前已强制：出发前在欧盟官网申请，€20，有效 3 年。 出入境系统 (EES) 已于 2025 年 10 月启用：第一次在 KEF 入境时会采集指纹和面部照片，不需要提前申请，但排队可能久一点。"
+    },
+    {
+     "t": "驾照原件及对应有效翻译件（如果想用中国驾照开车）",
+     "more": "**查过了：中国驾照在冰岛和挪威基本用不了**，翻译件也不能代替国际驾照，而中国开不出国际驾照。只让持安省驾照的人开车，并登记为驾驶员。驾照：安省驾照是英文，加拿大又是 1949 年日内瓦道路交通公约的缔约国，在冰岛和挪威旅游时可以直接开车，瑞典和丹麦也一样。国际驾照不是必须的，但 CAA 有售，便宜，可备一本。租车公司一般要求驾龄满 1 年，25 岁以下另收费。"
+    },
+    {
+     "t": "旅行医疗保险（≥ €30,000，覆盖全程和全部申根国）",
+     "more": "办申根签证必须有，持加拿大护照的人也建议买。"
+    },
+    {
+     "t": "学生卡（雷市教堂有优惠）",
+     "more": "[[hallgrimskirkja]]塔楼学生票 1,300 ISK（成人 1,500）。"
+    },
+    {
+     "t": "信用卡（带芯片和 PIN 码）",
+     "more": "冰岛加油站多为自助，需要 4 位 PIN。"
+    }
+   ]
+  },
+  {
+   "id": "clothes",
+   "title": "衣物",
+   "items": [
+    {
+     "t": "防水防风外套与裤子（冲锋衣裤）",
+     "more": "7 月冰岛常年最高约 14°，高地和冰川边上更冷、风大。"
+    },
+    {
+     "t": "雨衣"
+    },
+    {
+     "t": "保暖内衣、抓绒衣"
+    },
+    {
+     "t": "防水徒步鞋"
+    }
+   ]
+  },
+  {
+   "id": "gear",
+   "title": "电器与用品",
+   "items": [
+    {
+     "t": "标准欧洲双圆孔插头",
+     "more": "冰岛、挪威、瑞典、丹麦都用 230V、C/F 型双圆孔插座。"
+    },
+    {
+     "t": "符合欧洲电压标准的便携式锅",
+     "more": "露营和自己做饭用，省钱。"
+    },
+    {
+     "t": "眼罩",
+     "more": "7 月冰岛几乎极昼，营地里尤其需要。"
+    }
+   ]
+  },
+  {
+   "id": "meds",
+   "title": "药品",
+   "items": [
+    {
+     "t": "晕车药",
+     "more": "F 路颠簸，峡湾游船、渡轮也可能晃。"
+    },
+    {
+     "t": "感冒药"
+    }
+   ]
+  }
+ ],
+ "sources": [
+  [
+   "ust.is – Landmannalaugar FAQ",
+   "https://ust.is/english/visiting-iceland/protected-areas/south/fjallabak-nature-reserve/landmannalaugar/faq"
+  ],
+  [
+   "Checkit – Seljalandsfoss price list",
+   "https://www.checkit.is/seljalandsfoss"
+  ],
+  [
+   "Þingvellir National Park – parking service",
+   "https://www.thingvellir.is/en/service/parking-service/"
+  ],
+  [
+   "Vegagerðin – opening of mountain roads",
+   "https://www.vegagerdin.is/en/the-transportation-system/the-road-system/roads/opening-of-mountain-roads"
+  ],
+  [
+   "Lotus Car Rental – insurance",
+   "https://www.lotuscarrental.is/insurance"
+  ],
+  [
+   "Lotus Car Rental – how to drive on F-roads",
+   "https://www.lotuscarrental.is/blog/how-to-drive-on-f-roads-in-iceland"
+  ],
+  [
+   "Hallgrímskirkja – opening hours & prices",
+   "https://www.hallgrimskirkja.is/en-gb/opnunartimar"
+  ],
+  [
+   "Vatnajökull National Park – pricelist",
+   "https://www.vatnajokulsthjodgardur.is/en/communities--businesses/pricelist"
+  ],
+  [
+   "Iceland Monitor – Reynisfjara red warning sooner (2025-08-06)",
+   "https://icelandmonitor.mbl.is/news/news/2025/08/06/red_warning_light_to_activate_sooner_at_reynisfjara"
+  ],
+  [
+   "Icelandic Met Office (vedur.is) – Svínafellsheiði fractures",
+   "https://en.vedur.is/about-imo/news/fractures-in-svinafellsheidi-and-a-potential-rockslide-on-svinafellsjokull"
+  ],
+  [
+   "gocampers.is – parking fees Iceland (updated 2026-06-08)",
+   "https://www.gocampers.is/guides/money/parking-fees-iceland/"
+  ],
+  [
+   "Road conditions",
+   "https://umferdin.is/en"
+  ],
+  [
+   "Safetravel",
+   "https://safetravel.is/"
+  ],
+  [
+   "冰岛航空卑尔根航线改为全年运营",
+   "https://www.aviation24.be/airlines/icelandair/icelandair-opens-new-arctic-gateway-with-tromso-route-and-year-round-bergen-service/"
+  ],
+  [
+   "KEF–BGO 航班时刻",
+   "https://www.directflights.com/KEF-BGO"
+  ],
+  [
+   "Stuðlagil 徒步（East Iceland 官方）",
+   "https://www.east.is/en/blog/studlagil-canyon-hike"
+  ],
+  [
+   "Mývatn Nature Baths / Earth Lagoon 介绍",
+   "https://guidetoiceland.is/es/viaja-islandia/conduce/myvatn-nature-baths"
+  ],
+  [
+   "Trolltunga（Fjord Norway 官方）",
+   "https://www.fjordnorway.com/en/attractions/trolltunga"
+  ],
+  [
+   "Trolltunga 停车与接驳车（2026 年攻略）",
+   "https://loudavymkrokem.cz/en/trolltunga-norway-hike/"
+  ],
+  [
+   "纳柔依峡湾游船 2025 年时刻与票价",
+   "https://www.norwaysbest.com/globalassets/pdf/rutetider/rutetider-2025/fjord-cruise-naroyfjord-2025.pdf"
+  ],
+  [
+   "Destination Gotland 航线与时长",
+   "https://directferries.com/nynashamn_visby_ferry.htm"
+  ],
+  [
+   "Öresundståg 时刻表（Kalmar–Köpenhamn）",
+   "https://www.oresundstag.se/en/travel-information/timetables/"
+  ],
+  [
+   "阿尔梅达伦周 2027 日期",
+   "https://en.wikipedia.org/wiki/Almedalen_Week"
+  ],
+  [
+   "CPH–YYZ 直飞（加航扩张）",
+   "https://curiocity.com/air-canada-new-flights-toronto-2027/"
+  ],
+  [
+   "冰岛外交部：2025-02-10 起在加拿大受理冰岛签证",
+   "https://mfa.is/ministries/diplomatic-missions/embassy-article/2025-02-06-Iceland-begins-accepting-Schengen-visa-applications-in-Canada"
+  ],
+  [
+   "VFS Global 冰岛（加拿大）",
+   "https://visa.vfsglobal.com/one-pager/iceland/canada/english/"
+  ],
+  [
+   "欧盟官方 ETIAS",
+   "https://travel-europe.europa.eu/etias_en"
+  ],
+  [
+   "ETIAS 推迟报道（Newland Chase）",
+   "https://newlandchase.com/schengen-ees-flexibility-lapses-as-etias-launch-appears-likely-to-move-to-2027/"
+  ],
+  [
+   "ETIAS 推迟报道（etiaspro）",
+   "https://etiaspro.com/news/eulisa-etias-2027-timeline"
+  ],
+  [
+   "挪威公路局：非欧洲经济区驾照",
+   "https://www.vegvesen.no/en/driving-licences/driving-licence-holders/foreign-driving-licence-in-norway/using-a-non-eueea-driving-licence-in-norway/"
+  ],
+  [
+   "Lotus 租车常见问题（驾照要求）",
+   "https://lotuscarrental.is/faqs"
+  ],
+  [
+   "欧盟驻华代表团：申根签证申请指南",
+   "https://www.eeas.europa.eu/delegations/china/schengen-visa-application-process-essential-guide_en"
+  ]
+ ],
+ "footnote": "时间是建议，不是死规定；7/4 的落地时间和 2027 年的航班、渡轮时刻都是按往年规律估计的，订好再改。价格大多是 2025–2026 年的，2027 年可能上涨。冰岛 F 路是否开放以 [umferdin.is](https://umferdin.is/en) 为准。",
+ "fx": {
+  "base": "USD",
+  "date": "2026-10-05",
+  "source": "open.er-api.com",
+  "rates": {
+   "USD": 1,
+   "ISK": 121.9,
+   "NOK": 9.62,
+   "SEK": 10.04,
+   "DKK": 6.647,
+   "EUR": 0.8889,
+   "CAD": 1.4248,
+   "CNY": 6.7104
+  }
+ }
+}

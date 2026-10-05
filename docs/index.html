@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>北欧之旅 2027</title>
+<meta name="description" content="2027 年 7 月冰岛、挪威、瑞典、丹麦四周行程：每日路线、地图、预订、天气和行程助手。">
+<meta name="theme-color" content="#1F4E6B">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231F4E6B'/%3E%3Cpath d='M4 23l7-10 4 5 5-9 8 14z' fill='%23EEF3F6'/%3E%3Ccircle cx='23' cy='8' r='2.5' fill='%23E7A33E'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app">
+
+  <main class="content">
+    <!-- top bar: brand, the three views, currency and language -->
+    <div class="sticky" id="sticky">
+      <nav class="topbar" aria-label="主导航" data-i18n-aria-label="主导航">
+        <a class="brand" href="#all" aria-label="北欧之旅 2027">
+          <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9"/><path d="M4 23l7-10 4 5 5-9 8 14z"/><circle cx="23" cy="8" r="2.5"/></svg>
+          <span id="brandName" data-i18n="北欧之旅">北欧之旅</span>
+        </a>
+        <div class="seg" role="tablist" aria-label="视图" data-i18n-aria-label="视图">
+          <button role="tab" class="seg-btn" data-view="all" aria-selected="true"><span data-i18n="总览">总览</span> <small id="allSub"></small></button>
+          <button role="tab" class="seg-btn" data-view="day" aria-selected="false"><span data-i18n="每日">每日</span> <small id="daySub"></small></button>
+          <button role="tab" class="seg-btn" data-view="prep" aria-selected="false"><span data-i18n="准备">准备</span> <small id="prepCount"></small></button>
+        </div>
+        <div class="prefs">
+          <label class="cur" title="价格换算（按最新汇率，约数）" data-i18n-title="价格换算（按最新汇率，约数）">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7"/><path d="M12.5 7.5c-.5-.8-1.4-1.2-2.5-1.2-1.5 0-2.5.8-2.5 1.9 0 2.6 5 1.2 5 3.7 0 1.1-1 1.9-2.5 1.9-1.1 0-2-.4-2.5-1.2M10 4.8v1.5M10 13.7v1.5"/></svg>
+            <select id="cur" aria-label="货币" data-i18n-aria-label="货币">
+              <option value="local" data-i18n="当地货币">当地货币</option>
+              <option value="CAD">CAD</option>
+              <option value="CNY">CNY</option>
+              <option value="USD">USD</option>
+            </select>
+          </label>
+          <div class="names" role="radiogroup" aria-label="语言 Language">
+            <button type="button" role="radio" data-nm="zh" aria-checked="true" title="中文（地名悬停显示原文）">中文</button>
+            <button type="button" role="radio" data-nm="local" aria-checked="false" title="English (place names in the local spelling)">EN</button>
+          </div>
+        </div>
+      </nav>
+      <div class="strip-wrap" id="stripWrap" hidden>
+        <button type="button" class="strip-arrow" id="prevDay" aria-label="前一天" data-i18n-aria-label="前一天">‹</button>
+        <div class="strip" id="strip" role="tablist" aria-label="选择日期" data-i18n-aria-label="选择日期"></div>
+        <button type="button" class="strip-arrow" id="nextDay" aria-label="后一天" data-i18n-aria-label="后一天">›</button>
+      </div>
+    </div>
+
+    <header class="top" id="top">
+      <span class="eyebrow" id="eyebrow">Nordic Trip 2027</span>
+      <h1 id="title">北欧之旅 2027</h1>
+      <p class="lede" id="lede" data-i18n="正在载入行程…">正在载入行程…</p>
+      <div class="chips" id="chips"></div>
+    </header>
+
+    <section id="allView" class="view">
+      <div class="route" id="ribbon" aria-label="路线" data-i18n-aria-label="路线"></div>
+      <div class="tl-head"><h2 data-i18n="四周日历">四周日历</h2><span class="hint" data-i18n="点任意一天看当天安排">点任意一天看当天安排</span></div>
+      <div class="cal" id="cal"></div>
+      <div class="tl-head"><h2 data-i18n="路线分段">路线分段</h2><span class="hint" id="legHint"></span></div>
+      <div class="legs" id="legs"></div>
+    </section>
+
+    <section id="dayView" class="view" hidden>
+      <div class="glance" id="glance"></div>
+      <div class="tl-head">
+        <h2 id="dayTitle"></h2>
+        <span class="hint" data-i18n="点一站看详情，地图会跳过去">点一站看详情，地图会跳过去</span>
+      </div>
+      <p class="day-sub" id="daySubtitle"></p>
+      <ol class="timeline" id="rows"></ol>
+      <div class="draftbox" id="draftBox" hidden></div>
+      <nav class="daynav" id="dayNav" aria-label="前一天 / 后一天"></nav>
+    </section>
+
+    <section id="prepView" class="view" hidden>
+      <div class="tl-head"><h2 data-i18n="预订">预订</h2><span class="hint" id="bookedCount"></span></div>
+      <div class="bookings" id="bookings"></div>
+      <div id="prepLists"></div>
+      <footer class="foot">
+        <p id="footnote"></p>
+        <p id="sources"></p>
+      </footer>
+    </section>
+  </main>
+
+  <aside class="mapcol" aria-label="地图" data-i18n-aria-label="地图">
+    <div class="stage">
+      <div id="map" class="map" role="region" aria-label="行程地图" data-i18n-aria-label="行程地图"></div>
+      <div class="map-tools" role="toolbar" aria-label="地图">
+        <button class="tool" id="fitBtn" title="看全天 / 全程" data-i18n-title="看全天 / 全程">
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 7V3h4M13 3h4v4M17 13v4h-4M7 17H3v-4"/></svg><span id="fitLabel">全程</span>
+        </button>
+        <a class="tool" id="dayRoute" href="https://www.google.com/maps" target="_blank" rel="noopener" title="在 Google 地图里打开当天路线" data-i18n-title="在 Google 地图里打开当天路线">
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M8 4H4v12h12v-4M11 3h6v6M17 3l-8 8"/></svg><span data-i18n="导航">导航</span>
+        </a>
+      </div>
+      <div class="map-caption" id="mapCaption"></div>
+    </div>
+  </aside>
+</div>
+
+<section class="cli" id="chat" data-open="false" aria-label="行程助手" data-i18n-aria-label="行程助手">
+  <div class="cli-box">
+    <div class="cli-log" id="chatLog" aria-live="polite"></div>
+    <form class="cli-join" id="chatJoin" hidden>
+      <span data-i18n="输入访问码：">输入访问码：</span>
+      <input id="joinCode" type="password" autocomplete="off" aria-label="访问码" data-i18n-aria-label="访问码" placeholder="access code">
+      <button type="submit" data-i18n="确定">确定</button>
+      <span class="cli-err" id="joinErr" role="alert"></span>
+    </form>
+    <form class="cli-input" id="chatForm">
+      <span class="cli-prompt" aria-hidden="true">›</span>
+      <textarea id="chatText" rows="1" placeholder="问问行程助手" data-i18n-placeholder="问问行程助手" aria-label="问行程助手" data-i18n-aria-label="问行程助手" maxlength="2000" spellcheck="false"></textarea>
+      <kbd class="cli-kbd" id="chatKbd">⌘K</kbd>
+      <button type="submit" class="cli-send" id="chatSend" aria-label="发送" data-i18n-aria-label="发送">↵</button>
+    </form>
+    <div class="cli-foot">
+      <span class="cli-status" id="chatSub">连接中…</span>
+      <span class="cli-keys" data-i18n="回车发送 · esc 收起 · /clear 清空">回车发送 · esc 收起 · /clear 清空</span>
+    </div>
+  </div>
+</section>
+
+<script src="config.js"></script>
+<script src="app.js"></script>
+<script src="chat.js"></script>
+</body>
+</html>

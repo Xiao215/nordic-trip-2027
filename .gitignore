@@ -1,0 +1,8 @@
+backend/.env
+backend/.venv/
+__pycache__/
+.DS_Store
+.claude/
+*.log
+# internal planning notes and research, not part of the site
+plan/
