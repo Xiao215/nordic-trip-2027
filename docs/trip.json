@@ -2,7 +2,7 @@
  "title": "北欧之旅 2027",
  "titleEn": "Nordic Trip 2027",
  "eyebrow": "冰岛 · 挪威 · 瑞典 · 丹麦 · 2027 年 7 月 4 日 – 8 月 1 日",
- "lede": "四周北欧自助游：先在[[is]]租四驱车，走黄金圈、进高地露营、沿南岸看瀑布和冰川；之后飞往[[no]]峡湾，再去[[stockholm]]、哥特兰岛的[[visby]]，最后在[[kobenhavn]]收尾回家。",
+ "lede": "四周北欧自助游：先在[[is]]租四驱车，走黄金圈、进高地露营、沿南岸看瀑布和冰川；之后飞往[[no]]峡湾，翻山开到[[oslo]]，再去[[stockholm]]、哥特兰岛的[[visby]]，最后在[[kobenhavn]]收尾回家。",
  "dates": {
   "start": "2027-07-04",
   "end": "2027-08-01"
@@ -127,61 +127,61 @@
   {
    "c": "no",
    "from": "2027-07-16",
-   "to": "2027-07-20",
-   "short": "挪威峡湾",
-   "title": "[[no]]峡湾：[[bergen]]、哈当厄尔、松恩",
+   "to": "2027-07-22",
+   "short": "峡湾和奥斯陆",
+   "title": "[[no]]：[[bergen]]、峡湾、[[oslo]]",
    "wx": "bergen",
-   "body": "7/16 冰岛航空直飞[[bergen]]（当天不用车），7/17 在卑尔根城里取车，走哈当厄尔峡湾和松恩峡湾，7/21 卑尔根机场还车。",
+   "body": "7/16 冰岛航空直飞[[bergen]]（当天不用车），7/17 在卑尔根城里取车，走哈当厄尔峡湾和松恩峡湾，7/21 翻山开到[[oslo]]还车，7/22 逛一天奥斯陆，傍晚飞斯德哥尔摩。",
    "items": [
     "7/16 [[kef]] ✈ [[bergen]]：[[bryggen]] 与 [[floyen]]",
     "7/17 [[bergen]] → 哈当厄尔峡湾 → [[odda]]",
     "7/18 [[trolltunga]] 全天徒步",
     "7/19 [[odda]] → [[voringsfossen]] → [[stalheim]] → [[flam]]",
-    "7/20 纳柔依峡湾游船 + [[stegastein]] + [[snovegen]]"
+    "7/20 纳柔依峡湾游船 + [[stegastein]] + [[snovegen]]",
+    "7/21 [[flam]] → [[borgund]] → [[oslo]]",
+    "7/22 [[oslo]] 一日 ✈ [[stockholm]]"
    ]
   },
   {
    "c": "se",
-   "from": "2027-07-21",
-   "to": "2027-07-23",
+   "from": "2027-07-23",
+   "to": "2027-07-24",
    "short": "斯德哥尔摩",
    "title": "[[stockholm]]",
    "wx": "stockholm",
-   "body": "回卑尔根还车，直飞[[stockholm]]。",
+   "body": "7/22 傍晚从[[oslo]]飞来，住三晚，两个整天逛城和群岛。",
    "items": [
-    "7/21 [[flam]] → [[bgo]] 还车 ✈ [[stockholm]]",
-    "7/22 [[stadshuset]]、[[gamla_stan]]、[[vasamuseet]]、[[skansen]]",
-    "7/23 地铁艺术 + 群岛小镇 [[vaxholm]]"
+    "7/23 [[stadshuset]]、[[gamla_stan]]、[[vasamuseet]]、[[skansen]]",
+    "7/24 地铁艺术 + 群岛小镇 [[vaxholm]]"
    ]
   },
   {
    "c": "se",
-   "from": "2027-07-24",
-   "to": "2027-07-26",
+   "from": "2027-07-25",
+   "to": "2027-07-27",
    "short": "维斯比",
    "title": "[[gotland]]的[[visby]]",
    "wx": "visby",
-   "body": "[[nynashamn]]坐 Destination Gotland 渡轮（约 3 小时 20 分），7/25 租车去弗罗岛，7/26 骑车去海崖。",
+   "body": "[[nynashamn]]坐 Destination Gotland 渡轮（约 3 小时 20 分），7/26 租车去弗罗岛，7/27 骑车去海崖。",
    "items": [
-    "7/24 [[stockholm]] → [[nynashamn]] ⛴ [[visby]]",
-    "7/25 自驾 [[faro]]：海蚀柱和白沙滩",
-    "7/26 骑车去 [[hogklint]] + 古城慢游"
+    "7/25 [[stockholm]] → [[nynashamn]] ⛴ [[visby]]",
+    "7/26 自驾 [[faro]]：海蚀柱和白沙滩",
+    "7/27 骑车去 [[hogklint]] + 古城慢游"
    ]
   },
   {
    "c": "dk",
-   "from": "2027-07-27",
+   "from": "2027-07-28",
    "to": "2027-08-01",
    "short": "哥本哈根",
    "title": "[[kobenhavn]]",
    "wx": "kobenhavn",
-   "body": "7/27 维斯比坐渡轮到[[oskarshamn]]，转汽车、火车到[[kobenhavn]]。住 5 晚，8/1 直飞多伦多。",
+   "body": "7/28 维斯比坐渡轮到[[oskarshamn]]，转汽车、火车到[[kobenhavn]]。住 4 晚，8/1 直飞多伦多。",
    "items": [
-    "7/27 [[visby]] ⛴ [[oskarshamn]] → [[kalmar]] → [[kobenhavn]]",
-    "7/28 骑车游 [[kobenhavn]]：[[nyhavn]]、[[christiania]]、[[tivoli]]",
-    "7/29 [[louisiana]] + [[kronborg]] 一日游",
-    "7/30 自驾 [[stevns_klint]] + [[mons_klint]] 白垩海崖",
-    "7/31 [[dyrehaven]] 鹿园徒步 + 自由日 + [[reffen]]",
+    "7/28 [[visby]] ⛴ [[oskarshamn]] → [[kalmar]] → [[kobenhavn]]",
+    "7/29 骑车游 [[kobenhavn]]：[[nyhavn]]、[[christiania]]、[[tivoli]]",
+    "7/30 [[louisiana]] + [[kronborg]] 一日游",
+    "7/31 自驾 [[stevns_klint]] + [[mons_klint]] 白垩海崖",
     "8/1 [[cph]] ✈ 多伦多"
    ]
   }
@@ -1440,24 +1440,6 @@
     12.545
    ]
   },
-  "dyrehaven": {
-   "zh": "鹿园（猎宫）",
-   "local": "Jægersborg Dyrehave (Eremitagen)",
-   "en": "Dyrehaven deer park",
-   "ll": [
-    55.79,
-    12.564
-   ]
-  },
-  "reffen": {
-   "zh": "雷芬街头美食",
-   "local": "Reffen",
-   "en": "Reffen street food",
-   "ll": [
-    55.6935,
-    12.609
-   ]
-  },
   "cph": {
    "zh": "哥本哈根凯斯楚普机场",
    "local": "Københavns Lufthavn, Kastrup",
@@ -1474,6 +1456,96 @@
    "ll": [
     43.6777,
     -79.6248
+   ]
+  },
+  "borgund": {
+   "zh": "博尔贡木板教堂",
+   "local": "Borgund stavkyrkje",
+   "en": "Borgund Stave Church",
+   "ll": [
+    61.0472,
+    7.8125
+   ]
+  },
+  "fagernes": {
+   "zh": "法格内斯",
+   "local": "Fagernes",
+   "en": "Fagernes",
+   "ll": [
+    60.9858,
+    9.234
+   ]
+  },
+  "oslo": {
+   "zh": "奥斯陆",
+   "local": "Oslo",
+   "en": "Oslo",
+   "ll": [
+    59.9139,
+    10.7522
+   ]
+  },
+  "oslo_s": {
+   "zh": "奥斯陆中央车站",
+   "local": "Oslo sentralstasjon",
+   "en": "Oslo Central Station",
+   "ll": [
+    59.9111,
+    10.7503
+   ]
+  },
+  "operahuset": {
+   "zh": "奥斯陆歌剧院",
+   "local": "Operahuset",
+   "en": "Oslo Opera House",
+   "ll": [
+    59.9075,
+    10.7531
+   ]
+  },
+  "aker_brygge": {
+   "zh": "阿克尔码头",
+   "local": "Aker Brygge",
+   "en": "Aker Brygge",
+   "ll": [
+    59.9105,
+    10.7275
+   ]
+  },
+  "vigeland": {
+   "zh": "维格兰雕塑公园",
+   "local": "Vigelandsparken",
+   "en": "Vigeland Park",
+   "ll": [
+    59.927,
+    10.7006
+   ]
+  },
+  "bygdoy": {
+   "zh": "比格迪半岛",
+   "local": "Bygdøy",
+   "en": "Bygdøy",
+   "ll": [
+    59.9033,
+    10.699
+   ]
+  },
+  "munch": {
+   "zh": "蒙克美术馆",
+   "local": "MUNCH",
+   "en": "Munch Museum",
+   "ll": [
+    59.9056,
+    10.7554
+   ]
+  },
+  "osl": {
+   "zh": "奥斯陆加勒穆恩机场",
+   "local": "Oslo lufthavn Gardermoen",
+   "en": "Oslo Airport Gardermoen",
+   "ll": [
+    60.1939,
+    11.1004
    ]
   }
  },
@@ -4203,7 +4275,7 @@
      "kind": "start",
      "name": "[[bergen]] 取车",
      "verb": "取租车",
-     "body": "在城里的租车点取车，约好 7/21 在机场还车。路上的电子收费 (AutoPASS) 租车公司会事后扣款。"
+     "body": "在城里的租车点取车，约好 7/21 在奥斯陆还车（异地还车）。路上的电子收费 (AutoPASS) 租车公司会事后扣款。"
     },
     {
      "t": "move",
@@ -4744,7 +4816,7 @@
      "kind": "camp",
      "name": "[[flam]] 住宿",
      "verb": "收拾行李",
-     "body": "明天中午前要到卑尔根机场还车。",
+     "body": "明天要开 5 个多小时到奥斯陆，早点休息。",
      "tips": [
       "备选（有一项特别想做时）：坐弗洛姆铁路 (Flåmsbana) 上 Myrdal，租自行车沿 Rallarvegen 骑 20 km 下坡回弗洛姆，约半天。"
      ]
@@ -4754,11 +4826,11 @@
   {
    "date": "2027-07-21",
    "c": "no",
-   "title": "[[flam]] → [[bgo]] 还车 ✈ [[stockholm]]",
-   "short": "飞斯德哥尔摩",
-   "sub": "上午开回卑尔根机场还车，下午直飞斯德哥尔摩，晚上逛老城。",
-   "stay": "stockholm",
-   "stayNote": "青旅床位约 350–550 SEK/人",
+   "title": "[[flam]] → [[borgund]] → [[oslo]]",
+   "short": "开到奥斯陆",
+   "sub": "穿过世界最长的公路隧道，看一座 800 多年的木板教堂，翻山开到奥斯陆还车，晚上走上歌剧院屋顶。",
+   "stay": "oslo",
+   "stayNote": "青旅床位约 400–650 NOK/人",
    "segs": [
     {
      "t": "stop",
@@ -4768,41 +4840,288 @@
      "kind": "start",
      "name": "[[flam]] 出发",
      "verb": "出发",
-     "body": "留足时间，路上可能遇到修路和羊群。"
+     "body": "今天开车约 6 小时，加上停留，下午 4 点多到奥斯陆。"
     },
     {
      "t": "move",
      "mode": "drive",
      "path": [
       "flam",
-      "bgo"
+      "borgund"
      ],
      "start": "08:00",
-     "end": "11:15",
-     "note": "E16 经 Gudvangen、Voss，过 Bergen 环城收费后去 Flesland 机场",
-     "km": 169,
-     "geom": "_fnrJ_llj@dDl`@yOnDgHy]oOmMcSfMiTdSwRxUwO|UyLxTmO`]u_@teAcNp\\mMhXmNz\\aJp\\zDpa@jO~H`PjGnIj[`A``Bt@ti@pDnrAlCjo@|GffBvArb@pDzmAhFntCjAlaAjA~t@nBh_ArB|v@lCzz@xBhl@dErbAtBfp@~Atx@b@jc@Xdo@`Dhc@jGb^rHt^`Qx]|QbShMvUbMjT`OhOtIjj@zGta@|B`b@`Ebb@~Ef_@pAva@hEt_@kBba@e@va@g@jb@zJ~]vJhYbKn[zIf[tIlZbIv^~Gl\\fD``@wAtb@tEd`@`G~c@bEp_@rHx\\}IvZsBlb@fNzOnQLhOlHdKjYxOiCtH{`@|MwPbQwAnPkDpP`AzNxKdJtYrL~UnJtZfCta@nGni@~Ff^|Gb]xArb@nJn]hN~NjItZ|Gj\\tGr\\jIz\\jDz_@cAha@zIx[~KpYbI|ZvI~YpDf`@`JfZfA|a@~Ef_@fBjb@kIn^aCp`@qNpRwNtM}NvM{IdZEhh@Kfc@q@nc@v@pi@Bhb@zDv`@rL`TbNzSbNjP`Aha@|JzX|OnMzO~F|O}F|NsKpQmOfMoQhPpCpOrHdNcPzKgVtNePzPiBdQbOnKzVxMhThRpChP~AzOmBpPWlPy@~OpBxOyGhPtAnOhMhOrL|OrDtPj@fQnJbMpSzOfKdO|LjOtK|O`IhNfQpObXxNnS`R|C~N`L|MfPnMvRdPdAfO`K~OrRvK|ZtMnV`MxS|OjCjP~AvP}ClThAtVbAdQs@dIl[pGd`@`Sll@`Qvg@~N~b@lLvTlNpMdHf]tG~^xGv\\zHz\\jIr[|JnXjHl_@tIr[zEd`@mDxc@kFb`@qLp[{I|[{Kvh@cH`\\mJ|[{H~[{Ajh@U`b@Mbb@gGr_@aGl^gFtc@{@tb@_Cjg@}Avd@Gxg@|Afa@uJfZuLjUyDf`@fFtc@lIn\\`En_@Jta@gDbi@iMfTcKlW}Bna@zEn_@Oji@{Dx_@tDv`@}Abb@_K|g@}LrTgKz`@oKd\\sD~a@Xxa@xC~a@{Dfb@Nra@bA~a@gCba@`Cbq@tBtq@`@xb@_Ara@Z|b@cD|`@Gja@dGd]|Ev_@pQfW`Gx^yBbf@qF`^hCzb@q@lb@}Hh[uJb[wJjYx@ra@jCd`@t@xa@jHv\\eC|a@{@da@~Hf[zPjEbO~IxIlY}Bz`@s@va@Wpb@|Fzb@rEr`@lEj`@nA~a@|Rps@vNlRjFz^kAda@bDtc@qB|a@xC`j@nE|a@|K|UtHd[xCdf@|e@boBtGb^nBxb@`@tb@|LlXvOlIbQhD`OpJfOfL`O~NlOhOdOzH|OwFfN|P~Hv_@jFj^|B~b@hC`d@hGl^|Cre@xDf_@`NbQtPxEzp@~m@dNbPbNrStLxTrI~[hKxWrKjVnKnVxKfYhMxYrLvUlJrXbPdJnPvDtOqG~NwKjRqCpReBvP]hQ_ArOgEfQ^dPl@|ObHlPwG~OgGtNuPjOiH`PiBhOkJzOw@lQvA|c@yx@tOiFrP\\`ReH|OaGzPWjPzG~SxVpNrP|MnSrH`\\jEt_@zGl^oE|_@}@|b@~Fh]~@`j@]td@sF`_@cI|ZuEv^hGf_@~dAvoEhL`V~PtEfSqGzPyFzQyB~Pl@dNbOlDra@eIb\\uFx_@Tzf@Y~h@`Cpl@yDbk@mF`b@[|b@xBz`@hIbZdHd]xHh\\|Cxa@A|j@Etf@Vnb@lEj_@zDt_@u@db@cJb[gEtg@_Cr`@bBta@|P|aAvOd}@tAta@kAna@rPx@jScBxPaAtPiHfPiArOvFrPtClOiHrScUtPvJlPnKbOhJ|NtJjOrU~LhRhOnNfPzBjPkAvO`CzPdAhOfJlRzG~O~D`KdYOpb@pAz`@~Afa@tFj_@xKtVNfa@dGnb@zIr[dKbWlKdWvNpOlP~JfO|SxLdUxPd`@vL~VjPdZ~MlVbM~RpLhWjFr]nOtInKx]tFx_@bEz_@bInZ~NlKfOrHjMpRdPxHdMlQ`Glb@jEx`@y@ba@`Anb@lD~`@Bvd@^|b@fBdb@rBzg@~Aba@jHz\\hHp\\tKjVjEb_@xIr\\zDh_@rBha@`Gn`@y@`a@mR~HyOzGmQtBkPhDeQhEw@J"
+     "end": "09:00",
+     "note": "E16 穿过 24.5 km 的洛达尔隧道 (Lærdalstunnelen)，世界最长的公路隧道，免费；隧道里有三处蓝色灯光的岩洞，让司机歇口气。",
+     "geom": "_fnrJ_llj@dDl`@tPgJzEke@_E{f@wWcZgKs\\kCab@uIiZwRmDoOgIePkAsHm\\cMaUaOmLiP\\iO_IgPQaKwX_LoU}MoPqNcP}D_g@iAma@aC}b@hDka@|@yd@tCaa@nE_`@iEo_@cWwm@oKuWgKkX{P}e@sJqYiJcZcb@iwAyTss@mUqr@_Voq@sNa`@}Voo@iOw^ef@eiAgW}n@uVcp@cViq@oUor@}Tqs@gTqt@ed@w`BuJo\\}Ja\\_Owc@mTun@}KeZ{R{f@iZmr@cTed@{[un@eUia@aNgUeNsTwV}^sVa]_Ws[gOkQkOwPe`@s`@y`@c^cPqMgP}LiPiLoPsKgb@iVsn@{ZkNuSmGsa@lBib@vIgZ~NyTbKaZvIs^bJcg@pAua@bE}i@kFyl@~@ke@Oud@Rye@|Dm`@fDya@pD}`@tCsa@|Fy]jF}a@Y}b@~D_b@hAcc@Ycd@kL_g@kMaY{K_Y_Js]yGoa@eI}b@uBue@lCad@~Dcd@rEac@lKc\\pKiVnAce@mF}^l@eb@dA}a@Hwb@eDab@|BirAlDu{@pGq`@jK{W`Bad@}Mqj@oJgf@mFw_@aJ{s@_Fyd@kEgf@oFuq@_Ho`@{KsVhNjNfShHjOtGlQkCjP_@",
+     "km": 56
     },
     {
      "t": "stop",
-     "place": "bgo",
-     "start": "11:15",
-     "end": "12:00",
+     "place": "borgund",
+     "start": "09:00",
+     "end": "10:15",
+     "kind": "visit",
+     "name": "[[borgund]]",
+     "verb": "看木板教堂",
+     "body": "约 1180 年建的木板教堂，挪威保存得最完整的一座，层层叠叠的屋顶上有龙头。旁边的游客中心有展览，门票价格以官网为准。"
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "borgund",
+      "fagernes"
+     ],
+     "start": "10:15",
+     "end": "12:15",
+     "note": "E16 翻过 Filefjell 山口，再沿 Valdres 山谷往下",
+     "geom": "ugrsJa_un@{OTePbD_PqGyPyFuOoDuL{UaPsHmPqUeOaT_JoZeMeTaLeXuIa\\eBme@hEcb@zDoe@pJwtAlFu~@|@{a@xBwa@fJq^~Fga@`Hg^z@ud@}F{p@cIs`@kIq\\cBce@m@kb@lAeb@{Aeb@mCwe@it@{u@}]e\\iZsZ}MkO{PkXeJu[sF{d@aDej@aCec@kAkd@mJwYkFy_@eNeQ}O_H{NzKiNvR}NzT_OzOuJd]}MhQ_PqDePcDwMtUiLhUyNlMkP|AqOqGwOcEyPsIqNaQsOiV_MgU}OeHoPdKgPc@sF_f@mAqb@gDwb@_Gma@}Dc`@{E{a@{NeO}NcOgIq\\_Iqd@uCaa@p@ac@q@{d@uCec@_Aob@jB}g@nA}a@t@sb@Xid@Ckd@r@}b@iDwb@_Jy[yJid@qH{]oH}]kHc^cJod@yK}j@aHq^}Gu^cM}q@uG__@iIoe@cIue@yI}h@sDmb@Bao@Yuc@}Awb@iCia@|Bcf@bGm^oA_b@sDae@yBgf@{Fw^[mc@yE{_@Tec@]eg@sAwe@_Ayb@eCsb@u@oe@mBqb@nBma@fDqa@zFu`@vIo[nIc\\fHs]xEk`@fKkWxMoSdOkO`OmOlNsP~QyChQv@fPCxPqIjNkOnHa\\`Jc[rHo]cAkb@h@wb@fEa`@bEca@Mkc@hAgb@zAma@hAab@[cd@bAob@jBqd@`Dsb@d@wc@t@ac@~E__@xHa^`Ic[tHe]nDe`@|Eg_@tGg]yBwa@n@{b@vEs_@|@gb@jGy]xLeVzJcXzMiT|LaSjJ_YkCoa@yBsb@Zob@_G{]_K{X{LaUaFi`@qC{a@_Gw]qFg_@sG_]iI}[uFi`@mJ}\\uIkZkJoYyBsa@oD}a@wEe`@wIa\\a@_c@wDa`@yBgb@eAub@Uab@Oug@U{d@fBka@hL{U|JeYtNqMrPkB~OlBxOjEdO_IrIuZ`Ie^sAkb@wOgG}Cec@fBof@hBya@xHc^vM}X~I{[`G}_@jN{m@`Dw`@|I}ZxNgPbEq_@c@ab@iAec@Kob@v@kb@kAid@vD_c@dEy`@fGm]vLoStOxK`NxRjO_S~He`@vI_\\vE{d@Yid@z@cd@Boc@Wqd@xEqb@L}b@dB_c@tHw[~Ega@xGy\\`L}V`OsJjOwJvK}UxIw\\dKaZnJs[bQyIrKiWzOuB|N}LtNaMhJw[rO}HpNeQfPmIzNwO~KoVpNgUvJu_@rNoa@bJwZxLoUjMeTxHag@`OmJrPgRjNuP~Isa@zOgIxNoNpPvCxMqPnPiDpK_ZbIu\\|Dm`@rOiYzJu[hGa^lI{Z~L_TxEy^hM_R`QmEhPeMfNaOlLoV~Ic[nL}TjLiTlOmK{Dw_@bDgj@xAgb@zMoTjQoDzOmGdOsNtNeM~Iw[~Hs[}Aee@_Dkb@tBcb@sCoa@Hoi@nF}_@vGgd@vHo\\lIa[hGw^i@ic@Jgb@qHk^\\}b@uAma@cFgb@{C_d@eKqXkP|FeJkYEaD",
+     "km": 112
+    },
+    {
+     "t": "stop",
+     "place": "fagernes",
+     "start": "12:15",
+     "end": "13:00",
+     "kind": "food",
+     "name": "[[fagernes]] 午饭",
+     "verb": "吃午饭、加油",
+     "body": "半路的小镇，超市和加油站都在 E16 边上。"
+    },
+    {
+     "t": "move",
+     "mode": "drive",
+     "path": [
+      "fagernes",
+      "oslo_s"
+     ],
+     "start": "13:00",
+     "end": "16:05",
+     "note": "E16 经 Hønefoss 进奥斯陆；进城有电子收费 (AutoPASS)，租车公司事后扣款",
+     "geom": "uhfsJoojw@vBsb@Rob@zAga@vHs]xIw\\pE__@rLqU~Ec_@bL}VzI}[jEua@dIk^zAgb@fKcXlKcXpHs\\~I_ZtNiY~JaYjKwWzLkUtJ_Z~Jm\\|O_q@~Is]zJwZzHc[vJ_[rGc_@lKg\\zHw`@hHe^tGk^|Ge_@|Hk]jFa_@bNyVxLoXvMuWhLcWbMwVbN{PxLmTrMcU~MmThNyPlN_VjNoVpK{XdKkXjMmS|@gd@fFk^rKoXpN{NhRcP~QySxRyY`NiPxOoKtPaSdR_ZdOwJ~NhNjP`GtMcS~Gkf@fIy\\vN{RfO_JtO{KlOeOtNkRfNeVrK_VlKgZjJ}\\zIk^pLoVxO_I~OrAnPwHdOoSdPsTnMqQxOmHlPlEvOtHlQ}BnOkKnNkYpEab@pFm^vFs^zTo]zNmOzMwPzJuX`JcZtD{_@t@}b@Iab@rCma@zJeZhI{^bNuTvOuSbMyYtLwUjK}WrLw[jMcRlOiHpJc^dFii@hBsa@nBga@bJya@tLaY`[mQhPe@lO_JfMsSbPkHvTmDdRkAtNtKhSeGbSuG|OdEjPeBtPJdQqCzTyZrMcTpP}TfQua@vJ_\\dM_f@pRc]tLuStYkMzVeGnPlCzPlV|N~M|OyB~S@nOtIzP|CdPqG|NyL|Lqb@pJs]fJaZW{i@wD}`@q@qb@dIg\\dEo_@mBii@qBie@aFu`@{Dac@oEea@w@sc@Eqm@aB{c@hCeb@rHk_@rEib@tG{_@vHy`@rVm]rKsXdG}c@jG_]dI{Z~I_^xLw\\`M{RxR{RfOyQfQua@nKkXrEq_@|LeTxFye@{@wb@tDce@tFi^tI_ZxGk\\xHm[hFa_@`NiPjMmQhToOlPsN|Vm]nN}NzQqAlP~DdNhR~N`K~O}EnQoHbQ{AvVyOtLmUvCyc@xI}ZhJqYxEii@pRqg@zRk_@zIkYnIyZnF{]jLyW`A{j@sGw\\?_s@Fia@jIo^fJs\\hIq[rSeQr^w`@lMoRhOmHbS~BxO`IfNbQvUlDzSfErVpHlR`QnV|LpOdGrMbSxQ|Kt[jG~PPfPjErPlIhOvIjPpFfPpD`P`AhR`N~OtFtSXdTzAvOsCfHo]dNuP~N_KnOuZbD}_@nGy\\xJiXzDwa@`KkXjPsE`Pw@bPcD|OvKjO`LxOhIpO|MrOvN|NvLrO`OfPxYtO|OxOpPbPrPpPlFtP|@rPwMbTaMvTaKdL}YbOaNpPrAzQi@~SdBvP|C|OaFdOiJdP~BvGk\\|Mac@rNqVbQwVbOwJrPyJrR{KpQuIdRmGdOeIjLwUjF_a@|HwZlKaVrOsNjNkMfLgU|Rgo@rKyYnLySvWud@zLgTdM}VdMk\\rNi_@lMoQjOmK~PwR|MaQrX}c@vN{NvR~O|OrRlXvWvOrGfQiC`PeGbOkM~Oy@lQmDpPwDlTuIxNsMvNqRtOyStRoWnMsPnK{WvDo_@lD}u@tDe_@dRwr@pIy\\jKuh@fJqZfN{OtOoDbPjCb_@bI|Qa@nQ_MdPwDzN|K`IzZzGrh@xFpc@tG~\\hNdSdPhDtOuEnQa@jPhKbOx[pKh\\dMvUnMpQfPeAxMiOnOqFhOaJxOhE`PbIlP{AhMaR`J{Z|KmUvCea@_Eo`@cDic@l@{a@lFo]vLmTjPyJpMuPdJsYbKyVrP{BbPsFvM_U~O}E`TgD|OqCdRuGlU}I`SqHfVcJvRgH`WsJlPcG~O|HlVhTfPhHhQHbPfGlLaUrFe`@jFu^lKwV~OdCvPbPhP|CfMgTDea@nQ|A|LnZxAr`@nJh\\lF|^rJtYfKrVpSpLjYlHrOvG|NhMdR|ArPpBzPdHvP~BfQ~BxPHhPkC|OuAxOeJ`QgAlNoWxJmZfLkWjJwXpN}f@xKw[dP}OjPwC|NmM`N{NvNyLhKmYzKak@xM}_@|IoZvd@gqBjIeZpK}WlLsSbV}[bM{QjNaVtMwRjOuQ`L{WbGa`@~@yb@jBkb@hI}c@rJ_e@fGi]|Eib@nCc`@bGs^zM{[zK{WfKcd@hHw[vJmWbR_`@~La]rJib@zKyYrOsNrPgClP}C~KaXtFe_@nKgYnLeSxNmOxP{GhUo[hOgS~Jc[l@}b@nDs`@uF}]{H{]gGqi@gFa`@mEy^yAs`@cEka@sF{^sDab@aEw_@eEc_@oCga@kGgc@cEy^wEqa@}Dq_@yFq]mEo_@{Fu^mGi_@gJs[eEw^}Dq_@cG{^mEo`@wEsa@}E{]wEs^yG}[xCae@tJiZJaa@jLyThFu^rNqVzHmZdCq_@Emd@sEo`@k@kn@tGw]lOeLlJgY{MgRoJsXiFoC",
+     "km": 185
+    },
+    {
+     "t": "stop",
+     "place": "oslo_s",
+     "start": "16:05",
+     "end": "16:35",
      "kind": "shop",
-     "name": "[[bgo]] 还车",
+     "name": "[[oslo_s]] 附近还车",
      "verb": "加满油、还车",
-     "body": "机场附近加油站加满油，还车时拍照。"
+     "body": "奥斯陆的租车点大多在中央车站附近。先加满油再还，还车时绕车拍照。"
+    },
+    {
+     "t": "move",
+     "mode": "walk",
+     "path": [
+      "oslo_s",
+      "oslo"
+     ],
+     "start": "16:35",
+     "end": "16:50",
+     "note": "步行"
+    },
+    {
+     "t": "stop",
+     "place": "oslo",
+     "start": "16:50",
+     "end": "17:15",
+     "kind": "stay",
+     "name": "[[oslo]] 入住",
+     "verb": "入住",
+     "body": "住中央车站附近，明天去机场最方便。"
+    },
+    {
+     "t": "move",
+     "mode": "walk",
+     "path": [
+      "oslo",
+      "operahuset"
+     ],
+     "start": "17:15",
+     "end": "17:30",
+     "note": "步行约 10 分钟"
+    },
+    {
+     "t": "stop",
+     "place": "operahuset",
+     "start": "17:30",
+     "end": "18:30",
+     "kind": "city",
+     "name": "[[operahuset]]",
+     "verb": "走上屋顶",
+     "body": "白色大理石斜坡可以一直走到屋顶，免费，看奥斯陆峡湾和新建的滨水区。"
+    },
+    {
+     "t": "move",
+     "mode": "walk",
+     "path": [
+      "operahuset",
+      "aker_brygge"
+     ],
+     "start": "18:30",
+     "end": "19:00",
+     "note": "沿港口步道经阿克斯胡斯城堡 (Akershus festning)"
+    },
+    {
+     "t": "stop",
+     "place": "aker_brygge",
+     "start": "19:00",
+     "end": "21:00",
+     "kind": "food",
+     "name": "[[aker_brygge]] 晚饭",
+     "verb": "海边散步、晚饭",
+     "body": "旧船厂改成的海港街区，可以一直走到 Tjuvholmen 的小沙滩。奥斯陆餐厅很贵，超市熟食或热狗更划算。"
+    },
+    {
+     "t": "move",
+     "mode": "train",
+     "path": [
+      "aker_brygge",
+      "oslo"
+     ],
+     "start": "21:00",
+     "end": "21:20",
+     "note": "电车或步行回去"
+    },
+    {
+     "t": "stop",
+     "place": "oslo",
+     "start": "21:20",
+     "end": "21:30",
+     "kind": "stay",
+     "name": "[[oslo]] 住宿",
+     "verb": "休息",
+     "body": ""
+    }
+   ]
+  },
+  {
+   "date": "2027-07-22",
+   "c": "no",
+   "title": "[[oslo]] 一日 ✈ [[stockholm]]",
+   "short": "奥斯陆",
+   "sub": "上午看雕塑公园和极地探险船，下午去蒙克美术馆看《呐喊》，傍晚飞斯德哥尔摩。",
+   "stay": "stockholm",
+   "stayNote": "青旅床位约 350–550 SEK/人",
+   "segs": [
+    {
+     "t": "stop",
+     "place": "oslo",
+     "start": "08:30",
+     "end": "08:45",
+     "kind": "start",
+     "name": "退房、寄存行李",
+     "verb": "退房",
+     "body": "行李寄存在住处，傍晚回来取。"
+    },
+    {
+     "t": "move",
+     "mode": "train",
+     "path": [
+      "oslo",
+      "vigeland"
+     ],
+     "start": "08:45",
+     "end": "09:05",
+     "note": "电车 12 路到 Vigelandsparken，约 20 min；Ruter 单程票（在 app 里买）"
+    },
+    {
+     "t": "stop",
+     "place": "vigeland",
+     "start": "09:05",
+     "end": "10:30",
+     "kind": "visit",
+     "name": "[[vigeland]]",
+     "verb": "看雕塑",
+     "body": "福罗格纳公园里的 200 多座维格兰雕塑，还有 121 个人叠成的人柱 (Monolitten)。全天开放、免费，早上人少。"
+    },
+    {
+     "t": "move",
+     "mode": "bus",
+     "path": [
+      "vigeland",
+      "bygdoy"
+     ],
+     "start": "10:30",
+     "end": "11:00",
+     "note": "公交去比格迪半岛，约 25 min（用 Ruter app 查路线）"
+    },
+    {
+     "t": "stop",
+     "place": "bygdoy",
+     "start": "11:00",
+     "end": "14:00",
+     "kind": "visit",
+     "name": "[[bygdoy]] 博物馆",
+     "verb": "登上极地探险船",
+     "body": "前进号博物馆 (Frammuseet) 可以走进南森和阿蒙森用过的极地探险船，旁边是康提基号博物馆；挪威民俗博物馆有一座从山里搬来的木板教堂。午饭在半岛上吃。维京时代博物馆在改建，2027 年是否开放出发前查。"
+    },
+    {
+     "t": "move",
+     "mode": "ferry",
+     "path": [
+      "bygdoy",
+      "munch"
+     ],
+     "start": "14:00",
+     "end": "14:30",
+     "note": "夏季有渡轮从比格迪回市政厅码头 (Rådhusbrygge)，再沿海边走过去"
+    },
+    {
+     "t": "stop",
+     "place": "munch",
+     "start": "14:30",
+     "end": "16:15",
+     "kind": "visit",
+     "name": "[[munch]]",
+     "verb": "看《呐喊》",
+     "body": "13 层的新蒙克美术馆就在歌剧院隔壁。《呐喊》的几个版本怕光，轮流展出，每次只挂一幅。顶层可以看风景。"
+    },
+    {
+     "t": "move",
+     "mode": "walk",
+     "path": [
+      "munch",
+      "oslo"
+     ],
+     "start": "16:15",
+     "end": "16:30",
+     "note": "步行回住处取行李"
+    },
+    {
+     "t": "move",
+     "mode": "train",
+     "path": [
+      "oslo_s",
+      "osl"
+     ],
+     "start": "16:45",
+     "end": "17:10",
+     "note": "Flytoget 机场快线约 20 min（贵）/ Vy 区域火车约 25 min（便宜）"
+    },
+    {
+     "t": "stop",
+     "place": "osl",
+     "start": "17:10",
+     "end": "18:30",
+     "kind": "start",
+     "name": "[[osl]] 值机",
+     "verb": "值机、过安检",
+     "body": "挪威和瑞典都在申根区，不用过边检。"
     },
     {
      "t": "move",
      "mode": "flight",
      "path": [
-      "bgo",
+      "osl",
       "arn"
      ],
-     "start": "13:30",
-     "end": "15:00",
-     "note": "SAS / Norwegian 直飞约 1 h 20 min，具体航班和时间待定"
+     "start": "18:30",
+     "end": "19:35",
+     "note": "SAS / Norwegian 直飞约 1 h，傍晚有好几班，具体航班待定",
+     "mins": 65
     },
     {
      "t": "move",
@@ -4811,66 +5130,24 @@
       "arn",
       "stockholm"
      ],
-     "start": "15:30",
-     "end": "16:15",
+     "start": "20:00",
+     "end": "20:45",
      "note": "Arlanda Express 18 分钟（贵）/ SL 通勤火车经 Arlanda C 站约 40 min（便宜，但要加机场站费）/ Flygbussarna 机场大巴约 45 min"
     },
     {
      "t": "stop",
      "place": "stockholm",
-     "start": "16:30",
-     "end": "17:30",
+     "start": "20:45",
+     "end": "21:15",
      "kind": "stay",
      "name": "[[stockholm]] 入住",
      "verb": "入住",
      "body": "去游客中心或 SL app 买 72 小时交通卡，三天都能用。"
-    },
-    {
-     "t": "move",
-     "mode": "walk",
-     "path": [
-      "stockholm",
-      "gamla_stan"
-     ],
-     "start": "17:30",
-     "end": "17:50",
-     "note": "步行或地铁"
-    },
-    {
-     "t": "stop",
-     "place": "gamla_stan",
-     "start": "17:50",
-     "end": "20:00",
-     "kind": "city",
-     "name": "[[gamla_stan]] 黄昏",
-     "verb": "老城散步、晚饭",
-     "body": "傍晚游客少，石板巷子很好看。晚饭可以吃瑞典肉丸。"
-    },
-    {
-     "t": "move",
-     "mode": "train",
-     "path": [
-      "gamla_stan",
-      "stockholm"
-     ],
-     "start": "20:00",
-     "end": "20:20",
-     "note": "地铁"
-    },
-    {
-     "t": "stop",
-     "place": "stockholm",
-     "start": "20:20",
-     "end": "20:30",
-     "kind": "stay",
-     "name": "[[stockholm]] 住宿",
-     "verb": "休息",
-     "body": ""
     }
    ]
   },
   {
-   "date": "2027-07-22",
+   "date": "2027-07-23",
    "c": "se",
    "title": "[[stadshuset]]、[[gamla_stan]]、[[vasamuseet]]、[[skansen]]",
    "short": "老城与博物馆",
@@ -5058,7 +5335,7 @@
    ]
   },
   {
-   "date": "2027-07-23",
+   "date": "2027-07-24",
    "c": "se",
    "title": "地铁艺术 + 群岛小镇 [[vaxholm]]",
    "short": "群岛一日",
@@ -5132,7 +5409,7 @@
    ]
   },
   {
-   "date": "2027-07-24",
+   "date": "2027-07-25",
    "c": "se",
    "title": "[[stockholm]] → [[nynashamn]] ⛴ [[visby]]",
    "short": "渡轮去哥特兰",
@@ -5292,7 +5569,7 @@
    ]
   },
   {
-   "date": "2027-07-25",
+   "date": "2027-07-26",
    "c": "se",
    "title": "自驾 [[faro]]：海蚀柱和白沙滩",
    "short": "弗罗岛",
@@ -5465,7 +5742,7 @@
    ]
   },
   {
-   "date": "2027-07-26",
+   "date": "2027-07-27",
    "c": "se",
    "title": "骑车去 [[hogklint]] + 古城慢游",
    "short": "海崖骑行",
@@ -5597,7 +5874,7 @@
    ]
   },
   {
-   "date": "2027-07-27",
+   "date": "2027-07-28",
    "c": "se",
    "title": "[[visby]] ⛴ [[oskarshamn]] → [[kalmar]] → [[kobenhavn]]",
    "short": "移动日",
@@ -5699,7 +5976,7 @@
    ]
   },
   {
-   "date": "2027-07-28",
+   "date": "2027-07-29",
    "c": "dk",
    "title": "骑车游 [[kobenhavn]]：[[nyhavn]]、[[christiania]]、[[tivoli]]",
    "short": "哥本哈根",
@@ -5891,7 +6168,7 @@
    ]
   },
   {
-   "date": "2027-07-29",
+   "date": "2027-07-30",
    "c": "dk",
    "title": "[[louisiana]] + [[kronborg]] 一日游",
    "short": "城堡与美术馆",
@@ -5991,7 +6268,7 @@
    ]
   },
   {
-   "date": "2027-07-30",
+   "date": "2027-07-31",
    "c": "dk",
    "title": "自驾 [[stevns_klint]] + [[mons_klint]] 白垩海崖",
    "short": "白垩海崖",
@@ -6094,121 +6371,6 @@
      "tips": [
       "不租车的话：火车到 Vordingborg + 巴士经 Stege 到默恩崖（夏季班次），单程约 2.5–3 h，就去不了斯泰温斯崖了。"
      ]
-    }
-   ]
-  },
-  {
-   "date": "2027-07-31",
-   "c": "dk",
-   "title": "[[dyrehaven]] 鹿园徒步 + 自由日 + [[reffen]]",
-   "short": "自由日",
-   "sub": "上午去郊外的鹿园看野鹿和猎宫，下午买手信、收拾行李，晚上在雷芬吃告别晚餐。",
-   "stay": "kobenhavn",
-   "stayNote": "同前一晚",
-   "segs": [
-    {
-     "t": "stop",
-     "place": "kobenhavn",
-     "start": "09:00",
-     "end": "09:30",
-     "kind": "start",
-     "name": "出发",
-     "verb": "出发",
-     "body": ""
-    },
-    {
-     "t": "move",
-     "mode": "train",
-     "path": [
-      "kbh_h",
-      "dyrehaven"
-     ],
-     "start": "09:30",
-     "end": "10:00",
-     "note": "S-tog C 线到 Klampenborg 约 20 min，再步行进园"
-    },
-    {
-     "t": "stop",
-     "place": "dyrehaven",
-     "start": "10:00",
-     "end": "13:00",
-     "kind": "hike",
-     "name": "[[dyrehaven]]",
-     "verb": "在林间草地看鹿",
-     "body": "皇家狩猎林，世界遗产，林子里有 2,000 多头梅花鹿和马鹿，小山顶上是白色的猎宫 (Eremitagen)。入口旁边是 1583 年开的老游乐园 Bakken，免费入园。"
-    },
-    {
-     "t": "move",
-     "mode": "train",
-     "path": [
-      "dyrehaven",
-      "kobenhavn"
-     ],
-     "start": "13:15",
-     "end": "13:45",
-     "note": "S-tog 回城"
-    },
-    {
-     "t": "stop",
-     "place": "torvehallerne",
-     "start": "14:00",
-     "end": "15:00",
-     "kind": "food",
-     "name": "[[torvehallerne]] 午饭",
-     "verb": "吃开放三明治",
-     "body": ""
-    },
-    {
-     "t": "stop",
-     "place": "kobenhavn",
-     "start": "15:00",
-     "end": "18:00",
-     "kind": "shop",
-     "name": "Strøget 步行街和收拾行李",
-     "verb": "买手信、打包",
-     "body": "步行街和周边小店。离境退税：非欧盟居民在同一家店当天消费满一定金额可以退税，要保留单据。"
-    },
-    {
-     "t": "move",
-     "mode": "bus",
-     "path": [
-      "kobenhavn",
-      "reffen"
-     ],
-     "start": "18:00",
-     "end": "18:30",
-     "note": "港口巴士 (Havnebus) 或骑车"
-    },
-    {
-     "t": "stop",
-     "place": "reffen",
-     "start": "18:30",
-     "end": "21:00",
-     "kind": "food",
-     "name": "[[reffen]]",
-     "verb": "告别晚餐",
-     "body": "旧船厂改的海边街头美食市场，几十个小摊，看着日落干杯。"
-    },
-    {
-     "t": "move",
-     "mode": "bus",
-     "path": [
-      "reffen",
-      "kobenhavn"
-     ],
-     "start": "21:00",
-     "end": "21:30",
-     "note": "港口巴士或骑车回去"
-    },
-    {
-     "t": "stop",
-     "place": "kobenhavn",
-     "start": "21:30",
-     "end": "22:00",
-     "kind": "stay",
-     "name": "[[kobenhavn]] 最后一晚",
-     "verb": "收拾行李",
-     "body": ""
     }
    ]
   },
@@ -6691,13 +6853,13 @@
   },
   {
    "id": "norway-car",
-   "what": "挪威租车：7/17 卑尔根城里取车 → 7/21 机场还车",
+   "what": "挪威租车：7/17 卑尔根城里取车 → 7/21 奥斯陆还车",
    "for": "7/17–7/21",
    "when": "提前 4–6 个月",
    "badge": "提前4月",
    "hot": true,
-   "cost": "约 3,000–5,000 NOK 共 5 天（需核实），另加油费和过路费",
-   "summary": "司机必须持安省驾照。25 岁以下通常要交年轻司机附加费。异地还车（城里取、机场还）一般不加钱，订车时确认。",
+   "cost": "约 3,000–5,000 NOK 共 5 天（需核实），另加油费、过路费和异地还车费",
+   "summary": "司机必须持安省驾照。25 岁以下通常要交年轻司机附加费。卑尔根取、奥斯陆还是异地还车，一般要加一笔异地还车费，各家差别很大，订车时比价。",
    "key": [
     [
      "司机",
@@ -6789,14 +6951,28 @@
    ]
   },
   {
-   "id": "bgo-arn",
-   "what": "机票 [[bergen]] → [[stockholm]]（SAS / Norwegian）",
+   "id": "oslo-stay",
+   "what": "[[oslo]] 一晚住宿",
    "for": "7/21",
    "when": "提前 2–3 个月",
    "badge": "提前3月",
    "hot": false,
+   "cost": "青旅约 400–650 NOK/人",
+   "summary": "住中央车站附近，还车和第二天去机场都方便。",
+   "key": [],
+   "tip": "",
+   "steps": [],
+   "links": []
+  },
+  {
+   "id": "osl-arn",
+   "what": "机票 [[oslo]] → [[stockholm]]（SAS / Norwegian）",
+   "for": "7/22",
+   "when": "提前 2–3 个月",
+   "badge": "提前3月",
+   "hot": false,
    "cost": "约 600–1,500 NOK/人（需核实）",
-   "summary": "选下午起飞的航班，上午有时间从弗洛姆开回机场还车。",
+   "summary": "选傍晚 18:00 以后起飞的航班，白天能在奥斯陆玩一整天。也可以坐火车（约 5–6 小时），但会占掉大半天。",
    "key": [],
    "tip": "",
    "steps": [],
@@ -6805,7 +6981,7 @@
   {
    "id": "stockholm-stay",
    "what": "[[stockholm]] 三晚住宿",
-   "for": "7/21–7/23",
+   "for": "7/22–7/24",
    "when": "提前约 3 个月",
    "badge": "提前3月",
    "hot": false,
@@ -6818,8 +6994,8 @@
   },
   {
    "id": "gotland-ferry",
-   "what": "Destination Gotland 渡轮：[[nynashamn]] → [[visby]]（7/24）、[[visby]] → [[oskarshamn]]（7/27）",
-   "for": "7/24、7/27",
+   "what": "Destination Gotland 渡轮：[[nynashamn]] → [[visby]]（7/25）、[[visby]] → [[oskarshamn]]（7/28）",
+   "for": "7/25、7/28",
    "when": "开售就订（一般在年初公布夏季时刻）",
    "badge": "开售即订",
    "hot": true,
@@ -6843,7 +7019,7 @@
   {
    "id": "visby-stay",
    "what": "[[visby]] 三晚住宿",
-   "for": "7/24–7/26",
+   "for": "7/25–7/27",
    "when": "现在到 2027 年 3 月",
    "badge": "尽早",
    "hot": true,
@@ -6857,7 +7033,7 @@
   {
    "id": "gotland-car",
    "what": "哥特兰租车一天（弗罗岛）",
-   "for": "7/25",
+   "for": "7/26",
    "when": "提前 1–2 个月",
    "badge": "提前2月",
    "hot": false,
@@ -6871,7 +7047,7 @@
   {
    "id": "kalmar-cph-train",
    "what": "火车 [[kalmar]] → [[kobenhavn]]（Öresundståg）",
-   "for": "7/27",
+   "for": "7/28",
    "when": "渡轮时刻确定后再订",
    "badge": "提前1月",
    "hot": false,
@@ -6889,8 +7065,8 @@
   },
   {
    "id": "cph-stay",
-   "what": "[[kobenhavn]] 五晚住宿",
-   "for": "7/27–7/31",
+   "what": "[[kobenhavn]] 四晚住宿",
+   "for": "7/28–7/31",
    "when": "提前 3–4 个月",
    "badge": "提前3月",
    "hot": false,
@@ -6904,7 +7080,7 @@
   {
    "id": "dk-car",
    "what": "丹麦租车一天（[[stevns_klint]] + [[mons_klint]]）",
-   "for": "7/30",
+   "for": "7/31",
    "when": "提前 1–2 个月",
    "badge": "提前2月",
    "hot": false,
@@ -6962,7 +7138,7 @@
     },
     {
      "t": "中国护照：申根签证（向冰岛申请，VFS 多伦多递交）",
-     "more": "向哪国申请：按停留时间最长的国家，即冰岛（12 晚；瑞典 6 晚、挪威 5 晚、丹麦 5 晚）。在加拿大：自 2025-02-10 起，冰岛签证由 VFS Global 多伦多/渥太华/温哥华中心受理，材料寄往冰岛驻华盛顿大使馆审理，丹麦不再代理。必须是加拿大的合法居民（持学签、工签或 PR）。 时间：最早在入境前 6 个月递交（2027-01-04 起），最晚入境前 15 天；一般 15 天出结果，最长 45 天。建议 2027 年 1–3 月就约 VFS 递交。 费用：签证费 €90/人（以加元收取），另加 VFS 服务费。学生免签证费只适用于以学习为目的的出行，旅游不免。 材料（以 VFS 冰岛加拿大清单为准）：申请表；护照（离开申根后至少还有 3 个月有效、10 年内签发、至少 2 页空白）和旧护照；照片；加拿大学签/工签或 PR 卡，以及有效的 TRV（回加拿大后至少还有 3 个月有效）；在读证明；往返机票行程单（含 KEF→BGO、BGO→ARN）；全程住宿预订；逐日行程表；旅行医疗保险（≥ €30,000，覆盖全部申根国和全程，含医疗遣返）；近 3 个月银行流水，冰岛的标准约 8,000 ISK/天（有人资助则约 4,000 ISK/天），28 天约 224,000 ISK；如果父母资助，要附资助信、父母的流水和亲属关系证明。"
+     "more": "向哪国申请：按停留时间最长的国家，即冰岛（12 晚；瑞典 6 晚、挪威 6 晚、丹麦 4 晚）。在加拿大：自 2025-02-10 起，冰岛签证由 VFS Global 多伦多/渥太华/温哥华中心受理，材料寄往冰岛驻华盛顿大使馆审理，丹麦不再代理。必须是加拿大的合法居民（持学签、工签或 PR）。 时间：最早在入境前 6 个月递交（2027-01-04 起），最晚入境前 15 天；一般 15 天出结果，最长 45 天。建议 2027 年 1–3 月就约 VFS 递交。 费用：签证费 €90/人（以加元收取），另加 VFS 服务费。学生免签证费只适用于以学习为目的的出行，旅游不免。 材料（以 VFS 冰岛加拿大清单为准）：申请表；护照（离开申根后至少还有 3 个月有效、10 年内签发、至少 2 页空白）和旧护照；照片；加拿大学签/工签或 PR 卡，以及有效的 TRV（回加拿大后至少还有 3 个月有效）；在读证明；往返机票行程单（含 KEF→BGO、OSL→ARN）；全程住宿预订；逐日行程表；旅行医疗保险（≥ €30,000，覆盖全部申根国和全程，含医疗遣返）；近 3 个月银行流水，冰岛的标准约 8,000 ISK/天（有人资助则约 4,000 ISK/天），28 天约 224,000 ISK；如果父母资助，要附资助信、父母的流水和亲属关系证明。"
     },
     {
      "t": "中国护照：检查加拿大 TRV 到期日，回加拿大要用",
