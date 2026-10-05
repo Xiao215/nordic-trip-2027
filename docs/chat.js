@@ -197,4 +197,7 @@ function grow(){text.style.height="auto";text.style.height=Math.min(text.scrollH
 text.addEventListener("input",grow);
 
 window.tripChat={ask:function(q){ask(q);}};
+// the expense log talks to the same server with the same access code (typed once, in either place)
+window.tripAuth={api:API,code:function(){return S.code||"";},
+  setCode:function(c){S.code=c||null;save();if(c){join.hidden=true;}else{needCode=true;showJoin();}}};
 })();
