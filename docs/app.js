@@ -50,7 +50,7 @@ var UIEN={
   "正在载入预报…":"Loading forecast…","出发前约 16 天出现预报":"Forecast appears ~16 days before","暂无预报":"No forecast",
   "不挪地方":"Staying put","景点、徒步、冰川、逛城":"Sights, hikes, glaciers, town","极昼":"Midnight sun","日出 {r} · 日照 {l}":"Sunrise {r} · {l} of daylight",
   "（{t}后）":" (in {t})",
-  "北欧之旅":"Nordic Trip","主导航":"Main navigation","路线":"Route","货币":"Currency","当地货币":"Local","当地":"Local","价格换算":"Currency","按原价显示，不换算":"As written, no conversion","汇率更新于 {d} · 约数":"Rates from {d} · approximate","汇率为约数":"Rates are approximate",
+  "北欧之旅":"Nordic Trip","照片：":"Photo: ","摄影：":"Photo: ","照片待定":"Photo TBD","照片":"Photo","关闭":"Close","上一张":"Previous","下一张":"Next","主导航":"Main navigation","路线":"Route","货币":"Currency","当地货币":"Local","当地":"Local","价格换算":"Currency","按原价显示，不换算":"As written, no conversion","汇率更新于 {d} · 约数":"Rates from {d} · approximate","汇率为约数":"Rates are approximate",
   "总览":"Overview","每日":"Daily","准备":"Prep","四周日历":"4-week calendar","点任意一天看当天安排":"Tap a day to see its plan","路线分段":"Route legs",
   "点一站看详情，地图会跳过去":"Tap a stop for details and to see it on the map","预订":"Bookings","前一天":"Previous day","后一天":"Next day",
   "视图":"View","选择日期":"Choose a day","语言":"Language","地图":"Map","行程地图":"Trip map","看全天 / 全程":"Show the whole day / trip",
@@ -252,17 +252,18 @@ function renderAll(){
   for(var i=0;i<wkday(DATES[0]);i++)h+="<div></div>";
   DATES.forEach(function(d,i){var D=BYDATE[d],stay=D&&D.stay?names(D.stay):null;
     h+='<button type="button" class="cd'+(D?"":" draft")+(d===live?" today":"")+'" style="--c:'+colorOf(d)+';--n:'+i+'" data-date="'+d+'"'+(D&&NM==="zh"?' title="'+esc(localText(D.short||D.title))+'"':"")+'>'+
-      '<span class="cd-d">'+md(d)+"</span>"+
+      '<span class="cd-img">'+(D&&heroOf(D)?img(heroOf(D).ph,400):D&&dayStops(D).length?tbd("mini"):"")+'</span><span class="cd-d">'+md(d)+"</span>"+
       '<span class="cd-t">'+(D?tx(D.short||D.title):U("规划中"))+"</span>"+
       (stay?'<span class="cd-s">'+U("住 ")+esc(NM==="local"?stay.lo:stay.zh)+"</span>":(!D&&legOf(d)?'<span class="cd-s">'+esc(plain(legOf(d).short||legOf(d).title))+"</span>":""))+"</button>";});
   $("cal").innerHTML=h;
-  $("legs").innerHTML=T.legs.map(function(l){var n=daysBetween(l.from,l.to)+1,c=T.countries[l.c]||{};
-    return '<div class="leg" style="--c:'+esc(c.color||"#8A99A3")+'"><div class="leg-h"><h3>'+tx(l.title)+'</h3><span class="when">'+cnDate(l.from)+" – "+cnDate(l.to)+" · "+U("{n} 天",{n:n})+"</span>"+(l.draft?'<span class="leg-tag">'+U("草案")+'</span>':"")+"</div>"+
+  $("legs").innerHTML=T.legs.map(function(l,li){var n=daysBetween(l.from,l.to)+1,c=T.countries[l.c]||{},lp=legPhotos(l);
+    return '<div class="leg" style="--c:'+esc(c.color||"#8A99A3")+'">'+('<div class="leg-imgs">'+lp.slice(0,4).map(function(x,k){return '<button type="button" class="leg-img" data-leg="'+li+'" data-k="'+k+'" aria-label="'+esc(plain(x.s.name||"[["+x.s.place+"]]"))+'">'+img(x.ph,600)+"</button>";}).join("")+(lp.length<4?new Array(5-lp.length).join('<span class="leg-img">'+tbd()+"</span>"):"")+"</div>")+'<div class="leg-h"><h3>'+tx(l.title)+'</h3><span class="when">'+cnDate(l.from)+" – "+cnDate(l.to)+" · "+U("{n} 天",{n:n})+"</span>"+(l.draft?'<span class="leg-tag">'+U("草案")+'</span>':"")+"</div>"+
       (l.body?"<p>"+tx(l.body)+"</p>":"")+(l.items&&l.items.length?"<ul>"+l.items.map(function(x){return "<li>"+tx(x)+"</li>";}).join("")+"</ul>":"")+"</div>";}).join("");
   var drafts=DATES.filter(function(d){return !BYDATE[d];}).length;
   $("legHint").textContent=drafts?U("已排好 {a} 天，其余 {b} 天规划中",{a:total-drafts,b:drafts}):U("全部 {n} 天已排好",{n:total});
 }
-$("allView").addEventListener("click",function(e){var b=e.target.closest("[data-date]");if(b)setView("day",b.dataset.date);});
+$("allView").addEventListener("click",function(e){var li=e.target.closest(".leg-img");if(li){openLb(legPhotos(T.legs[+li.dataset.leg]),+li.dataset.k);return;}
+  var b=e.target.closest("[data-date]");if(b)setView("day",b.dataset.date);});
 
 /* ---------- day strip ---------- */
 function renderStrip(){
@@ -464,7 +465,7 @@ function renderDay(){
   $("daySubtitle").innerHTML=D&&D.sub?tx(D.sub):"";
   var rt=D?(D.route||embedDayRoute(D)):null;
   $("dayRoute").href=rt&&rt.length>1?gRoute(rt,D.routeMode):"https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(((T.countries[cOf(d)]||{}).en)||"Iceland");
-  renderGlance();renderRows();renderDayNav();
+  renderHero();renderGlance();renderRows();renderDayNav();
   var box=$("draftBox");
   if(D){box.hidden=true;return;}
   var l=legOf(d);box.hidden=false;
@@ -502,7 +503,10 @@ function paintOpen(){
 function detail(s){
   var d=document.createElement("div");d.className="detail";var kind=s.t==="move"?"move":s.kind;
   var when=s.start?(s.end&&s.end!==s.start?s.start+" – "+s.end:s.start):"";
-  var h='<span class="kind" style="--k:'+(KCOL[kind]||KCOL.visit)+'">'+esc(s.t==="move"?mode(s.mode):L(T.kinds[kind])||"")+(when?" · "+esc(when):"")+(s.t==="move"&&s.km?U(" · 约 {n} 公里",{n:s.km}):"")+'</span>';
+  var phs=s.t==="stop"?photosOf(s.place):[],h="";
+  if(phs.length)h+='<div class="d-photos n'+phs.length+'">'+phs.map(function(ph,k){return '<figure class="d-photo" data-k="'+k+'">'+img(ph,k?600:1200)+(k?"":"<figcaption>"+credit(ph)+"</figcaption>")+"</figure>";}).join("")+"</div>";
+  else if(s.t==="stop"&&SCENIC[s.kind])h+='<div class="d-photos n1"><figure class="d-photo empty">'+tbd()+"</figure></div>";
+  h+='<span class="kind" style="--k:'+(KCOL[kind]||KCOL.visit)+'">'+esc(s.t==="move"?mode(s.mode):L(T.kinds[kind])||"")+(when?" · "+esc(when):"")+(s.t==="move"&&s.km?U(" · 约 {n} 公里",{n:s.km}):"")+'</span>';
   if(s.facts&&s.facts.length)h+='<dl class="facts">'+s.facts.map(function(f){return "<div><dt>"+esc(L(f[0]))+"</dt><dd>"+tx(f[1])+"</dd></div>";}).join("")+"</dl>";
   var body=s.body||s.note;if(body)h+='<p class="body">'+tx(body)+"</p>";
   if(s.tips&&s.tips.length)h+='<ul class="tips">'+s.tips.map(function(t){return "<li>"+tx(t)+"</li>";}).join("")+"</ul>";
@@ -513,6 +517,8 @@ function detail(s){
   acts.push('<button class="pill ask" type="button">'+ICON.ask+U("问问这个")+"</button>");
   h+='<div class="actions">'+acts.join("")+"</div>";
   d.innerHTML=h;
+  d.querySelectorAll(".d-photo[data-k]").forEach(function(fig){fig.addEventListener("click",function(e){if(e.target.closest(".credit"))return;
+    var g=dayGallery(day()),ph=phs[+fig.dataset.k];if(!g.length)g=phs.map(function(p){return {s:s,ph:p};});openLb(g,galleryIndex(g,ph));});});
   d.querySelector(".ask").addEventListener("click",function(){
     var q=s.t==="move"?U("{w} 这段{m}有什么要注意的？",{w:moveLabel(s,true),m:mode(s.mode)}):U("多讲讲「{w}」，有什么要注意的？",{w:plain(s.name||"[["+s.place+"]]")});
     if(window.tripChat)window.tripChat.ask(q);});
@@ -542,6 +548,66 @@ window.addEventListener("resize",function(){slideInd(".seg",'.seg-btn[aria-selec
 (function(){var st=$("sticky"),on=null;function f(){var v=scrollY>8;if(v!==on){on=v;st.classList.toggle("stuck",v);}}addEventListener("scroll",f,{passive:true});f();})();
 // re-run a CSS entrance animation on an element
 function replay(el,cls){if(!el)return;el.classList.remove(cls);void el.offsetWidth;el.classList.add(cls);}
+
+/* ---------- photos ---------- */
+// Up to three photos per place from Unsplash (places[id].photos: src = the photo's raw URL, w, h, author,
+// author_link, page, alt), each checked by eye against reference photos of the place. Unsplash serves any
+// width from the same URL; the credit links the photographer and Unsplash, as its API guidelines ask.
+// Scenic stops still waiting for photos show a grey "TBD" tile.
+var SCENIC={visit:1,hike:1,glacier:1,water:1,camp:1,city:1};
+var UTM="utm_source=nordic_trip_2027&utm_medium=referral";
+function photosOf(id){var p=T.places[id];return p&&p.photos||[];}
+function sized(src,w){if(src.indexOf("images.unsplash.com")<0)return src.replace(/\/(\d+)px-/,"/"+w+"px-");
+  var u=src.replace(/([?&])(w|q|fm|fit|auto)=[^&]*/g,"$1").replace(/&&+/g,"&").replace(/[?&]+$/,"");
+  return u+(u.indexOf("?")<0?"?":"&")+"w="+w+"&q=80&fm=jpg&fit=max";}
+function img(ph,w,cls){return '<img class="'+(cls||"")+'" src="'+esc(sized(ph.src,w))+'" width="'+ph.w+'" height="'+ph.h+'" alt="'+esc(ph.alt||"")+'" loading="lazy" decoding="async" onload="this.classList.add(\'ok\')">';}
+function utm(u){return u+(u.indexOf("?")<0?"?":"&")+UTM;}
+function credit(ph){
+  if(ph.author_link)return '<span class="credit">'+esc(U("摄影："))+'<a href="'+esc(utm(ph.author_link))+'" target="_blank" rel="noopener">'+esc(ph.author)+'</a> / <a href="'+esc(utm("https://unsplash.com/"))+'" target="_blank" rel="noopener">Unsplash</a></span>';
+  return '<a class="credit" href="'+esc(ph.page)+'" target="_blank" rel="noopener">'+esc(U("照片："))+esc(ph.author||"")+(ph.license?" · "+esc(ph.license):"")+"</a>";}
+function tbd(cls){return '<span class="tbd'+(cls?" "+cls:"")+'"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M4 17l5-5 4 4 3-3 4 4"/></svg><span>'+esc(U("照片待定"))+"</span></span>";}
+// one entry per scenic stop of the day (photo = its first one, or none yet)
+function dayStops(D){var seen={},out=[];if(!D)return out;
+  D.segs.forEach(function(s){if(s.t==="stop"&&SCENIC[s.kind]&&!seen[s.place]){seen[s.place]=1;out.push({s:s,ph:photosOf(s.place)[0]||null});}});return out;}
+// every photo of the day, for the full-screen viewer
+function dayGallery(D){var out=[];dayStops(D).forEach(function(x){photosOf(x.s.place).forEach(function(ph){out.push({s:x.s,ph:ph});});});return out;}
+function galleryIndex(list,ph){for(var i=0;i<list.length;i++)if(list[i].ph===ph)return i;return 0;}
+// the day's banner: D.hero if set, else its first nature stop with a photo, else any photo
+function heroOf(D){var ps=dayStops(D).filter(function(x){return x.ph;});if(!ps.length)return null;
+  if(D.hero){var h=ps.filter(function(x){return x.s.place===D.hero;})[0];if(h)return h;}
+  return ps.filter(function(x){return x.s.kind!=="city";})[0]||ps[0];}
+function legPhotos(l){var seen={},out=[],ds=T.days.filter(function(D){return D.date>=l.from&&D.date<=l.to;});
+  function add(x){if(x&&x.ph&&!seen[x.s.place]){seen[x.s.place]=1;out.push(x);}}
+  ds.forEach(function(D){add(heroOf(D));});ds.forEach(function(D){dayStops(D).forEach(add);});return out;}
+function renderHero(){
+  var D=day(),box=$("hero"),st=dayStops(D),h=D&&heroOf(D);
+  if(!st.length){box.hidden=true;box.innerHTML="";return;}
+  box.hidden=false;
+  var html=h?'<figure class="hero-fig" data-lb="1">'+img(h.ph,1600,"hero-img")+'<figcaption><b>'+tx(h.s.name||"[["+h.s.place+"]]")+"</b>"+credit(h.ph)+"</figcaption></figure>"
+           :'<figure class="hero-fig empty">'+tbd("big")+"</figure>";
+  if(st.length>1)html+='<div class="hero-thumbs">'+st.map(function(x){
+    return '<button type="button" class="ht'+(h&&x.s.place===h.s.place?" on":"")+'" data-i="'+x.s.i+'" title="'+esc(plain(x.s.name||"[["+x.s.place+"]]"))+'">'+(x.ph?img(x.ph,400):tbd("mini"))+"<span>"+x.s.num+"</span></button>";}).join("")+"</div>";
+  box.innerHTML=html;}
+$("hero").addEventListener("click",function(e){
+  var t=e.target.closest(".ht");if(t){select(+t.dataset.i,false);return;}
+  if(e.target.closest(".credit"))return;
+  if(e.target.closest("[data-lb]")){var D=day(),g=dayGallery(D);openLb(g,galleryIndex(g,heroOf(D).ph));}});
+
+/* lightbox: a photo full screen; arrows and swipe step through the photos it was opened with */
+var LB={list:[],i:0};
+function openLb(list,i){if(!list.length)return;LB.list=list;LB.i=i;showLb();$("lb").hidden=false;document.body.classList.add("lb-open");$("lbClose").focus();}
+function closeLb(){$("lb").hidden=true;document.body.classList.remove("lb-open");}
+function showLb(){var x=LB.list[LB.i];if(!x)return;var im=$("lbImg");im.classList.remove("ok");im.onload=function(){im.classList.add("ok");};
+  im.src=sized(x.ph.src,2000);im.alt=x.ph.alt||"";
+  $("lbCap").innerHTML="<b>"+tx(x.s.name||"[["+x.s.place+"]]")+"</b>"+credit(x.ph)+(LB.list.length>1?'<span class="lb-n">'+(LB.i+1)+" / "+LB.list.length+"</span>":"");
+  $("lbPrev").hidden=$("lbNext").hidden=LB.list.length<2;}
+function stepLb(d){LB.i=(LB.i+d+LB.list.length)%LB.list.length;showLb();}
+$("lbClose").addEventListener("click",closeLb);$("lbPrev").addEventListener("click",function(){stepLb(-1);});$("lbNext").addEventListener("click",function(){stepLb(1);});
+$("lb").addEventListener("click",function(e){if(e.target===this||e.target.classList.contains("lb-fig"))closeLb();});
+document.addEventListener("keydown",function(e){if($("lb").hidden)return;
+  if(e.key==="Escape"){e.preventDefault();closeLb();}else if(e.key==="ArrowLeft"){e.preventDefault();e.stopImmediatePropagation();stepLb(-1);}else if(e.key==="ArrowRight"){e.preventDefault();e.stopImmediatePropagation();stepLb(1);}},true);
+(function(){var x0=null;$("lb").addEventListener("touchstart",function(e){x0=e.touches[0].clientX;},{passive:true});
+  $("lb").addEventListener("touchend",function(e){if(x0==null)return;var dx=e.changedTouches[0].clientX-x0;x0=null;if(Math.abs(dx)>50)stepLb(dx<0?1:-1);},{passive:true});})();
 
 /* ---------- day at a glance ---------- */
 function wxPlace(d){var D=BYDATE[d];var id=D&&(D.wx||D.stay);if(id&&T.places[id])return id;var l=legOf(d);return l&&l.wx;}

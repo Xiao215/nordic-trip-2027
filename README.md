@@ -36,6 +36,10 @@ Everything lives in `docs/trip.json`:
 - `kinds`, `countries` (colour, time zone, July normals), `bookings`, `prep`, `sources`.
 - `entry`: visa and entry steps per passport, shown on the prep tab once a visitor picks theirs (saved on that device). Profiles are `ca` (Canadian passport) and `cn-ca`, `cn-uk`, `cn-cn` (Chinese passport, by country of residence). A booking with `"who": ["cn-ca"]` or `["ca"]` only shows for those passports (`"cn"` would mean every Chinese passport).
 
+### Photos
+
+Scenic stops show up to three photos from [Unsplash](https://unsplash.com) (`places[id].photos`), each checked by eye against reference photos of the place before it's added. They load straight from Unsplash's image servers and every one credits the photographer and Unsplash. Stops still waiting for photos show a grey 照片待定 / Photo TBD tile.
+
 ### English text
 
 The English page reads `docs/i18n/en.json`, a map from each Chinese string in `trip.json` to its English version (interface strings live in `UIEN` in `app.js`). After editing the plan, list what still needs translating:
