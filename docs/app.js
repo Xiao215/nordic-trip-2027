@@ -78,7 +78,40 @@ var UIEN={
   "新对话":"New chat","清空对话，重新开始":"Clear this conversation and start over","收起对话":"Hide chat",
   "收起（Esc）。收起后回答会继续。":"Hide (Esc). Answers keep coming while hidden.",
   "回车发送 · Shift+回车换行 · Esc 收起":"Enter to send · Shift+Enter for a new line · Esc to hide","正在载入行程…":"Loading the plan…","按计划现在在这":"Here now (per plan)","Google 地图":"Google Map",
-  "行程没载入（{e}）。如果是直接从硬盘打开的 index.html，请改用本地服务器：python3 -m http.server":"Couldn't load the plan ({e}). If you opened index.html from disk, serve the folder instead: python3 -m http.server"
+  "行程没载入（{e}）。如果是直接从硬盘打开的 index.html，请改用本地服务器：python3 -m http.server":"Couldn't load the plan ({e}). If you opened index.html from disk, serve the folder instead: python3 -m http.server",
+  // pace
+  "节奏":"Pace","轻松":"Easy","适中":"Moderate","很满":"Full","开车 {t}":"{t} driving","走路 {t}":"{t} on foot","在路上 {t}":"{t} in transit",
+  "{t} 出发":"leave {t}","{t} 才结束":"done at {t}","从早到晚 {n} 小时":"{n} h start to finish","没有长途":"nothing long",
+  "连着 {n} 天很满的第 {i} 天":"full day {i} of {n} in a row","最长连着 {n} 天很满：{a}–{b}":"Longest run of full days: {n} ({a}–{b})",
+  "按开车、走路时间和起止时间估算":"Estimated from driving, time on foot, and start and finish times",
+  // what to bring
+  "带上":"Bring","点一下表示已装好":"Tap to mark packed","今天过境或坐飞机":"Border or flight today",
+  "驾照和实体信用卡":"Driving licence and a physical credit card","今天取车":"Picking up a car today",
+  "登山鞋":"Hiking boots","水和路上吃的":"Water and trail snacks","好走的鞋":"Comfortable walking shoes","逛城 {t}":"{t} around town",
+  "手套和帽子":"Gloves and a hat","冰川上冷":"Cold on the ice","墨镜和防晒":"Sunglasses and sunscreen","冰面反光":"Glare off the ice","晴天":"Sunny",
+  "防水外套":"Waterproof jacket","瀑布水雾大":"Waterfall spray","泳衣和毛巾":"Swimsuit and towel","要泡温泉或下水":"Hot pool or swim today",
+  "睡袋和防潮垫":"Sleeping bag and mat","今晚露营":"Camping tonight","眼罩":"Eye mask","极昼，夜里也亮":"Midnight sun: bright all night",
+  "零食、充电线和离线歌单":"Snacks, charging cable, offline playlist","晕船药":"Seasickness tablets","渡轮 {t}":"{t} on a ferry",
+  "充电宝放随身行李":"Power bank in your carry-on","今天坐飞机":"Flying today","雨衣雨裤":"Rain jacket and trousers","降水概率 {n}%":"{n}% chance of rain",
+  "保暖层":"Warm layers","最高 {n}°":"High of {n}°","防风外套":"Windproof layer","风大":"Windy",
+  // drivers
+  "司机轮换":"Driver rotation","谁开哪一段，大家共用一份":"Who drives each leg, shared by everyone","司机":"Driver","不指定":"Clear the driver",
+  "先在总览页加上能开车的人":"Add the drivers on the overview first","没排":"No driver","能开车的人":"Drivers","+ 加司机":"+ Add a driver","加一个司机":"Add a driver",
+  "加上持安省驾照、登记在租车合同上的人，再给每段车程排司机，下面会算每个人一共开多久。":"Add everyone with an Ontario licence who's on the rental agreement, then give each drive a driver. This adds up how long each person drives.",
+  "{n} 段 · 单日最多 {t}":"{n} drives · most in one day {t}","还有 {t} 没排司机":"{t} of driving has no driver yet","把没排的自动排上":"Fill in the rest",
+  "全部 {t} 车程都排好了":"All {t} of driving has a driver","按天看":"By day",
+  "司机安排存在行程服务器上，跟行程助手用同一个访问码。":"Driver assignments live on the trip server and use the same access code as the assistant.",
+  "连不上行程服务器。下面是这台设备上次看到的安排；改动会先存在这里，连上后自动同步。":"Can't reach the trip server. This is the plan as this device last saw it; changes wait here and sync once you're back online.",
+  "1 处改动等待同步":"1 change waiting to sync","{n} 处改动等待同步":"{n} changes waiting to sync",
+  "连不上行程服务器，联网后才能改司机名单。":"Can't reach the trip server. The driver list can be changed once you're online.",
+  "把 {p} 从司机里移除？已经排给 {p} 的车程会空出来。":"Remove {p} from the drivers? Their drives will have no driver.",
+  // offline
+  "离线使用":"Offline use","只存在这台设备上":"Saved on this device only","这个浏览器不能离线保存网页。":"This browser can't save the site for offline use.",
+  "行程、上次看过的天气和汇率：打开过一次就存好了，没信号也能看":"The plan, the last forecast and exchange rates: saved after your first visit, readable with no signal",
+  "照片：已存 {a} / {b} 张":"Photos: {a} of {b} saved","下载全部照片（约 {m} MB）":"Download all photos (~{m} MB)","正在下载 {a} / {b}…":"Downloading {a} of {b}…",
+  "{n} 张没下载成功，有信号时再点一次":"{n} didn't download; try again with a better connection",
+  "地图和行程助手要联网。出发前在 Google 地图 app 里下载冰岛、挪威、瑞典、丹麦的离线地图。":"The map and the assistant need a connection. Before you go, download offline maps of Iceland, Norway, Sweden and Denmark in the Google Maps app.",
+  "离线中：行程和存好的照片都能看，地图、助手和同步要等有信号":"Offline: the plan and saved photos still work; the map, the assistant and syncing wait for signal"
 };
 /* ---------- currency ---------- */
 // Prices stay as written in trip.json (ISK, NOK, SEK, DKK, €, US$). With CAD, CNY or USD picked, every
@@ -156,7 +189,8 @@ var ICON={
   train:'<svg viewBox="0 0 20 20"><rect x="5" y="3" width="10" height="11" rx="2.5"/><path d="M5 9h10M8 17l-2 1.5M12 17l2 1.5M7.5 12h.01M12.5 12h.01"/></svg>',
   bus:'<svg viewBox="0 0 20 20"><rect x="4" y="3" width="12" height="12" rx="2"/><path d="M4 10h12M6 15v2M14 15v2M7 12.5h.01M13 12.5h.01"/></svg>',
   bike:'<svg viewBox="0 0 20 20"><circle cx="5" cy="13.5" r="3"/><circle cx="15" cy="13.5" r="3"/><path d="M5 13.5l3-6h5l2 6M8 7.5L10 13.5h0M11.5 5.5H14"/></svg>',
-  walk:'<svg viewBox="0 0 20 20"><circle cx="11" cy="3.8" r="1.6"/><path d="M8 18l2-5 2 2v3M10 13l1-5-3 2-1 3M11 8l2 3h2.5"/></svg>'
+  walk:'<svg viewBox="0 0 20 20"><circle cx="11" cy="3.8" r="1.6"/><path d="M8 18l2-5 2 2v3M10 13l1-5-3 2-1 3M11 8l2 3h2.5"/></svg>',
+  down:'<svg viewBox="0 0 20 20"><path d="M10 3v10M5.5 9l4.5 4.5L14.5 9M4 16.5h12"/></svg>'
 };
 var WX={sun:'<svg viewBox="0 0 48 48"><g class="sun"><circle cx="24" cy="24" r="8"/><path d="M24 6v5M24 37v5M6 24h5M37 24h5M11 11l3.5 3.5M33.5 33.5 37 37M11 37l3.5-3.5M33.5 14.5 37 11"/></g></svg>',
   part:'<svg viewBox="0 0 48 48"><g class="sun"><circle cx="18" cy="17" r="6"/><path d="M18 5v3M6 17h3M9.5 8.5l2 2M26.5 8.5l-2 2"/></g><path d="M16 38h20a7 7 0 0 0 0-14 10 10 0 0 0-19 3 5.5 5.5 0 0 0-1 11z"/></svg>',
@@ -198,7 +232,7 @@ function localText(s){return String(s||"").replace(/\[\[([\w-]+)\]\]/g,function(
 function plain(s){return money(String(L(s)||"")).replace(/\[\[([\w-]+)\]\]/g,function(_,id){return pn(id,true);}).replace(/\*\*|`/g,"").replace(/\[([^\]]+)\]\([^)]+\)/g,"$1");}
 
 /* ---------- state ---------- */
-var T,DATES=[],BYDATE={},N={},GPID={};
+var T,DATES=[],BYDATE={},N={},GPID={},PACE={};
 var state={view:"all",date:null,sel:null},weather={};
 var VIEWS={all:1,prep:1,money:1}; // tabs addressed by name in the URL (#prep); a day is #2027-07-06
 
@@ -219,9 +253,13 @@ function boot(trip){
   T=trip;
   Object.keys(T.places).forEach(function(k){N[k]=T.places[k].ll;if(T.places[k].gid)GPID[k]=T.places[k].gid;});
   for(var d=T.dates.start;d<=T.dates.end;d=addDays(d,1))DATES.push(d);
-  T.days.forEach(function(D){BYDATE[D.date]=D;var n=0;
+  T.days.forEach(function(D){BYDATE[D.date]=D;var n=0,dn={};
     D.segs.forEach(function(s,i){s.i=i;if(s.t==="stop")s.num=++n;
-      s.pts=s.geom?decode(s.geom):(s.t==="move"?s.path.map(LL):null);});});
+      s.pts=s.geom?decode(s.geom):(s.t==="move"?s.path.map(LL):null);
+      // each drive's key for the driver rotation: date + where it starts and ends (#2 for a repeat that day)
+      if(s.t==="move"&&s.mode==="drive"){var ids=s.path.filter(function(x){return typeof x==="string";}),k=D.date+"|"+(ids.length?ids[0]+">"+ids[ids.length-1]:i);
+        dn[k]=(dn[k]||0)+1;s.dk=dn[k]>1?k+"#"+dn[k]:k;}});
+    PACE[D.date]=pace(D);});
   loadFx();renderCur();
   applyNames();renderHeader();renderAll();renderStrip();renderPrep();
   var h=decodeURIComponent(location.hash.slice(1)),saved=store("nt-pos")||{};
@@ -230,6 +268,7 @@ function boot(trip){
   setView(view,date);
   loadMap();
   if(OUT.length&&auth().code())flush(); // expenses logged offline last time go out as soon as the page is back
+  loadDrivers(true);paintOnline();
   setInterval(function(){if(state.view==="day"&&liveDate()===state.date)renderGlance();},60000);
   window.addEventListener("hashchange",function(){var h=decodeURIComponent(location.hash.slice(1));
     if(DATES.indexOf(h)>=0&&!(state.view==="day"&&state.date===h))setView("day",h);else if(VIEWS[h]&&state.view!==h)setView(h);});
@@ -274,10 +313,11 @@ function renderAll(){
   for(var i=0;i<wkday(DATES[0]);i++)h+="<div></div>";
   DATES.forEach(function(d,i){var D=BYDATE[d],stay=D&&D.stay?names(D.stay):null,open=dayBookings(d).filter(function(b){return !b.done;}).length;
     h+='<button type="button" class="cd'+(D?"":" draft")+(d===live?" today":"")+'" style="--c:'+colorOf(d)+';--n:'+i+'" data-date="'+d+'"'+(D&&NM==="zh"?' title="'+esc(localText(D.short||D.title))+'"':"")+'>'+
-      '<span class="cd-img">'+(D&&heroOf(D)?img(heroOf(D).ph,400):D&&dayStops(D).length?tbd("mini"):"")+'</span><span class="cd-d">'+md(d)+(open?'<span class="cd-due" title="'+esc(U(open===1?"这天还有 1 项没订":"这天还有 {n} 项没订",{n:open}))+'" aria-label="'+esc(U(open===1?"这天还有 1 项没订":"这天还有 {n} 项没订",{n:open}))+'"></span>':"")+"</span>"+
+      '<span class="cd-img">'+(D&&heroOf(D)?img(heroOf(D).ph,400):D&&dayStops(D).length?tbd("mini"):"")+'</span><span class="cd-d"><span>'+md(d)+(D?paceMeter(d,true):"")+"</span>"+(open?'<span class="cd-due" title="'+esc(U(open===1?"这天还有 1 项没订":"这天还有 {n} 项没订",{n:open}))+'" aria-label="'+esc(U(open===1?"这天还有 1 项没订":"这天还有 {n} 项没订",{n:open}))+'"></span>':"")+"</span>"+
       '<span class="cd-t">'+(D?tx(D.short||D.title):U("规划中"))+"</span>"+
       (stay?'<span class="cd-s">'+U("住 ")+esc(NM==="local"?stay.lo:stay.zh)+"</span>":(!D&&legOf(d)?'<span class="cd-s">'+esc(plain(legOf(d).short||legOf(d).title))+"</span>":""))+"</button>";});
   $("cal").innerHTML=h;
+  renderPaceSum();renderDrivers();
   $("legs").innerHTML=T.legs.map(function(l,li){var n=daysBetween(l.from,l.to)+1,c=T.countries[l.c]||{},lp=legPhotos(l);
     return '<div class="leg" style="--c:'+esc(c.color||"#8A99A3")+'">'+('<div class="leg-imgs">'+lp.slice(0,4).map(function(x,k){return '<button type="button" class="leg-img" data-leg="'+li+'" data-k="'+k+'" aria-label="'+esc(plain(x.s.name||"[["+x.s.place+"]]"))+'">'+img(x.ph,600)+"</button>";}).join("")+(lp.length<4?new Array(5-lp.length).join('<span class="leg-img">'+tbd()+"</span>"):"")+"</div>")+'<div class="leg-h"><h3>'+tx(l.title)+'</h3><span class="when">'+cnDate(l.from)+" – "+cnDate(l.to)+" · "+U("{n} 天",{n:n})+"</span>"+(l.draft?'<span class="leg-tag">'+U("草案")+'</span>':"")+"</div>"+
       (l.body?"<p>"+tx(l.body)+"</p>":"")+(l.items&&l.items.length?"<ul>"+l.items.map(function(x){return "<li>"+tx(x)+"</li>";}).join("")+"</ul>":"")+"</div>";}).join("");
@@ -290,7 +330,7 @@ $("allView").addEventListener("click",function(e){var li=e.target.closest(".leg-
 /* ---------- day strip ---------- */
 function renderStrip(){
   var live=liveDate();
-  $("strip").innerHTML=DATES.map(function(d){return '<button type="button" role="tab" class="sd'+(BYDATE[d]?"":" draft")+(d===live?" today":"")+'" style="--c:'+colorOf(d)+'" data-date="'+d+'" aria-selected="false" title="'+esc(dayLabel(d))+'"><b>'+md(d)+"</b><small>"+wk(d)+"</small></button>";}).join("");
+  $("strip").innerHTML=DATES.map(function(d){return '<button type="button" role="tab" class="sd'+(BYDATE[d]?"":" draft")+(d===live?" today":"")+'" style="--c:'+colorOf(d)+'" data-date="'+d+'" aria-selected="false" title="'+esc(dayLabel(d))+'"><b>'+md(d)+"</b><small>"+wk(d)+"</small>"+(BYDATE[d]?paceMeter(d):"")+"</button>";}).join("");
 }
 $("strip").addEventListener("click",function(e){var b=e.target.closest("[data-date]");if(b)setView("day",b.dataset.date);});
 $("prevDay").addEventListener("click",function(){var i=DATES.indexOf(state.date);if(i>0)setView("day",DATES[i-1]);});
@@ -448,6 +488,7 @@ function renderPrep(){
     return '<div class="list-head"><h2>'+esc(L(card.title))+'</h2><small data-count="'+ci+'"></small></div><ul class="checklist" data-card="'+ci+'">'+items+'</ul>';
   }).join("");
   $("footnote").innerHTML=tx(T.footnote);
+  renderOffline();
   $("sources").innerHTML=U("资料来源：")+T.sources.concat([[U("天气预报：Open-Meteo"),"https://open-meteo.com/"]]).map(function(s){return '<a href="'+esc(s[1])+'" target="_blank" rel="noopener">'+esc(L(s[0]))+'</a>';}).join(" · ");
   countPrep();
 }
@@ -530,7 +571,7 @@ function renderRows(){
     var li=document.createElement("li");li.dataset.i=s.i;li.style.setProperty("--n",Math.min(s.i,14));if(cur&&cur.i===s.i)li.classList.add("now");
     var b=document.createElement("button");b.className="row"+(s.t==="move"?" move":"");b.setAttribute("aria-expanded","false");
     if(s.t==="move"){var dm=dur(s);
-      b.innerHTML='<span class="t"></span><span class="num" title="'+esc(mode(s.mode))+'">'+(ICON[s.mode]||ICON.drive)+'</span><span class="n">'+(dm?esc(hm(dm))+" · ":"")+moveLabel(s)+"</span>"+ICON.chev;}
+      b.innerHTML='<span class="t"></span><span class="num" title="'+esc(mode(s.mode))+'">'+(ICON[s.mode]||ICON.drive)+'</span><span class="n">'+(dm?esc(hm(dm))+" · ":"")+moveLabel(s)+(s.dk?'<span class="drv-tag" data-dk="'+esc(s.dk)+'">'+esc(driverOf(s.dk)||"")+"</span>":"")+"</span>"+ICON.chev;}
     else{b.style.setProperty("--k",KCOL[s.kind]||KCOL.visit);
       var bits=[s.start&&s.end&&s.start!==s.end?hm(dur(s)):s.mins?hm(s.mins):"",L(T.kinds[s.kind])].filter(Boolean).join(" · ");
       b.innerHTML='<span class="t">'+(s.start?esc(s.start):"")+'</span><span class="num">'+s.num+'</span><span class="n">'+tx(s.name||"[["+s.place+"]]")+(cur&&cur.i===s.i?'<span class="now-tag">'+U("现在")+'</span>':"")+"</span>"+ICON.chev+'<span class="s">'+esc(bits)+"</span>";}
@@ -568,6 +609,7 @@ function detail(s){
   else if(s.t==="stop"&&SCENIC[s.kind])h+='<div class="d-photos n1"><figure class="d-photo empty">'+tbd()+"</figure></div>";
   h+='<span class="kind" style="--k:'+(KCOL[kind]||KCOL.visit)+'">'+esc(s.t==="move"?mode(s.mode):L(T.kinds[kind])||"")+(when?" · "+esc(when):"")+(s.t==="move"&&s.km?U(" · 约 {n} 公里",{n:s.km}):"")+'</span>';
   h+='<div class="detail-map"></div>'; // phones only: the map moves in here (placeMap)
+  if(s.dk)h+='<div class="drv-pick" data-dk="'+esc(s.dk)+'">'+drvPick(s.dk)+"</div>";
   if(s.facts&&s.facts.length)h+='<dl class="facts">'+s.facts.map(function(f){return "<div><dt>"+esc(L(f[0]))+"</dt><dd>"+tx(f[1])+"</dd></div>";}).join("")+"</dl>";
   var body=s.body||s.note;if(body)h+='<p class="body">'+tx(body)+"</p>";
   if(s.tips&&s.tips.length)h+='<ul class="tips">'+s.tips.map(function(t){return "<li>"+tx(t)+"</li>";}).join("")+"</ul>";
@@ -592,7 +634,13 @@ function renderDayNav(){var i=DATES.indexOf(state.date),h="";
     if(!d){h+="<span></span>";return;}
     h+='<button type="button" class="dn '+x[1]+'" data-date="'+d+'" style="--c:'+colorOf(d)+'"><small>'+esc(x[2])+" · "+md(d)+" "+wk(d)+"</small><b>"+esc(dayLabel(d))+"</b></button>";});
   $("dayNav").innerHTML=h;}
-$("glance").addEventListener("click",function(e){var b=e.target.closest("[data-booking]");if(b)openBooking(b.dataset.booking);});
+$("glance").addEventListener("click",function(e){var b=e.target.closest("[data-booking]");if(b){openBooking(b.dataset.booking);return;}
+  var br=e.target.closest("[data-bring]");if(br){var all=store("nt-bring")||{},mine=all[state.date]=all[state.date]||{},k=br.dataset.bring;
+    if(mine[k])delete mine[k];else mine[k]=1;store("nt-bring",all);br.classList.toggle("got",!!mine[k]);br.setAttribute("aria-pressed",!!mine[k]);}});
+// picking a driver in an open drive
+$("rows").addEventListener("click",function(e){var o=e.target.closest("[data-drv]");
+  if(o){var k=o.closest("[data-dk]").dataset.dk,p=o.dataset.drv||null;setDriver(k,p&&p===driverOf(k)?null:p);return;}
+  if(e.target.closest("[data-go-drivers]"))goDrivers();});
 $("dayNav").addEventListener("click",function(e){var b=e.target.closest("[data-date]");if(b){setView("day",b.dataset.date);window.scrollTo({top:Math.min(scrollY,$("dayView").offsetTop-130),behavior:"smooth"});}});
 // swipe left / right on the day view (phones) changes the day
 (function(){var x0=null,y0=0;
@@ -671,6 +719,87 @@ document.addEventListener("keydown",function(e){if($("lb").hidden)return;
 (function(){var x0=null;$("lb").addEventListener("touchstart",function(e){x0=e.touches[0].clientX;},{passive:true});
   $("lb").addEventListener("touchend",function(e){if(x0==null)return;var dx=e.changedTouches[0].clientX-x0;x0=null;if(Math.abs(dx)>50)stepLb(dx<0?1:-1);},{passive:true});})();
 
+/* ---------- pace: how full a day is ---------- */
+// Worked out from the plan rather than tagged by hand: time behind the wheel (bus, train and ferry count about
+// half, a flight a bit more plus an hour at the airport), time on foot (hikes, long walks and bike rides fully,
+// glacier viewpoints, town and sightseeing a little), plus a day over 10 hours, 6+ hours in a vehicle, an early
+// start or a late finish. A day in trip.json can override it with "pace": 1 (easy) to 3 (full) and say why in "paceNote".
+var PACEM={drive:1.15,bus:.6,train:.6,ferry:.5,flight:.6,walk:1.1,bike:1.1},PACEK={hike:1.1,glacier:.7,city:.4,visit:.25,water:.3};
+var PACEN=["","轻松","适中","很满"];
+function pace(D){var p={drive:0,ride:0,foot:0,a:null,b:null,sc:0};
+  D.segs.forEach(function(s){var m=dur(s);
+    if(s.start){var a=mins(s.start),b=s.end?mins(s.end):a;if(b<a)b+=1440;if(p.a==null||a<p.a)p.a=a;if(p.b==null||b>p.b)p.b=b;}
+    if(s.t==="move"){p.sc+=m/60*(PACEM[s.mode]||.6)+(s.mode==="flight"?1:0);
+      if(s.mode==="drive")p.drive+=m;else if(s.mode==="walk"||s.mode==="bike")p.foot+=m;else p.ride+=m;}
+    else{p.sc+=m/60*(PACEK[s.kind]||0);if(s.kind==="hike")p.foot+=m;}});
+  p.span=p.a!=null?(p.b-p.a)/60:0;
+  p.sc+=Math.max(0,p.span-10)*.5+(p.drive+p.ride>=360?1:0);
+  if(p.a!=null){if(p.a<420)p.sc+=1;if(p.a<360)p.sc+=1;if(p.b>1260)p.sc+=.7;}
+  p.lv=D.pace>=1&&D.pace<=3?Math.round(D.pace):p.sc<5.5?1:p.sc<9.5?2:3;
+  return p;}
+function lvOf(d){return PACE[d]?PACE[d].lv:0;}
+// the biggest reasons, at most three
+function paceWhy(d){var p=PACE[d],D=BYDATE[d],r=[];if(!p)return r;
+  if(D.paceNote)r.push([99,plain(D.paceNote)]);
+  if(p.drive>=90)r.push([p.drive/60,U("开车 {t}",{t:hm(p.drive)})]);
+  if(p.foot>=90)r.push([p.foot/60,U("走路 {t}",{t:hm(p.foot)})]);
+  if(p.ride>=150)r.push([p.ride/90,U("在路上 {t}",{t:hm(p.ride)})]);
+  if(p.a!=null&&p.a<420)r.push([5,U("{t} 出发",{t:fmt(p.a)})]);
+  if(p.a!=null&&p.b>1260)r.push([3,U("{t} 才结束",{t:fmt(p.b)})]);
+  if(p.span>=13)r.push([2.5,U("从早到晚 {n} 小时",{n:Math.round(p.span)})]);
+  return r.sort(function(x,y){return y[0]-x[0];}).slice(0,3).map(function(x){return x[1];});}
+// the run of full days this one is part of
+function fullRun(d){var i=DATES.indexOf(d),a=i,b=i;if(lvOf(d)!==3)return null;
+  while(a>0&&lvOf(DATES[a-1])===3)a--;while(b<DATES.length-1&&lvOf(DATES[b+1])===3)b++;
+  return {n:b-a+1,i:i-a+1,from:DATES[a],to:DATES[b]};}
+// three bars, as many filled as the level; tip=true says the level and why on hover
+function paceMeter(d,tip){var lv=typeof d==="number"?d:lvOf(d);
+  var t=tip&&typeof d==="string"?U(PACEN[lv])+(paceWhy(d).length?" · "+paceWhy(d).join(" · "):""):"";
+  return '<span class="pm p'+lv+'"'+(t?' title="'+esc(t)+'"':' aria-hidden="true"')+"><i></i><i></i><i></i></span>";}
+// under the calendar: how many days of each, and the longest stretch of full days
+function renderPaceSum(){var c=[0,0,0,0],best=null;
+  DATES.forEach(function(d){c[lvOf(d)]++;var r=fullRun(d);if(r&&(!best||r.n>best.n))best=r;});
+  var h="<b>"+U("节奏")+"</b>"+[1,2,3].map(function(lv){return "<span>"+paceMeter(lv)+" "+U(PACEN[lv])+" · "+U("{n} 天",{n:c[lv]})+"</span>";}).join("");
+  if(best&&best.n>=3)h+='<button type="button" class="pace-run-btn" data-date="'+best.from+'">'+U("最长连着 {n} 天很满：{a}–{b}",{n:best.n,a:md(best.from),b:md(best.to)})+" →</button>";
+  $("paceSum").innerHTML=h+'<span class="pace-how">'+U("按开车、走路时间和起止时间估算")+"</span>";}
+
+/* ---------- what to bring today ---------- */
+// A short list worked out from the day (hot pools, hikes, glaciers, waterfalls, camping, long drives, ferries,
+// flights, a new rental car) and from the forecast once there is one. A day in trip.json can add its own with
+// "bring": ["..."]. Tapping an item ticks it off on this device (nt-bring, by date).
+var SWIM=/温泉|泻湖|浴场|沙滩|海滩|lagoon|baths|beach|hot ?spring/i;
+function placeText(s){var p=T.places[s.place]||{};return [s.name,s.body,s.place,p.zh,p.en,p.local].join(" ");}
+function bringList(d){var D=BYDATE[d];if(!D)return [];
+  var out=[],seen={},p=PACE[d],w=weather[d],c=T.countries[cOf(d)]||{},id=wxPlace(d),clim=(id&&T.places[id].climate)||c.climate;
+  function add(k,why){if(!seen[k]){seen[k]=1;out.push([k,esc(U(k)),why||""]);}}
+  function sum(f){return D.segs.reduce(function(a,s){return a+(f(s)?dur(s):0);},0);}
+  function has(f){return D.segs.some(f);}
+  var drives=function(X){return X&&X.segs.some(function(s){return s.mode==="drive";});};
+  var flight=has(function(s){return s.mode==="flight";});
+  if(flight||d===T.dates.start||d===T.dates.end||(has(function(s){return s.mode==="ferry"||s.mode==="train"||s.mode==="bus";})&&cOf(addDays(d,1))&&cOf(addDays(d,1))!==cOf(d)))add("护照",U("今天过境或坐飞机"));
+  if(drives(D)&&!drives(BYDATE[addDays(d,-1)]))add("驾照和实体信用卡",U("今天取车"));
+  if(flight)add("充电宝放随身行李",U("今天坐飞机"));
+  var foot=sum(function(s){return s.kind==="hike"||s.kind==="glacier"&&dur(s)>=90||s.mode==="walk"&&dur(s)>=45;});
+  if(foot>=60)add("登山鞋",U("走路 {t}",{t:hm(foot)}));
+  if(foot>=180)add("水和路上吃的",U("走路 {t}",{t:hm(foot)}));
+  var town=sum(function(s){return s.kind==="city";});
+  if(foot<60&&town>=180)add("好走的鞋",U("逛城 {t}",{t:hm(town)}));
+  if(has(function(s){return s.kind==="water"&&SWIM.test(placeText(s));}))add("泳衣和毛巾",U("要泡温泉或下水"));
+  if(has(function(s){return s.t==="stop"&&(/foss/.test(s.place||"")||/瀑布/.test(((T.places[s.place]||{}).zh)||""));}))add("防水外套",U("瀑布水雾大"));
+  if(has(function(s){return s.kind==="glacier"&&dur(s)>=90;})){add("手套和帽子",U("冰川上冷"));add("墨镜和防晒",U("冰面反光"));}
+  if(has(function(s){return s.kind==="camp"&&/扎营|营地|帐篷/.test(s.name||"");})){add("睡袋和防潮垫",U("今晚露营"));add("眼罩",U("极昼，夜里也亮"));}
+  if(p&&p.drive>=240)add("零食、充电线和离线歌单",U("开车 {t}",{t:hm(p.drive)}));
+  var boat=sum(function(s){return s.mode==="ferry";});
+  if(boat>=120)add("晕船药",U("渡轮 {t}",{t:hm(boat)}));
+  if(w&&w!=="loading"&&w.hi!=null){
+    if(w.rain>=50)add("雨衣雨裤",U("降水概率 {n}%",{n:w.rain}));
+    if(w.hi<=10)add("保暖层",U("最高 {n}°",{n:Math.round(w.hi)}));
+    if(w.wind/3.6>=12)add("防风外套",U("风大"));
+    if(w.code<=1)add("墨镜和防晒",U("晴天"));}
+  else if(clim&&clim.hi<=10)add("保暖层",U("最高 {n}°",{n:clim.hi}));
+  (D.bring||[]).forEach(function(x){if(!seen[x]){seen[x]=1;out.push([x,tx(x),""]);}});
+  return out;}
+
 /* ---------- day at a glance ---------- */
 function wxPlace(d){var D=BYDATE[d];var id=D&&(D.wx||D.stay);if(id&&T.places[id])return id;var l=legOf(d);return l&&l.wx;}
 function loadWeather(d){
@@ -701,9 +830,22 @@ function renderGlance(){
     '<div class="stat"><dt>'+U("户外")+'</dt><dd>'+(D?hm(out):"—")+'</dd><span class="sub">'+U("景点、徒步、冰川、逛城")+'</span></div>'+
     '<div class="stat"><dt>'+U("住宿")+'</dt><dd class="txt">'+(stay?pn(stay):"—")+'</dd><span class="sub">'+esc(D&&D.stayNote?plain(D.stayNote):"")+'</span></div>'+
     '<div class="stat"><dt>'+U("日落")+'</dt><dd>'+(sun?(sun.polar==="day"?U("极昼"):sun.set):"—")+'</dd><span class="sub">'+(sun&&sun.rise?U("日出 {r} · 日照 {l}",{r:sun.rise,l:hmS(sun.len)}):"")+'</span></div></dl>';
+  var p=PACE[d];
+  if(p){var run=fullRun(d),why=paceWhy(d).join(" · ")||U("没有长途");
+    h+='<div class="pace-row p'+p.lv+'">'+paceMeter(d)+"<b>"+U(PACEN[p.lv])+"</b><span>"+esc(why.charAt(0).toUpperCase()+why.slice(1))+"</span>"+
+      (run&&run.n>=3?'<span class="pace-run">'+U("连着 {n} 天很满的第 {i} 天",{n:run.n,i:run.i})+"</span>":"")+"</div>";}
   if(D&&liveDate()===d){var t=nowIn(tzOf(d)).mins,cur=nowSeg(),nx=segs.filter(function(s){return s.t==="stop"&&s.start&&mins(s.start)>t;})[0];
     if(cur)h+='<div class="nownext"><span><b>'+U("现在")+'</b>'+(cur.t==="move"?esc(mode(cur.mode))+" "+moveLabel(cur):tx(cur.verb||cur.name||"[["+cur.place+"]]"))+'</span>'+
       (nx?'<span><b>'+U("下一站")+'</b>'+tx(nx.name||"[["+nx.place+"]]")+" "+esc(nx.start)+U("（{t}后）",{t:hm(mins(nx.start)-t)})+"</span>":"")+"</div>";}
+  // who drives today, when the drivers are set up
+  var dv=segs.filter(function(s){return s.dk;});
+  if(dv.length&&DRV.drivers.length){var by={},un=0;dv.forEach(function(s){var w=driverOf(s.dk);if(w)by[w]=(by[w]||0)+dur(s);else un+=dur(s);});
+    h+='<div class="drv-row"><b>'+U("司机")+"</b>"+Object.keys(by).map(function(w){return '<span class="drv-chip">'+esc(w)+" <small>"+esc(hmS(by[w]))+"</small></span>";}).join("")+
+      (un?'<span class="drv-chip un">'+U("没排")+" <small>"+esc(hmS(un))+"</small></span>":"")+"</div>";}
+  // what to bring, ticked off on this device
+  var br=bringList(d),got=(store("nt-bring")||{})[d]||{};
+  if(br.length)h+='<div class="bring" title="'+esc(U("点一下表示已装好"))+'"><b>'+U("带上")+"</b>"+br.map(function(x){var on=!!got[x[0]];
+    return '<button type="button" class="br-i'+(on?" got":"")+'" data-bring="'+esc(x[0])+'" aria-pressed="'+on+'"'+(x[2]?' title="'+esc(x[2])+'"':"")+">"+ICON.check+"<span>"+x[1]+"</span></button>";}).join("")+"</div>";
   // what has to be booked for this day, and whether it is
   var bk=dayBookings(d);
   if(bk.length)h+='<div class="dbk"><b>'+U("预订")+"</b>"+bk.map(function(x){
@@ -981,6 +1123,123 @@ $("moneyView").addEventListener("submit",function(e){
 $("moneyView").addEventListener("click",function(e){
   var d=e.target.closest("[data-del]");if(d){var x=mItems().filter(function(i){return i.id===d.dataset.del;})[0];if(x&&confirm(U("删掉「{w}」这一笔？",{w:x.what})))delExpense(x.id);return;}
   var u=e.target.closest("[data-unperson]");if(u&&confirm(U("把 {p} 移出账本？",{p:u.dataset.unperson})))personOp("/api/expenses/people/delete",u.dataset.unperson);});
+
+/* ---------- driver rotation ---------- */
+// Only some of us can drive, and some days have 7+ hours at the wheel, so each drive in the plan (s.dk, set in
+// boot) can be given to a driver. The drivers and who drives what are shared through the trip server
+// (backend/drivers.json, same access code as the chat). This device keeps the last copy it saw, and picks made
+// offline wait in an outbox ({key: name or null}) until the server answers again.
+var DRV=store("nt-drv")||{drivers:[],assign:{}},DOUT=store("nt-drv-out")||{},dState={status:"",err:""},dAt=0;
+function driverOf(k){var w=k in DOUT?DOUT[k]:DRV.assign[k];return w&&DRV.drivers.indexOf(w)>=0?w:null;}
+function gotDrivers(j){DRV={drivers:j.drivers||[],assign:j.assign||{}};store("nt-drv",DRV);}
+function loadDrivers(force){if(!auth().code()){dState.status="code";paintDrivers();return;}
+  if(!force&&Date.now()-dAt<60000)return;dAt=Date.now();
+  mApi("/api/drivers").then(function(j){gotDrivers(j);dState.status="ok";return flushDrivers();})
+    .catch(function(e){dState.status=e&&e.code===401?"code":"off";}).then(paintDrivers);}
+// sends every waiting pick in one go; a pick changed again meanwhile stays in the outbox for the next round
+function flushDrivers(){var batch=Object.assign({},DOUT),ks=Object.keys(batch);if(!ks.length)return Promise.resolve();
+  return mApi("/api/drivers/assign",{body:{assign:batch}}).then(function(j){
+    ks.forEach(function(k){if(DOUT[k]===batch[k])delete DOUT[k];});store("nt-drv-out",DOUT);gotDrivers(j);},function(e){
+    // the server said no (not a dropped connection): drop the batch and say why, or it would never clear
+    if(e.code&&e.code!==401&&e.code!==429&&e.code<500){DOUT={};store("nt-drv-out",DOUT);dState.err=e.message;return;}throw e;});}
+function pushDrivers(){paintDrivers();if(!auth().code())return;
+  flushDrivers().then(function(){dState.status="ok";},function(e){dState.status=e&&e.code===401?"code":"off";}).then(paintDrivers);}
+function setDriver(k,name){dState.err="";DOUT[k]=name;store("nt-drv-out",DOUT);pushDrivers();}
+// fills every drive with no driver: the same person keeps driving up to about 2.5 hours, then hands over to
+// whoever has driven least so far (today's hours count double, so one person doesn't take a whole long day)
+function autoDrivers(){var P=DRV.drivers,tot={};if(!P.length)return;dState.err="";
+  P.forEach(function(w){tot[w]=0;});
+  T.days.forEach(function(D){D.segs.forEach(function(s){var w=s.dk&&driverOf(s.dk);if(w)tot[w]+=dur(s);});});
+  T.days.forEach(function(D){var today={},cur=null,stint=0;
+    D.segs.forEach(function(s){if(!s.dk)return;var m=dur(s),w=driverOf(s.dk);
+      if(!w){if(cur&&stint+m<=150)w=cur;
+        else{var best=1e9;P.forEach(function(x){var sc=tot[x]+2*(today[x]||0)+(x===cur?1e5:0);if(sc<best){best=sc;w=x;}});}
+        DOUT[s.dk]=w;tot[w]+=m;}
+      if(w!==cur){cur=w;stint=0;}stint+=m;today[w]=(today[w]||0)+m;});});
+  store("nt-drv-out",DOUT);pushDrivers();}
+function drvPerson(path,name){dState.err="";
+  mApi(path,{body:{name:name}}).then(function(j){gotDrivers(j);dState.status="ok";},function(e){
+    dState.err=e.code?e.message:U("连不上行程服务器，联网后才能改司机名单。");}).then(function(){paintDrivers();if(path.indexOf("delete")<0&&$("drvPersonIn"))$("drvPersonIn").focus();});}
+function goDrivers(){setView("all");setTimeout(function(){$("drvHead").scrollIntoView({block:"start",behavior:"smooth"});},50);}
+// the picker inside an open drive
+function drvPick(k){var P=DRV.drivers,cur=driverOf(k);
+  if(!P.length)return '<span class="drv-lab">'+U("司机")+'</span><button type="button" class="drv-link" data-go-drivers="1">'+U("先在总览页加上能开车的人")+" →</button>";
+  return '<span class="drv-lab">'+U("司机")+"</span>"+P.map(function(w){return '<button type="button" class="drv-opt" data-drv="'+esc(w)+'" aria-pressed="'+(cur===w)+'">'+esc(w)+"</button>";}).join("")+
+    (cur?'<button type="button" class="drv-opt clear" data-drv="" aria-label="'+esc(U("不指定"))+'" title="'+esc(U("不指定"))+'">×</button>':"");}
+// everything that shows drivers, redrawn in place (an open drive stays open)
+function paintDrivers(){if(!T)return;renderDrivers();
+  document.querySelectorAll(".drv-tag").forEach(function(el){el.textContent=driverOf(el.dataset.dk)||"";});
+  document.querySelectorAll(".drv-pick").forEach(function(el){el.innerHTML=drvPick(el.dataset.dk);});
+  if(state.view==="day")renderGlance();}
+function drvTotals(){var t={},un=0,days=[];DRV.drivers.forEach(function(w){t[w]={m:0,n:0,top:0};});
+  T.days.forEach(function(D){var by={},u=0,all=0;
+    D.segs.forEach(function(s){if(!s.dk)return;var m=dur(s),w=driverOf(s.dk);all+=m;if(w){by[w]=(by[w]||0)+m;t[w].n++;}else u+=m;});
+    if(!all)return;Object.keys(by).forEach(function(w){t[w].m+=by[w];t[w].top=Math.max(t[w].top,by[w]);});un+=u;days.push({D:D,all:all,by:by,un:u});});
+  return {t:t,un:un,days:days};}
+function renderDrivers(){var box=$("drivers");if(!box||!T)return;var st=dState.status,P=DRV.drivers,h="";
+  if(st==="code"&&!P.length){box.innerHTML='<form class="mny-gate" id="drvCode"><p>'+U("司机安排存在行程服务器上，跟行程助手用同一个访问码。")+'</p><div class="mny-row"><input type="password" id="drvCodeIn" autocomplete="off" placeholder="'+esc(U("访问码"))+'" aria-label="'+esc(U("访问码"))+'"><button class="pill primary" type="submit">'+U("确定")+'</button></div><span class="mny-err" id="drvCodeErr" role="alert"></span></form>';return;}
+  if(st==="off")h+='<p class="mny-note warn">'+U("连不上行程服务器。下面是这台设备上次看到的安排；改动会先存在这里，连上后自动同步。")+"</p>";
+  var pend=Object.keys(DOUT).length;if(pend&&st!=="code")h+='<p class="mny-note">'+U(pend===1?"1 处改动等待同步":"{n} 处改动等待同步",{n:pend})+"</p>";
+  if(dState.err)h+='<p class="mny-note warn">'+esc(dState.err)+"</p>";
+  var X=drvTotals(),max=0,all=X.un,open=$("drvDays")&&$("drvDays").open;P.forEach(function(w){max=Math.max(max,X.t[w].m);all+=X.t[w].m;});
+  h+='<div class="mny-card"><div class="mny-people"><b>'+U("能开车的人")+"</b>"+P.map(function(w){
+    return '<span class="mny-chip">'+esc(w)+'<button type="button" data-undriver="'+esc(w)+'" aria-label="'+esc(U("移除 {p}",{p:w}))+'">×</button></span>';}).join("")+
+    '<form class="mny-addp" id="drvPerson"><input id="drvPersonIn" maxlength="24" list="drvSuggest" placeholder="'+esc(U("+ 加司机"))+'" aria-label="'+esc(U("加一个司机"))+'"></form>'+
+    '<datalist id="drvSuggest">'+MNY.people.filter(function(w){return P.indexOf(w)<0;}).map(function(w){return '<option value="'+esc(w)+'">';}).join("")+"</datalist></div>";
+  if(!P.length)h+='<p class="mny-empty">'+U("加上持安省驾照、登记在租车合同上的人，再给每段车程排司机，下面会算每个人一共开多久。")+"</p>";
+  else{
+    h+='<ul class="drv-tot">'+P.map(function(w){var x=X.t[w];
+      return '<li><b>'+esc(w)+'</b><span class="drv-bar"><span style="width:'+(max?x.m/max*100:0)+'%"></span></span><span class="drv-h">'+esc(hm(x.m))+"</span><small>"+U("{n} 段 · 单日最多 {t}",{n:x.n,t:hmS(x.top)})+"</small></li>";}).join("")+"</ul>";
+    h+='<div class="drv-foot">'+(X.un?'<span class="drv-un">'+U("还有 {t} 没排司机",{t:hm(X.un)})+'</span><button type="button" class="pill primary" id="drvAuto">'+U("把没排的自动排上")+"</button>":
+      "<span>"+U("全部 {t} 车程都排好了",{t:hm(all)})+"</span>")+"</div>";
+    h+='<details class="drv-days" id="drvDays"'+(open?" open":"")+"><summary>"+U("按天看")+"</summary><ul>"+X.days.map(function(x){
+      var who=Object.keys(x.by).map(function(w){return esc(w)+" "+hmS(x.by[w]);});if(x.un)who.push('<span class="drv-un">'+U("没排")+" "+hmS(x.un)+"</span>");
+      return '<li><button type="button" data-date="'+x.D.date+'" style="--c:'+colorOf(x.D.date)+'"><span class="drv-d">'+md(x.D.date)+" "+esc(plain(x.D.short||x.D.title))+'</span><span class="drv-w">'+who.join(" · ")+"</span><small>"+hmS(x.all)+"</small></button></li>";}).join("")+"</ul></details>";}
+  box.innerHTML=h+"</div>";}
+$("drivers").addEventListener("submit",function(e){e.preventDefault();
+  if(e.target.id==="drvPerson"){var v=$("drvPersonIn").value.trim();if(v)drvPerson("/api/drivers/people",v);}
+  else if(e.target.id==="drvCode"){var code=$("drvCodeIn").value.trim(),er=$("drvCodeErr"),A=auth();if(!code)return;er.textContent=U("验证中…");
+    fetch(A.api+"/api/check",{method:"POST",headers:{"X-Access-Code":code}}).then(function(r){
+      if(r.status===401){er.textContent=U("访问码不对。");return;}if(!r.ok)throw new Error();A.setCode(code);loadDrivers(true);})
+      .catch(function(){er.textContent=U("连不上行程服务器。");});}});
+$("drivers").addEventListener("click",function(e){
+  var u=e.target.closest("[data-undriver]");if(u){e.stopPropagation();if(confirm(U("把 {p} 从司机里移除？已经排给 {p} 的车程会空出来。",{p:u.dataset.undriver})))drvPerson("/api/drivers/people/delete",u.dataset.undriver);return;}
+  if(e.target.closest("#drvAuto"))autoDrivers();});
+
+/* ---------- offline ---------- */
+// sw.js keeps a copy of the page, the plan, the last forecast and rates, and every photo once seen. The prep tab
+// can fetch all the photos ahead of time (one 1200px copy each; the worker uses it for any other size offline).
+// (smaller copies saved while browsing don't count: offline they'd stand in for the big one, blurry)
+var PHOTOC="nt-photos",OFF={busy:false,have:null,done:0,todo:0,fail:0};
+function allPhotos(){var seen={},out=[];Object.keys(T.places).forEach(function(k){photosOf(k).forEach(function(ph){var u=new URL(sized(ph.src,1200)).href;
+  if(!seen[u]){seen[u]=1;out.push(u);}});});return out;}
+function savedUrls(c){return c.keys().then(function(ks){var have={};ks.forEach(function(r){have[r.url]=1;});return have;});}
+function countPhotos(){if(!window.caches)return Promise.resolve(null);
+  return caches.open(PHOTOC).then(savedUrls).then(function(have){return allPhotos().filter(function(u){return have[u];}).length;}).catch(function(){return null;});}
+function getPhotos(){if(OFF.busy)return;OFF.busy=true;OFF.done=OFF.fail=0;renderOffline();
+  caches.open(PHOTOC).then(function(c){return savedUrls(c).then(function(have){
+    var list=allPhotos().filter(function(u){return !have[u];}),i=0;OFF.todo=list.length;
+    function next(){if(i>=list.length)return Promise.resolve();var u=list[i++];
+      return fetch(u,{mode:"cors",credentials:"omit"}).then(function(r){if(!r.ok)throw new Error(r.status);return c.put(u,r);})
+        .catch(function(){OFF.fail++;}).then(function(){OFF.done++;renderOffline();return next();});}
+    return Promise.all([next(),next(),next(),next()]);});})
+  .catch(function(){}).then(function(){OFF.busy=false;return countPhotos();}).then(function(n){OFF.have=n;renderOffline();});}
+function renderOffline(){var box=$("offline");if(!box||!T)return;
+  var h='<div class="tl-head"><h2>'+U("离线使用")+'</h2><span class="hint">'+U("只存在这台设备上")+'</span></div><div class="off-card">';
+  if(!("serviceWorker" in navigator)||!window.caches){box.innerHTML=h+"<p>"+U("这个浏览器不能离线保存网页。")+"</p></div>";return;}
+  if(OFF.have==null&&!OFF.busy)countPhotos().then(function(n){if(n!=null&&OFF.have!==n){OFF.have=n;renderOffline();}});
+  var n=allPhotos().length,all=OFF.have===n;
+  h+='<ul class="off-list"><li class="ok">'+ICON.check+"<span>"+U("行程、上次看过的天气和汇率：打开过一次就存好了，没信号也能看")+"</span></li>";
+  h+='<li class="'+(all?"ok":"")+'">'+(all?ICON.check:ICON.down)+"<span>"+U("照片：已存 {a} / {b} 张",{a:OFF.have==null?"…":OFF.have,b:n})+
+    (OFF.fail&&!OFF.busy?'<small class="off-err">'+U("{n} 张没下载成功，有信号时再点一次",{n:OFF.fail})+"</small>":"")+"</span>"+
+    (all?"":'<button type="button" class="pill primary" id="offGet"'+(OFF.busy?" disabled":"")+">"+(OFF.busy?U("正在下载 {a} / {b}…",{a:OFF.done,b:OFF.todo}):U("下载全部照片（约 {m} MB）",{m:Math.max(1,Math.round((n-(OFF.have||0))*0.27))}))+"</button>")+"</li>";
+  h+='<li class="warn">'+ICON.visa+"<span>"+U("地图和行程助手要联网。出发前在 Google 地图 app 里下载冰岛、挪威、瑞典、丹麦的离线地图。")+"</span></li></ul></div>";
+  box.innerHTML=h;}
+$("offline").addEventListener("click",function(e){if(e.target.closest("#offGet"))getPhotos();});
+function paintOnline(){$("offlineBar").hidden=navigator.onLine!==false;}
+addEventListener("offline",paintOnline);
+addEventListener("online",function(){paintOnline();if(T)loadDrivers(true);});
+if("serviceWorker" in navigator&&/^https?:$/.test(location.protocol))navigator.serviceWorker.register("sw.js").catch(function(e){console.warn("offline copy unavailable:",e);});
 
 /* ---------- start ---------- */
 applyStatic();

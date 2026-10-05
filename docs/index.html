@@ -52,6 +52,7 @@
         <div class="strip" id="strip" role="tablist" aria-label="选择日期" data-i18n-aria-label="选择日期"></div>
         <button type="button" class="strip-arrow" id="nextDay" aria-label="后一天" data-i18n-aria-label="后一天">›</button>
       </div>
+      <div class="offline-bar" id="offlineBar" role="status" data-i18n="离线中：行程和存好的照片都能看，地图、助手和同步要等有信号" hidden>离线中：行程和存好的照片都能看，地图、助手和同步要等有信号</div>
     </div>
 
     <header class="top" id="top">
@@ -65,6 +66,9 @@
       <div class="route" id="ribbon" aria-label="路线" data-i18n-aria-label="路线"></div>
       <div class="tl-head"><h2 data-i18n="四周日历">四周日历</h2><span class="hint" data-i18n="点任意一天看当天安排">点任意一天看当天安排</span></div>
       <div class="cal" id="cal"></div>
+      <div class="pace-sum" id="paceSum"></div>
+      <div class="tl-head" id="drvHead"><h2 data-i18n="司机轮换">司机轮换</h2><span class="hint" data-i18n="谁开哪一段，大家共用一份">谁开哪一段，大家共用一份</span></div>
+      <div class="drivers" id="drivers"></div>
       <div class="tl-head"><h2 data-i18n="路线分段">路线分段</h2><span class="hint" id="legHint"></span></div>
       <div class="legs" id="legs"></div>
     </section>
@@ -86,6 +90,7 @@
       <section class="entry" id="entry" aria-live="polite"></section>
       <div class="tl-head"><h2 data-i18n="预订">预订</h2><span class="hint" id="bookedCount"></span></div>
       <div class="bookings" id="bookings"></div>
+      <section class="offline" id="offline"></section>
       <div id="prepLists"></div>
       <footer class="foot">
         <p id="footnote"></p>

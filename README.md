@@ -4,22 +4,31 @@ Trip planner for Jul 4 – Aug 1, 2027 (Iceland → Norway → Stockholm → Vis
 
 A currency menu next to the language switch shows every price in the local currency as written (ISK, NOK, SEK, DKK, €) or converted to CAD, CNY or USD with the latest rates from [open.er-api.com](https://open.er-api.com) (cached for 12 hours, with a fallback in `trip.json` under `fx`). Hover a converted price to see the original.
 
-What's on it: an overview (route ribbon, 4-week calendar, route legs), one day at a time (forecast or July normals, sunrise and sunset, transport and outdoor totals, the timeline), a Google map that shows whatever you open (on phones it opens inside the stop you tap), booking cards grouped into "do now", "opens later" and "booked" (days and calendar cells flag anything still unbooked), checklists, a shared expense log (账本), plus a floating chat assistant (Ctrl/⌘+K) that knows the plan, searches the web and answers in Chinese.
+What's on it: an overview (route ribbon, 4-week calendar with how full each day is, driver rotation, route legs), one day at a time (forecast or July normals, sunrise and sunset, transport and outdoor totals, the day's pace, who drives, what to bring, the timeline), a Google map that shows whatever you open (on phones it opens inside the stop you tap), booking cards grouped into "do now", "opens later" and "booked" (days and calendar cells flag anything still unbooked), checklists, a shared expense log (账本), plus a floating chat assistant (Ctrl/⌘+K) that knows the plan, searches the web and answers in Chinese.
 
 The expense log (账本 tab) is one shared ledger for the group: add the people, then log each expense with who paid and who shares it, in any currency. It totals spending by category, shows each person's balance and the fewest transfers to settle up, in the currency picked in the top bar (CAD when that's "local"). It lives on the backend in `backend/expenses.json` (not committed; back it up) behind the same access code as the chat. Each device keeps the last copy it saw, so the log still reads with no signal, and anything added offline waits on that device and syncs once the backend answers again.
+
+Each day gets a pace, 轻松 / 适中 / 很满 (easy / moderate / full), shown as three bars on the calendar, the day strip and the day card. It's worked out from the plan: hours driving (buses, trains and ferries count about half), hours on foot, how long the day runs, and early starts or late finishes. The day card says why ("7 h driving · leave 05:30") and flags a run of full days, and the overview names the longest run. To override a day, add `"pace": 1`–`3` and an optional `"paceNote"` to it in `trip.json`.
+
+The day card also lists what to bring (带上), worked out from the day: passport on flight or border days, licence and a physical card when a new rental car starts, boots and snacks for long walks, swimsuit for hot pools, a waterproof for waterfalls, gloves and sunglasses for glacier walks, camping gear, seasickness tablets for long ferries, and rain or warm layers once the forecast says so. Add your own with `"bring": ["..."]` on a day. Tapping an item ticks it off on that device.
+
+Driver rotation (司机轮换, on the overview) is shared by the group: add who can drive, then pick a driver in each drive on the day view, or let 把没排的自动排上 (fill in the rest) hand over every ~2.5 hours to whoever has driven least. It shows each driver's total and longest day. It lives on the backend in `backend/drivers.json` (not committed) behind the same access code; drives are keyed by date and start/end place, so renaming a drive's places in `trip.json` drops its driver. Picks made offline wait on the device and sync later.
+
+The site works offline once it's been opened (`docs/sw.js`): the page, the plan, the last forecast and exchange rates come from the device when there's no signal, and an orange bar says so. Photos are kept once seen, and 准备 → 离线使用 (Prep → Offline use) downloads all of them ahead of time (about 35 MB). Google Maps and the chat still need a connection.
 
 The forecast comes from [Open-Meteo](https://open-meteo.com/) (free, no key) and appears about 16 days before each day; until then the day shows typical July temperatures. Sunrise and sunset are calculated on the page.
 
 ```
 docs/                 static site, served by GitHub Pages
   index.html          page shell, map column, chat bar
+  sw.js               offline copy (service worker)
   styles.css
   trip.json           THE PLAN: legs, days, places, bookings, checklists (page and AI both read this)
-  app.js              overview, day view, names switch, Google map, bookings + checklists, expense log
+  app.js              overview, day view, pace, what to bring, names switch, Google map, bookings + checklists, expense log, drivers
   chat.js             trip assistant
   config.js           backend URL + Google Maps key
 backend/
-  server.py           FastAPI + Claude API, streams answers; stores the shared expense log
+  server.py           FastAPI + Claude API, streams answers; stores the shared expense log and drivers
   .env                secrets (not committed)
 scripts/
   build_routes.py     regenerates the drive lines in trip.json
