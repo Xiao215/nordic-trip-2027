@@ -5,6 +5,7 @@ One job: answer questions about the trip. The plan itself is read from ../docs/t
 Exposed to the internet through Tailscale Funnel; see ../README.md.
 """
 
+import asyncio
 import hmac
 import json
 import os
@@ -343,6 +344,112 @@ async def answer(messages: list[dict], lang_en: bool = False):
         print(f"[chat] {type(e).__name__}: {e}", flush=True)
         yield sse({"type": "error", "message": "行程服务器出错了，告诉行程作者。"})
     yield sse({"type": "done"})
+
+
+# ---------- shared expense log ----------
+# One small JSON file next to this script holds who's on the trip and every expense. The page keeps
+# a copy for offline reading and queues new entries until it can reach this server again, so adding
+# is idempotent (the page picks the id) and every write answers with the whole log.
+
+EXPENSES_FILE = Path(__file__).with_name("expenses.json")
+CURRENCIES = ("ISK", "NOK", "SEK", "DKK", "EUR", "CAD", "USD", "CNY")
+CATEGORIES = ("food", "groceries", "fuel", "transport", "stay", "tickets", "other")
+_ledger_lock = asyncio.Lock()
+
+
+def read_ledger() -> dict:
+    try:
+        data = json.loads(EXPENSES_FILE.read_text())
+    except FileNotFoundError:
+        data = {}
+    return {"people": data.get("people", []), "items": data.get("items", [])}
+
+
+def write_ledger(data: dict) -> None:
+    tmp = EXPENSES_FILE.with_suffix(".tmp")
+    tmp.write_text(json.dumps(data, ensure_ascii=False, indent=1))
+    os.replace(tmp, EXPENSES_FILE)
+
+
+class ExpenseIn(BaseModel):
+    id: str = Field(pattern=r"^[A-Za-z0-9_-]{8,40}$")
+    date: str = Field(pattern=r"^\d{4}-\d{2}-\d{2}$")
+    what: str = Field(min_length=1, max_length=80)
+    amount: float = Field(gt=0, lt=1e9)
+    currency: str = Field(pattern="^(" + "|".join(CURRENCIES) + ")$")
+    cat: str = Field(default="other", pattern="^(" + "|".join(CATEGORIES) + ")$")
+    paidBy: str = Field(min_length=1, max_length=24)
+    split: list[str] = Field(min_length=1, max_length=20)
+
+
+class PersonIn(BaseModel):
+    name: str = Field(min_length=1, max_length=24)
+
+
+@app.get("/api/expenses")
+async def expenses(x_access_code: str | None = Header(default=None)):
+    check_code(x_access_code)
+    return read_ledger()
+
+
+@app.post("/api/expenses")
+async def add_expense(body: ExpenseIn, x_access_code: str | None = Header(default=None)):
+    check_code(x_access_code)
+    async with _ledger_lock:
+        data = read_ledger()
+        if any(x["id"] == body.id for x in data["items"]):
+            return data  # already saved (the page retried after a dropped connection)
+        people = set(data["people"])
+        if body.paidBy not in people or not set(body.split) <= people:
+            raise HTTPException(400, "付款人和平摊的人都要先加进成员里。")
+        if len(data["items"]) >= 5000:
+            raise HTTPException(400, "账本满了。")
+        item = body.model_dump()
+        item["what"] = item["what"].strip()
+        item["split"] = list(dict.fromkeys(item["split"]))
+        item["ts"] = int(datetime.now(TZ).timestamp() * 1000)
+        data["items"].append(item)
+        write_ledger(data)
+        return data
+
+
+@app.post("/api/expenses/people")
+async def add_person(body: PersonIn, x_access_code: str | None = Header(default=None)):
+    check_code(x_access_code)
+    name = body.name.strip()
+    if not name:
+        raise HTTPException(400, "名字不能是空的。")
+    async with _ledger_lock:
+        data = read_ledger()
+        if name not in data["people"]:
+            if len(data["people"]) >= 20:
+                raise HTTPException(400, "最多 20 个人。")
+            data["people"].append(name)
+            write_ledger(data)
+        return data
+
+
+@app.post("/api/expenses/people/delete")
+async def delete_person(body: PersonIn, x_access_code: str | None = Header(default=None)):
+    check_code(x_access_code)
+    async with _ledger_lock:
+        data = read_ledger()
+        if any(x["paidBy"] == body.name or body.name in x["split"] for x in data["items"]):
+            raise HTTPException(409, "这个人还有账目，先删掉相关的账再移除。")
+        data["people"] = [p for p in data["people"] if p != body.name]
+        write_ledger(data)
+        return data
+
+
+# after the /people routes, or "people" would be taken for an expense id
+@app.post("/api/expenses/{item_id}/delete")
+async def delete_expense(item_id: str, x_access_code: str | None = Header(default=None)):
+    check_code(x_access_code)
+    async with _ledger_lock:
+        data = read_ledger()
+        data["items"] = [x for x in data["items"] if x["id"] != item_id]
+        write_ledger(data)
+        return data
 
 
 # ---------- the site itself ----------

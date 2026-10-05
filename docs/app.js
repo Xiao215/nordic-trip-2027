@@ -35,6 +35,25 @@ var UIEN={
   "{p} · 住在 {l}":"{p} · living in {l}","查看预订":"See the booking","显示全部":"Show all","只看我的":"Only mine",
   "已隐藏 {n} 项只适用于其他护照的预订":"{n} bookings for other passports are hidden","已隐藏 1 项只适用于其他护照的预订":"1 booking for another passport is hidden",
   "正在显示所有护照的预订":"Showing bookings for every passport",
+  "现在就能办":"Do now","之后开放":"Opens later","按开放日期排；快开放时总览页会提醒":"By opening date; the overview reminds you when one is close",
+  "还没订":"Not booked yet","这天还有 1 项没订":"1 booking for this day isn't done","这天还有 {n} 项没订":"{n} bookings for this day aren't done",
+  "货币和语言":"Currency and language","账本":"Expenses",
+  "大家共用一本账 · 按 {c} 结算，汇率为约数":"One shared log · settled in {c} at approximate rates",
+  "账本存在行程服务器上，跟行程助手用同一个访问码。":"The log lives on the trip server and uses the same access code as the assistant.",
+  "连不上行程服务器。下面是这台设备上次同步的账；新记的会先存在这里，连上后自动同步。":"Can't reach the trip server. This is the log as this device last saw it; anything you add waits here and syncs once you're back online.",
+  "正在载入账本…":"Loading the log…","1 笔改动等待同步":"1 change waiting to sync","{n} 笔改动等待同步":"{n} changes waiting to sync",
+  "成员":"People","移除 {p}":"Remove {p}","+ 加人":"+ Add someone","加一个人":"Add a person",
+  "先把一起旅行的人加进来，然后每花一笔钱就记一笔：谁付的、谁平摊。":"Add everyone on the trip, then log each expense: who paid and who shares it.",
+  "一共花了":"Spent so far","{n} 笔":"{n} expenses","人":"Who","付了":"Paid","该摊":"Share","差额":"Balance",
+  "怎么结清":"To settle up","{a} 给 {b}":"{a} pays {b}","现在谁也不欠谁。":"Nobody owes anybody.",
+  "{p} 付":"{p} paid","大家平摊":"split by everyone","自己的":"for themselves","{n} 人平摊：{w}":"split {n} ways: {w}","等待同步":"waiting to sync",
+  "删掉这笔":"Delete","还没有账。花了钱就在上面记一笔。":"Nothing logged yet. Add an expense above.",
+  "记一笔":"Add an expense","买了什么？比如：Bónus 超市买菜":"What was it? e.g. groceries at Bónus","买了什么":"What","金额":"Amount","日期":"Date","类别":"Category",
+  "谁付的":"Paid by","谁平摊":"Split between","记下":"Save","金额要是大于 0 的数字。":"The amount needs to be a number above 0.","至少选一个人平摊。":"Pick at least one person to share it.",
+  "验证中…":"Checking…","访问码不对。":"That code didn't work.","连不上行程服务器。":"Can't reach the trip server.",
+  "删掉「{w}」这一笔？":"Delete “{w}”?","把 {p} 移出账本？":"Remove {p} from the log?",
+  "{p} 还有账目，先删掉相关的几笔再移除。":"{p} still has expenses. Delete those first.",
+  "连不上行程服务器，联网后才能改成员。":"Can't reach the trip server. People can be changed once you're online.",
   "资料来源：":"Sources: ","天气预报：Open-Meteo":"Forecast: Open-Meteo",
   "一步步教我怎么订「{w}」，有什么要注意的？":"Walk me through booking {w}. Anything to watch out for?",
   "全天":"Whole day","全程":"Whole trip","全程路线":"Whole route","{d}：全天":"{d}: whole day",
@@ -181,6 +200,7 @@ function plain(s){return money(String(L(s)||"")).replace(/\[\[([\w-]+)\]\]/g,fun
 /* ---------- state ---------- */
 var T,DATES=[],BYDATE={},N={},GPID={};
 var state={view:"all",date:null,sel:null},weather={};
+var VIEWS={all:1,prep:1,money:1}; // tabs addressed by name in the URL (#prep); a day is #2027-07-06
 
 function LL(x){return typeof x==="string"?N[x]:x;}
 function gPlace(id){var ll=N[id];var u="https://www.google.com/maps/search/?api=1&query="+ll[0]+"%2C"+ll[1];if(GPID[id])u+="&query_place_id="+GPID[id];return u;}
@@ -206,18 +226,20 @@ function boot(trip){
   applyNames();renderHeader();renderAll();renderStrip();renderPrep();
   var h=decodeURIComponent(location.hash.slice(1)),saved=store("nt-pos")||{};
   var live=liveDate(),date=BYDATE[h]||DATES.indexOf(h)>=0?h:live||saved.date||T.dates.start;
-  var view=h==="prep"||h==="all"?h:DATES.indexOf(h)>=0||live?"day":saved.view||"all";
+  var view=VIEWS[h]?h:DATES.indexOf(h)>=0||live?"day":saved.view||"all";
   setView(view,date);
   loadMap();
+  if(OUT.length&&auth().code())flush(); // expenses logged offline last time go out as soon as the page is back
   setInterval(function(){if(state.view==="day"&&liveDate()===state.date)renderGlance();},60000);
   window.addEventListener("hashchange",function(){var h=decodeURIComponent(location.hash.slice(1));
-    if(DATES.indexOf(h)>=0&&!(state.view==="day"&&state.date===h))setView("day",h);else if((h==="all"||h==="prep")&&state.view!==h)setView(h);});
+    if(DATES.indexOf(h)>=0&&!(state.view==="day"&&state.date===h))setView("day",h);else if(VIEWS[h]&&state.view!==h)setView(h);});
   window.tripApp={context:function(){var c=viewContext(),pp=passportText();if(pp)c.passport=pp;return c;},
     lang:function(){return en()?"en":"zh";}};
   function viewContext(){var D=day(),s=D&&state.sel!=null?D.segs[state.sel]:null;
     var lang=en()?"en":"zh",curTxt=curContext();
     if(state.view==="prep")return {lang:lang,currency:curTxt,day:"Prep tab",looking_at:"visas, bookings and checklists"};
     if(state.view==="all")return {lang:lang,currency:curTxt,day:"Overview",looking_at:"the whole trip's calendar and route legs"};
+    if(state.view==="money")return {lang:lang,currency:curTxt,day:"Expenses tab",looking_at:"the group's shared expense log"};
     return {lang:lang,currency:curTxt,day:state.date+" · "+(D?plain(D.title):"being planned"),looking_at:s?(s.t==="move"?mode(s.mode)+" "+moveLabel(s,true):s.num+". "+plain(s.name||"[["+s.place+"]]")+(s.start?" ("+s.start+")":"")):"the whole day"};}
   document.dispatchEvent(new CustomEvent("trip:view"));
 }
@@ -250,9 +272,9 @@ function renderAll(){
     return '<button type="button" class="rt" style="--c:'+esc(c.color||"#8A99A3")+';flex:'+n+' 1 0" data-date="'+esc(l.from)+'" title="'+esc(plain(l.title))+'"><span class="rt-bar"></span><b>'+esc(plain(l.short||l.title))+'</b><small>'+md(l.from)+"–"+md(l.to)+" · "+U("{n} 天",{n:n})+"</small></button>";}).join("");
   var live=liveDate(),h=(en()?WKEN:WK).map(function(w){return '<div class="cal-h">'+(en()?w:w.slice(1))+"</div>";}).join("");
   for(var i=0;i<wkday(DATES[0]);i++)h+="<div></div>";
-  DATES.forEach(function(d,i){var D=BYDATE[d],stay=D&&D.stay?names(D.stay):null;
+  DATES.forEach(function(d,i){var D=BYDATE[d],stay=D&&D.stay?names(D.stay):null,open=dayBookings(d).filter(function(b){return !b.done;}).length;
     h+='<button type="button" class="cd'+(D?"":" draft")+(d===live?" today":"")+'" style="--c:'+colorOf(d)+';--n:'+i+'" data-date="'+d+'"'+(D&&NM==="zh"?' title="'+esc(localText(D.short||D.title))+'"':"")+'>'+
-      '<span class="cd-d">'+md(d)+"</span>"+
+      '<span class="cd-d">'+md(d)+(open?'<span class="cd-due" title="'+esc(U(open===1?"这天还有 1 项没订":"这天还有 {n} 项没订",{n:open}))+'" aria-label="'+esc(U(open===1?"这天还有 1 项没订":"这天还有 {n} 项没订",{n:open}))+'"></span>':"")+"</span>"+
       '<span class="cd-t">'+(D?tx(D.short||D.title):U("规划中"))+"</span>"+
       (stay?'<span class="cd-s">'+U("住 ")+esc(NM==="local"?stay.lo:stay.zh)+"</span>":(!D&&legOf(d)?'<span class="cd-s">'+esc(plain(legOf(d).short||legOf(d).title))+"</span>":""))+"</button>";});
   $("cal").innerHTML=h;
@@ -286,16 +308,18 @@ function markStrip(){
 // -title and -aria-label do the same for attributes.
 function applyStatic(){
   document.querySelectorAll("[data-i18n]").forEach(function(el){el.textContent=U(el.dataset.i18n);});
+  // a shorter English label where phones have no room (the tab names); Chinese is already short
+  document.querySelectorAll("[data-i18n-sm]").forEach(function(el){el.dataset.sm=en()?el.getAttribute("data-i18n-sm"):el.textContent;});
   ["placeholder","title","aria-label"].forEach(function(at){document.querySelectorAll("[data-i18n-"+at+"]").forEach(function(el){el.setAttribute(at,U(el.getAttribute("data-i18n-"+at)));});});
 }
 
 /* ---------- language switch ---------- */
 function applyNames(){document.querySelectorAll(".names button").forEach(function(b){b.setAttribute("aria-checked",b.dataset.nm===NM);});slideInd(".names",'[aria-checked="true"]');}
 document.querySelectorAll(".names button").forEach(function(b){b.addEventListener("click",function(){
-  if(NM===b.dataset.nm)return;NM=b.dataset.nm;store("nt-names",NM);applyNames();rerender(true);});});
+  if(NM===b.dataset.nm)return;NM=b.dataset.nm;store("nt-names",NM);applyNames();rerender(true);prefsOpen(false);});});
 // redraw everything that shows text (after a language or currency change), keeping the open stop
 function rerender(lang){
-  var sel=state.sel;applyStatic();renderCur();renderHeader();renderAll();renderStrip();markStrip();renderPrep();$("fitLabel").textContent=U(state.view==="day"?"全天":"全程");
+  var sel=state.sel;applyStatic();renderCur();renderHeader();renderAll();renderStrip();markStrip();renderPrep();renderMoney();$("fitLabel").textContent=U(state.view==="day"?"全天":"全程");
   if(state.view==="day"){renderDay();if(sel!=null&&day()){state.sel=sel;paintOpen();}}
   if(lang){redrawMap();caption();document.dispatchEvent(new CustomEvent("trip:lang"));if(embed){var D=day();if(state.view==="day"&&D&&state.sel!=null)frame(D.segs[state.sel]);else fitView();}}}
 /* ---------- currency menu ---------- */
@@ -303,6 +327,7 @@ var CURS=[["local","kr","当地货币","Local currency"],["CAD","C$","加元","C
 function renderCur(){
   var cur=CURS.filter(function(c){return c[0]===CUR;})[0];
   $("curSym").textContent=cur[1];$("curLabel").textContent=CUR==="local"?U("当地"):CUR;
+  $("prefsSym").textContent=cur[1]+" · "+(en()?"EN":"中");
   var h=CURS.map(function(c){var on=c[0]===CUR,sub;
     if(c[0]==="local")sub=U("按原价显示，不换算");
     else sub=FX&&FX[c[0]]?"1 "+c[1]+" ≈ "+(FX.ISK/FX[c[0]]).toFixed(c[0]==="CNY"?1:0)+" ISK":"";
@@ -316,7 +341,8 @@ function curOpen(on){var m=$("curMenu"),b=$("curBtn");if(on===!m.hidden)return;
   b.setAttribute("aria-expanded",on);$("curBox").classList.toggle("open",on);
   if(on){m.hidden=false;var sel=m.querySelector('[aria-selected="true"]');(sel||m).focus({preventScroll:true});}
   else{m.hidden=true;}}
-function curPick(v){if(v!==CUR){CUR=v;store("nt-cur",CUR);rerender(false);}renderCur();curOpen(false);$("curBtn").focus();}
+function curPick(v){if(v!==CUR){CUR=v;store("nt-cur",CUR);rerender(false);}renderCur();curOpen(false);
+  if($("prefs").classList.contains("open")){prefsOpen(false);$("prefsBtn").focus();}else $("curBtn").focus();}
 $("curBtn").addEventListener("click",function(){curOpen($("curMenu").hidden);});
 $("curMenu").addEventListener("click",function(e){var o=e.target.closest(".cur-opt");if(o)curPick(o.dataset.cur);});
 $("curMenu").addEventListener("keydown",function(e){var opts=[].slice.call(this.querySelectorAll(".cur-opt")),i=opts.indexOf(document.activeElement);
@@ -324,7 +350,13 @@ $("curMenu").addEventListener("keydown",function(e){var opts=[].slice.call(this.
   else if(e.key==="Escape"){e.preventDefault();curOpen(false);$("curBtn").focus();}
   else if(e.key==="Tab")curOpen(false);});
 $("curBtn").addEventListener("keydown",function(e){if(e.key==="ArrowDown"){e.preventDefault();curOpen(true);}});
-document.addEventListener("pointerdown",function(e){if(!$("curBox").contains(e.target))curOpen(false);});
+document.addEventListener("pointerdown",function(e){if(!$("curBox").contains(e.target))curOpen(false);
+  if(!$("prefs").contains(e.target)&&!$("prefsBtn").contains(e.target))prefsOpen(false);});
+// phones: currency and language live in a small panel behind one button, so the bar fits on one line
+function prefsOpen(on){var p=$("prefs");if(on===p.classList.contains("open"))return;
+  p.classList.toggle("open",on);$("prefsBtn").setAttribute("aria-expanded",on);if(on)slideInd(".names",'[aria-checked="true"]');else curOpen(false);}
+$("prefsBtn").addEventListener("click",function(){prefsOpen(!$("prefs").classList.contains("open"));});
+$("prefs").addEventListener("keydown",function(e){if(e.key==="Escape"&&!e.defaultPrevented){prefsOpen(false);$("prefsBtn").focus();}});
 
 /* ---------- prep ---------- */
 // The visa section follows the passport picked on this device ({p:"cn"|"ca", live:"ca"|"uk"|"cn"}). A Chinese
@@ -364,10 +396,22 @@ function renderEntry(){
     U(hid===1?"已隐藏 1 项只适用于其他护照的预订":"已隐藏 {n} 项只适用于其他护照的预订",{n:hid})+' · <button type="button" data-showall="1">'+U("显示全部")+"</button>")+"</p>";
   return h;
 }
+// the bookings that matter on one date (bookings tagged "days" in trip.json), each with whether it's ticked as booked
+function dayBookings(d){var done=store("nt-booked")||{};
+  return T.bookings.filter(function(b){return forMe(b)&&b.days&&b.days.indexOf(d)>=0;}).map(function(b){return {b:b,done:!!done[b.id]};});}
+// Bookings in three groups: what you can do now, what opens later (by date), and what's booked (folded away)
 function renderPrep(){
   var today=homeToday(),done=store("nt-booked")||{},nb=nextBooking(),shown=shownBookings();
   $("entry").innerHTML=renderEntry();
-  $("bookings").innerHTML=shown.map(function(b){
+  var now=[],later=[],booked=[],doneOpen=$("bkDone")&&$("bkDone").open;
+  shown.forEach(function(b){(done[b.id]?booked:b.opens&&b.opens.slice(0,10)>today?later:now).push(b);});
+  later.sort(function(a,b){return a.opens<b.opens?-1:1;});
+  function group(key,list,label,hint){return list.length?'<div class="bk-group" data-group="'+key+'"><h3>'+U(label)+' <small>'+list.length+"</small></h3>"+(hint?'<p class="bk-hint">'+U(hint)+"</p>":"")+list.map(card).join("")+"</div>":"";}
+  var nDone=booked.length,pct=shown.length?Math.round(nDone/shown.length*100):0;
+  $("bookings").innerHTML='<div class="bk-progress" role="progressbar" aria-valuemin="0" aria-valuemax="'+shown.length+'" aria-valuenow="'+nDone+'" aria-label="'+esc(U("预订"))+'"><span style="width:'+pct+'%"></span></div>'+
+    group("now",now,"现在就能办")+group("later",later,"之后开放","按开放日期排；快开放时总览页会提醒")+
+    (booked.length?'<details class="bk-group bk-done" id="bkDone"'+(doneOpen?" open":"")+'><summary><h3>'+U("已订")+' <small>'+booked.length+'</small></h3><svg class="b-chev" viewBox="0 0 20 20"><path d="M5 8l5 5 5-5"/></svg></summary>'+booked.map(card).join("")+"</details>":"");
+  function card(b){
     var badge,due="",isDone=!!done[b.id];
     if(b.opens){var dt=b.opens.slice(0,10),n=daysBetween(today,dt);badge="<small>"+(en()?MON[+dt.slice(5,7)-1]:(+dt.slice(5,7))+"月")+"</small><b>"+(+dt.slice(8,10))+"</b>";
       due=n>1?U("{n} 天后开放预订",{n:n}):n===1?U("明天开放预订"):n===0?U("今天开放预订"):U("现在可以订");}
@@ -390,8 +434,7 @@ function renderPrep(){
     if(b.steps&&b.steps.length)h+='<details class="allsteps"><summary>'+U("全部步骤")+'</summary><ol class="steps">'+b.steps.map(function(s){return "<li><span>"+tx(s)+"</span></li>";}).join("")+"</ol></details>";
     h+="</div></details>";
     return h;
-  }).join("");
-  var nDone=shown.filter(function(b){return done[b.id];}).length;
+  }
   $("bookedCount").textContent=U("已订 {a} / {b} · 勾选只保存在这台设备上",{a:nDone,b:shown.length});
 
   var checked=store("nt-check")||{};
@@ -423,28 +466,32 @@ $("prepView").addEventListener("click",function(e){
   var mb=e.target.closest(".more-btn");
   if(mb){var p=mb.closest(".citem").querySelector(".more"),on=mb.getAttribute("aria-expanded")!=="true";mb.setAttribute("aria-expanded",on);p.hidden=!on;return;}
   var dn=e.target.closest("[data-done]");
-  if(dn){var d=store("nt-booked")||{},id=dn.dataset.done;d[id]=!d[id];store("nt-booked",d);renderPrep();renderHeader();var el=$("bk-"+id);if(el)el.open=true;return;}
+  if(dn){var d=store("nt-booked")||{},id=dn.dataset.done;d[id]=!d[id];store("nt-booked",d);renderPrep();renderHeader();renderAll();var el=$("bk-"+id);if(el&&!el.closest(".bk-done"))el.open=true;return;}
   var ak=e.target.closest("[data-ask]");
   if(ak){var b=T.bookings.filter(function(x){return x.id===ak.dataset.ask;})[0];if(b&&window.tripChat)window.tripChat.ask(U("一步步教我怎么订「{w}」，有什么要注意的？",{w:plain(b.what)}));}
 });
-function openBooking(id){setView("prep");T.bookings.forEach(function(b){var el=$("bk-"+b.id);if(el)el.open=b.id===id;});
-  var el=$("bk-"+id);if(el)el.scrollIntoView({block:"start",behavior:"smooth"});}
+function openBooking(id){setView("prep");if(!$("bk-"+id)&&!SHOWALL){SHOWALL=true;renderPrep();}T.bookings.forEach(function(b){var el=$("bk-"+b.id);if(el)el.open=b.id===id;});showBooking(id);}
+// opens one booking card (unfolding the "booked" group if it's in there) and scrolls to it
+function showBooking(id){var el=$("bk-"+id);if(!el)return;el.open=true;var g=el.closest(".bk-done");if(g)g.open=true;
+  // wait for the other cards to finish folding (0.3s), or the scroll aims at where the card used to be
+  setTimeout(function(){el.scrollIntoView({block:"start",behavior:"smooth"});},matchMedia("(prefers-reduced-motion:reduce)").matches?0:320);}
 
 /* ---------- views ---------- */
 function setView(v,date){
   var was={view:state.view,date:state.date};
-  state.view=v;if(date)state.date=date;if(!state.date)state.date=T.dates.start;state.sel=null;
+  state.view=v;if(date)state.date=date;if(!state.date)state.date=T.dates.start;state.sel=null;placeMap(null,true);
   store("nt-pos",{view:v,date:state.date});
   var hash=v==="day"?state.date:v;if(decodeURIComponent(location.hash.slice(1))!==hash)history.replaceState(null,"","#"+hash);
   document.querySelectorAll(".seg-btn").forEach(function(b){b.setAttribute("aria-selected",b.dataset.view===v?"true":"false");});
   $("daySub").textContent=md(state.date);
-  $("top").hidden=v!=="all";$("allView").hidden=v!=="all";$("dayView").hidden=v!=="day";$("prepView").hidden=v!=="prep";$("stripWrap").hidden=v!=="day";
+  $("top").hidden=v!=="all";$("allView").hidden=v!=="all";$("dayView").hidden=v!=="day";$("prepView").hidden=v!=="prep";$("moneyView").hidden=v!=="money";$("stripWrap").hidden=v!=="day";
   $("fitLabel").textContent=U(v==="day"?"全天":"全程");
   markStrip();slideInd(".seg",'.seg-btn[aria-selected="true"]');
   // entrance animation: a new tab fades up; another day slides in from the side it came from
-  if(was.view!==v||was.date!==state.date){var el=$({all:"allView",day:"dayView",prep:"prepView"}[v]);
+  if(was.view!==v||was.date!==state.date){var el=$(v+"View");
     el.dataset.dir=was.view===v&&v==="day"?(state.date>was.date?"next":"prev"):"";
     el.classList.remove("enter");void el.offsetWidth;el.classList.add("enter");}
+  if(v==="money")loadMoney();
   if(v==="day"){renderDay();
     var D=day(),cur=D&&liveDate()===state.date?nowSeg():null;
     if(cur){select(cur.i,false);return;}}
@@ -476,7 +523,7 @@ function renderDay(){
   $("draftAsk").addEventListener("click",function(){if(window.tripChat)window.tripChat.ask(U("{d}（{w}）还没排，按目前的路线，这天可以怎么安排？",{d:cnDate(d),w:wk(d)}));});
 }
 function renderRows(){
-  var D=day(),ol=$("rows");ol.innerHTML="";if(!D)return;
+  var D=day(),ol=$("rows");placeMap(null,true);ol.innerHTML="";if(!D)return;
   var cur=liveDate()===state.date?nowSeg():null;
   D.segs.forEach(function(s){
     var li=document.createElement("li");li.dataset.i=s.i;li.style.setProperty("--n",Math.min(s.i,14));if(cur&&cur.i===s.i)li.classList.add("now");
@@ -494,15 +541,29 @@ function select(i,scroll){state.sel=i;paintOpen();var s=day().segs[i];
   markSel();frame(s);caption();
   if(scroll===false){var li=document.querySelector('#rows>li[data-i="'+i+'"]');if(li)li.scrollIntoView({block:"center"});}}
 function paintOpen(){
+  var from=STAGE.closest("#rows>li");
   document.querySelectorAll("#rows>li").forEach(function(li){var i=+li.dataset.i,on=i===state.sel;
     li.classList.toggle("open",on);li.querySelector(".row").setAttribute("aria-expanded",on);
     var d=li.querySelector(".detail");if(on&&!d){li.appendChild(detail(day().segs[i]));}else if(!on&&d)d.remove();});
+  placeMap(document.querySelector("#rows>li.open")||from);
   document.dispatchEvent(new CustomEvent("trip:view"));
 }
+/* ---------- phones: the map travels with the open stop ---------- */
+// Below 900px the map sits above the plan and scrolls out of sight, so an open stop carries the map in
+// its details and hands it back when it closes. The row you tapped stays where it was on screen.
+var STAGE=document.querySelector(".stage"),MAPHOME=document.querySelector(".mapcol");
+function placeMap(anchor,home){
+  var slot=!home&&!wide.matches&&state.view==="day"&&state.sel!=null?document.querySelector("#rows>li.open .detail-map"):null,to=slot||MAPHOME;
+  if(STAGE.parentNode===to)return;
+  var a=anchor&&anchor.isConnected?anchor:$("rows"),y0=a.getBoundingClientRect().top;
+  to.appendChild(STAGE);MAPHOME.classList.toggle("away",!!slot);
+  var dy=a.getBoundingClientRect().top-y0;if(dy&&a.offsetParent)scrollBy(0,dy);}
+if(wide.addEventListener)wide.addEventListener("change",function(){placeMap();});
 function detail(s){
   var d=document.createElement("div");d.className="detail";var kind=s.t==="move"?"move":s.kind;
   var when=s.start?(s.end&&s.end!==s.start?s.start+" – "+s.end:s.start):"";
   var h='<span class="kind" style="--k:'+(KCOL[kind]||KCOL.visit)+'">'+esc(s.t==="move"?mode(s.mode):L(T.kinds[kind])||"")+(when?" · "+esc(when):"")+(s.t==="move"&&s.km?U(" · 约 {n} 公里",{n:s.km}):"")+'</span>';
+  h+='<div class="detail-map"></div>'; // phones only: the map moves in here (placeMap)
   if(s.facts&&s.facts.length)h+='<dl class="facts">'+s.facts.map(function(f){return "<div><dt>"+esc(L(f[0]))+"</dt><dd>"+tx(f[1])+"</dd></div>";}).join("")+"</dl>";
   var body=s.body||s.note;if(body)h+='<p class="body">'+tx(body)+"</p>";
   if(s.tips&&s.tips.length)h+='<ul class="tips">'+s.tips.map(function(t){return "<li>"+tx(t)+"</li>";}).join("")+"</ul>";
@@ -525,6 +586,7 @@ function renderDayNav(){var i=DATES.indexOf(state.date),h="";
     if(!d){h+="<span></span>";return;}
     h+='<button type="button" class="dn '+x[1]+'" data-date="'+d+'" style="--c:'+colorOf(d)+'"><small>'+esc(x[2])+" · "+md(d)+" "+wk(d)+"</small><b>"+esc(dayLabel(d))+"</b></button>";});
   $("dayNav").innerHTML=h;}
+$("glance").addEventListener("click",function(e){var b=e.target.closest("[data-booking]");if(b)openBooking(b.dataset.booking);});
 $("dayNav").addEventListener("click",function(e){var b=e.target.closest("[data-date]");if(b){setView("day",b.dataset.date);window.scrollTo({top:Math.min(scrollY,$("dayView").offsetTop-130),behavior:"smooth"});}});
 // swipe left / right on the day view (phones) changes the day
 (function(){var x0=null,y0=0;
@@ -576,6 +638,10 @@ function renderGlance(){
   if(D&&liveDate()===d){var t=nowIn(tzOf(d)).mins,cur=nowSeg(),nx=segs.filter(function(s){return s.t==="stop"&&s.start&&mins(s.start)>t;})[0];
     if(cur)h+='<div class="nownext"><span><b>'+U("现在")+'</b>'+(cur.t==="move"?esc(mode(cur.mode))+" "+moveLabel(cur):tx(cur.verb||cur.name||"[["+cur.place+"]]"))+'</span>'+
       (nx?'<span><b>'+U("下一站")+'</b>'+tx(nx.name||"[["+nx.place+"]]")+" "+esc(nx.start)+U("（{t}后）",{t:hm(mins(nx.start)-t)})+"</span>":"")+"</div>";}
+  // what has to be booked for this day, and whether it is
+  var bk=dayBookings(d);
+  if(bk.length)h+='<div class="dbk"><b>'+U("预订")+"</b>"+bk.map(function(x){
+    return '<button type="button" class="dbk-i'+(x.done?" ok":"")+'" data-booking="'+esc(x.b.id)+'" title="'+esc(U(x.done?"已订":"还没订"))+'">'+(x.done?ICON.check:ICON.visa)+"<span>"+esc(plain(x.b.what))+"</span></button>";}).join("")+"</div>";
   $("glance").innerHTML=h;
 }
 
@@ -699,6 +765,156 @@ function addMarker(ll,badgeTxt,col,nameTxt,onClick){
   m.el=el;m.nameEl=name;m.addEventListener("gmp-click",function(){onClick(m);});markers.push(m);return m;}
 function markSel(){var D=day(),sel=state.view==="day"&&D&&state.sel!=null&&D.segs[state.sel];
   markers.forEach(function(m){var on=!!(sel&&m.stops&&m.stops.indexOf(sel)>=0);m.el.classList.toggle("sel",on);if(on)m.nameEl.textContent=plain(sel.name||"[["+sel.place+"]]");m.zIndex=on?999:null;});}
+
+/* ---------- shared expense log ---------- */
+// Everyone's expenses live on the trip server (backend/expenses.json), behind the chat's access code.
+// This device keeps the last copy it saw, so the log still reads offline (the highlands have no signal),
+// and anything added or deleted offline waits in an outbox until the server answers again. Totals are
+// settled in the currency picked in the top bar (CAD when that's "local"), at the page's exchange rates.
+var MCAT=[["food","吃饭","Eating out","#C9711C"],["groceries","超市","Groceries","#3D7A4F"],["fuel","油费","Fuel","#5D6B73"],["transport","交通","Transport","#3F8FB5"],
+  ["stay","住宿","Lodging","#7A5C9E"],["tickets","门票活动","Tickets","#2B7A8C"],["other","其他","Other","#8A99A3"]];
+var MCUR=["ISK","NOK","SEK","DKK","EUR","CAD","USD","CNY"],CCUR={is:"ISK",fo:"DKK",no:"NOK",se:"SEK",dk:"DKK"},MSYM={CAD:"C$",USD:"US$",CNY:"¥",EUR:"€"};
+var MNY=store("nt-money")||{people:[],items:[]},OUT=store("nt-money-out")||[],mState={status:"",err:""},mTimer=null,flushing=null,formKey=null;
+function auth(){return window.tripAuth||{api:"",code:function(){return "";},setCode:function(){}};}
+function settleCur(){return CUR==="local"?"CAD":CUR;}
+function fxTo(v,from,to){return FX&&FX[from]&&FX[to]?v/FX[from]*FX[to]:null;}
+// typed amounts show as entered (450 NOK, 39.90 SEK); totals and shares get cents below 1,000 so columns line up
+function fmtC(v,code,typed){var dec=code==="ISK"?0:typed?(Math.round(v*100)%100?2:0):Math.abs(v)<1000?2:0;
+  var t=(Math.round(v*Math.pow(10,dec))/Math.pow(10,dec)).toLocaleString("en-US",{minimumFractionDigits:dec,maximumFractionDigits:dec});
+  return MSYM[code]?MSYM[code]+t:t+" "+code;}
+function mcat(k){return MCAT.filter(function(c){return c[0]===k;})[0]||MCAT[MCAT.length-1];}
+function mDay(){return liveDate()||homeToday();}
+// the server's list, plus what's waiting in the outbox
+function mItems(){var del={},have={};OUT.forEach(function(o){if(o.op==="del")del[o.id]=1;});
+  var list=MNY.items.filter(function(x){have[x.id]=1;return !del[x.id];});
+  OUT.forEach(function(o){if(o.op==="add"&&!have[o.item.id])list.push(Object.assign({pending:true},o.item));});
+  return list;}
+function balances(items){var sc=settleCur(),ppl={},total=0,byCat={};
+  MNY.people.forEach(function(p){ppl[p]={paid:0,share:0};});
+  items.forEach(function(x){var v=fxTo(x.amount,x.currency,sc);if(v==null)return;total+=v;byCat[x.cat]=(byCat[x.cat]||0)+v;
+    (ppl[x.paidBy]=ppl[x.paidBy]||{paid:0,share:0}).paid+=v;
+    x.split.forEach(function(p){(ppl[p]=ppl[p]||{paid:0,share:0}).share+=v/x.split.length;});});
+  return {total:total,byCat:byCat,people:ppl};}
+// fewest transfers that square everyone up: the biggest debtor pays the biggest creditor, repeat
+function settleUp(ppl){var cr=[],dr=[],out=[],i=0,j=0;
+  Object.keys(ppl).forEach(function(p){var n=ppl[p].paid-ppl[p].share;if(n>.01)cr.push([p,n]);else if(n<-.01)dr.push([p,-n]);});
+  cr.sort(function(a,b){return b[1]-a[1];});dr.sort(function(a,b){return b[1]-a[1];});
+  while(i<dr.length&&j<cr.length){var v=Math.min(dr[i][1],cr[j][1]);if(v>=.5)out.push([dr[i][0],cr[j][0],v]);dr[i][1]-=v;cr[j][1]-=v;if(dr[i][1]<.01)i++;if(cr[j][1]<.01)j++;}
+  return out;}
+
+function mApi(path,opts){var A=auth();opts=opts||{};var h={"X-Access-Code":A.code()};if(opts.body)h["Content-Type"]="application/json";
+  return fetch(A.api+path,{method:opts.body||opts.post?"POST":"GET",headers:h,body:opts.body?JSON.stringify(opts.body):undefined}).then(function(r){
+    return r.json().catch(function(){return {};}).then(function(j){if(r.ok)return j;
+      if(r.status===401)A.setCode(null);var e=new Error(j.detail||String(r.status));e.code=r.status;throw e;});});}
+function gotLedger(j){MNY={people:j.people||[],items:j.items||[]};store("nt-money",MNY);}
+function offline(e){mState.status=e&&e.code===401?"code":"off";}
+function loadMoney(){
+  clearInterval(mTimer);mTimer=setInterval(function(){if(state.view==="money"&&document.visibilityState==="visible")loadMoney();},60000);
+  if(!auth().code()){mState.status="code";renderMoney();return;}
+  if(mState.status!=="ok")mState.status="loading";renderMoney();
+  mApi("/api/expenses").then(function(j){gotLedger(j);mState.status="ok";return flush();}).catch(offline).then(renderMoney);}
+// sends the outbox in order; stops at the first network failure and tries again later
+function flush(){if(flushing)return flushing;
+  flushing=(function step(){if(!OUT.length)return Promise.resolve();var o=OUT[0];
+    var p=o.op==="add"?mApi("/api/expenses",{body:o.item}):mApi("/api/expenses/"+encodeURIComponent(o.id)+"/delete",{post:true});
+    return p.then(function(j){gotLedger(j);OUT.shift();store("nt-money-out",OUT);return step();},function(e){
+      // the server said no (not a dropped connection): drop it and say why, or it would block everything behind it
+      if(e.code&&e.code!==401&&e.code!==429&&e.code<500){OUT.shift();store("nt-money-out",OUT);mState.err=e.message;return step();}throw e;});})()
+    .then(function(){mState.status="ok";},offline).then(function(){flushing=null;renderMoney();});
+  return flushing;}
+window.addEventListener("online",function(){if(OUT.length||state.view==="money")loadMoney();});
+function addExpense(item){mState.err="";OUT.push({op:"add",item:item});store("nt-money-out",OUT);renderMoney();if(auth().code())flush();}
+function delExpense(id){mState.err="";var i=-1;OUT.forEach(function(o,k){if(o.op==="add"&&o.item.id===id)i=k;});
+  if(i>=0)OUT.splice(i,1);else OUT.push({op:"del",id:id});store("nt-money-out",OUT);renderMoney();if(auth().code())flush();}
+function personOp(path,name){mState.err="";var typing=document.activeElement&&document.activeElement.id==="mnyPersonIn";
+  mApi(path,{body:{name:name}}).then(function(j){gotLedger(j);mState.status="ok";},function(e){
+    mState.err=e.code===409?U("{p} 还有账目，先删掉相关的几笔再移除。",{p:name}):e.code?e.message:U("连不上行程服务器，联网后才能改成员。");})
+    .then(function(){renderMoney();if(typing&&$("mnyPersonIn"))$("mnyPersonIn").focus();});} // keep typing the next name
+
+function renderMoney(){
+  if(!T)return;
+  var items=mItems(),sc=settleCur(),B=balances(items),st=mState.status,P=MNY.people,pend=OUT.length;
+  $("moneySub").textContent=items.length?items.length:"";
+  $("moneyHint").textContent=U("大家共用一本账 · 按 {c} 结算，汇率为约数",{c:sc});
+  var g="";
+  if(st==="code")g='<form class="mny-gate" id="mnyCode"><p>'+U("账本存在行程服务器上，跟行程助手用同一个访问码。")+'</p><div class="mny-row"><input type="password" id="mnyCodeIn" autocomplete="off" placeholder="'+esc(U("访问码"))+'" aria-label="'+esc(U("访问码"))+'"><button class="pill primary" type="submit">'+U("确定")+'</button></div><span class="mny-err" id="mnyCodeErr" role="alert"></span></form>';
+  else if(st==="off")g='<p class="mny-note warn">'+U("连不上行程服务器。下面是这台设备上次同步的账；新记的会先存在这里，连上后自动同步。")+"</p>";
+  else if(st==="loading"&&!P.length)g='<p class="mny-note">'+U("正在载入账本…")+"</p>";
+  if(pend&&st!=="code")g+='<p class="mny-note">'+U(pend===1?"1 笔改动等待同步":"{n} 笔改动等待同步",{n:pend})+"</p>";
+  if(mState.err)g+='<p class="mny-note warn">'+esc(mState.err)+"</p>";
+  $("moneyGate").innerHTML=g;
+  var locked=st==="code"&&!P.length;
+  $("moneySum").hidden=locked;$("moneyAdd").hidden=locked||!P.length;$("moneyList").hidden=locked;
+  if(locked)return;
+
+  // members, totals, who owes whom
+  var h='<div class="mny-card"><div class="mny-people"><b>'+U("成员")+"</b>"+P.map(function(p){
+    return '<span class="mny-chip">'+esc(p)+'<button type="button" data-unperson="'+esc(p)+'" aria-label="'+esc(U("移除 {p}",{p:p}))+'">×</button></span>';}).join("")+
+    '<form class="mny-addp" id="mnyPerson"><input id="mnyPersonIn" maxlength="24" placeholder="'+esc(U("+ 加人"))+'" aria-label="'+esc(U("加一个人"))+'"></form></div>';
+  if(!P.length)h+='<p class="mny-empty">'+U("先把一起旅行的人加进来，然后每花一笔钱就记一笔：谁付的、谁平摊。")+"</p>";
+  if(items.length){
+    h+='<div class="mny-total"><small>'+U("一共花了")+'</small><b>'+esc(fmtC(B.total,sc))+'</b><small>'+U("{n} 笔",{n:items.length})+"</small></div>";
+    h+='<div class="mny-bar">'+MCAT.filter(function(c){return B.byCat[c[0]];}).map(function(c){
+      return '<span style="flex:'+B.byCat[c[0]]+';--k:'+c[3]+'" title="'+esc((en()?c[2]:c[1])+" "+fmtC(B.byCat[c[0]],sc))+'"></span>';}).join("")+"</div>";
+    h+='<ul class="mny-legend">'+MCAT.filter(function(c){return B.byCat[c[0]];}).map(function(c){
+      return '<li style="--k:'+c[3]+'">'+esc(en()?c[2]:c[1])+" <b>"+esc(fmtC(B.byCat[c[0]],sc))+"</b></li>";}).join("")+"</ul>";
+    h+='<table class="mny-tbl"><thead><tr><th>'+U("人")+"</th><th>"+U("付了")+"</th><th>"+U("该摊")+"</th><th>"+U("差额")+"</th></tr></thead><tbody>"+Object.keys(B.people).map(function(p){
+      var x=B.people[p],n=x.paid-x.share;return "<tr><td>"+esc(p)+"</td><td>"+esc(fmtC(x.paid,sc))+"</td><td>"+esc(fmtC(x.share,sc))+'</td><td class="'+(n>.5?"pos":n<-.5?"neg":"")+'">'+(n>.5?"+":n<-.5?"−":"")+esc(fmtC(Math.abs(n),sc))+"</td></tr>";}).join("")+"</tbody></table>";
+    var tr=settleUp(B.people);
+    h+='<div class="mny-settle"><b>'+U("怎么结清")+"</b>"+(tr.length?"<ul>"+tr.map(function(t){
+      return "<li>"+U("{a} 给 {b}",{a:'<span class="who">'+esc(t[0])+"</span>",b:'<span class="who">'+esc(t[1])+"</span>"})+' <b>'+esc(fmtC(t[2],sc))+"</b></li>";}).join("")+"</ul>":"<p>"+U("现在谁也不欠谁。")+"</p>")+"</div>";}
+  h+="</div>";
+  $("moneySum").innerHTML=h;
+  renderMoneyForm();
+
+  // the log, newest day first
+  var byDay={};items.forEach(function(x){(byDay[x.date]=byDay[x.date]||[]).push(x);});
+  $("moneyList").innerHTML=Object.keys(byDay).sort().reverse().map(function(d){var list=byDay[d].sort(function(a,b){return (b.ts||9e15)-(a.ts||9e15);}),D=BYDATE[d];
+    var sum=list.reduce(function(a,x){return a+(fxTo(x.amount,x.currency,sc)||0);},0);
+    return '<div class="mny-day"><div class="mny-dh"><b>'+cnDate(d)+" "+wk(d)+"</b>"+(D?"<span>"+esc(plain(D.short||D.title))+"</span>":"")+'<small>'+esc(fmtC(sum,sc))+"</small></div><ul>"+list.map(function(x){
+      var c=mcat(x.cat),v=fxTo(x.amount,x.currency,sc),all=x.split.length===P.length&&P.every(function(p){return x.split.indexOf(p)>=0;});
+      var who=U("{p} 付",{p:esc(x.paidBy)})+" · "+(all?U("大家平摊"):x.split.length===1&&x.split[0]===x.paidBy?U("自己的"):U("{n} 人平摊：{w}",{n:x.split.length,w:x.split.map(esc).join("、")}));
+      return '<li class="mny-it'+(x.pending?" pending":"")+'" style="--k:'+c[3]+'"><span class="mny-dot" title="'+esc(en()?c[2]:c[1])+'"></span><div class="mny-w"><b>'+esc(x.what)+"</b><small>"+who+(x.pending?' · <span class="mny-pend">'+U("等待同步")+"</span>":"")+'</small></div><div class="mny-amt"><b>'+esc(fmtC(x.amount,x.currency,true))+"</b>"+(x.currency!==sc&&v!=null?"<small>≈ "+esc(fmtC(v,sc))+"</small>":"")+
+        '</div><button type="button" class="mny-del" data-del="'+esc(x.id)+'" aria-label="'+esc(U("删掉这笔"))+'" title="'+esc(U("删掉这笔"))+'">×</button></li>';}).join("")+"</ul></div>";}).join("")||
+    (P.length?'<p class="mny-empty">'+U("还没有账。花了钱就在上面记一笔。")+"</p>":"");
+}
+// The add form is rebuilt only when the members or the language change, so a refresh never eats what you're typing.
+function renderMoneyForm(){
+  var P=MNY.people,f=$("moneyAdd"),key=P.join("\u0001")+"|"+NM;if(!P.length||key===formKey)return;formKey=key;
+  var old={what:f.what&&f.what.value,amount:f.amount&&f.amount.value,currency:f.currency&&f.currency.dataset.touched?f.currency.value:null,date:f.date&&f.date.value,cat:f.querySelector&&(f.querySelector('[name=cat]:checked')||{}).value};
+  var me=store("nt-me"),day0=old.date||mDay(),cur=old.currency||CCUR[cOf(day0)]||"CAD";
+  f.innerHTML='<h3>'+U("记一笔")+'</h3>'+
+    '<input name="what" required maxlength="80" placeholder="'+esc(U("买了什么？比如：Bónus 超市买菜"))+'" aria-label="'+esc(U("买了什么"))+'">'+
+    '<div class="mny-row"><input name="amount" required inputmode="decimal" placeholder="'+esc(U("金额"))+'" aria-label="'+esc(U("金额"))+'">'+
+    '<select name="currency" aria-label="'+esc(U("货币"))+'">'+MCUR.map(function(c){return "<option"+(c===cur?" selected":"")+">"+c+"</option>";}).join("")+"</select>"+
+    '<input type="date" name="date" value="'+esc(day0)+'" aria-label="'+esc(U("日期"))+'"></div>'+
+    '<div class="mny-cats" role="radiogroup" aria-label="'+esc(U("类别"))+'">'+MCAT.map(function(c,i){
+      return '<label style="--k:'+c[3]+'"><input type="radio" name="cat" value="'+c[0]+'"'+((old.cat||"food")===c[0]?" checked":"")+"><span>"+esc(en()?c[2]:c[1])+"</span></label>";}).join("")+"</div>"+
+    '<div class="mny-row"><label class="mny-lab">'+U("谁付的")+' <select name="paidBy">'+P.map(function(p){return "<option"+(p===me?" selected":"")+">"+esc(p)+"</option>";}).join("")+"</select></label></div>"+
+    '<div class="mny-split"><span class="mny-lab">'+U("谁平摊")+'</span>'+P.map(function(p){return '<label><input type="checkbox" name="split" value="'+esc(p)+'" checked><span>'+esc(p)+"</span></label>";}).join("")+"</div>"+
+    '<div class="mny-row"><button class="pill primary" type="submit">'+ICON.check+U("记下")+'</button><span class="mny-err" id="mnyAddErr" role="alert"></span></div>';
+  if(old.what)f.what.value=old.what;if(old.amount)f.amount.value=old.amount;if(old.currency)f.currency.dataset.touched="1";
+}
+$("moneyAdd").addEventListener("change",function(e){var f=this;
+  if(e.target.name==="currency")e.target.dataset.touched="1";
+  if(e.target.name==="date"&&!f.currency.dataset.touched&&e.target.value)f.currency.value=CCUR[cOf(e.target.value)]||"CAD";});
+$("moneyAdd").addEventListener("submit",function(e){e.preventDefault();var f=this,err=$("mnyAddErr");
+  var amt=+String(f.amount.value).replace(/[,\s]/g,""),split=[].slice.call(f.querySelectorAll("[name=split]:checked")).map(function(x){return x.value;});
+  if(!(amt>0)){err.textContent=U("金额要是大于 0 的数字。");f.amount.focus();return;}
+  if(!split.length){err.textContent=U("至少选一个人平摊。");return;}
+  err.textContent="";store("nt-me",f.paidBy.value);
+  addExpense({id:Date.now().toString(36)+Math.random().toString(36).slice(2,8),date:f.date.value||mDay(),what:f.what.value.trim(),amount:amt,currency:f.currency.value,
+    cat:(f.querySelector("[name=cat]:checked")||{}).value||"other",paidBy:f.paidBy.value,split:split,ts:Date.now()});
+  f.what.value="";f.amount.value="";f.what.focus();});
+$("moneyView").addEventListener("submit",function(e){
+  if(e.target.id==="mnyPerson"){e.preventDefault();var v=$("mnyPersonIn").value.trim();if(v)personOp("/api/expenses/people",v);}
+  else if(e.target.id==="mnyCode"){e.preventDefault();var code=$("mnyCodeIn").value.trim(),er=$("mnyCodeErr"),A=auth();if(!code)return;er.textContent=U("验证中…");
+    fetch(A.api+"/api/check",{method:"POST",headers:{"X-Access-Code":code}}).then(function(r){
+      if(r.status===401){er.textContent=U("访问码不对。");return;}if(!r.ok)throw new Error();A.setCode(code);loadMoney();})
+      .catch(function(){er.textContent=U("连不上行程服务器。");});}});
+$("moneyView").addEventListener("click",function(e){
+  var d=e.target.closest("[data-del]");if(d){var x=mItems().filter(function(i){return i.id===d.dataset.del;})[0];if(x&&confirm(U("删掉「{w}」这一笔？",{w:x.what})))delExpense(x.id);return;}
+  var u=e.target.closest("[data-unperson]");if(u&&confirm(U("把 {p} 移出账本？",{p:u.dataset.unperson})))personOp("/api/expenses/people/delete",u.dataset.unperson);});
 
 /* ---------- start ---------- */
 applyStatic();

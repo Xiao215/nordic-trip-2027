@@ -24,11 +24,16 @@
           <span id="brandName" data-i18n="北欧之旅">北欧之旅</span>
         </a>
         <div class="seg" role="tablist" aria-label="视图" data-i18n-aria-label="视图">
-          <button role="tab" class="seg-btn" data-view="all" aria-selected="true"><span data-i18n="总览">总览</span> <small id="allSub"></small></button>
-          <button role="tab" class="seg-btn" data-view="day" aria-selected="false"><span data-i18n="每日">每日</span> <small id="daySub"></small></button>
-          <button role="tab" class="seg-btn" data-view="prep" aria-selected="false"><span data-i18n="准备">准备</span> <small id="prepCount"></small></button>
+          <button role="tab" class="seg-btn" data-view="all" aria-selected="true"><span data-i18n="总览" data-i18n-sm="Trip">总览</span> <small id="allSub"></small></button>
+          <button role="tab" class="seg-btn" data-view="day" aria-selected="false"><span data-i18n="每日" data-i18n-sm="Day">每日</span> <small id="daySub"></small></button>
+          <button role="tab" class="seg-btn" data-view="prep" aria-selected="false"><span data-i18n="准备" data-i18n-sm="Prep">准备</span> <small id="prepCount"></small></button>
+          <button role="tab" class="seg-btn" data-view="money" aria-selected="false"><span data-i18n="账本" data-i18n-sm="Money">账本</span> <small id="moneySub"></small></button>
         </div>
-        <div class="prefs">
+        <!-- phones: currency and language fold into this one button -->
+        <button type="button" class="prefs-btn" id="prefsBtn" aria-expanded="false" aria-controls="prefs" aria-label="货币和语言" data-i18n-aria-label="货币和语言">
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 6h7M15 6h1M4 14h1M9 14h7"/><circle cx="13" cy="6" r="2"/><circle cx="7" cy="14" r="2"/></svg><span id="prefsSym">kr</span>
+        </button>
+        <div class="prefs" id="prefs">
           <div class="cur" id="curBox">
             <button type="button" class="cur-btn" id="curBtn" aria-haspopup="listbox" aria-expanded="false" aria-controls="curMenu" title="价格换算" data-i18n-title="价格换算">
               <span class="cur-sym" id="curSym">kr</span><span id="curLabel">当地</span>
@@ -85,6 +90,14 @@
         <p id="footnote"></p>
         <p id="sources"></p>
       </footer>
+    </section>
+
+    <section id="moneyView" class="view" hidden>
+      <div class="tl-head"><h2 data-i18n="账本">账本</h2><span class="hint" id="moneyHint"></span></div>
+      <div id="moneyGate"></div>
+      <div id="moneySum"></div>
+      <form class="mny-add" id="moneyAdd" autocomplete="off" hidden></form>
+      <div id="moneyList"></div>
     </section>
   </main>
 
