@@ -34,6 +34,7 @@ Everything lives in `docs/trip.json`:
   - Stops: `{"t":"stop", "place", "start":"HH:MM", "end", "kind", "name", "verb", "body", "facts", "tips"}`. Times are optional.
   - Moves: `{"t":"move", "mode":"drive|flight|ferry|train|bus|walk", "path":[place ids], "start", "end"}` or `"mins"` instead of times.
 - `kinds`, `countries` (colour, time zone, July normals), `bookings`, `prep`, `sources`.
+- `entry`: visa and entry steps per passport, shown on the prep tab once a visitor picks theirs (saved on that device). Profiles are `ca` (Canadian passport) and `cn-ca`, `cn-uk`, `cn-cn` (Chinese passport, by country of residence). A booking with `"who": ["cn-ca"]` or `["ca"]` only shows for those passports (`"cn"` would mean every Chinese passport).
 
 ### English text
 
