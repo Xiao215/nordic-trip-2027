@@ -403,6 +403,35 @@
    "ll": [
     64.1476,
     -21.9223
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1565520604189-eb38cdfb6616?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8M3x8U3VuJTIwVm95YWdlciUyMHNjdWxwdHVyZSUyMFJleWtqYXZpa3xlbnwxfDB8fHwxNzkxMTg4MDE3fDA&ixlib=rb-4.1.0",
+     "w": 6720,
+     "h": 4480,
+     "author": "Michael Held",
+     "author_link": "https://unsplash.com/@michaelheld",
+     "page": "https://unsplash.com/photos/dike-near-ocean-5FuDcnZZPcc",
+     "alt": "dike near ocean"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1605025178143-c346fedb7a50?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8N3x8U3VuJTIwVm95YWdlciUyMHNjdWxwdHVyZSUyMFJleWtqYXZpa3xlbnwxfDB8fHwxNzkxMTg4MDE3fDA&ixlib=rb-4.1.0",
+     "w": 6000,
+     "h": 4000,
+     "author": "Federico Di Dio photography",
+     "author_link": "https://unsplash.com/@didiofederico_photographer",
+     "page": "https://unsplash.com/photos/white-and-black-fish-figurine-on-gray-concrete-pavement-c3l_Y0NJ0Ec",
+     "alt": "white and black fish figurine on gray concrete pavement"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1592960100062-d4e144c2569a?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8NXx8U3VuJTIwVm95YWdlciUyMHNjdWxwdHVyZSUyMFJleWtqYXZpa3xlbnwxfDB8fHwxNzkxMTg4MDE3fDA&ixlib=rb-4.1.0",
+     "w": 5736,
+     "h": 3824,
+     "author": "Benjamin R.",
+     "author_link": "https://unsplash.com/@dapperprofessional",
+     "page": "https://unsplash.com/photos/white-wooden-chair-on-beach-during-daytime-Z33-g72JZRw",
+     "alt": "white wooden chair on beach during daytime"
+    }
    ]
   },
   "harpa": {
@@ -488,6 +517,26 @@
    "ll": [
     64.2658,
     -21.118
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1686080976644-552603bd8149?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8M3x8T3hhcmFyZm9zcyUyMFRoaW5ndmVsbGlyfGVufDF8MHx8fDE3OTExODgwNDl8MA&ixlib=rb-4.1.0",
+     "w": 6778,
+     "h": 4521,
+     "author": "Ben Lande",
+     "author_link": "https://unsplash.com/@ben_lande",
+     "page": "https://unsplash.com/photos/a-large-waterfall-with-lots-of-water-coming-out-of-it-gtiG75hYAn0",
+     "alt": "a large waterfall with lots of water coming out of it"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1651863075630-213f2c320b44?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8OHx8T3hhcmFyZm9zcyUyMFRoaW5ndmVsbGlyfGVufDF8MHx8fDE3OTExODgwNDl8MA&ixlib=rb-4.1.0",
+     "w": 4155,
+     "h": 2760,
+     "author": "Genna Weber",
+     "author_link": "https://unsplash.com/@gennaweber",
+     "page": "https://unsplash.com/photos/a-waterfall-over-rocks-A_gYm7TmUyM",
+     "alt": "a waterfall over rocks"
+    }
    ]
   },
   "silfra": {
@@ -497,6 +546,17 @@
    "ll": [
     64.2555,
     -21.1243
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1678016315458-3806831fe7fc?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8MXx8U2lsZnJhJTIwZmlzc3VyZSUyMHNub3JrZWxpbmd8ZW58MXwwfHx8MTc5MTE4ODA1MHww&ixlib=rb-4.1.0",
+     "w": 3200,
+     "h": 1800,
+     "author": "CHUNGHOI KIM",
+     "author_link": "https://unsplash.com/@chunghwi",
+     "page": "https://unsplash.com/photos/an-underwater-view-of-a-sandy-area-with-grass-and-rocks-5Oy7eaT7zXg",
+     "alt": "an underwater view of a sandy area with grass and rocks"
+    }
    ]
   },
   "bruarfoss": {
@@ -630,6 +690,26 @@
    "ll": [
     63.9809,
     -19.0955
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1727197093259-e89dc8ccd8ee?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8M3x8TGFuZG1hbm5hbGF1Z2FyJTIwcmh5b2xpdGUlMjBtb3VudGFpbnN8ZW58MXwwfHx8MTc5MTE4ODA1MXww&ixlib=rb-4.1.0",
+     "w": 6024,
+     "h": 4024,
+     "author": "Alexander Sinn",
+     "author_link": "https://unsplash.com/@swimstaralex",
+     "page": "https://unsplash.com/photos/an-aerial-view-of-a-mountain-range-with-a-cloudy-sky-bBucmsH9LBc",
+     "alt": "An aerial view of a mountain range with a cloudy sky"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1633706351407-49fc9a63ff9e?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8OHx8TGFuZG1hbm5hbGF1Z2FyJTIwcmh5b2xpdGUlMjBtb3VudGFpbnN8ZW58MXwwfHx8MTc5MTE4ODA1MXww&ixlib=rb-4.1.0",
+     "w": 6000,
+     "h": 4000,
+     "author": "Andrea Zanenga",
+     "author_link": "https://unsplash.com/@andreazanenga",
+     "page": "https://unsplash.com/photos/a-view-of-a-mountain-range-in-the-mountains-FGt7fMVW_yU",
+     "alt": "a view of a mountain range in the mountains"
+    }
    ]
   },
   "blahnukur": {
@@ -764,6 +844,26 @@
    "ll": [
     63.404,
     -19.129
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1619165822815-3a024438cbf6?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8MXx8RHlyaG9sYWV5JTIwYXJjaHxlbnwxfDB8fHwxNzkxMTg4MDQ3fDA&ixlib=rb-4.1.0",
+     "w": 4032,
+     "h": 2268,
+     "author": "Pavol Svantner",
+     "author_link": "https://unsplash.com/@palsoft",
+     "page": "https://unsplash.com/photos/green-and-brown-rock-formation-on-sea-under-white-clouds-during-daytime-LjTEWxkzqG0",
+     "alt": "green and brown rock formation on sea under white clouds during daytime"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1486325486831-9a166a9bb70d?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8Mnx8RHlyaG9sYWV5JTIwYXJjaHxlbnwxfDB8fHwxNzkxMTg4MDQ3fDA&ixlib=rb-4.1.0",
+     "w": 4658,
+     "h": 3036,
+     "author": "Raul Taciu",
+     "author_link": "https://unsplash.com/@raultaciu",
+     "page": "https://unsplash.com/photos/brown-rock-formation-during-day-time-9cEEwoZqOQ0",
+     "alt": "brown rock formation during day time"
+    }
    ]
   },
   "reynisfjara": {
@@ -864,6 +964,17 @@
    "ll": [
     63.9905,
     -16.4244
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1734042090634-3b728c5fdc90?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8Mnx8TXVsYWdsanVmdXIlMjBjYW55b258ZW58MXwwfHx8MTc5MTE4ODAxOHww&ixlib=rb-4.1.0",
+     "w": 6024,
+     "h": 4008,
+     "author": "Pietro Donà",
+     "author_link": "https://unsplash.com/@piotre98",
+     "page": "https://unsplash.com/photos/a-waterfall-in-the-middle-of-a-mountain-range-zZmA4FMiPMo",
+     "alt": "A waterfall in the middle of a mountain range"
+    }
    ]
   },
   "smyrlabjorg": {
@@ -886,6 +997,35 @@
    "ll": [
     64.048,
     -16.1797
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1607217774490-e76fa58d8d97?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8NHx8Sm9rdWxzYXJsb24lMjBnbGFjaWVyJTIwbGFnb29uJTIwYnJpZGdlfGVufDF8MHx8fDE3OTExODgwNDV8MA&ixlib=rb-4.1.0",
+     "w": 4905,
+     "h": 3261,
+     "author": "Gulfside Mike",
+     "author_link": "https://unsplash.com/@mikeypw62",
+     "page": "https://unsplash.com/photos/gray-bridge-over-water-during-daytime-Z3w_py1TDcM",
+     "alt": "gray bridge over water during daytime"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1710087992365-ce7d0e38b26d?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8OHx8Sm9rdWxzYXJsb24lMjBnbGFjaWVyJTIwbGFnb29uJTIwYnJpZGdlfGVufDF8MHx8fDE3OTExODgwNDV8MA&ixlib=rb-4.1.0",
+     "w": 6000,
+     "h": 4000,
+     "author": "Ole Kloth",
+     "author_link": "https://unsplash.com/@ole_kloth",
+     "page": "https://unsplash.com/photos/a-group-of-icebergs-that-are-floating-in-the-water-G7KbMeOwTOk",
+     "alt": "a group of icebergs that are floating in the water"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1470092183498-9feab68e643f?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8N3x8Sm9rdWxzYXJsb24lMjBnbGFjaWVyJTIwbGFnb29uJTIwYnJpZGdlfGVufDF8MHx8fDE3OTExODgwNDV8MA&ixlib=rb-4.1.0",
+     "w": 4824,
+     "h": 3096,
+     "author": "Jonatan Pie",
+     "author_link": "https://unsplash.com/@r3dmax",
+     "page": "https://unsplash.com/photos/photo-of-gray-concrete-bridge-under-blue-sky-at-daytime--8IkHdA0BH4",
+     "alt": "photo of gray concrete bridge under blue sky at daytime"
+    }
    ]
   },
   "diamond_beach": {
@@ -1049,6 +1189,17 @@
    "ll": [
     65.2602,
     -14.0091
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1788145653600-70df42356d72?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8MXx8U2V5ZGlzZmpvcmR1ciUyMGJsdWUlMjBjaHVyY2h8ZW58MXwwfHx8MTc5MTE4ODAzNHww&ixlib=rb-4.1.0",
+     "w": 6240,
+     "h": 4160,
+     "author": "Vincent Yap",
+     "author_link": "https://unsplash.com/@chonky_films",
+     "page": "https://unsplash.com/photos/rainbow-path-leading-to-blue-church-t8Af8srGA2E",
+     "alt": "A rainbow painted path leading to a light blue church beneath a mountain"
+    }
    ]
   },
   "studlagil": {
@@ -1058,6 +1209,17 @@
    "ll": [
     65.1559,
     -15.2958
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1788145654119-ae5f20a8fc17?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8Mnx8U3R1ZGxhZ2lsJTIwY2FueW9uJTIwYmFzYWx0fGVufDF8MHx8fDE3OTExODgwNDZ8MA&ixlib=rb-4.1.0",
+     "w": 6240,
+     "h": 4160,
+     "author": "Vincent Yap",
+     "author_link": "https://unsplash.com/@chonky_films",
+     "page": "https://unsplash.com/photos/river-through-snowy-basalt-canyon-B7qfMRpncA8",
+     "alt": "A river flowing through a canyon with basalt columns under a snowy landscape"
+    }
    ]
   },
   "modrudalur": {
@@ -1210,6 +1372,35 @@
    "ll": [
     65.5917,
     -16.9111
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1755114440174-ed612f56ce7a?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8NHx8RGltbXVib3JnaXIlMjBsYXZhfGVufDF8MHx8fDE3OTExODgwNDJ8MA&ixlib=rb-4.1.0",
+     "w": 6048,
+     "h": 4032,
+     "author": "Julia Taubitz",
+     "author_link": "https://unsplash.com/@justmejuliee",
+     "page": "https://unsplash.com/photos/rocky-formations-with-an-arch-under-a-cloudy-sky-hhPg7ASgFEI",
+     "alt": "Rocky formations with an arch under a cloudy sky"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1755114445404-016b8ce7ad74?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8M3x8RGltbXVib3JnaXIlMjBsYXZhfGVufDF8MHx8fDE3OTExODgwNDJ8MA&ixlib=rb-4.1.0",
+     "w": 6048,
+     "h": 4032,
+     "author": "Julia Taubitz",
+     "author_link": "https://unsplash.com/@justmejuliee",
+     "page": "https://unsplash.com/photos/jagged-rock-formations-under-a-cloudy-sky-mnnQ2nXp85E",
+     "alt": "Jagged rock formations under a cloudy sky"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1748680299743-41e7ee569bad?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8MXx8RGltbXVib3JnaXIlMjBsYXZhfGVufDF8MHx8fDE3OTExODgwNDJ8MA&ixlib=rb-4.1.0",
+     "w": 5392,
+     "h": 3592,
+     "author": "SOHAM BANERJEE",
+     "author_link": "https://unsplash.com/@soham1991",
+     "page": "https://unsplash.com/photos/rocky-formation-with-a-natural-arch-QdLoEZo791U",
+     "alt": "Rocky formation with a natural arch"
+    }
    ]
   },
   "skutustadagigar": {
@@ -1286,6 +1477,17 @@
    "ll": [
     65.6107,
     -19.505
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1649929888677-35fc57960b84?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8MXx8R2xhdW1iYWVyJTIwdHVyZiUyMGhvdXNlc3xlbnwxfDB8fHwxNzkxMTg4MDQzfDA&ixlib=rb-4.1.0",
+     "w": 16000,
+     "h": 7116,
+     "author": "Freysteinn G. Jonsson",
+     "author_link": "https://unsplash.com/@freys",
+     "page": "https://unsplash.com/photos/a-small-white-church-with-a-red-steeple-on-top-of-it-CPVc42gqT2Y",
+     "alt": "a small white church with a red steeple on top of it"
+    }
    ]
   },
   "hvitserkur": {
@@ -1548,6 +1750,17 @@
    "ll": [
     60.3945,
     5.3443
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1607891891983-f0145aa93e7b?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8MXx8QmVyZ2VuJTIwdmlldyUyMGZyb20lMjBGbG95ZW58ZW58MXwwfHx8MTc5MTE4ODAyNnww&ixlib=rb-4.1.0",
+     "w": 4032,
+     "h": 3024,
+     "author": "Solveig Smørdal Botn",
+     "author_link": "https://unsplash.com/@solveigsb",
+     "page": "https://unsplash.com/photos/aerial-view-of-city-buildings-during-daytime-_ZaS1r_bvRw",
+     "alt": "aerial view of city buildings during daytime"
+    }
    ]
   },
   "steinsdalsfossen": {
@@ -1633,6 +1846,26 @@
    "ll": [
     60.8381,
     6.6843
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1691055712477-7f4dea1c6faa?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8MXx8U3RhbGhlaW0lMjBOYWVyb3lkYWxlbiUyMHZpZXd8ZW58MXwwfHx8MTc5MTE4ODA0MHww&ixlib=rb-4.1.0",
+     "w": 3000,
+     "h": 1990,
+     "author": "Nadzeya Matskevich",
+     "author_link": "https://unsplash.com/@nadzeya1104",
+     "page": "https://unsplash.com/photos/a-view-of-a-valley-with-mountains-in-the-background-OOS7uVLLCk0",
+     "alt": "a view of a valley with mountains in the background"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1677851478022-56d725e9043d?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8Mnx8U3RhbGhlaW0lMjBOYWVyb3lkYWxlbiUyMHZpZXd8ZW58MXwwfHx8MTc5MTE4ODA0MHww&ixlib=rb-4.1.0",
+     "w": 3880,
+     "h": 2577,
+     "author": "Nunzio Guerrera",
+     "author_link": "https://unsplash.com/@nunzg",
+     "page": "https://unsplash.com/photos/a-scenic-view-of-a-valley-with-mountains-in-the-background-FQANMHvZUHc",
+     "alt": "a scenic view of a valley with mountains in the background"
+    }
    ]
   },
   "gudvangen": {
@@ -1814,6 +2047,17 @@
    "ll": [
     59.3266,
     18.1036
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1690455601312-96709a081e5c?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8M3x8U2thbnNlbiUyMFN0b2NraG9sbXxlbnwxfDB8fHwxNzkxMTg4MDI3fDA&ixlib=rb-4.1.0",
+     "w": 4500,
+     "h": 3000,
+     "author": "Austin Farrington",
+     "author_link": "https://unsplash.com/@austinfarrington",
+     "page": "https://unsplash.com/photos/the-entrance-to-a-building-with-a-clock-tower-in-the-background-7p3d4X26inA",
+     "alt": "the entrance to a building with a clock tower in the background"
+    }
    ]
   },
   "monteliusvagen": {
@@ -1823,6 +2067,17 @@
    "ll": [
     59.3204,
     18.0637
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1630772006786-ea65e7c97a1f?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8NXx8TW9udGVsaXVzdmFnZW4lMjBTdG9ja2hvbG18ZW58MXwwfHx8MTc5MTE4ODAzMXww&ixlib=rb-4.1.0",
+     "w": 4032,
+     "h": 3024,
+     "author": "Oscar Nord",
+     "author_link": "https://unsplash.com/@oscnord",
+     "page": "https://unsplash.com/photos/body-of-water-near-city-buildings-during-night-time-VgU7z7SQhIs",
+     "alt": "body of water near city buildings during night time"
+    }
    ]
   },
   "t_centralen": {
@@ -2262,6 +2517,35 @@
    "ll": [
     55.6737,
     12.5681
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1646210201164-4cc951b59bbc?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8Mnx8VGl2b2xpJTIwR2FyZGVucyUyMERlbm1hcmt8ZW58MXwwfHx8MTc5MTE4ODAwNnww&ixlib=rb-4.1.0",
+     "w": 4032,
+     "h": 3024,
+     "author": "Hasibe Salim",
+     "author_link": "https://unsplash.com/@hasi_km",
+     "page": "https://unsplash.com/photos/a-large-white-building-with-a-green-dome-ODdSfLd0Uug",
+     "alt": "a large white building with a green dome"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1789955245255-a5666639ce94?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8MXx8VGl2b2xpJTIwR2FyZGVucyUyMERlbm1hcmt8ZW58MXwwfHx8MTc5MTE4ODAwNnww&ixlib=rb-4.1.0",
+     "w": 6143,
+     "h": 3455,
+     "author": "Frank Huang",
+     "author_link": "https://unsplash.com/@frankhme",
+     "page": "https://unsplash.com/photos/pagoda-and-roller-coaster-in-park-CZ_JsirZyts",
+     "alt": "A red pagoda and a roller coaster above boats on a pond"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1620331291943-86a4ab4d0f00?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8OHx8VGl2b2xpJTIwR2FyZGVucyUyMERlbm1hcmt8ZW58MXwwfHx8MTc5MTE4ODAwNnww&ixlib=rb-4.1.0",
+     "w": 4592,
+     "h": 3448,
+     "author": "Catrina Carrigan",
+     "author_link": "https://unsplash.com/@catrinalouisec",
+     "page": "https://unsplash.com/photos/brown-concrete-building-near-bare-trees-during-daytime-w9daTUM73m0",
+     "alt": "brown concrete building near bare trees during daytime"
+    }
    ]
   },
   "louisiana": {
@@ -2271,6 +2555,17 @@
    "ll": [
     55.969,
     12.5427
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1731946719425-d21ac761aa56?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8Mnx8TG91aXNpYW5hJTIwTXVzZXVtJTIwb2YlMjBNb2Rlcm4lMjBBcnQlMjBEZW5tYXJrfGVufDF8MHx8fDE3OTExODgwMDd8MA&ixlib=rb-4.1.0",
+     "w": 6000,
+     "h": 4000,
+     "author": "Mircea Solomiea",
+     "author_link": "https://unsplash.com/@mirceadrian",
+     "page": "https://unsplash.com/photos/a-statue-of-two-hands-touching-each-other-RgMAGN6bg4Q",
+     "alt": "A statue of two hands touching each other"
+    }
    ]
   },
   "kronborg": {
@@ -2280,6 +2575,35 @@
    "ll": [
     56.039,
     12.6213
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1586797222690-e8a311ed2598?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8Mnx8S3JvbmJvcmclMjBDYXN0bGUlMjBEZW5tYXJrfGVufDF8MHx8fDE3OTExODgwMDl8MA&ixlib=rb-4.1.0",
+     "w": 6000,
+     "h": 4000,
+     "author": "Sandra Grünewald",
+     "author_link": "https://unsplash.com/@elmuff",
+     "page": "https://unsplash.com/photos/gray-concrete-building-under-blue-sky-and-white-clouds-during-daytime-tKyv6aSwSq8",
+     "alt": "gray concrete building under blue sky and white clouds during daytime"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1748814670185-ae3f3b8fee7d?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8MXx8S3JvbmJvcmclMjBDYXN0bGUlMjBEZW5tYXJrfGVufDF8MHx8fDE3OTExODgwMDl8MA&ixlib=rb-4.1.0",
+     "w": 5472,
+     "h": 3648,
+     "author": "Tannis Sullivan",
+     "author_link": "https://unsplash.com/@tannis",
+     "page": "https://unsplash.com/photos/a-majestic-castle-stands-proudly-by-the-water-aGuk3Dn5ado",
+     "alt": "A majestic castle stands proudly by the water"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1504009229495-48c34a4796ed?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8NHx8S3JvbmJvcmclMjBDYXN0bGUlMjBEZW5tYXJrfGVufDF8MHx8fDE3OTExODgwMDl8MA&ixlib=rb-4.1.0",
+     "w": 6000,
+     "h": 4000,
+     "author": "Jens Herrndorff",
+     "author_link": "https://unsplash.com/@jens_h",
+     "page": "https://unsplash.com/photos/birds-eye-view-of-groupe-of-people-outside-the-mansion-j1WRuNEoDWM",
+     "alt": "bird's eye view of groupe of people outside the mansion"
+    }
    ]
   },
   "stevns_klint": {
@@ -2298,6 +2622,35 @@
    "ll": [
     54.9675,
     12.545
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1607192772906-dade7cbefabb?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8NHx8TSVDMyVCOG5zJTIwS2xpbnQlMjBEZW5tYXJrfGVufDF8MHx8fDE3OTExODgwMTF8MA&ixlib=rb-4.1.0",
+     "w": 5152,
+     "h": 3864,
+     "author": "Victor Tenibor",
+     "author_link": "https://unsplash.com/@polarnet",
+     "page": "https://unsplash.com/photos/green-trees-near-body-of-water-during-daytime-Yz-HfUIM0vA",
+     "alt": "green trees near body of water during daytime"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1662203941261-36609ab42b1f?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8Mnx8TSVDMyVCOG5zJTIwS2xpbnQlMjBEZW5tYXJrfGVufDF8MHx8fDE3OTExODgwMTF8MA&ixlib=rb-4.1.0",
+     "w": 6000,
+     "h": 3376,
+     "author": "Levin Kohrt",
+     "author_link": "https://unsplash.com/@levik0",
+     "page": "https://unsplash.com/photos/people-walking-on-a-beach-ttkYQ3ddTUc",
+     "alt": "people walking on a beach"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1726996647650-94f19428225e?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8OHx8TSVDMyVCOG5zJTIwS2xpbnQlMjBEZW5tYXJrfGVufDF8MHx8fDE3OTExODgwMTF8MA&ixlib=rb-4.1.0",
+     "w": 6240,
+     "h": 4160,
+     "author": "Line Kjær",
+     "author_link": "https://unsplash.com/@linekjaer",
+     "page": "https://unsplash.com/photos/a-lighthouse-on-top-of-a-cliff-overlooking-the-ocean-c_n8DlWKO5g",
+     "alt": "A lighthouse on top of a cliff overlooking the ocean"
+    }
    ]
   },
   "cph": {
@@ -2325,6 +2678,26 @@
    "ll": [
     61.0472,
     7.8125
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1757697240115-12814edb5acb?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8N3x8Qm9yZ3VuZCUyMFN0YXZlJTIwQ2h1cmNoJTIwTm9yd2F5fGVufDF8MHx8fDE3OTExODgwMTJ8MA&ixlib=rb-4.1.0",
+     "w": 4800,
+     "h": 3200,
+     "author": "Arvid Høidahl",
+     "author_link": "https://unsplash.com/@arvidh",
+     "page": "https://unsplash.com/photos/historic-wooden-church-with-graveyard-and-mountains-HRxj_UBuEUA",
+     "alt": "Historic wooden church with graveyard and mountains"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1733667663657-5bb0a72721b1?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8Mnx8Qm9yZ3VuZCUyMFN0YXZlJTIwQ2h1cmNoJTIwTm9yd2F5fGVufDF8MHx8fDE3OTExODgwMTJ8MA&ixlib=rb-4.1.0",
+     "w": 5257,
+     "h": 3505,
+     "author": "Bart Wellens",
+     "author_link": "https://unsplash.com/@artwell",
+     "page": "https://unsplash.com/photos/a-stone-wall-with-a-building-on-top-of-it-Q1dmulCtgW0",
+     "alt": "A stone wall with a building on top of it"
+    }
    ]
   },
   "fagernes": {
@@ -2361,6 +2734,35 @@
    "ll": [
     59.9075,
     10.7531
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1715614178466-9b66323de388?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8Mnx8T3NsbyUyME9wZXJhJTIwSG91c2UlMjBOb3J3YXl8ZW58MXwwfHx8MTc5MTE4ODAxM3ww&ixlib=rb-4.1.0",
+     "w": 6000,
+     "h": 4000,
+     "author": "Andriy Oliynyk",
+     "author_link": "https://unsplash.com/@oliynykan",
+     "page": "https://unsplash.com/photos/a-body-of-water-with-buildings-in-the-background-s4JItrHdDNc",
+     "alt": "a body of water with buildings in the background"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1658154533912-e6611ef4b65d?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8Nnx8T3NsbyUyME9wZXJhJTIwSG91c2UlMjBOb3J3YXl8ZW58MXwwfHx8MTc5MTE4ODAxM3ww&ixlib=rb-4.1.0",
+     "w": 4592,
+     "h": 3061,
+     "author": "Nan Wisanmongkol",
+     "author_link": "https://unsplash.com/@nwsmk",
+     "page": "https://unsplash.com/photos/a-building-with-a-glass-front-AkbNlG56JCU",
+     "alt": "a building with a glass front"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1699559515660-5603fe800195?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8OHx8T3NsbyUyME9wZXJhJTIwSG91c2UlMjBOb3J3YXl8ZW58MXwwfHx8MTc5MTE4ODAxM3ww&ixlib=rb-4.1.0",
+     "w": 6809,
+     "h": 4539,
+     "author": "Hanlin Sun",
+     "author_link": "https://unsplash.com/@hanlin_sun",
+     "page": "https://unsplash.com/photos/a-view-of-a-city-from-a-high-point-of-view-HIU52vaWZgw",
+     "alt": "a view of a city from a high point of view"
+    }
    ]
   },
   "aker_brygge": {
@@ -2379,6 +2781,35 @@
    "ll": [
     59.927,
     10.7006
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1673112574931-76fe4f5869fe?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8M3x8VmlnZWxhbmQlMjBQYXJrJTIwTm9yd2F5fGVufDF8MHx8fDE3OTExODgwMTR8MA&ixlib=rb-4.1.0",
+     "w": 5943,
+     "h": 4000,
+     "author": "Marius Tandberg",
+     "author_link": "https://unsplash.com/@mbtandberg",
+     "page": "https://unsplash.com/photos/a-large-monument-with-many-statues-on-top-of-it--pG0RZ36pXE",
+     "alt": "a large monument with many statues on top of it"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1589109139946-d8f9a6e2fbda?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8Nnx8VmlnZWxhbmQlMjBQYXJrJTIwTm9yd2F5fGVufDF8MHx8fDE3OTExODgwMTR8MA&ixlib=rb-4.1.0",
+     "w": 4078,
+     "h": 2294,
+     "author": "Nick Night",
+     "author_link": "https://unsplash.com/@nicknight",
+     "page": "https://unsplash.com/photos/pink-flower-field-near-green-trees-during-daytime-KLFqGk709U0",
+     "alt": "pink flower field near green trees during daytime"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1589110211335-319c28fe49e4?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8MXx8VmlnZWxhbmQlMjBQYXJrJTIwTm9yd2F5fGVufDF8MHx8fDE3OTExODgwMTR8MA&ixlib=rb-4.1.0",
+     "w": 4177,
+     "h": 2790,
+     "author": "Nick Night",
+     "author_link": "https://unsplash.com/@nicknight",
+     "page": "https://unsplash.com/photos/people-walking-on-park-during-daytime-NY1CGpvtDl4",
+     "alt": "people walking on park during daytime"
+    }
    ]
   },
   "bygdoy": {
@@ -2388,6 +2819,17 @@
    "ll": [
     59.9033,
     10.699
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1756729190327-78c7438afca8?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8M3x8QnlnZCVDMyVCOHklMjBOb3J3YXl8ZW58MXwwfHx8MTc5MTE4ODAxNXww&ixlib=rb-4.1.0",
+     "w": 6537,
+     "h": 3677,
+     "author": "Hans-Joachim Kaiser",
+     "author_link": "https://unsplash.com/@zesa",
+     "page": "https://unsplash.com/photos/bronze-statues-of-six-men-standing-on-a-pedestal-cnpDOrIZERs",
+     "alt": "Bronze statues of six men standing on a pedestal"
+    }
    ]
   },
   "munch": {
@@ -2397,6 +2839,26 @@
    "ll": [
     59.9056,
     10.7554
+   ],
+   "photos": [
+    {
+     "src": "https://images.unsplash.com/photo-1656238287569-f24425b5d973?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8OHx8TXVuY2glMjBNdXNldW0lMjBOb3J3YXl8ZW58MXwwfHx8MTc5MTE4ODAxNnww&ixlib=rb-4.1.0",
+     "w": 6000,
+     "h": 3376,
+     "author": "Franz Wender",
+     "author_link": "https://unsplash.com/@franz95",
+     "page": "https://unsplash.com/photos/a-building-next-to-a-body-of-water-uTh4thrw2LU",
+     "alt": "a building next to a body of water"
+    },
+    {
+     "src": "https://images.unsplash.com/photo-1741213079648-6f1b2adb0501?ixid=M3wxMDkzMzI0fDB8MXxzZWFyY2h8N3x8TXVuY2glMjBNdXNldW0lMjBOb3J3YXl8ZW58MXwwfHx8MTc5MTE4ODAxNnww&ixlib=rb-4.1.0",
+     "w": 7105,
+     "h": 4728,
+     "author": "Gunnar Ridderström",
+     "author_link": "https://unsplash.com/@gunnarridder",
+     "page": "https://unsplash.com/photos/modern-architecture-lines-a-waterfront-Hv7-__u3bNs",
+     "alt": "Modern architecture lines a waterfront"
+    }
    ]
   },
   "osl": {
@@ -7292,7 +7754,10 @@
  "bookings": [
   {
    "id": "flights-home",
-   "days": ["2027-07-04", "2027-08-01"],
+   "days": [
+    "2027-07-04",
+    "2027-08-01"
+   ],
    "what": "跨大西洋机票：多伦多 → [[kef]]（7/4）、[[cph]] → 多伦多（8/1）",
    "for": "7/4、8/1",
    "when": "现在就能订",
@@ -7389,7 +7854,9 @@
   },
   {
    "id": "lotus",
-   "days": ["2027-07-04"],
+   "days": [
+    "2027-07-04"
+   ],
    "hot": true,
    "badge": "尽早",
    "what": "[[lotus_kef]]四驱 SUV + Platinum 保险",
@@ -7429,7 +7896,10 @@
   },
   {
    "id": "lmlparking",
-   "days": ["2027-07-06", "2027-07-07"],
+   "days": [
+    "2027-07-06",
+    "2027-07-07"
+   ],
    "hot": true,
    "opens": "2027-04-01T09:00",
    "what": "[[landmannalaugar]]停车预约",
@@ -7465,7 +7935,9 @@
   },
   {
    "id": "lmlcamp",
-   "days": ["2027-07-06"],
+   "days": [
+    "2027-07-06"
+   ],
    "hot": true,
    "badge": "开放就订",
    "what": "[[landmannalaugar]]营地（FÍ）",
@@ -7492,7 +7964,14 @@
   },
   {
    "id": "lodging1",
-   "days": ["2027-07-04", "2027-07-05", "2027-07-07", "2027-07-08", "2027-07-09", "2027-07-10"],
+   "days": [
+    "2027-07-04",
+    "2027-07-05",
+    "2027-07-07",
+    "2027-07-08",
+    "2027-07-09",
+    "2027-07-10"
+   ],
    "hot": true,
    "badge": "提前半年",
    "what": "冰岛第一周住宿（5 晚）",
@@ -7540,7 +8019,13 @@
   },
   {
    "id": "iceland-north-stays",
-   "days": ["2027-07-11", "2027-07-12", "2027-07-13", "2027-07-14", "2027-07-15"],
+   "days": [
+    "2027-07-11",
+    "2027-07-12",
+    "2027-07-13",
+    "2027-07-14",
+    "2027-07-15"
+   ],
    "what": "冰岛 7/11–7/15 住宿（[[egilsstadir]]、[[myvatn]]、[[akureyri]]、[[grundarfjordur]]、[[kef]]）",
    "for": "7/11–7/15",
    "when": "现在到 2027 年 1 月订；米湖和斯奈山半岛的房间最少",
@@ -7640,7 +8125,9 @@
   },
   {
    "id": "glacier",
-   "days": ["2027-07-10"],
+   "days": [
+    "2027-07-10"
+   ],
    "badge": "提前2月",
    "what": "冰川徒步（[[hali]]出发）",
    "for": "7/10 上午",
@@ -7671,7 +8158,9 @@
   },
   {
    "id": "silfra",
-   "days": ["2027-07-05"],
+   "days": [
+    "2027-07-05"
+   ],
    "badge": "可选",
    "what": "可选：[[silfra]]浮潜 / 潜水",
    "for": "7/5 上午",
@@ -7691,7 +8180,9 @@
   },
   {
    "id": "myvatn-baths",
-   "days": ["2027-07-12"],
+   "days": [
+    "2027-07-12"
+   ],
    "what": "[[myvatn_baths]] 门票",
    "for": "7/12 晚上",
    "when": "提前 1–3 天网上订",
@@ -7711,7 +8202,9 @@
   },
   {
    "id": "kef-bgo",
-   "days": ["2027-07-16"],
+   "days": [
+    "2027-07-16"
+   ],
    "what": "机票 [[kef]] → [[bergen]]（冰岛航空）",
    "for": "7/16",
    "when": "2027 年初，冰岛航空公布夏季时刻后",
@@ -7736,7 +8229,9 @@
   },
   {
    "id": "norway-car",
-   "days": ["2027-07-17"],
+   "days": [
+    "2027-07-17"
+   ],
    "what": "挪威租车：7/17 卑尔根城里取车 → 7/21 奥斯陆还车",
    "for": "7/17–7/21",
    "when": "提前 4–6 个月",
@@ -7760,7 +8255,10 @@
   },
   {
    "id": "odda-stay",
-   "days": ["2027-07-17", "2027-07-18"],
+   "days": [
+    "2027-07-17",
+    "2027-07-18"
+   ],
    "what": "[[odda]] 两晚住宿",
    "for": "7/17–7/18",
    "when": "现在到 2027 年 2 月",
@@ -7775,7 +8273,9 @@
   },
   {
    "id": "trolltunga-parking",
-   "days": ["2027-07-18"],
+   "days": [
+    "2027-07-18"
+   ],
    "what": "[[trolltunga]] 停车：P3 [[trolltunga_p3]]（或 P2 + 接驳车）",
    "for": "7/18",
    "when": "P3 只有约 30 个车位，开放后马上订；P2 和接驳车提前几天订",
@@ -7800,7 +8300,10 @@
   },
   {
    "id": "flam-stay",
-   "days": ["2027-07-19", "2027-07-20"],
+   "days": [
+    "2027-07-19",
+    "2027-07-20"
+   ],
    "what": "[[flam]] 两晚住宿",
    "for": "7/19–7/20",
    "when": "现在到 2027 年 2 月",
@@ -7815,7 +8318,9 @@
   },
   {
    "id": "fjord-cruise",
-   "days": ["2027-07-20"],
+   "days": [
+    "2027-07-20"
+   ],
    "what": "纳柔依峡湾游船（弗洛姆 → [[gudvangen]]）+ 回程巴士",
    "for": "7/20",
    "when": "提前 1–3 个月",
@@ -7840,7 +8345,9 @@
   },
   {
    "id": "oslo-stay",
-   "days": ["2027-07-21"],
+   "days": [
+    "2027-07-21"
+   ],
    "what": "[[oslo]] 一晚住宿",
    "for": "7/21",
    "when": "提前 2–3 个月",
@@ -7855,7 +8362,9 @@
   },
   {
    "id": "osl-arn",
-   "days": ["2027-07-22"],
+   "days": [
+    "2027-07-22"
+   ],
    "what": "机票 [[oslo]] → [[stockholm]]（SAS / Norwegian）",
    "for": "7/22",
    "when": "提前 2–3 个月",
@@ -7870,7 +8379,11 @@
   },
   {
    "id": "stockholm-stay",
-   "days": ["2027-07-22", "2027-07-23", "2027-07-24"],
+   "days": [
+    "2027-07-22",
+    "2027-07-23",
+    "2027-07-24"
+   ],
    "what": "[[stockholm]] 三晚住宿",
    "for": "7/22–7/24",
    "when": "提前约 3 个月",
@@ -7885,7 +8398,10 @@
   },
   {
    "id": "gotland-ferry",
-   "days": ["2027-07-25", "2027-07-28"],
+   "days": [
+    "2027-07-25",
+    "2027-07-28"
+   ],
    "what": "Destination Gotland 渡轮：[[nynashamn]] → [[visby]]（7/25）、[[visby]] → [[oskarshamn]]（7/28）",
    "for": "7/25、7/28",
    "when": "开售就订（一般在年初公布夏季时刻）",
@@ -7910,7 +8426,11 @@
   },
   {
    "id": "visby-stay",
-   "days": ["2027-07-25", "2027-07-26", "2027-07-27"],
+   "days": [
+    "2027-07-25",
+    "2027-07-26",
+    "2027-07-27"
+   ],
    "what": "[[visby]] 三晚住宿",
    "for": "7/25–7/27",
    "when": "现在到 2027 年 3 月",
@@ -7925,7 +8445,9 @@
   },
   {
    "id": "gotland-car",
-   "days": ["2027-07-26"],
+   "days": [
+    "2027-07-26"
+   ],
    "what": "哥特兰租车一天（弗罗岛）",
    "for": "7/26",
    "when": "提前 1–2 个月",
@@ -7940,7 +8462,9 @@
   },
   {
    "id": "kalmar-cph-train",
-   "days": ["2027-07-28"],
+   "days": [
+    "2027-07-28"
+   ],
    "what": "火车 [[kalmar]] → [[kobenhavn]]（Öresundståg）",
    "for": "7/28",
    "when": "渡轮时刻确定后再订",
@@ -7960,7 +8484,12 @@
   },
   {
    "id": "cph-stay",
-   "days": ["2027-07-28", "2027-07-29", "2027-07-30", "2027-07-31"],
+   "days": [
+    "2027-07-28",
+    "2027-07-29",
+    "2027-07-30",
+    "2027-07-31"
+   ],
    "what": "[[kobenhavn]] 四晚住宿",
    "for": "7/28–7/31",
    "when": "提前 3–4 个月",
@@ -7975,7 +8504,9 @@
   },
   {
    "id": "dk-car",
-   "days": ["2027-07-31"],
+   "days": [
+    "2027-07-31"
+   ],
    "what": "丹麦租车一天（[[stevns_klint]] + [[mons_klint]]）",
    "for": "7/31",
    "when": "提前 1–2 个月",
