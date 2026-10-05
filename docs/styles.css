@@ -92,7 +92,7 @@ button.chip.due:hover{filter:brightness(1.08)}
 .seg-btn[aria-selected="true"]{color:var(--ink)}
 .seg .ind{position:absolute;left:0;top:0;border-radius:9px;background:var(--surface);box-shadow:0 1px 2px rgba(10,25,35,.08),0 4px 12px -4px rgba(10,25,35,.18);transition:transform .35s cubic-bezier(.3,.8,.25,1),width .35s cubic-bezier(.3,.8,.25,1)}
 .names{position:relative;display:flex;align-items:center;gap:2px;padding:3px;background:var(--surface-2);border-radius:10px}
-.names button{position:relative;z-index:1;transition:color .25s;border:0;background:transparent;border-radius:8px;padding:4px 9px;font-size:12.5px;font-weight:600;color:var(--muted);cursor:pointer}
+.names button{position:relative;z-index:1;transition:color .25s;white-space:nowrap;border:0;background:transparent;border-radius:8px;padding:4px 9px;font-size:12.5px;font-weight:600;color:var(--muted);cursor:pointer}
 .names button[aria-checked="true"]{color:var(--ink)}
 .names .ind{position:absolute;left:0;top:0;border-radius:8px;background:var(--surface);box-shadow:0 1px 2px rgba(10,25,35,.08),0 3px 8px -3px rgba(10,25,35,.18);transition:transform .3s cubic-bezier(.3,.8,.25,1),width .3s}
 .view[hidden]{display:none}
