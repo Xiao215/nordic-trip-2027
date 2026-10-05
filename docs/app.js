@@ -30,6 +30,11 @@ var UIEN={
   "{n} 天后开放预订":"Opens in {n} days","明天开放预订":"Opens tomorrow","今天开放预订":"Opens today","现在可以订":"Open now",
   "尽早":"Early","已订":"Booked","标记已订":"Mark booked","打开 ":"Open ","问助手":"Ask","全部步骤":"All steps","展开说明":"More",
   "已订 {a} / {b} · 勾选只保存在这台设备上":"{a} of {b} booked · ticks are saved on this device",
+  "签证和入境":"Visas and entry","护照和勾选只保存在这台设备上":"Your passport and ticks are saved on this device","护照":"Passport","住在":"Living in",
+  "选一下你的护照，只看跟你有关的签证和入境步骤。":"Pick your passport to see only the visa and entry steps that apply to you.",
+  "{p} · 住在 {l}":"{p} · living in {l}","查看预订":"See the booking","显示全部":"Show all","只看我的":"Only mine",
+  "已隐藏 {n} 项只适用于其他护照的预订":"{n} bookings for other passports are hidden","已隐藏 1 项只适用于其他护照的预订":"1 booking for another passport is hidden",
+  "正在显示所有护照的预订":"Showing bookings for every passport",
   "资料来源：":"Sources: ","天气预报：Open-Meteo":"Forecast: Open-Meteo",
   "一步步教我怎么订「{w}」，有什么要注意的？":"Walk me through booking {w}. Anything to watch out for?",
   "全天":"Whole day","全程":"Whole trip","全程路线":"Whole route","{d}：全天":"{d}: whole day",
@@ -123,6 +128,8 @@ var ICON={
   dir:'<svg viewBox="0 0 20 20"><path d="M8 4H4v12h12v-4M11 3h6v6M17 3l-8 8"/></svg>',
   ask:'<svg viewBox="0 0 20 20"><path d="M4 4.5h12v8H9l-4 3v-3H4z"/></svg>',
   check:'<svg viewBox="0 0 20 20"><path d="M4 10.5l4 4 8-9"/></svg>',
+  visa:'<svg viewBox="0 0 20 20"><path d="M10 3l7.5 13h-15zM10 8.5v3.5M10 14.5h.01"/></svg>',
+  free:'<svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="7.5"/><path d="M6.5 10.2l2.4 2.4 4.6-5"/></svg>',
   chev:'<svg class="chev" viewBox="0 0 20 20"><path d="M5 8l5 5 5-5"/></svg>',
   drive:'<svg viewBox="0 0 20 20"><path d="M4 13V9.5L5.6 5h8.8L16 9.5V13M4 13h12M4 13v2M16 13v2"/></svg>',
   flight:'<svg viewBox="0 0 20 20"><path d="M2.5 11.5l15-5.5-1-2-5.5 2.5L6 3.5 4.5 4l3 4-3.5 1.5L2.5 8l-1 .5zM4 16.5h12"/></svg>',
@@ -205,18 +212,19 @@ function boot(trip){
   setInterval(function(){if(state.view==="day"&&liveDate()===state.date)renderGlance();},60000);
   window.addEventListener("hashchange",function(){var h=decodeURIComponent(location.hash.slice(1));
     if(DATES.indexOf(h)>=0&&!(state.view==="day"&&state.date===h))setView("day",h);else if((h==="all"||h==="prep")&&state.view!==h)setView(h);});
-  window.tripApp={context:function(){var D=day(),s=D&&state.sel!=null?D.segs[state.sel]:null;
-    var lang=en()?"en":"zh",curTxt=curContext();
-    if(state.view==="prep")return {lang:lang,currency:curTxt,day:"Prep tab",looking_at:"bookings and checklists"};
-    if(state.view==="all")return {lang:lang,currency:curTxt,day:"Overview",looking_at:"the whole trip's calendar and route legs"};
-    return {lang:lang,currency:curTxt,day:state.date+" · "+(D?plain(D.title):"being planned"),looking_at:s?(s.t==="move"?mode(s.mode)+" "+moveLabel(s,true):s.num+". "+plain(s.name||"[["+s.place+"]]")+(s.start?" ("+s.start+")":"")):"the whole day"};},
+  window.tripApp={context:function(){var c=viewContext(),pp=passportText();if(pp)c.passport=pp;return c;},
     lang:function(){return en()?"en":"zh";}};
+  function viewContext(){var D=day(),s=D&&state.sel!=null?D.segs[state.sel]:null;
+    var lang=en()?"en":"zh",curTxt=curContext();
+    if(state.view==="prep")return {lang:lang,currency:curTxt,day:"Prep tab",looking_at:"visas, bookings and checklists"};
+    if(state.view==="all")return {lang:lang,currency:curTxt,day:"Overview",looking_at:"the whole trip's calendar and route legs"};
+    return {lang:lang,currency:curTxt,day:state.date+" · "+(D?plain(D.title):"being planned"),looking_at:s?(s.t==="move"?mode(s.mode)+" "+moveLabel(s,true):s.num+". "+plain(s.name||"[["+s.place+"]]")+(s.start?" ("+s.start+")":"")):"the whole day"};}
   document.dispatchEvent(new CustomEvent("trip:view"));
 }
 
 /* ---------- header ---------- */
 function nextBooking(){var today=homeToday(),done=store("nt-booked")||{};
-  return T.bookings.filter(function(b){return b.opens&&!done[b.id]&&b.opens.slice(0,10)>=today;}).sort(function(a,b){return a.opens<b.opens?-1:1;})[0];}
+  return T.bookings.filter(function(b){return forMe(b)&&b.opens&&!done[b.id]&&b.opens.slice(0,10)>=today;}).sort(function(a,b){return a.opens<b.opens?-1:1;})[0];}
 function renderHeader(){
   document.title=en()&&T.titleEn?T.titleEn:T.title;document.documentElement.lang=en()?"en":"zh-Hans";
   $("eyebrow").textContent=L(T.eyebrow);$("title").innerHTML=en()&&T.titleEn?esc(T.titleEn):esc(T.title)+(T.titleEn?'<span class="en">'+esc(T.titleEn)+"</span>":"");
@@ -319,9 +327,47 @@ $("curBtn").addEventListener("keydown",function(e){if(e.key==="ArrowDown"){e.pre
 document.addEventListener("pointerdown",function(e){if(!$("curBox").contains(e.target))curOpen(false);});
 
 /* ---------- prep ---------- */
+// The visa section follows the passport picked on this device ({p:"cn"|"ca", live:"ca"|"uk"|"cn"}). A Chinese
+// passport's steps depend on where you live; a Canadian one's don't. Bookings tagged "who" (a passport like "cn",
+// or a profile like "cn-ca") are hidden from everyone else unless they ask to see all.
+var PASS=store("nt-passport")||{},SHOWALL=false;
+function profile(){return PASS.p==="ca"?"ca":PASS.p==="cn"?"cn-"+(PASS.live||"ca"):null;}
+function forMe(b){var pr=profile();return !b.who||!pr||b.who.indexOf(pr)>=0||b.who.indexOf(pr.split("-")[0])>=0;}
+function shownBookings(){return SHOWALL?T.bookings:T.bookings.filter(forMe);}
+function profLabel(k){var E=T.entry;return k==="ca"?L(E.passports.ca):U("{p} · 住在 {l}",{p:L(E.passports.cn),l:L(E.live[k.slice(3)])});}
+function passportText(){var pr=profile();return pr?(pr==="ca"?"Canadian passport":"Chinese passport, lives in "+{ca:"Canada",uk:"the UK",cn:"China"}[PASS.live||"ca"]):"";}
+function setPassport(p,live){PASS={p:p,live:live||PASS.live||"ca"};store("nt-passport",PASS);SHOWALL=false;renderPrep();renderHeader();}
+function renderEntry(){
+  var E=T.entry,pr=profile(),checked=store("nt-check")||{},shown=shownBookings();
+  var h='<div class="tl-head"><h2>'+U("签证和入境")+'</h2><span class="hint">'+U("护照和勾选只保存在这台设备上")+'</span></div>';
+  h+='<div class="entry-pick"><div class="pp" role="radiogroup" aria-label="'+U("护照")+'">'+["cn","ca"].map(function(k){
+    return '<button type="button" role="radio" data-pp="'+k+'" aria-checked="'+(PASS.p===k)+'">'+esc(L(E.passports[k]))+"</button>";}).join("")+"</div>";
+  h+='<label class="pp-live"'+(PASS.p==="cn"?"":" hidden")+'>'+U("住在")+'<span class="pp-sel"><select id="ppLive">'+Object.keys(E.live).map(function(k){
+    return '<option value="'+k+'"'+((PASS.live||"ca")===k?" selected":"")+">"+esc(L(E.live[k]))+"</option>";}).join("")+"</select>"+ICON.chev+"</span></label></div>";
+  if(!pr){
+    h+='<div class="entry-card"><p class="entry-empty">'+U("选一下你的护照，只看跟你有关的签证和入境步骤。")+'</p><div class="entry-opts">'+Object.keys(E.profiles).map(function(k){
+      return '<button type="button" data-prof="'+k+'"><b>'+esc(profLabel(k))+"</b><span>"+tx(E.profiles[k].head)+"</span></button>";}).join("")+"</div></div>";
+    return h;
+  }
+  var P=E.profiles[pr];
+  h+='<div class="entry-card'+(P.visa?" visa":"")+'"><div class="entry-top"><span class="entry-ic'+(P.visa?"":" free")+'">'+(P.visa?ICON.visa:ICON.free)+"</span><div><b>"+tx(P.head)+"</b><p>"+tx(P.sub)+"</p></div></div>";
+  h+='<ol class="entry-steps">'+P.steps.map(function(st,i){var id="entry-"+pr+"-"+st.id,more=st.more?plain(st.more):"",long=more.length>140;
+    var li='<li class="citem estep'+(st.hot?" hot":"")+'"><div class="citem-row"><label class="echeck"><input type="checkbox" data-id="'+esc(id)+'" data-n="'+(i+1)+'"'+(checked[id]?" checked":"")+">";
+    li+='<span class="et">'+tx(st.t)+'</span><span class="ewhen">'+tx(st.when)+"</span></label>";
+    if(long)li+='<button class="more-btn" type="button" aria-expanded="false" aria-label="'+U("展开说明")+'">'+ICON.chev.replace(' class="chev"',"")+"</button>";
+    li+='</div><div class="ebody">';
+    if(more)li+=long?'<p class="more" hidden>'+tx(st.more)+"</p>":'<p class="emore">'+tx(st.more)+"</p>";
+    if(st.booking&&shown.some(function(b){return b.id===st.booking;}))li+='<button type="button" class="elink" data-open-booking="'+esc(st.booking)+'">'+U("查看预订")+" →</button>";
+    return li+"</div></li>";}).join("")+"</ol></div>";
+  var hid=T.bookings.length-T.bookings.filter(forMe).length;
+  if(hid)h+='<p class="entry-foot">'+(SHOWALL?U("正在显示所有护照的预订")+' · <button type="button" data-showall="0">'+U("只看我的")+"</button>":
+    U(hid===1?"已隐藏 1 项只适用于其他护照的预订":"已隐藏 {n} 项只适用于其他护照的预订",{n:hid})+' · <button type="button" data-showall="1">'+U("显示全部")+"</button>")+"</p>";
+  return h;
+}
 function renderPrep(){
-  var today=homeToday(),done=store("nt-booked")||{},nb=nextBooking();
-  $("bookings").innerHTML=T.bookings.map(function(b){
+  var today=homeToday(),done=store("nt-booked")||{},nb=nextBooking(),shown=shownBookings();
+  $("entry").innerHTML=renderEntry();
+  $("bookings").innerHTML=shown.map(function(b){
     var badge,due="",isDone=!!done[b.id];
     if(b.opens){var dt=b.opens.slice(0,10),n=daysBetween(today,dt);badge="<small>"+(en()?MON[+dt.slice(5,7)-1]:(+dt.slice(5,7))+"月")+"</small><b>"+(+dt.slice(8,10))+"</b>";
       due=n>1?U("{n} 天后开放预订",{n:n}):n===1?U("明天开放预订"):n===0?U("今天开放预订"):U("现在可以订");}
@@ -345,12 +391,12 @@ function renderPrep(){
     h+="</div></details>";
     return h;
   }).join("");
-  var nDone=T.bookings.filter(function(b){return done[b.id];}).length;
-  $("bookedCount").textContent=U("已订 {a} / {b} · 勾选只保存在这台设备上",{a:nDone,b:T.bookings.length});
+  var nDone=shown.filter(function(b){return done[b.id];}).length;
+  $("bookedCount").textContent=U("已订 {a} / {b} · 勾选只保存在这台设备上",{a:nDone,b:shown.length});
 
   var checked=store("nt-check")||{};
   $("prepLists").innerHTML=T.prep.map(function(card,ci){
-    var items=card.items.map(function(it,ii){var id=(card.id||ci)+"-"+ii;
+    var items=card.items.map(function(it,ii){var id=it.id||(card.id||ci)+"-"+ii;
       var h='<li class="citem"><div class="citem-row"><label class="check"><input type="checkbox" data-id="'+esc(id)+'"'+(checked[id]?" checked":"")+'><span>'+tx(it.t)+'</span></label>';
       if(it.more)h+='<button class="more-btn" type="button" aria-expanded="false" aria-label="'+U("展开说明")+'">'+ICON.chev.replace(' class="chev"',"")+"</button>";
       h+="</div>";if(it.more)h+='<p class="more" hidden>'+tx(it.more)+"</p>";
@@ -365,10 +411,15 @@ function countPrep(){var all=0,on=0;
   T.prep.forEach(function(card,ci){var c=0,list=document.querySelector('[data-card="'+ci+'"]');
     if(list)list.querySelectorAll("input").forEach(function(el){if(el.checked)c++;});
     all+=card.items.length;on+=c;var lab=document.querySelector('[data-count="'+ci+'"]');if(lab)lab.textContent=c+" / "+card.items.length;});
-  var done=store("nt-booked")||{},b=T.bookings.filter(function(x){return done[x.id];}).length;
-  $("prepCount").textContent=(b+on)+"/"+(T.bookings.length+all);}
-$("prepView").addEventListener("change",function(e){var id=e.target.dataset&&e.target.dataset.id;if(!id)return;var d=store("nt-check")||{};d[id]=e.target.checked;store("nt-check",d);countPrep();});
+  $("entry").querySelectorAll("input[data-id]").forEach(function(el){all++;if(el.checked)on++;});
+  var done=store("nt-booked")||{},shown=shownBookings(),b=shown.filter(function(x){return done[x.id];}).length;
+  $("prepCount").textContent=(b+on)+"/"+(shown.length+all);}
+$("prepView").addEventListener("change",function(e){if(e.target.id==="ppLive"){setPassport("cn",e.target.value);return;}var id=e.target.dataset&&e.target.dataset.id;if(!id)return;var d=store("nt-check")||{};d[id]=e.target.checked;store("nt-check",d);countPrep();});
 $("prepView").addEventListener("click",function(e){
+  var pp=e.target.closest("[data-pp]");if(pp){if(PASS.p!==pp.dataset.pp)setPassport(pp.dataset.pp);return;}
+  var pf=e.target.closest("[data-prof]");if(pf){var k=pf.dataset.prof;setPassport(k==="ca"?"ca":"cn",k==="ca"?null:k.slice(3));return;}
+  var sa=e.target.closest("[data-showall]");if(sa){SHOWALL=sa.dataset.showall==="1";renderPrep();return;}
+  var ob=e.target.closest("[data-open-booking]");if(ob){openBooking(ob.dataset.openBooking);return;}
   var mb=e.target.closest(".more-btn");
   if(mb){var p=mb.closest(".citem").querySelector(".more"),on=mb.getAttribute("aria-expanded")!=="true";mb.setAttribute("aria-expanded",on);p.hidden=!on;return;}
   var dn=e.target.closest("[data-done]");

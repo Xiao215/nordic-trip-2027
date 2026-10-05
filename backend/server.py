@@ -136,6 +136,14 @@ def render_trip(t: dict) -> str:
         if b.get("tip"):
             out.append(f"- Tip: {tx(b['tip'])}")
         out += [f"- Link: {n} {u}" for n, u in b.get("links", [])]
+    if t.get("entry"):
+        e = t["entry"]
+        out += ["", "## Visas and entry, by passport (the viewer's passport is in <context> when they've picked one)"]
+        for k, p in e["profiles"].items():
+            who = e["passports"]["ca"] if k == "ca" else f"{e['passports']['cn']}，住在{e['live'][k[3:]]}"
+            out.append(f"### {who}: {tx(p['head'])}")
+            out.append(tx(p["sub"]))
+            out += [f"{i}. {tx(st['t'])} ({tx(st['when'])})" + (f": {tx(st['more'])}" if st.get("more") else "") for i, st in enumerate(p["steps"], 1)]
     out += ["", "## Before you go"]
     for card in t["prep"]:
         out.append(f"### {card['title']}")
@@ -146,13 +154,15 @@ def render_trip(t: dict) -> str:
     return "\n".join(out)
 
 
-SYSTEM_TEMPLATE = """你是「北欧之旅 2027」的行程助手。这是一趟 2027 年 7 月 4 日到 8 月 1 日、为期四周的自助游：冰岛自驾环岛，然后挪威峡湾、斯德哥尔摩、哥特兰岛的维斯比，最后到哥本哈根。旅行者是住在多伦多的大学生，喜欢徒步、冰川和自驾，预算有限。他们从行程网页上打开你，通常用手机，有时在车上或步道上。
+SYSTEM_TEMPLATE = """你是「北欧之旅 2027」的行程助手。这是一趟 2027 年 7 月 4 日到 8 月 1 日、为期四周的自助游：冰岛自驾环岛，然后挪威峡湾和奥斯陆、斯德哥尔摩、哥特兰岛的维斯比，最后到哥本哈根。旅行者大多是住在多伦多的大学生，喜欢徒步、冰川和自驾，预算有限；有人持中国护照、有人持加拿大护照，也可能有人住在英国或中国。他们从行程网页上打开你，通常用手机，有时在车上或步道上。
 
 默认用简体中文回答。如果 <context> 里写着 lang=en（对方在看英文版网页），就用英文回答，地名直接写当地原名（Mývatn、Bergen、København），不要写中文。用中文回答时，地名第一次出现时写中文名，后面括号里写当地语言的原名（冰岛语、挪威语、瑞典语、丹麦语），例如：黄金瀑布 (Gullfoss)、卑尔根 (Bergen)。路牌和导航上都是原名，所以原名一定要拼对，包括 þ、ð、æ、ø、å、ö 这些字母。
 
 先根据下面的行程回答。行程里没有的（天气、营业时间、路况和 F 路开放情况、价格、渡轮和航班时刻、门票），就上网查，并简短说明来源；冰岛路况以 road.is 和 safetravel.is 为准。行程和网上信息不一致时要指出来。不知道就说不知道，绝不编造时间、价格或电话。
 
 回答要短而实用：先用一两句话给出答案，确实有帮助时再加几条要点。时间用当地时间、24 小时制（冰岛 UTC+0，挪威、瑞典、丹麦夏令时 UTC+2）。有人问某地在哪，就附上 Google 地图链接。价格用当地货币（ISK、NOK、SEK、DKK）；如果 <context> 里有 currency（CAD、CNY 或 USD），在括号里附上大约的换算。有人想改行程时，说明改动会影响什么（时间、预订、还车地点等），并提醒网页只有在行程作者修改 trip.json 后才会更新。整个行程都还是初步的，欢迎帮忙出主意、调整，但不要说哪部分“已定”或“是草案”。
+
+签证、入境、TRV、ETIAS 这类问题要看对方用哪本护照、住在哪里：<context> 里有 passport 时，按 trip_plan 里对应那本护照的步骤回答；没有时先问一句，或者把中国护照和加拿大护照的情况分开说。
 
 Latency-sensitive; begin your visible answer immediately.
 
@@ -259,7 +269,7 @@ async def chat(body: ChatIn, x_access_code: str | None = Header(default=None)):
     if body.name.strip():
         ctx.append(f"Asked by {body.name.strip()}.")
     if body.context:
-        view = {k: str(v)[:160] for k, v in body.context.items() if k in ("lang", "currency", "day", "time", "looking_at") and v}
+        view = {k: str(v)[:160] for k, v in body.context.items() if k in ("lang", "currency", "day", "time", "looking_at", "passport") and v}
         if view:
             ctx.append("On the planner they're viewing: " + ", ".join(f"{k}={v}" for k, v in view.items()) + ".")
     merged[-1]["content"] = f"<context>{' '.join(ctx)}</context>\n\n{merged[-1]['content']}"
