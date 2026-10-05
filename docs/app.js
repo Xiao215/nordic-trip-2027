@@ -50,8 +50,10 @@ var UIEN={
   "点一站看详情，地图会跳过去":"Tap a stop for details and to see it on the map","预订":"Bookings","前一天":"Previous day","后一天":"Next day",
   "视图":"View","选择日期":"Choose a day","语言":"Language","地图":"Map","行程地图":"Trip map","看全天 / 全程":"Show the whole day / trip",
   "在 Google 地图里打开当天路线":"Open the day's route in Google Maps","行程助手":"Trip assistant","输入访问码：":"Enter the access code:",
-  "访问码":"Access code","确定":"enter","问问行程助手":"Ask the trip assistant","问行程助手":"Ask the trip assistant","发送":"Send",
-  "回车发送 · esc 收起 · /clear 清空":"enter to send · esc to hide · /clear","连接中…":"connecting…","正在载入行程…":"Loading the plan…","按计划现在在这":"Here now (per plan)","Google 地图":"Google Map",
+  "访问码":"Access code","确定":"Enter","问问行程助手…":"Ask about the trip…","问行程助手":"Ask the trip assistant",
+  "新对话":"New chat","清空对话，重新开始":"Clear this conversation and start over","收起对话":"Hide chat",
+  "收起（Esc）。收起后回答会继续。":"Hide (Esc). Answers keep coming while hidden.",
+  "回车发送 · Shift+回车换行 · Esc 收起":"Enter to send · Shift+Enter for a new line · Esc to hide","正在载入行程…":"Loading the plan…","按计划现在在这":"Here now (per plan)","Google 地图":"Google Map",
   "行程没载入（{e}）。如果是直接从硬盘打开的 index.html，请改用本地服务器：python3 -m http.server":"Couldn't load the plan ({e}). If you opened index.html from disk, serve the folder instead: python3 -m http.server"
 };
 /* ---------- currency ---------- */

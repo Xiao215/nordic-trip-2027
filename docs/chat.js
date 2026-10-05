@@ -1,9 +1,10 @@
 (function(){
 "use strict";
-/* Trip assistant as a terminal-style command bar (think Claude Code): click or press Ctrl/⌘+K,
-   type, Enter. The transcript opens above the prompt; Esc hides it (or stops an answer in progress).
-   Type /clear to start over. History lives in this browser only; each question sends the recent
-   conversation to the backend, which streams the answer back as server-sent events. */
+/* Trip assistant docked under the plan: click the bar or press Ctrl/⌘+K, type, Enter. The panel
+   stays open until you hide it (the ⌄ button or Esc); an answer keeps streaming while it's hidden and
+   the bar says when it's ready. "New chat" starts over. Anything asked while an answer is in progress
+   waits its turn. History lives in this browser only; each question sends the recent conversation to
+   the backend, which streams the answer back as server-sent events. */
 // An empty apiBase means "same server as this page" (the backend serves the site too).
 var API=((window.TRIP_CONFIG||{}).apiBase||"").replace(/\/$/,"");
 var override=new URLSearchParams(location.search).get("api");
@@ -15,7 +16,6 @@ function isEn(){return !!(window.tripApp&&window.tripApp.lang&&window.tripApp.la
 function Z(zh,en){return isEn()?en:zh;}
 var SUGGEST={zh:["F208 进高地，我们的车能开吗？要注意什么？","7 月冰岛要带哪些衣服？","持中国护照的人申根签证什么时候递交？","冰岛自驾一天的油钱和停车费大概多少？"],
   en:["Can our car handle F208 into the Highlands? What should we watch for?","What clothes do we need for Iceland in July?","When should the Chinese-passport holders apply for the Schengen visa?","Roughly how much are fuel and parking per day in Iceland?"]};
-var SPIN=["·","✢","✳","✶","✻","✽","✻","✶","✳","✢"];
 
 function load(k){try{return JSON.parse(localStorage.getItem(k));}catch(e){return null;}}
 function keep(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
@@ -23,8 +23,8 @@ var S=load(KEY)||{};S.msgs=S.msgs||[];
 function save(){keep(KEY,{code:S.code,msgs:S.msgs.slice(-60)});}
 
 var $=function(id){return document.getElementById(id);};
-var chat=$("chat"),log=$("chatLog"),form=$("chatForm"),text=$("chatText"),join=$("chatJoin"),sub=$("chatSub");
-var busy=false,checked=false,needCode=false,pending=null,ctrl=null;
+var chat=$("chat"),log=$("chatLog"),form=$("chatForm"),text=$("chatText"),join=$("chatJoin"),sub=$("chatSub"),badge=$("chatBadge"),send=$("chatSend");
+var busy=false,checked=false,needCode=false,pending=null,ctrl=null,queue=[],gen=0,stick=true;
 if(!/Mac|iPhone|iPad/.test(navigator.platform||navigator.userAgent))$("chatKbd").textContent="Ctrl K";
 
 /* ---------- tiny markdown: paragraphs, lists, headings, bold, italics, code, links ---------- */
@@ -53,63 +53,80 @@ function md(src){
 }
 function clock(ts){return ts?new Date(ts).toLocaleTimeString(isEn()?"en-CA":"zh-CN",{hour:"2-digit",minute:"2-digit"}):"";}
 
-/* ---------- open / hide ---------- */
+/* ---------- open / hide (hiding never interrupts an answer) ---------- */
 function isOpen(){return chat.dataset.open==="true";}
-function openChat(){if(isOpen())return;chat.dataset.open="true";render();if(!checked)health();}
-function closeChat(){chat.dataset.open="false";text.blur();}
+function openChat(){if(isOpen())return;chat.dataset.open="true";setBadge();scroll(true);if(!checked)health();}
+function closeChat(){chat.dataset.open="false";text.blur();setBadge();}
+// the collapsed bar says when an answer is still coming or has arrived while hidden
+function setBadge(fresh){
+  if(isOpen()){badge.hidden=true;return;}
+  if(busy){badge.hidden=false;badge.className="cli-badge";badge.textContent=Z("回答中…","Answering…");}
+  else if(fresh){badge.hidden=false;badge.className="cli-badge new";badge.textContent=Z("有新回复","New reply");}
+  else if(fresh===undefined)return;
+  else badge.hidden=true;
+}
 text.addEventListener("focus",openChat);
+badge.addEventListener("click",function(){openChat();text.focus();});
+$("chatHide").addEventListener("click",closeChat);
+$("chatNew").addEventListener("click",newChat);
 document.addEventListener("keydown",function(e){
   if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==="k"){e.preventDefault();openChat();text.focus();}
-  else if(e.key==="Escape"&&isOpen()){e.preventDefault();if(busy&&ctrl)ctrl.abort();else closeChat();}
+  else if(e.key==="Escape"&&isOpen()){e.preventDefault();closeChat();}
 });
-// clicking anywhere else on the page tucks the transcript away
-document.addEventListener("pointerdown",function(e){if(isOpen()&&!chat.contains(e.target)&&!e.target.closest(".ask"))closeChat();});
 
-/* ---------- transcript ---------- */
-function scroll(){log.scrollTop=log.scrollHeight;}
-function userLine(m){var d=document.createElement("div");d.className="l-user";d.innerHTML='<span class="p">›</span><span class="txt"></span>';d.lastChild.textContent=m.content;log.appendChild(d);return d;}
-function botLine(m){var d=document.createElement("div");d.className="l-bot";d.innerHTML='<span class="dot" aria-hidden="true">●</span><div class="m-content"></div>';log.appendChild(d);if(m)fillBot(d,m);return d;}
+/* ---------- transcript (built once; new lines are appended, so hiding/showing never loses anything) ---------- */
+log.addEventListener("scroll",function(){stick=log.scrollHeight-log.scrollTop-log.clientHeight<48;});
+function scroll(force){if(force||stick)log.scrollTop=log.scrollHeight;}
+function add(el){var e0=log.querySelector(".l-empty");if(e0)e0.remove();log.appendChild(el);return el;}
+function userLine(m){var d=document.createElement("div");d.className="l-user";d.textContent=m.content;return add(d);}
+function botLine(m){var d=document.createElement("div");d.className="l-bot";d.innerHTML='<div class="m-content"></div>';add(d);if(m)fillBot(d,m);return d;}
 function fillBot(d,m){d.querySelector(".m-content").innerHTML=md(m.content);
   var t=d.querySelector(".l-tools")||d.appendChild(document.createElement("div"));t.className="l-tools";
-  t.innerHTML="<span>"+esc(clock(m.ts))+(m.stopped?Z(" · 已停止"," · stopped"):"")+'</span><button type="button">'+Z("复制","copy")+'</button>';
+  t.innerHTML="<span>"+esc(clock(m.ts))+(m.stopped?Z(" · 中途停止"," · stopped early"):"")+'</span><button type="button">'+Z("复制","Copy")+'</button>';
   t.querySelector("button").addEventListener("click",function(){var b=this;
-    (navigator.clipboard?navigator.clipboard.writeText(m.content):Promise.reject()).then(function(){b.textContent=Z("已复制","copied");setTimeout(function(){b.textContent=Z("复制","copy");},1500);}).catch(function(){});});}
-function errLine(msg,retry){var d=document.createElement("div");d.className="l-err";d.textContent="⎿ "+msg;
-  if(retry){var b=document.createElement("button");b.type="button";b.className="cli-link";b.textContent=Z("重试","retry");b.onclick=function(){d.remove();retry();};d.appendChild(b);}
-  log.appendChild(d);scroll();}
-function note(msg){var d=document.createElement("div");d.className="l-note";d.textContent=msg;log.appendChild(d);scroll();}
-function empty(){var e=document.createElement("div");e.className="l-empty";e.innerHTML="<span>"+Z("关于这趟旅行，随便问。比如：","Ask anything about the trip. Try:")+"</span>";
+    (navigator.clipboard?navigator.clipboard.writeText(m.content):Promise.reject()).then(function(){b.textContent=Z("已复制","Copied");setTimeout(function(){b.textContent=Z("复制","Copy");},1500);}).catch(function(){});});}
+function errLine(msg,retry){var d=document.createElement("div");d.className="l-err";d.textContent=msg;
+  if(retry){var b=document.createElement("button");b.type="button";b.className="cli-link";b.textContent=Z("重试","Try again");b.onclick=function(){d.remove();retry();};d.appendChild(b);}
+  add(d);scroll(true);}
+function note(msg){var d=document.createElement("div");d.className="l-note";d.textContent=msg;add(d);scroll(true);return d;}
+function empty(){var e=document.createElement("div");e.className="l-empty";e.innerHTML="<p>"+Z("关于这趟旅行，随便问。比如：","Ask anything about the trip. For example:")+"</p>";
   SUGGEST[isEn()?"en":"zh"].forEach(function(q){var b=document.createElement("button");b.type="button";b.textContent=q;b.onclick=function(){ask(q);};e.appendChild(b);});log.appendChild(e);}
 function render(){
-  join.hidden=!(needCode&&!S.code);
   log.innerHTML="";
   if(!S.msgs.length)empty();
   S.msgs.forEach(function(m){if(m.role==="user")userLine(m);else botLine(m);});
-  scroll();
+  scroll(true);
 }
+function showJoin(){join.hidden=!(needCode&&!S.code);}
 function setStatus(state,msg){sub.className="cli-status"+(state?" "+state:"");sub.textContent=msg;}
 var status={state:"",local:false};
 function showStatus(){var st=status.state;
-  setStatus(st,st==="ok"?(status.local?Z("本地 claude","local claude"):"claude")+Z(" · 熟悉整个行程"," · knows the plan"):st==="down"?Z("行程服务器离线","trip server offline"):Z("连接中…","connecting…"));}
-showStatus();
-// the page switched language: redraw the empty-state suggestions and status line
-document.addEventListener("trip:lang",function(){showStatus();if(isOpen())render();});
+  setStatus(st,st==="ok"?(status.local?Z("在线（本地）","Online (local)"):Z("在线","Online")):st==="down"?Z("离线","Offline"):Z("连接中…","Connecting…"));}
 function health(){
   fetch(API+"/api/health").then(function(r){return r.ok?r.json():Promise.reject();})
-    .then(function(j){checked=true;needCode=!!j.code;status={state:"ok",local:j.local};showStatus();if(isOpen())render();})
+    .then(function(j){checked=true;needCode=!!j.code;status={state:"ok",local:j.local};showStatus();showJoin();})
     .catch(function(){status={state:"down"};showStatus();});
 }
-health();
+showStatus();render();health();
+// the page switched language: redraw the status, the bar badge and (unless an answer is streaming) the transcript
+document.addEventListener("trip:lang",function(){showStatus();if(!busy)render();if(!badge.hidden)setBadge(badge.classList.contains("new"));sendLabel();});
+
+/* ---------- start over ---------- */
+function newChat(){
+  gen++;if(ctrl)ctrl.abort();
+  queue=[];pending=null;S.msgs=[];save();setBusy(false);ctrl=null;
+  render();openChat();text.focus();
+}
 
 /* ---------- access code ---------- */
 join.addEventListener("submit",function(e){
-  e.preventDefault();var code=$("joinCode").value.trim(),err=$("joinErr");if(!code)return;err.textContent=Z("验证中…","checking…");
+  e.preventDefault();var code=$("joinCode").value.trim(),err=$("joinErr");if(!code)return;err.textContent=Z("验证中…","Checking…");
   fetch(API+"/api/check",{method:"POST",headers:{"X-Access-Code":code}}).then(function(r){
-    if(r.status===401){err.textContent=Z("访问码不对","wrong code");return;}
+    if(r.status===401){err.textContent=Z("访问码不对。","That code didn't work.");return;}
     if(!r.ok)throw new Error();
     S.code=code;save();err.textContent="";join.hidden=true;
     if(pending){var q=pending;pending=null;ask(q);}else text.focus();
-  }).catch(function(){err.textContent=Z("连不上服务器","can't reach the server");});
+  }).catch(function(){err.textContent=Z("连不上服务器。","Can't reach the server.");});
 });
 
 /* ---------- ask ---------- */
@@ -118,23 +135,24 @@ function history(){
   while(h.length&&h[0].role!=="user")h.shift();
   return h.map(function(m){return {role:m.role,content:m.content};});
 }
-function setBusy(on){busy=on;chat.classList.toggle("busy",on);$("chatSend").textContent=on?"■":"↵";}
+function setBusy(on){busy=on;chat.classList.toggle("busy",on);sendLabel();setBadge(false);}
+function sendLabel(){send.setAttribute("aria-label",busy?Z("停止回答","Stop answering"):Z("发送","Send"));send.title=busy?Z("停止","Stop"):Z("发送","Send");}
+// a question asked mid-answer waits its turn instead of cutting the answer off
+function enqueue(q){queue.push({q:q,el:note(Z("排队中：","Up next: ")+q)});}
+function next(){if(busy||!queue.length)return;var n=queue.shift();n.el.remove();ask(n.q);}
 function ask(q){
-  q=q.trim();if(!q||busy)return;
+  q=q.trim();if(!q)return;
   openChat();
-  if(q==="/clear"||q==="/new"){S.msgs=[];save();render();return;}
-  if(q==="/help"){note(Z("回车发送 · Shift+回车换行 · Esc 收起或停止 · /clear 清空对话","Enter sends · Shift+Enter adds a line · Esc hides or stops · /clear starts over"));return;}
-  if(needCode&&!S.code){pending=q;join.hidden=false;$("joinCode").focus();return;}
-  setBusy(true);
+  if(q==="/clear"||q==="/new"){newChat();return;}
+  if(busy){enqueue(q);return;}
+  if(needCode&&!S.code){pending=q;showJoin();$("joinCode").focus();return;}
+  var my=gen;setBusy(true);
   var um={role:"user",content:q,ts:Date.now()};S.msgs.push(um);save();
-  var e0=log.querySelector(".l-empty");if(e0)e0.remove();
   var uEl=userLine(um);
-  var st=document.createElement("div");st.className="l-status";st.innerHTML='<span class="spin">✻</span><span class="w">'+Z("思考中…","Thinking…")+'</span><span class="dim">'+Z("（esc 停止）","(esc to stop)")+'</span>';log.appendChild(st);scroll();
-  var f=0,spin=setInterval(function(){st.firstChild.textContent=SPIN[f++%SPIN.length];},110);
+  var st=add(document.createElement("div"));st.className="l-status";st.innerHTML='<span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="w">'+Z("思考中","Thinking")+'</span>';scroll(true);
   var el=null,acc="",ctx=null;try{ctx=window.tripApp&&window.tripApp.context();}catch(e){}
   ctrl=window.AbortController?new AbortController():null;
 
-  function stopSpin(){clearInterval(spin);st.remove();}
   function finish(stopped){var m={role:"assistant",content:acc,ts:Date.now(),stopped:stopped||undefined};S.msgs.push(m);save();fillBot(el,m);}
   fetch(API+"/api/chat",{method:"POST",signal:ctrl&&ctrl.signal,headers:{"Content-Type":"application/json","X-Access-Code":S.code||""},
     body:JSON.stringify({name:"",messages:history(),context:ctx})})
@@ -143,8 +161,9 @@ function ask(q){
     if(!r.ok)return r.json().catch(function(){return {};}).then(function(j){throw new Error(j.detail||Z("行程服务器出错了（"+r.status+"）。","The trip server had a problem ("+r.status+")."));});
     var reader=r.body.getReader(),dec=new TextDecoder(),buf="";
     function handle(ev){
-      if(ev.type==="text"){if(!el){stopSpin();el=botLine(null);}acc+=ev.text;el.querySelector(".m-content").innerHTML=md(acc);scroll();}
-      else if(ev.type==="status"&&!acc){st.querySelector(".w").textContent=ev.text+"…";}
+      if(my!==gen)return;
+      if(ev.type==="text"){if(!el){st.remove();el=botLine(null);}acc+=ev.text;el.querySelector(".m-content").innerHTML=md(acc);scroll();}
+      else if(ev.type==="status"&&!acc){st.querySelector(".w").textContent=ev.text;}
       else if(ev.type==="error"){throw new Error(ev.message);}
     }
     function pump(){return reader.read().then(function(res){
@@ -155,25 +174,27 @@ function ask(q){
     });}
     return pump();
   })
-  .then(function(){stopSpin();if(!acc)throw new Error(Z("没有收到回答。","No answer came back."));finish();})
+  .then(function(){if(my!==gen)return;st.remove();if(!acc)throw new Error(Z("没有收到回答。","No answer came back."));finish();})
   .catch(function(e){
-    stopSpin();
-    if(e&&e.name==="AbortError"){if(acc)finish(true);else{uEl.remove();S.msgs.pop();save();note(Z("已停止","stopped"));}return;}
+    if(my!==gen)return; // "New chat" already cleared everything
+    st.remove();
+    if(e&&e.name==="AbortError"){if(acc)finish(true);else{uEl.remove();S.msgs.pop();save();note(Z("还没回答就停止了。","Stopped before an answer came back."));}return;}
     var msg=e&&e.message&&e.message!=="Failed to fetch"?e.message:Z("连不上行程服务器，可能离线了。","Can't reach the trip server. It may be offline.");
     if(acc){finish();errLine(msg);}
     else{S.msgs.pop();save();
-      if(needCode&&!S.code){uEl.remove();pending=q;join.hidden=false;errLine(msg);}
+      if(needCode&&!S.code){uEl.remove();pending=q;showJoin();errLine(msg);}
       else errLine(msg,function(){uEl.remove();ask(q);});}
   })
-  .then(function(){setBusy(false);ctrl=null;scroll();});
+  .then(function(){if(my!==gen)return;ctrl=null;setBusy(false);setBadge(true);scroll();next();});
 }
 
 form.addEventListener("submit",function(e){e.preventDefault();
-  if(busy){if(ctrl)ctrl.abort();return;}
-  var q=text.value;if(!q.trim())return;text.value="";grow();ask(q);});
-text.addEventListener("keydown",function(e){if(e.key==="Enter"&&!e.shiftKey&&!e.isComposing){e.preventDefault();if(!busy)form.requestSubmit();}});
-function grow(){text.style.height="auto";text.style.height=Math.min(text.scrollHeight,150)+"px";}
+  var q=text.value;
+  if(busy&&!q.trim()){if(ctrl)ctrl.abort();return;} // the send button doubles as Stop
+  if(!q.trim())return;text.value="";grow();ask(q);});
+text.addEventListener("keydown",function(e){if(e.key==="Enter"&&!e.shiftKey&&!e.isComposing){e.preventDefault();if(text.value.trim())form.requestSubmit();}});
+function grow(){text.style.height="auto";text.style.height=Math.min(text.scrollHeight,150)+"px";chat.classList.toggle("typed",!!text.value.trim());}
 text.addEventListener("input",grow);
 
-window.tripChat={ask:function(q){openChat();if(busy)return;ask(q);}};
+window.tripChat={ask:function(q){ask(q);}};
 })();
