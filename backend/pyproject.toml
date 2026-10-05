@@ -1,0 +1,11 @@
+[project]
+name = "nordic-trip-backend"
+version = "0.1.0"
+description = "Chat backend for the Nordic Trip 2027 planner"
+requires-python = ">=3.11"
+dependencies = [
+    "anthropic",
+    "fastapi",
+    "uvicorn",
+    "python-dotenv",
+]
