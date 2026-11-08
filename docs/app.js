@@ -871,9 +871,20 @@ function useEmbed(){
 }
 function embedTo(src){if(embed&&embed.getAttribute("src")!==src)embed.setAttribute("src",src);}
 function ll2(p){return p[0]+","+p[1];}
-function embedPlace(ll,z){embedTo("https://maps.google.com/maps?q="+ll2(ll)+"&z="+z+"&hl="+(NM==="zh"?"zh-CN":"en")+"&output=embed");}
-function embedRoute(stops){embedTo("https://maps.google.com/maps?saddr="+ll2(stops[0])+"&daddr="+stops.slice(1).map(ll2).join("+to:")+"&hl="+(NM==="zh"?"zh-CN":"en")+"&output=embed");}
-function embedArea(q,z){embedTo("https://maps.google.com/maps?q="+encodeURIComponent(q)+"&z="+z+"&hl="+(NM==="zh"?"zh-CN":"en")+"&output=embed");}
+// t=k is satellite; the embed's own route framing ignores the frame's shape, so routes get an explicit ll/z
+function embedTail(){return "&t=k&hl="+(NM==="zh"?"zh-CN":"en")+"&output=embed";}
+function embedPlace(ll,z){embedTo("https://maps.google.com/maps?q="+ll2(ll)+"&z="+z+embedTail());}
+function embedRoute(stops){embedTo("https://maps.google.com/maps?saddr="+ll2(stops[0])+"&daddr="+stops.slice(1).map(ll2).join("+to:")+embedFit(stops)+embedTail());}
+function embedArea(q,z){embedTo("https://maps.google.com/maps?q="+encodeURIComponent(q)+"&z="+z+embedTail());}
+// Center and zoom that fit every stop in the frame, leaving room for the directions card (top) and caption (bottom).
+function embedFit(pts){var box=$("map"),w=box.clientWidth||400,h=box.clientHeight||500,T0=120,B0=50,S=40,
+    my=function(la){return Math.log(Math.tan(Math.PI/4+la*Math.PI/360));},
+    la=pts.map(function(p){return p[0];}),lo=pts.map(function(p){return p[1];}),
+    y1=my(Math.min.apply(0,la)),y2=my(Math.max.apply(0,la)),x1=Math.min.apply(0,lo),x2=Math.max.apply(0,lo),
+    fx=(w-2*S)/(256*Math.max((x2-x1)/360,1e-6)),fy=(h-T0-B0)/(256*Math.max((y2-y1)/(2*Math.PI),1e-6)),
+    z=Math.max(3,Math.min(15,Math.floor(Math.log(Math.min(fx,fy))/Math.LN2))),
+    yc=(y1+y2)/2+(T0-B0)/2*2*Math.PI/(256*Math.pow(2,z));
+  return "&ll="+(Math.atan(Math.sinh(yc))*180/Math.PI).toFixed(4)+","+((x1+x2)/2).toFixed(4)+"&z="+z;}
 
 function loadMap(){
   caption();
@@ -885,7 +896,7 @@ function loadMap(){
     if(embed)return;
     G=google.maps;Marker=libs[1].AdvancedMarkerElement;
     map=new libs[0].Map($("map"),{
-      center:{lat:62,lng:5},zoom:4,mapId:CFG.googleMapId||"DEMO_MAP_ID",
+      center:{lat:62,lng:5},zoom:4,mapId:CFG.googleMapId||"DEMO_MAP_ID",mapTypeId:"hybrid",
       disableDefaultUI:true,zoomControl:true,zoomControlOptions:{position:G.ControlPosition.RIGHT_BOTTOM},
       clickableIcons:false,gestureHandling:wide.matches?"greedy":"cooperative",
       colorScheme:G.ColorScheme?G.ColorScheme.FOLLOW_SYSTEM:undefined
