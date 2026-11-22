@@ -601,6 +601,10 @@ body.lb-open{overflow:hidden}
 .lb-x{position:absolute;top:12px;right:14px;width:40px;height:40px;border:0;border-radius:50%;background:rgba(255,255,255,.12);color:#fff;font-size:24px;line-height:1;cursor:pointer}
 .lb-nav{width:44px;height:44px;border:0;border-radius:50%;background:rgba(255,255,255,.12);color:#fff;font-size:26px;line-height:1;cursor:pointer}
 .lb-x:hover,.lb-nav:hover{background:rgba(255,255,255,.22)}
+/* SVG icons, not text glyphs: a font's ‹ › × sit on its baseline, so they never land in the middle of the circle */
+.lb-x:not([hidden]),.lb-nav:not([hidden]){display:grid;place-items:center;padding:0}
+.lb-x svg,.lb-nav svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.lb-x svg{width:18px;height:18px}
 .lb-nav.prev{justify-self:end;margin-right:12px}.lb-nav.next{justify-self:start;margin-left:12px}
 .lb-nav[hidden]{visibility:hidden;display:block}
 
