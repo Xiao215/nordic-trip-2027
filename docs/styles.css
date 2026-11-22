@@ -589,17 +589,19 @@ a.credit:hover,.credit a:hover{color:#fff;text-decoration:underline;text-decorat
 span.leg-img{cursor:default;display:block}
 
 /* lightbox */
-.lb{position:fixed;inset:0;z-index:60;display:grid;grid-template-columns:56px 1fr 56px;align-items:center;background:rgba(4,9,13,.92);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.lb{position:fixed;inset:0;z-index:60;display:grid;grid-template-columns:minmax(68px,1fr) auto minmax(68px,1fr);align-items:center;background:rgba(4,9,13,.92);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 .lb[hidden]{display:none}
 body.lb-open{overflow:hidden}
+/* the middle column takes the photo's width, so the arrows sit right beside it however wide the window is */
 .lb-fig{grid-column:2;margin:0;display:grid;justify-items:center;gap:10px;max-height:100vh;padding:20px 0}
 .lb-fig img{max-width:100%;max-height:calc(100vh - 110px);object-fit:contain;border-radius:10px;box-shadow:0 20px 60px rgba(0,0,0,.5)}
-.lb-fig figcaption{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:center;gap:4px 14px;color:#fff;text-align:center}
+.lb-fig figcaption{width:0;min-width:100%;display:flex;flex-wrap:wrap;align-items:baseline;justify-content:center;gap:4px 14px;color:#fff;text-align:center}
 .lb-fig figcaption b{font-family:var(--f-display);font-size:18px}
 .lb-n{font:12px var(--f-mono);color:rgba(255,255,255,.6)}
 .lb-x{position:absolute;top:12px;right:14px;width:40px;height:40px;border:0;border-radius:50%;background:rgba(255,255,255,.12);color:#fff;font-size:24px;line-height:1;cursor:pointer}
-.lb-nav{justify-self:center;width:44px;height:44px;border:0;border-radius:50%;background:rgba(255,255,255,.12);color:#fff;font-size:26px;line-height:1;cursor:pointer}
+.lb-nav{width:44px;height:44px;border:0;border-radius:50%;background:rgba(255,255,255,.12);color:#fff;font-size:26px;line-height:1;cursor:pointer}
 .lb-x:hover,.lb-nav:hover{background:rgba(255,255,255,.22)}
+.lb-nav.prev{justify-self:end;margin-right:12px}.lb-nav.next{justify-self:start;margin-left:12px}
 .lb-nav[hidden]{visibility:hidden;display:block}
 
 /* prev / next day */
@@ -723,7 +725,7 @@ body.lb-open{overflow:hidden}
   .entry-card{padding-left:14px}
   .hero-fig{aspect-ratio:16/10}
   .lb{grid-template-columns:0 1fr 0}
-  .lb-nav{position:absolute;bottom:18px}
+  .lb-nav{position:absolute;bottom:18px;margin:0}
   .lb-nav.prev{left:calc(50% - 60px)}.lb-nav.next{right:calc(50% - 60px)}
   .leg-imgs{grid-template-columns:repeat(2,1fr)}
   .leg-imgs .leg-img:nth-child(n+3){display:none}
