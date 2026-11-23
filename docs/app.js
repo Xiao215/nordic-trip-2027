@@ -77,7 +77,7 @@ var UIEN={
   "访问码":"Access code","确定":"Enter","问问助手，或发张小票让它记账…":"Ask anything, or send a receipt to log it…","加图片（拍照或从相册选）":"Add a photo (camera or library)","加图片：小票、收据、截图":"Add a photo: a receipt, a bill, a screenshot","问行程助手":"Ask the trip assistant",
   "新对话":"New chat","清空对话，重新开始":"Clear this conversation and start over","关闭":"Close",
   "关闭（Esc）。关了回答也会继续。":"Close (Esc). Answers keep coming while it's closed.","问助手":"Ask","问行程助手（⌘K）":"Ask the trip assistant (⌘K)",
-  "随便问 · 改行程前会先等你确认":"Ask anything · changes wait for your approval","返回对话":"Back to the chat","历史对话":"Past chats","我是":"I'm","名字":"name","正在载入行程…":"Loading the plan…","按计划现在在这":"Here now (per plan)","Google 地图":"Google Map",
+  "随便问 · 改行程前会先等你确认":"Ask anything · changes wait for your approval","所有对话":"All chats","历史对话":"Past chats","我是":"I'm","名字":"name","正在载入行程…":"Loading the plan…","按计划现在在这":"Here now (per plan)","Google 地图":"Google Map",
   "行程没载入（{e}）。如果是直接从硬盘打开的 index.html，请改用本地服务器：python3 -m http.server":"Couldn't load the plan ({e}). If you opened index.html from disk, serve the folder instead: python3 -m http.server",
   // pace
   "节奏":"Pace","轻松":"Easy","适中":"Moderate","很满":"Full","开车 {t}":"{t} driving","走路 {t}":"{t} on foot","在路上 {t}":"{t} in transit",

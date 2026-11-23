@@ -88,11 +88,11 @@ fab.addEventListener("click",function(){if(isOpen())closeChat();else openChat();
 scrim.addEventListener("click",closeChat);
 $("chatHide").addEventListener("click",closeChat);
 $("chatNew").addEventListener("click",newChat);
-$("chatHist").addEventListener("click",function(){showList(true);});
-$("chatBack").addEventListener("click",function(){showList(false);});
+// ‹ in a conversation goes to the list of all of them; picking one (or +) comes back
+$("chatBack").addEventListener("click",function(){showList(true);});
 document.addEventListener("keydown",function(e){
   if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==="k"){e.preventDefault();openChat();}
-  else if(e.key==="Escape"&&isOpen()){e.preventDefault();if(listing)showList(false);else closeChat();}
+  else if(e.key==="Escape"&&isOpen()){e.preventDefault();closeChat();}
 });
 
 /* ---------- the conversation ----------
