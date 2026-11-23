@@ -559,8 +559,10 @@ li.now>.row .t{color:var(--sun);font-weight:600}
 .tasks li.done>span:last-child{text-decoration:line-through;text-decoration-color:color-mix(in srgb,currentColor 45%,transparent)}
 .tasks li.in_progress{font-weight:600}
 .tasks .dot{flex:none;width:12px;height:12px;border-radius:50%;border:1.5px solid color-mix(in srgb,var(--muted) 55%,transparent)}
-/* what it just found and what it's doing next, written between tool calls */
-.m-note{font-size:13px;line-height:1.5;color:var(--muted);padding-left:10px;border-left:2px solid var(--line);overflow-wrap:anywhere}
+/* its latest thought, in place of 思考中: two lines at most */
+.l-status.thought{align-items:flex-start}
+.l-status.thought .dots{margin-top:7px}
+.l-status.thought>span:last-child{font-size:12.5px;line-height:1.45;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;overflow-wrap:anywhere}
 
 /* a change waiting for someone's go-ahead */
 .ask-card{border:1px solid color-mix(in srgb,var(--sun) 45%,var(--line));border-radius:14px;background:var(--surface);overflow:hidden;box-shadow:0 0 0 3px var(--sun-soft)}

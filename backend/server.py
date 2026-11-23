@@ -444,7 +444,7 @@ async def answer(messages: list[dict], lang_en: bool = False, asker: str = ""):
                             pass  # the checklist shows once its input is complete
                         elif b.type in ("server_tool_use", "tool_use"):
                             yield sse({"type": "step", "id": b.id, "label": step_label(b.name, None, lang_en), "state": "running"})
-                        elif b.type == "web_search_tool_result":
+                        elif b.type in ("web_search_tool_result", "web_fetch_tool_result"):
                             yield sse({"type": "step", "id": b.tool_use_id, "state": "done"})
                     elif event.type == "content_block_stop":
                         b = getattr(event, "content_block", None)
@@ -998,6 +998,9 @@ def step_label(name: str, inp: dict | None, lang_en: bool) -> str:
     if name == "web_search":
         q = str(inp.get("query", ""))
         return (f"Searched the web: {q}" if lang_en else f"上网查：{q}") if q else ("Searching the web" if lang_en else "上网查")
+    if name == "web_fetch":
+        site = re.sub(r"^https?://(www\.)?", "", str(inp.get("url", ""))).split("/")[0]
+        return (f"Read a page: {site}" if lang_en else f"读网页：{site}") if site else ("Reading a page" if lang_en else "读网页")
     if name == "read_plan":
         path = str(inp.get("path", "")) or ("outline" if lang_en else "概览")
         return f"Read the plan: {path}" if lang_en else f"读行程：{path}"

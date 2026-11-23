@@ -97,8 +97,8 @@ document.addEventListener("keydown",function(e){
 
 /* ---------- the conversation ----------
    A user message is {role, content}. An answer is {role:"assistant", content (its text), parts, ts}: parts in the order
-   they arrived, {t:"steps", items:[{id,label,state,ts}]}, {t:"text", text}, {t:"card", card}, {t:"note", id, text} (a short
-   progress note the assistant wrote between tool calls) and at most one {t:"tasks", items:[{text,status}]} (its checklist for a
+   they arrived, {t:"steps", items:[{id,label,state,ts}]}, {t:"text", text}, {t:"card", card}, {t:"note", id, text} (what the
+   assistant is thinking about between tool calls: shown as the live status line, dropped once the answer is in) and at most one {t:"tasks", items:[{text,status}]} (its checklist for a
    request that takes several steps, updated in place). */
 log.addEventListener("scroll",function(){stick=log.scrollHeight-log.scrollTop-log.clientHeight<48;});
 function scroll(force){if(force||stick)log.scrollTop=log.scrollHeight;}
@@ -151,13 +151,14 @@ function paintBot(d,m,live){
     if(p.t==="steps")h+=stepsHtml(p.items,(m.ts||0)+"-"+i,live);
     else if(p.t==="card")h+=cardHtml(p.card);
     else if(p.t==="tasks")h+=tasksHtml(p.items,live);
-    else if(p.t==="note")h+='<div class="m-note">'+esc(p.text.trim())+"</div>";
     else if(p.text)h+='<div class="m-content">'+md(p.text)+"</div>";});
   var lastPart=parts[parts.length-1];
+  // while it works: its latest thought if that's the newest thing, else 思考中 unless a step or the checklist already spins
+  var thought=lastPart&&lastPart.t==="note"&&lastPart.text.trim();
   var working=parts.some(function(p){return p.t==="tasks"&&p.items.some(function(t){return t.status==="in_progress";});})||
     (lastPart&&lastPart.t==="steps"&&lastPart.items.some(function(s){return s.state==="running";}));
-  if(live&&(!lastPart||lastPart.t!=="text"||!lastPart.text)&&!working)
-    h+='<div class="l-status"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span>'+Z("思考中","Thinking")+"</span></div>";
+  if(live&&(!lastPart||lastPart.t!=="text"||!lastPart.text)&&(thought||!working))
+    h+='<div class="l-status'+(thought?" thought":"")+'"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span>'+esc(thought||Z("思考中","Thinking"))+"</span></div>";
   if(!live){h+='<div class="l-tools"><span>'+esc(clock(m.ts))+(m.stopped?Z(" · 中途停止"," · stopped early"):"")+'</span><button type="button" data-copy="1">'+Z("复制","Copy")+"</button></div>";}
   d.innerHTML=h;d._m=m;
 }
@@ -323,7 +324,7 @@ function ask(q,imgs){
     m.parts.forEach(function(p){if(p.t==="steps")p.items.forEach(function(s){if(s.state==="running")s.state=stopped?"error":"done";});
       // a complete answer means the list is done: the assistant doesn't spend a round trip ticking the last steps
       if(p.t==="tasks"&&!stopped&&!failed)p.items.forEach(function(t){t.status="done";});});
-    m.parts=m.parts.filter(function(p){return (p.t!=="text"&&p.t!=="note")||p.text.trim();});
+    m.parts=m.parts.filter(function(p){return p.t!=="note"&&(p.t!=="text"||p.text.trim());});
     m.ts=Date.now();m.stopped=stopped||undefined;cur=null;C.msgs.push(m);C.ts=Date.now();save();paintBot(el,m,false);}
   fetch(API+"/api/chat",{method:"POST",signal:ctrl&&ctrl.signal,headers:{"Content-Type":"application/json","X-Access-Code":S.code||""},
     body:JSON.stringify({name:"",messages:withPhotos(history(C),q,imgs),context:ctx})})
