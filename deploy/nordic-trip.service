@@ -1,0 +1,18 @@
+# The trip backend on the Raspberry Pi, as a user service. Installed by scripts/pi-setup.sh as
+# ~/.config/systemd/user/nordic-trip.service. Listens on 127.0.0.1:8791 (PORT in .env); Tailscale Funnel
+# publishes it at https://pi.tail3d8516.ts.net/nordic. The chat answers through cli-bridge on 127.0.0.1:8787.
+[Unit]
+Description=Nordic Trip 2027 backend: chat, expense log, drivers, options board (port 8791)
+After=network-online.target cli-bridge.service
+Wants=cli-bridge.service
+
+[Service]
+WorkingDirectory=%h/services/nordic-trip
+EnvironmentFile=%h/services/nordic-trip/.env
+Environment=DATA_DIR=%h/services/nordic-trip/data
+ExecStart=%h/services/nordic-trip/.venv/bin/python repo/backend/server.py
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target

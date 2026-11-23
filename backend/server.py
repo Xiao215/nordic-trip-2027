@@ -22,10 +22,14 @@ from fastapi.responses import Response, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
-load_dotenv(Path(__file__).with_name(".env"), override=True)  # .env wins over the shell
+load_dotenv(Path(__file__).with_name(".env"), override=True)  # .env wins over the shell (on the Pi there is none: systemd passes it)
 
 DOCS = Path(__file__).resolve().parent.parent / "docs"
 TRIP_FILE = DOCS / "trip.json"
+# The group's shared data (expense log, drivers, options board). On the Pi it lives outside the git checkout
+# (~/services/nordic-trip/data) so deploys never touch it; locally it defaults to this folder.
+DATA = Path(os.getenv("DATA_DIR") or Path(__file__).parent).expanduser()
+DATA.mkdir(parents=True, exist_ok=True)
 MODEL = os.getenv("MODEL", "claude-opus-5-5")
 EFFORT = os.getenv("EFFORT", "low")
 BASE_URL = os.getenv("ANTHROPIC_BASE_URL", "")
@@ -387,7 +391,7 @@ async def answer(messages: list[dict], lang_en: bool = False, asker: str = ""):
 # a copy for offline reading and queues new entries until it can reach this server again, so adding
 # is idempotent (the page picks the id) and every write answers with the whole log.
 
-EXPENSES_FILE = Path(__file__).with_name("expenses.json")
+EXPENSES_FILE = DATA / "expenses.json"
 CURRENCIES = ("ISK", "NOK", "SEK", "DKK", "EUR", "CAD", "USD", "CNY")
 CATEGORIES = ("food", "groceries", "fuel", "transport", "stay", "tickets", "other")
 _ledger_lock = asyncio.Lock()
@@ -496,7 +500,7 @@ async def delete_expense(item_id: str, x_access_code: str | None = Header(defaul
 # Who can drive and who drives each leg, keyed by the page as "date|from>to" (see app.js boot). Picks arrive in
 # batches (the page queues them offline), and every write answers with the whole list.
 
-DRIVERS_FILE = Path(__file__).with_name("drivers.json")
+DRIVERS_FILE = DATA / "drivers.json"
 DRIVE_KEY = re.compile(r"^\d{4}-\d{2}-\d{2}\|[\w>.#-]{1,120}$")
 _drivers_lock = asyncio.Lock()
 
@@ -569,7 +573,7 @@ async def delete_driver(body: PersonIn, x_access_code: str | None = Header(defau
 # batch of small operations (the page queues them offline, ids are picked by the page so a retry is harmless),
 # and every write answers with the whole board.
 
-OPTIONS_FILE = Path(__file__).with_name("options.json")
+OPTIONS_FILE = DATA / "options.json"
 ID = r"^[A-Za-z0-9_-]{6,40}$"
 SLOT = re.compile(r"^[\w-]{1,60}$")
 _options_lock = asyncio.Lock()
