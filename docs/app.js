@@ -1045,12 +1045,15 @@ function allPts(){var a=[];T.days.forEach(function(D){a=a.concat(dayPts(D));});T
 // Stops of a day in order, for the keyless embed and the directions link. Google can't route across
 // a flight, ferry or train, so the day splits there and the part with the most stops is used.
 var ROADS={drive:1,walk:1,bike:1};
-function embedDayRoute(D){if(D.route)return D.route.map(LL);var groups=[[]];
+function embedDayRoute(D){if(D.route)return D.route.map(LL);var groups=[[]],vias={};
   D.segs.forEach(function(s){var g=groups[groups.length-1];
     if(s.t==="move"&&!ROADS[s.mode]){groups.push([]);g=groups[groups.length-1];add(g,s.path[s.path.length-1]);return;}
-    (s.t==="move"?[s.path[0],s.path[s.path.length-1]]:[s.place]).forEach(function(x){add(g,x);});});
-  function add(g,x){if(typeof x==="string"&&g[g.length-1]!==x)g.push(x);}
+    // a drive's named waypoints (e.g. which F-road to take) go in too, so Google takes the same road
+    if(s.t==="move"){add(g,s.path[0]);if(s.mode==="drive")s.path.slice(1,-1).forEach(function(x){add(g,x,1);});add(g,s.path[s.path.length-1]);}else add(g,s.place);});
+  function add(g,x,via){if(typeof x==="string"&&g[g.length-1]!==x){g.push(x);if(via)vias[x]=1;}}
   var best=groups.reduce(function(a,g){return g.length>a.length?g:a;},[]);
+  // Google takes ten points at most: drop waypoints before stops
+  for(var j=best.length-2;best.length>10&&j>0;j--)if(vias[best[j]])best.splice(j,1);
   return best.slice(0,10).map(LL);}
 function fitView(){
   caption();redrawMap();var D=day();
