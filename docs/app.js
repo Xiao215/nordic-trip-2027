@@ -628,12 +628,12 @@ function optCard(o,k){
 function optRow(list,key){
   var li=document.createElement("li"),id=state.date+"|"+key,open=!!OPTOPEN[id];li.className="opts"+(open?" open":"");li.dataset.opt=key;
   li.innerHTML='<button type="button" class="opt-toggle" aria-expanded="'+open+'"><span class="opt-ar">›</span>'+esc(U("可选 · {n}",{n:list.length}))+'</button>'+
-    '<div class="opt-list"'+(open?"":" hidden")+'>'+list.map(function(o,j){return optCard(o,key+"#"+j);}).join('<div class="opt-or">'+esc(U("或"))+'</div>')+'</div>';
+    '<div class="opt-fold"'+(open?"":" inert")+'><div class="opt-in"><div class="opt-list">'+list.map(function(o,j){return optCard(o,key+"#"+j);}).join('<div class="opt-or">'+esc(U("或"))+'</div>')+'</div></div></div>';
   return li;}
 $("rows").addEventListener("click",function(e){
   var t=e.target.closest(".opt-toggle");
   if(t){var li=t.closest("li.opts"),id=state.date+"|"+li.dataset.opt,on=!OPTOPEN[id];OPTOPEN[id]=on;
-    li.classList.toggle("open",on);t.setAttribute("aria-expanded",on);li.querySelector(".opt-list").hidden=!on;return;}
+    li.classList.toggle("open",on);t.setAttribute("aria-expanded",on);li.querySelector(".opt-fold").inert=!on;return;}
   var a=e.target.closest("[data-opt-ask]");
   if(a){var k=a.dataset.optAsk.split("#"),o=optGroups(day())[k[0]][+k[1]];
     if(o&&window.tripChat)window.tripChat.ask(U("多讲讲「{w}」，有什么要注意的？",{w:plain(o.name||"[["+o.place+"]]")}));}});
@@ -644,10 +644,13 @@ function paintOpen(){
   var from=STAGE.closest("#rows>li");
   document.querySelectorAll("#rows>li[data-i]").forEach(function(li){var i=+li.dataset.i,on=i===state.sel;
     li.classList.toggle("open",on);li.querySelector(".row").setAttribute("aria-expanded",on);
-    var d=li.querySelector(".detail");if(on&&!d){li.appendChild(detail(day().segs[i]));}else if(!on&&d)d.remove();});
+    var d=li.querySelector(".detail:not(.closing)");if(on&&!d){li.appendChild(detail(day().segs[i]));}else if(!on&&d)foldAway(d);});
   placeMap(document.querySelector("#rows>li.open")||from);
   document.dispatchEvent(new CustomEvent("trip:view"));
 }
+// a closing stop's details fold up before they go (at once when motion is reduced)
+function foldAway(d){if(matchMedia("(prefers-reduced-motion:reduce)").matches){d.remove();return;}
+  d.classList.add("closing");d.addEventListener("animationend",function(){d.remove();},{once:true});setTimeout(function(){if(d.isConnected)d.remove();},400);}
 /* ---------- phones: the map travels with the open stop ---------- */
 // Below 900px the map sits above the plan and scrolls out of sight, so an open stop carries the map in
 // its details and hands it back when it closes. The row you tapped stays where it was on screen.

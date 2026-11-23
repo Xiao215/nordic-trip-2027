@@ -240,8 +240,10 @@ li.now>.row .t{color:var(--sun);font-weight:600}
 .opt-toggle:hover,.opts.open .opt-toggle{color:var(--ink)}
 .opt-ar{display:inline-block;transition:transform .15s}
 .opts.open .opt-ar{transform:rotate(90deg)}
-.opt-list{display:grid;gap:8px;margin:6px 0 8px}
-.opt-list[hidden]{display:none}
+.opt-fold{display:grid;grid-template-rows:0fr;opacity:0}
+.opts.open .opt-fold{grid-template-rows:1fr;opacity:1}
+.opt-in{min-height:0;overflow:hidden}
+.opt-list{display:grid;gap:8px;padding:6px 0 8px}
 .opt-card{border:1.5px dashed var(--line);border-left:3px solid var(--k);border-radius:0 12px 12px 0;background:var(--surface);padding:10px 14px 12px;display:grid;gap:8px}
 .opt-card h4{margin:0;font-size:15px;font-weight:600}
 .opt-meta{font-family:var(--f-mono);font-size:12px;color:var(--muted)}
@@ -776,6 +778,13 @@ body.lb-open{overflow:hidden}
   .detail{animation:open .28s cubic-bezier(.2,.7,.2,1);transform-origin:top}
   @keyframes open{from{opacity:0;transform:translateY(-6px) scaleY(.96)}to{opacity:1;transform:none}}
   .row .chev,.b-chev{transition:transform .25s cubic-bezier(.3,.8,.25,1)}
+  .detail.closing{animation:shut .2s cubic-bezier(.4,0,.6,1) forwards;pointer-events:none}
+  @keyframes shut{to{opacity:0;transform:translateY(-6px) scaleY(.96)}}
+  /* 可选: folds open and shut, the cards drifting in */
+  .opt-fold{transition:grid-template-rows .34s cubic-bezier(.2,.7,.2,1),opacity .26s ease}
+  .opt-ar{transition:transform .25s cubic-bezier(.3,.8,.25,1)}
+  .opt-card,.opt-mv,.opt-or{transition:transform .34s cubic-bezier(.2,.7,.2,1)}
+  .opts:not(.open) .opt-card,.opts:not(.open) .opt-mv,.opts:not(.open) .opt-or{transform:translateY(-8px)}
   /* every fold-out section (booking cards, the booked group, all steps, visa details) opens and closes smoothly */
   details::details-content{height:0;overflow:clip;transition:height .32s cubic-bezier(.2,.7,.2,1),content-visibility .32s allow-discrete}
   details[open]::details-content{height:auto}
