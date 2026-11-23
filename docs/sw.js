@@ -5,7 +5,7 @@
    of time; a photo not saved at the size asked for falls back to any size that is. The forecast and exchange
    rates keep their last answer. The chat, the expense log and the drivers (/api/) and Google Maps always go to
    the network. Bump SHELL's version only when this file's caching changes, not for edits to the site. */
-var SHELL="nt-shell-v2",PHOTOS="nt-photos",FONTS="nt-fonts-v1",DATA="nt-data-v1",KEEP=[SHELL,PHOTOS,FONTS,DATA];
+var SHELL="nt-shell-v3",PHOTOS="nt-photos",FONTS="nt-fonts-v1",DATA="nt-data-v1",KEEP=[SHELL,PHOTOS,FONTS,DATA];
 var CORE=["./","index.html","styles.css","app.js","chat.js","config.js"];
 
 self.addEventListener("install",function(e){
@@ -22,7 +22,7 @@ self.addEventListener("fetch",function(e){
   var req=e.request;if(req.method!=="GET")return;
   var u=new URL(req.url);
   if(u.origin===location.origin){if(u.pathname.indexOf("/api/")<0)e.respondWith(fresh(req,SHELL,4000));return;}
-  if(u.hostname==="images.unsplash.com"){e.respondWith(photo(req.url));return;}
+  if(u.hostname==="images.unsplash.com"||u.hostname==="upload.wikimedia.org"){e.respondWith(photo(req.url));return;}
   if(u.hostname==="fonts.googleapis.com"||u.hostname==="fonts.gstatic.com"){e.respondWith(kept(req,FONTS));return;}
   if(u.hostname==="api.open-meteo.com"||u.hostname==="open.er-api.com")e.respondWith(fresh(req,DATA,6000));
 });
