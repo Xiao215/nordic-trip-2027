@@ -2,7 +2,7 @@
 # ~/.config/systemd/user/nordic-trip.service. Listens on 127.0.0.1:8791 (PORT in .env); Tailscale Funnel
 # publishes it at https://pi.tail3d8516.ts.net/nordic. The chat answers through cli-bridge on 127.0.0.1:8787.
 [Unit]
-Description=Nordic Trip 2027 backend: chat, expense log, drivers, options board (port 8791)
+Description=Nordic Trip 2027 backend: chat, live plan, expense log, drivers (port 8791)
 After=network-online.target cli-bridge.service
 Wants=cli-bridge.service
 

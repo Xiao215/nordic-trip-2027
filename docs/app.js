@@ -29,7 +29,7 @@ var UIEN={
   "已排好 {a} 天，其余 {b} 天规划中":"{a} days planned, {b} still being planned","全部 {n} 天已排好":"All {n} days planned",
   "{n} 天后开放预订":"Opens in {n} days","明天开放预订":"Opens tomorrow","今天开放预订":"Opens today","现在可以订":"Open now",
   "尽早":"Early","已订":"Booked","标记已订":"Mark booked","打开 ":"Open ","问助手":"Ask","全部步骤":"All steps","展开说明":"More",
-  "已订 {a} / {b} · 勾选只保存在这台设备上":"{a} of {b} booked · ticks are saved on this device",
+  "已订 {a} / {b} · 自己勾的只存在这台设备上，跟助手说“订好了”大家都能看到":"{a} of {b} booked · your ticks stay on this device; tell the assistant it's booked and everyone sees it",
   "签证和入境":"Visas and entry","护照和勾选只保存在这台设备上":"Your passport and ticks are saved on this device","护照":"Passport","住在":"Living in",
   "选一下你的护照，只看跟你有关的签证和入境步骤。":"Pick your passport to see only the visa and entry steps that apply to you.",
   "{p} · 住在 {l}":"{p} · living in {l}","查看预订":"See the booking","显示全部":"Show all","只看我的":"Only mine",
@@ -74,10 +74,10 @@ var UIEN={
   "点一站看详情，地图会跳过去":"Tap a stop for details and to see it on the map","预订":"Bookings","前一天":"Previous day","后一天":"Next day",
   "视图":"View","选择日期":"Choose a day","语言":"Language","地图":"Map","行程地图":"Trip map","看全天 / 全程":"Show the whole day / trip",
   "在 Google 地图里打开当天路线":"Open the day's route in Google Maps","行程助手":"Trip assistant","输入访问码：":"Enter the access code:",
-  "访问码":"Access code","确定":"Enter","问问行程助手…":"Ask about the trip…","问行程助手":"Ask the trip assistant",
-  "新对话":"New chat","清空对话，重新开始":"Clear this conversation and start over","收起对话":"Hide chat",
-  "收起（Esc）。收起后回答会继续。":"Hide (Esc). Answers keep coming while hidden.",
-  "回车发送 · Shift+回车换行 · Esc 收起":"Enter to send · Shift+Enter for a new line · Esc to hide","正在载入行程…":"Loading the plan…","按计划现在在这":"Here now (per plan)","Google 地图":"Google Map",
+  "访问码":"Access code","确定":"Enter","问问行程助手，或让它改行程…":"Ask about the trip, or ask for a change…","问行程助手":"Ask the trip assistant",
+  "新对话":"New chat","清空对话，重新开始":"Clear this conversation and start over","关闭":"Close",
+  "关闭（Esc）。关了回答也会继续。":"Close (Esc). Answers keep coming while it's closed.","问助手":"Ask","问行程助手（⌘K）":"Ask the trip assistant (⌘K)",
+  "随便问 · 改行程前会先等你确认":"Ask anything · changes wait for your approval","我是":"I'm","名字":"name","正在载入行程…":"Loading the plan…","按计划现在在这":"Here now (per plan)","Google 地图":"Google Map",
   "行程没载入（{e}）。如果是直接从硬盘打开的 index.html，请改用本地服务器：python3 -m http.server":"Couldn't load the plan ({e}). If you opened index.html from disk, serve the folder instead: python3 -m http.server",
   // pace
   "节奏":"Pace","轻松":"Easy","适中":"Moderate","很满":"Full","开车 {t}":"{t} driving","走路 {t}":"{t} on foot","在路上 {t}":"{t} in transit",
@@ -105,26 +105,9 @@ var UIEN={
   "1 处改动等待同步":"1 change waiting to sync","{n} 处改动等待同步":"{n} changes waiting to sync",
   "连不上行程服务器，联网后才能改司机名单。":"Can't reach the trip server. The driver list can be changed once you're online.",
   "把 {p} 从司机里移除？已经排给 {p} 的车程会空出来。":"Remove {p} from the drivers? Their drives will have no driver.",
-  // options board
-  "候选":"Options","看到好的就跟助手说一声，大家投票、留言，再选定一个":"Found something good? Tell the assistant, then vote, comment and pick one together",
-  "{p} 开的话题":"Topic started by {p}","话题":"Topics","有一处改动没存上：内容太长或格式不对。":"One change wasn't saved: it was too long or not in the right format.",
-  "先在上面写上你是谁，大家才知道是谁投的。":"Write your name at the top first, so everyone knows who voted.",
-  "大家选了":"Picked","看候选":"See the options","1 个候选，去投票":"1 option, go vote","{n} 个候选，去投票":"{n} options, go vote",
-  "+ 加候选，让大家一起挑":"+ Add an option for the group to choose from","已选定":"picked","1 个候选":"1 option","{n} 个候选":"{n} options",
-  "候选存在行程服务器上，跟行程助手用同一个访问码。":"The options live on the trip server and use the same access code as the assistant.",
-  "连不上行程服务器。下面是这台设备上次看到的候选；改动会先存在这里，连上后自动同步。":"Can't reach the trip server. These are the options as this device last saw them; changes wait here and sync once you're back online.",
-  "正在载入候选…":"Loading the options…","定了：{w}":"Picked: {w}","加一个":"Add one","删掉这个话题":"Delete this topic",
-  "还没有候选。看到好的就跟助手说。":"No options yet. Tell the assistant when you find one.","另外 1 个候选":"1 other option","另外 {n} 个候选":"{n} other options",
-  "还没有候选。在上面跟助手说一声，比如贴个链接，它会放到对应的预订下面，大家就能投票了。也可以让它帮你找几个。":"No options yet. Tell the assistant above, for example by pasting a link: it files it under the right booking and everyone can vote. It can also find a few for you.",
-  "选定":"Picked","看预订":"Booking","名字":"Name","价格":"Price","链接":"Link","备注":"Note","保存":"Save","取消":"Cancel","投票":"Votes",
-  "赞成":"Yes","不太行":"Not for me","留言":"Comments","选定了":"Picked","就它了":"Pick this","编辑":"Edit","删掉":"Delete",
-  "说点什么…":"Say something…","发送":"Send","我是":"I'm","你的名字":"Your name","跟助手说":"Tell the assistant","发给助手":"Send to the assistant","先写上你是谁。":"Write your name first.",
-  "随便写。比如：弗洛姆这家不错 https://… 一晚 1,890 NOK；或者：冰岛北边住的就定第二个，别的删了":"Write it any way you like, e.g. \u201cthis Flåm place looks good https://… 1,890 NOK a night\u201d, or \u201cpick the second one for north Iceland and drop the rest\u201d",
-  "放在哪个预订下面，助手会自己判断；拿不准会先问你。":"The assistant works out which booking it's for, and asks if it isn't sure.","加到「{w}」：":"For \u201c{w}\u201d: ",
-  "在聊天里看助手的回复":"The assistant answers in the chat",
-  "删掉「{w}」这个候选？投票和留言也会一起删掉。":"Delete “{w}”? Its votes and comments go too.",
-  "删掉话题「{w}」和里面所有候选？":"Delete the topic “{w}” and every option in it?",
-  "{p} 加的":"added by {p}","{p} 让助手加的":"added by the assistant for {p}",
+  "加一个":"Add one","删掉":"Delete",
+  "大家已订":"Booked for everyone","行程里标记了已订，大家都能看到":"Marked booked in the plan, for everyone",
+  "行程更新了":"The plan was updated","{p} 刚改了行程":"{p} just changed the plan",
   // offline
   "离线使用":"Offline use","只存在这台设备上":"Saved on this device only","这个浏览器不能离线保存网页。":"This browser can't save the site for offline use.",
   "行程、上次看过的天气和汇率：打开过一次就存好了，没信号也能看":"The plan, the last forecast and exchange rates: saved after your first visit, readable with no signal",
@@ -254,7 +237,7 @@ function plain(s){return money(String(L(s)||"")).replace(/\[\[([\w-]+)\]\]/g,fun
 /* ---------- state ---------- */
 var T,DATES=[],BYDATE={},N={},GPID={},PACE={};
 var state={view:"all",date:null,sel:null},weather={};
-var VIEWS={all:1,prep:1,opts:1,money:1}; // tabs addressed by name in the URL (#prep); a day is #2027-07-06
+var VIEWS={all:1,prep:1,money:1}; // tabs addressed by name in the URL (#prep); a day is #2027-07-06
 
 function LL(x){return typeof x==="string"?N[x]:x;}
 function gPlace(id){var ll=N[id];var u="https://www.google.com/maps/search/?api=1&query="+ll[0]+"%2C"+ll[1];if(GPID[id])u+="&query_place_id="+GPID[id];return u;}
@@ -269,8 +252,9 @@ function dur(s){if(s.mins)return s.mins;if(!s.start||!s.end)return 0;var d=mins(
 function liveDate(){for(var i=0;i<DATES.length;i++){if(nowIn(tzOf(DATES[i])).date===DATES[i])return DATES[i];}return null;}
 function dayLabel(d){var D=BYDATE[d];return D?plain(D.short||D.title):U("规划中");}
 
-function boot(trip){
-  T=trip;
+// look-up tables for the plan: places, dates, days, pace (redone when a new version of the plan arrives)
+function index(trip){
+  T=trip;N={};GPID={};DATES=[];BYDATE={};PACE={};
   Object.keys(T.places).forEach(function(k){N[k]=T.places[k].ll;if(T.places[k].gid)GPID[k]=T.places[k].gid;});
   for(var d=T.dates.start;d<=T.dates.end;d=addDays(d,1))DATES.push(d);
   T.days.forEach(function(D){BYDATE[D.date]=D;var n=0,dn={};
@@ -280,33 +264,36 @@ function boot(trip){
       if(s.t==="move"&&s.mode==="drive"){var ids=s.path.filter(function(x){return typeof x==="string";}),k=D.date+"|"+(ids.length?ids[0]+">"+ids[ids.length-1]:i);
         dn[k]=(dn[k]||0)+1;s.dk=dn[k]>1?k+"#"+dn[k]:k;}});
     PACE[D.date]=pace(D);});
+}
+function boot(trip){
+  index(trip);
   loadFx();renderCur();
   applyNames();renderHeader();renderAll();renderStrip();renderPrep();
   var h=decodeURIComponent(location.hash.slice(1)),saved=store("nt-pos")||{};
   var live=liveDate(),date=BYDATE[h]||DATES.indexOf(h)>=0?h:live||saved.date||T.dates.start;
-  var view=VIEWS[h]?h:DATES.indexOf(h)>=0||live?"day":saved.view||"all";
+  var view=VIEWS[h]?h:DATES.indexOf(h)>=0||live?"day":VIEWS[saved.view]||saved.view==="day"?saved.view:"all"; // a tab that no longer exists (候选) opens the overview
   setView(view,date);
   loadMap();
   if(OUT.length&&auth().code())flush(); // expenses logged offline last time go out as soon as the page is back
   loadDrivers(true);paintOnline();
-  if(auth().code()&&state.view!=="opts")loadOpts(true); // booking cards show how the choosing is going
   setInterval(function(){if(state.view==="day"&&liveDate()===state.date)renderGlance();},60000);
   window.addEventListener("hashchange",function(){var h=decodeURIComponent(location.hash.slice(1));
     if(DATES.indexOf(h)>=0&&!(state.view==="day"&&state.date===h))setView("day",h);else if(VIEWS[h]&&state.view!==h)setView(h);});
   window.tripApp={context:function(){var c=viewContext(),pp=passportText();if(pp)c.passport=pp;return c;},
-    lang:function(){return en()?"en":"zh";},showOpts:function(){setView("opts");}};
+    lang:function(){return en()?"en":"zh";}};
   function viewContext(){var D=day(),s=D&&state.sel!=null?D.segs[state.sel]:null;
     var lang=en()?"en":"zh",curTxt=curContext();
     if(state.view==="prep")return {lang:lang,currency:curTxt,day:"Prep tab",looking_at:"visas, bookings and checklists"};
     if(state.view==="all")return {lang:lang,currency:curTxt,day:"Overview",looking_at:"the whole trip's calendar and route legs"};
     if(state.view==="money")return {lang:lang,currency:curTxt,day:"Expenses tab",looking_at:"the group's shared expense log"};
-    if(state.view==="opts")return {lang:lang,currency:curTxt,day:"Options tab",looking_at:"the group's shared options board (hotels, tours and other options to vote on)"};
     return {lang:lang,currency:curTxt,day:state.date+" · "+(D?plain(D.title):"being planned"),looking_at:s?(s.t==="move"?mode(s.mode)+" "+moveLabel(s,true):s.num+". "+plain(s.name||"[["+s.place+"]]")+(s.start?" ("+s.start+")":"")):"the whole day"};}
   document.dispatchEvent(new CustomEvent("trip:view"));
 }
 
 /* ---------- header ---------- */
-function nextBooking(){var today=homeToday(),done=store("nt-booked")||{};
+// booked: marked in the plan for everyone (through the assistant), or ticked on this device
+function bookedIds(){var d=store("nt-booked")||{},o={};T.bookings.forEach(function(b){if(b.booked||d[b.id])o[b.id]=1;});return o;}
+function nextBooking(){var today=homeToday(),done=bookedIds();
   return T.bookings.filter(function(b){return forMe(b)&&b.opens&&!done[b.id]&&b.opens.slice(0,10)>=today;}).sort(function(a,b){return a.opens<b.opens?-1:1;})[0];}
 function renderHeader(){
   document.title=en()&&T.titleEn?T.titleEn:T.title;document.documentElement.lang=en()?"en":"zh-Hans";
@@ -382,7 +369,7 @@ document.querySelectorAll(".names button").forEach(function(b){b.addEventListene
   if(NM===b.dataset.nm)return;NM=b.dataset.nm;store("nt-names",NM);applyNames();rerender(true);prefsOpen(false);});});
 // redraw everything that shows text (after a language or currency change), keeping the open stop
 function rerender(lang){
-  var sel=state.sel;applyStatic();renderCur();renderHeader();renderAll();renderStrip();markStrip();renderPrep();renderMoney();renderOpts(true);$("fitLabel").textContent=U(state.view==="day"?"全天":"全程");
+  var sel=state.sel;applyStatic();renderCur();renderHeader();renderAll();renderStrip();markStrip();renderPrep();renderMoney();$("fitLabel").textContent=U(state.view==="day"?"全天":"全程");
   if(state.view==="day"){renderDay();if(sel!=null&&day()){state.sel=sel;paintOpen();}}
   if(lang){redrawMap();caption();document.dispatchEvent(new CustomEvent("trip:lang"));if(embed){var D=day();if(state.view==="day"&&D&&state.sel!=null)frame(D.segs[state.sel]);else fitView();}}}
 /* ---------- currency menu ---------- */
@@ -461,11 +448,11 @@ function renderEntry(){
   return h;
 }
 // the bookings that matter on one date (bookings tagged "days" in trip.json), each with whether it's ticked as booked
-function dayBookings(d){var done=store("nt-booked")||{};
+function dayBookings(d){var done=bookedIds();
   return T.bookings.filter(function(b){return forMe(b)&&b.days&&b.days.indexOf(d)>=0;}).map(function(b){return {b:b,done:!!done[b.id]};});}
 // Bookings in three groups: what you can do now, what opens later (by date), and what's booked (folded away)
 function renderPrep(){
-  var today=homeToday(),done=store("nt-booked")||{},nb=nextBooking(),shown=shownBookings();
+  var today=homeToday(),done=bookedIds(),nb=nextBooking(),shown=shownBookings();
   $("entry").innerHTML=renderEntry();
   var now=[],later=[],booked=[],doneOpen=$("bkDone")&&$("bkDone").open;
   shown.forEach(function(b){(done[b.id]?booked:b.opens&&b.opens.slice(0,10)>today?later:now).push(b);});
@@ -483,24 +470,24 @@ function renderPrep(){
     if(isDone){badge=ICON.check.replace("<svg",'<svg style="width:26px;height:26px;fill:none;stroke:#fff;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round"');due=U("已订");}
     var h='<details class="booking'+(b.hot?" hot":"")+(isDone?" done":"")+'" id="bk-'+esc(b.id)+'"'+(nb&&nb.id===b.id?" open":"")+'>';
     h+='<summary><span class="b-date">'+badge+'</span><span class="b-title">'+tx(b.what)+'</span>';
-    h+='<span class="b-line"><span class="due">'+esc(due)+'</span>'+[b.for,b.cost].filter(Boolean).map(function(x){return " · "+tx(x);}).join("")+'<span class="b-optn" data-boptn="'+esc(b.id)+'"></span></span>';
+    h+='<span class="b-line"><span class="due">'+esc(due)+'</span>'+[b.for,b.cost].filter(Boolean).map(function(x){return " · "+tx(x);}).join("")+'</span>';
     h+='<svg class="b-chev" viewBox="0 0 20 20"><path d="M5 8l5 5 5-5"/></svg></summary><div class="b-body">';
     if(b.summary)h+='<p>'+tx(b.summary)+"</p>";
     if(b.select&&b.select.length)h+='<ol class="select">'+b.select.map(function(x){return '<li><small>'+esc(L(x[0]))+'</small><b>'+tx(x[1])+'</b></li>';}).join("")+"</ol>";
     if(b.key&&b.key.length)h+='<dl class="keyfacts">'+b.key.map(function(f){return "<div><dt>"+esc(L(f[0]))+"</dt><dd>"+tx(f[1])+"</dd></div>";}).join("")+"</dl>";
     if(b.tip)h+='<p class="b-tip">'+tx(b.tip)+"</p>";
-    h+='<div class="b-opts" data-bopt="'+esc(b.id)+'"></div>';
     var acts=[],link=(b.links||[])[0];
     if(link)acts.push('<a class="pill primary" target="_blank" rel="noopener" href="'+esc(link[1])+'">'+ICON.dir+U("打开 ")+esc(L(link[0]))+"</a>");
     (b.links||[]).slice(1).forEach(function(l){acts.push('<a class="pill" target="_blank" rel="noopener" href="'+esc(l[1])+'">'+esc(L(l[0]))+"</a>");});
-    acts.push('<button class="pill'+(isDone?" on":"")+'" type="button" data-done="'+esc(b.id)+'">'+ICON.check+U(isDone?"已订":"标记已订")+"</button>");
+    acts.push(b.booked?'<span class="pill on" title="'+esc(U("行程里标记了已订，大家都能看到"))+'">'+ICON.check+U("大家已订")+"</span>":
+      '<button class="pill'+(isDone?" on":"")+'" type="button" data-done="'+esc(b.id)+'">'+ICON.check+U(isDone?"已订":"标记已订")+"</button>");
     acts.push('<button class="pill ask" type="button" data-ask="'+esc(b.id)+'">'+ICON.ask+U("问助手")+"</button>");
     h+='<div class="actions">'+acts.join("")+"</div>";
     if(b.steps&&b.steps.length)h+='<details class="allsteps"><summary>'+U("全部步骤")+'</summary><ol class="steps">'+b.steps.map(function(s){return "<li><span>"+tx(s)+"</span></li>";}).join("")+"</ol></details>";
     h+="</div></details>";
     return h;
   }
-  $("bookedCount").textContent=U("已订 {a} / {b} · 勾选只保存在这台设备上",{a:nDone,b:shown.length});
+  $("bookedCount").textContent=U("已订 {a} / {b} · 自己勾的只存在这台设备上，跟助手说“订好了”大家都能看到",{a:nDone,b:shown.length});
 
   var checked=store("nt-check")||{};
   $("prepLists").innerHTML=T.prep.map(function(card,ci){
@@ -514,14 +501,14 @@ function renderPrep(){
   $("footnote").innerHTML=tx(T.footnote);
   renderOffline();
   $("sources").innerHTML=U("资料来源：")+T.sources.concat([[U("天气预报：Open-Meteo"),"https://open-meteo.com/"]]).map(function(s){return '<a href="'+esc(s[1])+'" target="_blank" rel="noopener">'+esc(L(s[0]))+'</a>';}).join(" · ");
-  countPrep();paintOptCounts();
+  countPrep();
 }
 function countPrep(){var all=0,on=0;
   T.prep.forEach(function(card,ci){var c=0,list=document.querySelector('[data-card="'+ci+'"]');
     if(list)list.querySelectorAll("input").forEach(function(el){if(el.checked)c++;});
     all+=card.items.length;on+=c;var lab=document.querySelector('[data-count="'+ci+'"]');if(lab)lab.textContent=c+" / "+card.items.length;});
   $("entry").querySelectorAll("input[data-id]").forEach(function(el){all++;if(el.checked)on++;});
-  var done=store("nt-booked")||{},shown=shownBookings(),b=shown.filter(function(x){return done[x.id];}).length;
+  var done=bookedIds(),shown=shownBookings(),b=shown.filter(function(x){return done[x.id];}).length;
   $("prepCount").textContent=(b+on)+"/"+(shown.length+all);}
 $("prepView").addEventListener("change",function(e){var id=e.target.dataset&&e.target.dataset.id;if(!id)return;var d=store("nt-check")||{};d[id]=e.target.checked;store("nt-check",d);countPrep();});
 $("prepView").addEventListener("click",function(e){
@@ -530,7 +517,6 @@ $("prepView").addEventListener("click",function(e){
   var pf=e.target.closest("[data-prof]");if(pf){var k=pf.dataset.prof;setPassport(k==="ca"?"ca":"cn",k==="ca"?null:k.slice(3));return;}
   var sa=e.target.closest("[data-showall]");if(sa){SHOWALL=sa.dataset.showall==="1";renderPrep();return;}
   var ob=e.target.closest("[data-open-booking]");if(ob){openBooking(ob.dataset.openBooking);return;}
-  var go=e.target.closest("[data-go-opts]");if(go){goOpts(go.dataset.goOpts,!!go.dataset.new);return;}
   var mb=e.target.closest(".more-btn");
   if(mb){var p=mb.closest(".citem").querySelector(".more"),on=mb.getAttribute("aria-expanded")!=="true";mb.setAttribute("aria-expanded",on);p.hidden=!on;return;}
   var dn=e.target.closest("[data-done]");
@@ -552,7 +538,7 @@ function setView(v,date){
   var hash=v==="day"?state.date:v;if(decodeURIComponent(location.hash.slice(1))!==hash)history.replaceState(null,"","#"+hash);
   document.querySelectorAll(".seg-btn").forEach(function(b){b.setAttribute("aria-selected",b.dataset.view===v?"true":"false");});
   $("daySub").textContent=md(state.date);
-  $("top").hidden=v!=="all";$("allView").hidden=v!=="all";$("dayView").hidden=v!=="day";$("prepView").hidden=v!=="prep";$("optsView").hidden=v!=="opts";$("moneyView").hidden=v!=="money";$("stripWrap").hidden=v!=="day";
+  $("top").hidden=v!=="all";$("allView").hidden=v!=="all";$("dayView").hidden=v!=="day";$("prepView").hidden=v!=="prep";$("moneyView").hidden=v!=="money";$("stripWrap").hidden=v!=="day";
   $("fitLabel").textContent=U(v==="day"?"全天":"全程");
   markStrip();slideInd(".seg",'.seg-btn[aria-selected="true"]');
   // entrance animation: a new tab fades up; another day slides in from the side it came from
@@ -560,13 +546,22 @@ function setView(v,date){
     el.dataset.dir=was.view===v&&v==="day"?(state.date>was.date?"next":"prev"):"";
     el.classList.remove("enter");void el.offsetWidth;el.classList.add("enter");}
   if(v==="money")loadMoney();
-  if(v==="opts")loadOpts();
   if(v==="day"){renderDay();
     var D=day(),cur=D&&liveDate()===state.date?nowSeg():null;
     if(cur){select(cur.i,false);return;}}
   fitView();
 }
-document.querySelectorAll(".seg-btn").forEach(function(b){b.addEventListener("click",function(){setView(b.dataset.view);});});
+// the switch itself runs a moment later (inside the transition), so quick clicks compare with the last one asked for
+var wantView=null;
+document.querySelectorAll(".seg-btn").forEach(function(b){b.addEventListener("click",function(){var v=b.dataset.view;if((wantView||state.view)===v)return;wantView=v;
+  morph(function(){if(wantView===v)wantView=null;if(state.view!==v)setView(v);},"tab");});});
+// a big change to the page (another tab, a new version of the plan) cross-fades where the browser can
+function morph(fn,kind){
+  if(!document.startViewTransition||document.hidden||matchMedia("(prefers-reduced-motion:reduce)").matches){fn();return;}
+  document.documentElement.dataset.morph=kind||"";
+  // a transition cut short (a second tab click, the page hidden) still runs fn; only the animation is skipped
+  var t=document.startViewTransition(fn),quiet=function(){};t.ready.catch(quiet);
+  t.finished.catch(quiet).then(function(){delete document.documentElement.dataset.morph;});}
 
 /* ---------- one day ---------- */
 function moveLabel(s,asText){var t=s.label||("[["+s.path[0]+"]] → [["+s.path[s.path.length-1]+"]]");return asText?plain(t):tx(t);}
@@ -1244,175 +1239,6 @@ $("drivers").addEventListener("click",function(e){
   var u=e.target.closest("[data-undriver]");if(u){e.stopPropagation();if(confirm(U("把 {p} 从司机里移除？已经排给 {p} 的车程会空出来。",{p:u.dataset.undriver})))drvPerson("/api/drivers/people/delete",u.dataset.undriver);return;}
   if(e.target.closest("#drvAuto"))autoDrivers();});
 
-/* ---------- shared options board ---------- */
-// Hotels, cabins, tours: anyone pastes a link under a booking from trip.json (or a topic of their own), the group
-// votes and comments, and one option per booking gets picked. It lives on the trip server (backend/options.json,
-// same access code as the chat). This device keeps the last copy it saw, and changes made offline wait in an
-// outbox; each change is applied here at once the same way the server applies it, so nothing waits on the network.
-var OPT=store("nt-opts")||{topics:[],items:[],picked:{}},OOUT=store("nt-opts-out")||[],oState={status:"",err:""},oTimer=null,oFlushing=null;
-var OASK=null,OPEN_C={},OPEN_M={};
-var OICON={up:'<svg viewBox="0 0 20 20"><path d="M6 9.5V16H3.5V9.5zM6 9.5l3.2-6c1.3 0 2.1 1 1.8 2.3L10.5 8h4.6c1 0 1.7.9 1.5 1.9l-1.1 4.6c-.2.9-1 1.5-1.9 1.5H6"/></svg>',
-  plus:'<svg viewBox="0 0 20 20"><path d="M10 4v12M4 10h12"/></svg>'};
-function me(){return store("nt-me")||"";}
-function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,8);}
-function applyOpt(d,o){var it=o.id?d.items.filter(function(x){return x.id===o.id;})[0]:null;
-  if(o.op==="topic"){if(!d.topics.some(function(t){return t.id===o.id;}))d.topics.push({id:o.id,title:o.title,by:o.by,ts:o.ts});}
-  else if(o.op==="untopic"){d.topics=d.topics.filter(function(t){return t.id!==o.id;});d.items=d.items.filter(function(x){return x.slot!==o.id;});delete d.picked[o.id];}
-  else if(o.op==="add"){if(!it)d.items.push({id:o.id,slot:o.slot,url:o.url||"",title:o.title||"",image:o.image||"",site:o.site||"",price:o.price||"",note:o.note||"",by:o.by||"",ts:o.ts,votes:{},comments:[],pending:true});}
-  else if(o.op==="pick"&&!o.id)delete d.picked[o.slot];
-  else if(!it)return;
-  else if(o.op==="edit")["title","price","note","url"].forEach(function(k){if(o[k]!=null)it[k]=o[k];});
-  else if(o.op==="del"){d.items=d.items.filter(function(x){return x.id!==o.id;});if(d.picked[it.slot]===o.id)delete d.picked[it.slot];}
-  else if(o.op==="vote"){if(o.v)it.votes[o.by]=o.v;else delete it.votes[o.by];}
-  else if(o.op==="comment"){if(!it.comments.some(function(c){return c.id===o.cid;}))it.comments.push({id:o.cid,by:o.by,text:o.text,ts:o.ts,pending:true});}
-  else if(o.op==="uncomment")it.comments=it.comments.filter(function(c){return c.id!==o.cid;});
-  else if(o.op==="pick")d.picked[it.slot]=it.id;}
-// the server's board, plus what's waiting in the outbox
-function board(){var d=JSON.parse(JSON.stringify(OPT));OOUT.forEach(function(o){applyOpt(d,o);});return d;}
-// where an option can go: every booking in trip.json, then the group's own topics
-function optSlots(d){var list=T.bookings.map(function(b){return {id:b.id,b:b,title:tx(b.what),plain:plain(b.what),sub:b.for?plain(b.for):""};});
-  d.topics.forEach(function(t){list.push({id:t.id,topic:t,title:esc(t.title),plain:t.title,sub:t.by?U("{p} 开的话题",{p:t.by}):U("话题")});});return list;}
-// a preview image that isn't photo-shaped is usually a logo: show it whole instead of cropped
-window.optImg=function(im){var r=im.naturalWidth/(im.naturalHeight||1);if(r<1.25||r>2.4||im.naturalWidth<360||/\.(png|svg)(\?|$)/i.test(im.src))im.classList.add("fit");im.classList.add("ok");};
-function score(x){var s=0;Object.keys(x.votes||{}).forEach(function(p){s+=x.votes[p];});return s;}
-function gotOpts(j){OPT={topics:j.topics||[],items:j.items||[],picked:j.picked||{}};store("nt-opts",OPT);}
-function loadOpts(quiet,then){
-  clearInterval(oTimer);oTimer=setInterval(function(){if(state.view==="opts"&&document.visibilityState==="visible")loadOpts(true);},30000);
-  if(!auth().code()){oState.status="code";renderOpts();return;}
-  if(oState.status!=="ok")oState.status="loading";if(!quiet)renderOpts();
-  mApi("/api/options").then(function(j){gotOpts(j);oState.status="ok";return flushOpts();})
-    .catch(function(e){oState.status=e&&e.code===401?"code":"off";}).then(function(){renderOpts(quiet);if(then)then();});}
-// sends the whole outbox in one batch; anything added meanwhile goes in the next one
-function flushOpts(){if(oFlushing)return oFlushing;if(!OOUT.length)return Promise.resolve();var batch=OOUT.slice();
-  oFlushing=mApi("/api/options",{body:{ops:batch}}).then(function(j){OOUT.splice(0,batch.length);store("nt-opts-out",OOUT);gotOpts(j);oState.status="ok";
-      if(j.errors&&j.errors.length)oState.err=j.errors[0];},function(e){
-      // the server said no (not a dropped connection): drop the batch and say why, or it would never clear
-      if(e.code&&e.code!==401&&e.code!==429&&e.code<500){OOUT.splice(0,batch.length);store("nt-opts-out",OOUT);oState.err=e.code===422?U("有一处改动没存上：内容太长或格式不对。"):e.message;return;}
-      oState.status=e&&e.code===401?"code":"off";})
-    .then(function(){oFlushing=null;renderOpts(true);if(OOUT.length&&oState.status==="ok")flushOpts();});
-  return oFlushing;}
-function optOp(o){oState.err="";o.ts=Date.now();if(o.by===undefined)o.by=me();OOUT.push(o);store("nt-opts-out",OOUT);renderOpts();if(auth().code())flushOpts();}
-// votes, comments and new options carry a name: asks for one first
-function needMe(){if(me())return false;var f=$("optMe");oState.err=U("先在上面写上你是谁，大家才知道是谁投的。");renderOpts();
-  if(f){f.scrollIntoView({block:"center",behavior:"smooth"});f.focus();}return true;}
-function cTime(ts){var d=new Date(ts);return (d.getMonth()+1)+"/"+d.getDate()+" "+(d.getHours()<10?"0":"")+d.getHours()+":"+(d.getMinutes()<10?"0":"")+d.getMinutes();}
-function goOpts(slot,add){setView("opts");setTimeout(function(){var s=$("os-"+slot);
-  if(s&&!add){s.scrollIntoView({block:"start",behavior:"smooth"});return;}
-  var sl=optSlots(board()).filter(function(x){return x.id===slot;})[0];askOpts(sl?U("加到「{w}」：",{w:sl.plain}):"");},60);}
-// puts the cursor in the line to the assistant, optionally starting it for them
-function askOpts(start){var f=$("optAsk");if(!f||!f.q)return;if(start&&f.q.value.indexOf(start)!==0)f.q.value=start+f.q.value;
-  f.scrollIntoView({block:"start",behavior:"smooth"});f.q.focus({preventScroll:true});var n=f.q.value.length;f.q.setSelectionRange(n,n);}
-
-// the booking cards on the prep tab say how the choosing is going
-function paintOptCounts(d){if(!T)return;d=d||board();var n={};d.items.forEach(function(x){n[x.slot]=(n[x.slot]||0)+1;});
-  $("optsSub").textContent=d.items.length||"";
-  function picked(id){var p=d.picked[id];return p?d.items.filter(function(x){return x.id===p;})[0]:null;}
-  document.querySelectorAll("[data-bopt]").forEach(function(el){var id=el.dataset.bopt,c=n[id]||0,pk=picked(id),go=' data-go-opts="'+esc(id)+'"';
-    el.innerHTML=pk?'<span class="b-opt-k">'+ICON.check+U("大家选了")+"</span>"+(pk.url?'<a href="'+esc(pk.url)+'" target="_blank" rel="noopener">'+esc(pk.title||pk.site)+"</a>":"<b>"+esc(pk.title)+"</b>")+(pk.price?' <small title="'+esc(pk.price)+'">'+esc(money(pk.price))+"</small>":"")+'<button type="button" class="drv-link"'+go+">"+U("看候选")+" →</button>"
-      :c?'<button type="button" class="drv-link"'+go+">"+U(c===1?"1 个候选，去投票":"{n} 个候选，去投票",{n:c})+" →</button>"
-      :'<button type="button" class="drv-link"'+go+' data-new="1">'+U("+ 加候选，让大家一起挑")+"</button>";});
-  document.querySelectorAll("[data-boptn]").forEach(function(el){var id=el.dataset.boptn,c=n[id]||0;
-    el.textContent=picked(id)?" · "+U("已选定"):c?" · "+U(c===1?"1 个候选":"{n} 个候选",{n:c}):"";});}
-
-function renderOpts(quiet){if(!T)return;var d=board(),st=oState.status,pend=OOUT.length,g="";
-  paintOptCounts(d);
-  if(st==="code")g='<form class="mny-gate" id="optCode"><p>'+U("候选存在行程服务器上，跟行程助手用同一个访问码。")+'</p><div class="mny-row"><input type="password" id="optCodeIn" autocomplete="off" placeholder="'+esc(U("访问码"))+'" aria-label="'+esc(U("访问码"))+'"><button class="pill primary" type="submit">'+U("确定")+'</button></div><span class="mny-err" id="optCodeErr" role="alert"></span></form>';
-  else if(st==="off")g='<p class="mny-note warn">'+U("连不上行程服务器。下面是这台设备上次看到的候选；改动会先存在这里，连上后自动同步。")+"</p>";
-  else if(st==="loading"&&!d.items.length&&!d.topics.length)g='<p class="mny-note">'+U("正在载入候选…")+"</p>";
-  if(pend&&st!=="code")g+='<p class="mny-note">'+U(pend===1?"1 处改动等待同步":"{n} 处改动等待同步",{n:pend})+"</p>";
-  if(oState.err)g+='<p class="mny-note warn">'+esc(oState.err)+"</p>";
-  $("optsGate").innerHTML=g;
-  var locked=st==="code"&&!d.items.length&&!d.topics.length;
-  $("optAsk").hidden=locked;$("optBoard").hidden=locked;if(locked)return;
-  renderOptAsk();
-  // a refresh in the background never eats a comment or an edit half typed
-  var a=document.activeElement;if(quiet&&a&&$("optBoard").contains(a)&&/^(INPUT|TEXTAREA)$/.test(a.tagName))return;
-  var by={};d.items.forEach(function(x){(by[x.slot]=by[x.slot]||[]).push(x);});
-  var h=optSlots(d).filter(function(s){return by[s.id]||s.topic;}).map(function(s){
-    var list=(by[s.id]||[]).sort(function(a,b){return score(b)-score(a)||a.ts-b.ts;}),pick=list.filter(function(x){return x.id===d.picked[s.id];})[0],rest=list.filter(function(x){return x!==pick;});
-    var sub=[s.sub&&esc(s.sub),pick?U("定了：{w}",{w:"<b>"+esc(pick.title||pick.site)+"</b>"}):list.length?U(list.length===1?"1 个候选":"{n} 个候选",{n:list.length}):""].filter(Boolean).join(" · ");
-    var head='<div class="opt-sh"><div class="opt-st"><h3>'+s.title+"</h3>"+(sub?"<small>"+sub+"</small>":"")+'</div><div class="opt-sa">'+
-      '<button type="button" class="pill" data-opt-new="'+esc(s.id)+'">'+OICON.plus+U("加一个")+"</button>"+
-      (s.b?'<button type="button" class="pill" data-open-booking="'+esc(s.id)+'">'+U("看预订")+" →</button>":'<button type="button" class="opt-icon" data-untopic="'+esc(s.id)+'" aria-label="'+esc(U("删掉这个话题"))+'" title="'+esc(U("删掉这个话题"))+'">×</button>')+"</div></div>";
-    var body=!list.length?'<p class="mny-empty">'+U("还没有候选。看到好的就跟助手说。")+"</p>":
-      pick?'<div class="opt-grid">'+optCard(pick,true)+"</div>"+(rest.length?'<details class="opt-more" data-more="'+esc(s.id)+'"'+(OPEN_M[s.id]?" open":"")+"><summary>"+U(rest.length===1?"另外 1 个候选":"另外 {n} 个候选",{n:rest.length})+'</summary><div class="opt-grid">'+rest.map(function(x){return optCard(x,false);}).join("")+"</div></details>":""):
-      '<div class="opt-grid">'+list.map(function(x){return optCard(x,false);}).join("")+"</div>";
-    return '<section class="opt-slot'+(pick?" decided":"")+'" id="os-'+esc(s.id)+'">'+head+body+"</section>";});
-  $("optBoard").innerHTML=h.join("")||'<p class="mny-empty opt-empty">'+U("还没有候选。在上面跟助手说一声，比如贴个链接，它会放到对应的预订下面，大家就能投票了。也可以让它帮你找几个。")+"</p>";}
-
-function optCard(x,picked){var my=me(),up=[],dn=[],mine=(x.votes||{})[my]||0;
-  Object.keys(x.votes||{}).forEach(function(p){(x.votes[p]>0?up:dn).push(p);});
-  var href=x.url?' href="'+esc(x.url)+'" target="_blank" rel="noopener"':"",id=esc(x.id),nm=x.title||x.site||x.url;
-  var h='<article class="opt'+(picked?" picked":"")+(x.pending?" pending":"")+'" id="opt-'+id+'">';
-  var ic='class="opt-img'+(x.image?"":" ph")+'"';
-  h+=(x.url?"<a "+ic+href+' tabindex="-1" aria-hidden="true">':"<span "+ic+' aria-hidden="true">')+"<span>"+esc((x.site||nm||"?").replace(/^www\./,""))+"</span>"+
-    (x.image?'<img src="'+esc(x.image)+'" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onload="optImg(this)" onerror="this.remove()">':"")+
-    (picked?'<span class="opt-badge">'+ICON.check+U("选定")+"</span>":"")+(x.url?"</a>":"</span>");
-  h+='<div class="opt-b">';
-      h+='<div class="opt-t">'+(x.url?"<a"+href+">"+esc(nm)+"</a>":"<b>"+esc(nm)+"</b>")+"</div>";
-    var meta=[x.price?'<b class="opt-price" title="'+esc(x.price)+'">'+esc(money(x.price))+"</b>":"",x.title&&x.site?esc(x.site):"",
-      x.by?esc(U(x.via==="chat"?"{p} 让助手加的":"{p} 加的",{p:x.by})):""].filter(Boolean);
-    if(x.pending)meta.push('<span class="mny-pend">'+U("等待同步")+"</span>");
-    h+='<div class="opt-meta">'+meta.join(" · ")+"</div>";
-    if(x.note)h+='<p class="opt-note">'+esc(x.note)+"</p>";
-  var nc=(x.comments||[]).length,open=!!OPEN_C[x.id];
-  h+='<div class="opt-acts"><span class="opt-votes" role="group" aria-label="'+esc(U("投票"))+'">'+
-    '<button type="button" class="opt-v up" data-vote="'+id+'" data-v="1" aria-pressed="'+(mine>0)+'" aria-label="'+esc(U("赞成"))+'" title="'+esc(up.join("、")||U("赞成"))+'">'+OICON.up+"<span>"+up.length+"</span></button>"+
-    '<button type="button" class="opt-v down" data-vote="'+id+'" data-v="-1" aria-pressed="'+(mine<0)+'" aria-label="'+esc(U("不太行"))+'" title="'+esc(dn.join("、")||U("不太行"))+'">'+OICON.up+"<span>"+dn.length+"</span></button></span>"+
-    '<button type="button" class="opt-v cmt" data-cmts="'+id+'" aria-expanded="'+open+'" aria-label="'+esc(U("留言"))+'">'+ICON.ask+"<span>"+nc+"</span></button>"+
-    '<span class="opt-sp"></span>'+
-    '<button type="button" class="pill'+(picked?" on":"")+'" data-pick="'+id+'" aria-pressed="'+picked+'">'+ICON.check+U(picked?"选定了":"就它了")+"</button>"+
-    '<button type="button" class="opt-icon" data-odel="'+id+'" aria-label="'+esc(U("删掉"))+'" title="'+esc(U("删掉"))+'">×</button></div>';
-  if(up.length||dn.length)h+='<p class="opt-who">'+(up.length?'<span class="up">'+OICON.up+esc(up.join("、"))+"</span>":"")+(dn.length?'<span class="down">'+OICON.up+esc(dn.join("、"))+"</span>":"")+"</p>";
-  if(open)h+='<div class="opt-cmts">'+(nc?"<ul>"+x.comments.map(function(c){return "<li><b>"+esc(c.by)+"</b><span>"+esc(c.text)+"</span><small>"+(c.pending?U("等待同步"):cTime(c.ts))+"</small>"+
-      (c.by===my?'<button type="button" class="opt-icon" data-uncmt="'+esc(c.id)+'" data-oid="'+id+'" aria-label="'+esc(U("删掉"))+'">×</button>':"")+"</li>";}).join("")+"</ul>":"")+
-    '<form class="opt-cf" data-cmt-form="'+id+'"><input name="text" maxlength="500" autocomplete="off" placeholder="'+esc(U("说点什么…"))+'" aria-label="'+esc(U("留言"))+'"><button class="pill" type="submit">'+U("发送")+"</button></form></div>";
-  return h+"</div></article>";}
-
-// The line to the assistant is built once per language, so a refresh never eats what you're typing.
-function renderOptAsk(){var f=$("optAsk");if(OASK===NM)return;OASK=NM;var q=f.q?f.q.value:"";
-  var ppl={};MNY.people.concat(DRV.drivers).forEach(function(p){ppl[p]=1;});
-  f.innerHTML='<div class="opt-fh"><h3>'+ICON.ask+U("跟助手说")+'</h3><label class="mny-lab">'+U("我是")+' <input id="optMe" maxlength="24" list="optPeople" autocomplete="off" value="'+esc(me())+'" placeholder="'+esc(U("你的名字"))+'" aria-label="'+esc(U("你的名字"))+'"></label>'+
-      '<datalist id="optPeople">'+Object.keys(ppl).map(function(p){return '<option value="'+esc(p)+'">';}).join("")+"</datalist></div>"+
-    '<textarea name="q" rows="3" maxlength="4000" placeholder="'+esc(U("随便写。比如：弗洛姆这家不错 https://… 一晚 1,890 NOK；或者：冰岛北边住的就定第二个，别的删了"))+'" aria-label="'+esc(U("跟助手说"))+'"></textarea>'+
-    '<div class="mny-row"><button class="pill primary" type="submit">'+U("发给助手")+'</button><span class="hint" id="optAskHint">'+U("放在哪个预订下面，助手会自己判断；拿不准会先问你。")+'</span><span class="mny-err" id="optErr" role="alert"></span></div>';
-  f.q.value=q;}
-$("optAsk").addEventListener("change",function(e){
-  if(e.target.id==="optMe"){var v=e.target.value.trim();store("nt-me",v);if(oState.err&&v){oState.err="";}renderOpts();}});
-$("optAsk").addEventListener("keydown",function(e){if(e.target.name==="q"&&e.key==="Enter"&&!e.shiftKey&&!e.isComposing){e.preventDefault();this.requestSubmit();}});
-$("optAsk").addEventListener("submit",function(e){e.preventDefault();var f=this,err=$("optErr"),who=$("optMe").value.trim(),q=f.q.value.trim();
-  if(!who){err.textContent=U("先写上你是谁。");$("optMe").focus();return;}store("nt-me",who);
-  if(!q){f.q.focus();return;}
-  if(!window.tripChat)return;err.textContent="";f.q.value="";window.tripChat.ask(q);
-  $("optAskHint").textContent=U("在聊天里看助手的回复");});
-$("optsView").addEventListener("submit",function(e){var t=e.target;
-  if(t.id==="optCode"){e.preventDefault();var code=$("optCodeIn").value.trim(),er=$("optCodeErr"),A=auth();if(!code)return;er.textContent=U("验证中…");
-    fetch(A.api+"/api/check",{method:"POST",headers:{"X-Access-Code":code}}).then(function(r){
-      if(r.status===401){er.textContent=U("访问码不对。");return;}if(!r.ok)throw new Error();A.setCode(code);loadOpts();})
-      .catch(function(){er.textContent=U("连不上行程服务器。");});return;}
-  if(t.dataset.cmtForm){e.preventDefault();var v=t.text.value.trim();if(!v)return;if(needMe())return;OPEN_C[t.dataset.cmtForm]=1;
-    optOp({op:"comment",id:t.dataset.cmtForm,cid:uid(),text:v});var nf=document.querySelector('[data-cmt-form="'+t.dataset.cmtForm+'"]');if(nf)nf.text.focus();return;}
-});
-$("optsView").addEventListener("click",function(e){var t;
-  if((t=e.target.closest("[data-vote]"))){if(needMe())return;var x=board().items.filter(function(i){return i.id===t.dataset.vote;})[0];if(!x)return;
-    var v=+t.dataset.v,cur=(x.votes||{})[me()]||0;optOp({op:"vote",id:x.id,v:cur===v?0:v});return;}
-  if((t=e.target.closest("[data-cmts]"))){var cid=t.dataset.cmts;OPEN_C[cid]=!OPEN_C[cid];renderOpts();
-    if(OPEN_C[cid]){var cf=document.querySelector('[data-cmt-form="'+cid+'"]');if(cf)cf.text.focus();}return;}
-  if((t=e.target.closest("[data-pick]"))){var px=board().items.filter(function(i){return i.id===t.dataset.pick;})[0];if(!px)return;
-    var on=board().picked[px.slot]===px.id;optOp(on?{op:"pick",slot:px.slot,id:null}:{op:"pick",id:px.id});return;}
-  if((t=e.target.closest("[data-odel]"))){var dx=board().items.filter(function(i){return i.id===t.dataset.odel;})[0];
-    if(dx&&confirm(U("删掉「{w}」这个候选？投票和留言也会一起删掉。",{w:dx.title||dx.site||dx.url})))optOp({op:"del",id:dx.id});return;}
-  if((t=e.target.closest("[data-uncmt]"))){optOp({op:"uncomment",id:t.dataset.oid,cid:t.dataset.uncmt});return;}
-  if((t=e.target.closest("[data-untopic]"))){var tp=board().topics.filter(function(x){return x.id===t.dataset.untopic;})[0];
-    if(tp&&confirm(U("删掉话题「{w}」和里面所有候选？",{w:tp.title})))optOp({op:"untopic",id:tp.id});return;}
-  if((t=e.target.closest("[data-opt-new]"))){goOpts(t.dataset.optNew,true);return;}
-  if((t=e.target.closest("[data-open-booking]"))){openBooking(t.dataset.openBooking);return;}});
-$("optBoard").addEventListener("toggle",function(e){if(e.target.dataset&&e.target.dataset.more)OPEN_M[e.target.dataset.more]=e.target.open;},true);
-// the assistant added options from the chat
-document.addEventListener("trip:options",function(){var was={};board().items.forEach(function(x){was[x.id]=JSON.stringify(x);});
-  loadOpts(true,function(){board().items.forEach(function(x){if(was[x.id]!==JSON.stringify(x))replay($("opt-"+x.id),"flash");});});});
-window.addEventListener("online",function(){if(OOUT.length||state.view==="opts")loadOpts(true);});
-
 /* ---------- offline ---------- */
 // sw.js keeps a copy of the page, the plan, the last forecast and rates, and every photo once seen. The prep tab
 // can fetch all the photos ahead of time (one 1200px copy each; the worker uses it for any other size offline).
@@ -1448,13 +1274,47 @@ addEventListener("offline",paintOnline);
 addEventListener("online",function(){paintOnline();if(T)loadDrivers(true);});
 if("serviceWorker" in navigator&&/^https?:$/.test(location.protocol))navigator.serviceWorker.register("sw.js").catch(function(e){console.warn("offline copy unavailable:",e);});
 
+/* ---------- the live plan ---------- */
+// The plan lives on the trip server, where the assistant can change it. The page starts from this device's last
+// copy (or the server, or the copy published with the site when neither is there), then checks for a newer
+// version every minute, when the page comes back into view, and right after the assistant changes it.
+var PLAN={rev:null,last:null},planTimer=null;
+function planApi(){var a=((window.TRIP_CONFIG||{}).apiBase||"").replace(/\/$/,""),o=new URLSearchParams(location.search).get("api");
+  return o&&/^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(o)?o:a;}
+function fetchPlan(ms){var c=window.AbortController?new AbortController():null,t=c&&setTimeout(function(){c.abort();},ms||10000);
+  return fetch(planApi()+"/api/plan",{cache:"no-cache",signal:c&&c.signal}).then(function(r){clearTimeout(t);if(!r.ok)throw new Error(r.status);return r.json();})
+    .then(function(p){if(!p||!p.trip||!p.rev)throw new Error("no plan");return p;});}
+function keepPlan(p){PLAN={rev:p.rev,last:p.last};try{localStorage.setItem("nt-plan",JSON.stringify({rev:p.rev,last:p.last,trip:p.trip,en:p.en}));}catch(e){}}
+function publishedPlan(){
+  // English translations are optional: a missing or broken file just leaves those lines in Chinese
+  return Promise.all([
+    fetch("trip.json",{cache:"no-cache"}).then(function(r){if(!r.ok)throw new Error(r.status);return r.json();}),
+    fetch("i18n/en.json",{cache:"no-cache"}).then(function(r){return r.ok?r.json():{};}).catch(function(){return {};})
+  ]).then(function(x){return {trip:x[0],en:x[1]||{}};});}
+function checkPlan(){if(navigator.onLine===false)return;
+  fetch(planApi()+"/api/plan/rev",{cache:"no-store"}).then(function(r){return r.ok?r.json():null;})
+    .then(function(j){if(j&&j.rev&&j.rev!==PLAN.rev)return fetchPlan().then(applyPlan);}).catch(function(){});}
+// a newer version: redraw everything from it, keeping the tab, the day and (if it's still there) the open stop
+function applyPlan(p){if(!p||p.rev===PLAN.rev)return;var quiet=!PLAN.rev;keepPlan(p);
+  morph(function(){EN=p.en||{};index(p.trip);
+    if(DATES.indexOf(state.date)<0)state.date=DATES[0];
+    var D=day();if(state.sel!=null&&(!D||state.sel>=D.segs.length))state.sel=null;
+    rerender();redrawMap();caption();},"plan");
+  if(!quiet)planToast(p.last);}
+function planToast(last){var t=$("planToast");if(!t){t=document.createElement("button");t.type="button";t.id="planToast";t.className="plan-toast";document.body.appendChild(t);
+    t.addEventListener("click",function(){t.classList.remove("show");});}
+  t.innerHTML=ICON.check+"<span><b>"+esc(last&&last.by?U("{p} 刚改了行程",{p:last.by}):U("行程更新了"))+"</b>"+(last&&last.summary?"<small>"+esc(last.summary)+"</small>":"")+"</span>";
+  t.classList.remove("show");void t.offsetWidth;t.classList.add("show");clearTimeout(t._h);t._h=setTimeout(function(){t.classList.remove("show");},7000);}
+function watchPlan(){clearInterval(planTimer);planTimer=setInterval(function(){if(document.visibilityState==="visible")checkPlan();},60000);checkPlan();}
+document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible"&&T)checkPlan();});
+addEventListener("online",function(){if(T)checkPlan();});
+document.addEventListener("trip:plan",function(){if(T)fetchPlan().then(applyPlan).catch(function(){});}); // the assistant just changed it
+
 /* ---------- start ---------- */
 applyStatic();
-// English translations are optional: a missing or broken file just leaves those lines in Chinese
-Promise.all([
-  fetch("trip.json",{cache:"no-cache"}).then(function(r){if(!r.ok)throw new Error(r.status);return r.json();}),
-  fetch("i18n/en.json",{cache:"no-cache"}).then(function(r){return r.ok?r.json():{};}).catch(function(){return {};})
-]).then(function(x){EN=x[1]||{};boot(x[0]);}).catch(function(e){
-  console.error(e);$("lede").textContent=U("行程没载入（{e}）。如果是直接从硬盘打开的 index.html，请改用本地服务器：python3 -m http.server",{e:e.message});
-});
+var kept=null;try{kept=JSON.parse(localStorage.getItem("nt-plan"));}catch(e){}
+(kept&&kept.trip?Promise.resolve(kept):fetchPlan(4000).then(function(p){keepPlan(p);return p;}).catch(function(e){console.warn("live plan unavailable, using the published copy:",e);return publishedPlan();}))
+  .then(function(p){EN=p.en||{};if(p.rev)PLAN={rev:p.rev,last:p.last};boot(p.trip);watchPlan();}).catch(function(e){
+    console.error(e);$("lede").textContent=U("行程没载入（{e}）。如果是直接从硬盘打开的 index.html，请改用本地服务器：python3 -m http.server",{e:e.message});
+  });
 })();

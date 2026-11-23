@@ -1,10 +1,11 @@
 (function(){
 "use strict";
-/* Trip assistant docked under the plan: click the bar or press Ctrl/⌘+K, type, Enter. The panel
-   stays open until you hide it (the ⌄ button or Esc); an answer keeps streaming while it's hidden and
-   the bar says when it's ready. "New chat" starts over. Anything asked while an answer is in progress
-   waits its turn. History lives in this browser only; each question sends the recent conversation to
-   the backend, which streams the answer back as server-sent events. */
+/* Trip assistant, in a drawer: the 问助手 button (or Ctrl/⌘+K) opens it with the recent conversation; Esc, the ×
+   or a click outside closes it, and an answer keeps streaming while it's closed (the button says when it's ready).
+   Each answer shows what the assistant looked at as it works (searches, parts of the plan it read), and any change
+   it wants to make to the plan as a card: nothing changes until someone presses 确认 on it. History lives in this
+   browser only; each question sends the recent conversation to the backend, which streams the answer back as
+   server-sent events: text, step (a tool call starting, getting its label, finishing), approval (a card), error. */
 // An empty apiBase means "same server as this page" (the backend serves the site too).
 var API=((window.TRIP_CONFIG||{}).apiBase||"").replace(/\/$/,"");
 var override=new URLSearchParams(location.search).get("api");
@@ -14,8 +15,8 @@ var KEY="nt-chat-v1",HISTORY=20;
 // the page language comes from the planner (中文 / EN switch); Z picks the matching string
 function isEn(){return !!(window.tripApp&&window.tripApp.lang&&window.tripApp.lang()==="en");}
 function Z(zh,en){return isEn()?en:zh;}
-var SUGGEST={zh:["F208 进高地，我们的车能开吗？要注意什么？","7 月冰岛要带哪些衣服？","持中国护照的人申根签证什么时候递交？","冰岛自驾一天的油钱和停车费大概多少？"],
-  en:["Can our car handle F208 into the Highlands? What should we watch for?","What clothes do we need for Iceland in July?","When should the Chinese-passport holders apply for the Schengen visa?","Roughly how much are fuel and parking per day in Iceland?"]};
+var SUGGEST={zh:["F208 进高地，我们的车能开吗？要注意什么？","我们订好奥达的住宿了，标记一下","7 月冰岛要带哪些衣服？","持中国护照的人申根签证什么时候递交？"],
+  en:["Can our car handle F208 into the Highlands? What should we watch for?","We booked the Odda stay, mark it as booked","What clothes do we need for Iceland in July?","When should the Chinese-passport holders apply for the Schengen visa?"]};
 
 function load(k){try{return JSON.parse(localStorage.getItem(k));}catch(e){return null;}}
 function keep(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
@@ -23,12 +24,17 @@ var S=load(KEY)||{};S.msgs=S.msgs||[];
 function save(){keep(KEY,{code:S.code,msgs:S.msgs.slice(-60)});}
 
 var $=function(id){return document.getElementById(id);};
-var chat=$("chat"),log=$("chatLog"),form=$("chatForm"),text=$("chatText"),join=$("chatJoin"),sub=$("chatSub"),badge=$("chatBadge"),send=$("chatSend");
-var busy=false,checked=false,needCode=false,pending=null,ctrl=null,queue=[],gen=0,stick=true;
+var chat=$("chat"),log=$("chatLog"),form=$("chatForm"),text=$("chatText"),join=$("chatJoin"),sub=$("chatSub"),badge=$("chatBadge"),send=$("chatSend"),fab=$("askBtn"),scrim=$("chatScrim");
+var cur=null,busy=false,checked=false,needCode=false,pending=null,ctrl=null,queue=[],gen=0,stick=true,openSteps={};
 if(!/Mac|iPhone|iPad/.test(navigator.platform||navigator.userAgent))$("chatKbd").textContent="Ctrl K";
 
+var IC={check:'<svg viewBox="0 0 20 20"><path d="M4.5 10.5l3.5 3.5 7.5-8"/></svg>',x:'<svg viewBox="0 0 20 20"><path d="M5 5l10 10M15 5L5 15"/></svg>',
+  clock:'<svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="6.5"/><path d="M10 6.5V10l2.5 1.5"/></svg>',search:'<svg viewBox="0 0 20 20"><circle cx="8.5" cy="8.5" r="5"/><path d="M12.5 12.5L17 17"/></svg>',
+  chev:'<svg viewBox="0 0 20 20"><path d="M8 5l5 5-5 5"/></svg>',edit:'<svg viewBox="0 0 20 20"><path d="M4 16l.8-3.4L13 4.4a1.4 1.4 0 0 1 2 0l.6.6a1.4 1.4 0 0 1 0 2L7.4 15.2zM11.5 6l2.5 2.5"/></svg>',
+  undo:'<svg viewBox="0 0 20 20"><path d="M7 5L3.5 8.5 7 12"/><path d="M4 8.5h8a4.5 4.5 0 0 1 0 9H9"/></svg>'};
+
 /* ---------- tiny markdown: paragraphs, lists, headings, bold, italics, code, links ---------- */
-function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
 function inline(s){
   var held=[];function hold(h){held.push(h);return "\u0000"+(held.length-1)+"\u0000";}
   s=s.replace(/`([^`]+)`/g,function(_,c){return hold("<code>"+esc(c)+"</code>");});
@@ -53,71 +59,143 @@ function md(src){
 }
 function clock(ts){return ts?new Date(ts).toLocaleTimeString(isEn()?"en-CA":"zh-CN",{hour:"2-digit",minute:"2-digit"}):"";}
 
-/* ---------- open / hide (hiding never interrupts an answer) ---------- */
+/* ---------- open / close (closing never interrupts an answer) ---------- */
 function isOpen(){return chat.dataset.open==="true";}
-function openChat(){if(isOpen())return;chat.dataset.open="true";setBadge();scroll(true);if(!checked)health();}
-function closeChat(){chat.dataset.open="false";text.blur();setBadge();}
-// the collapsed bar says when an answer is still coming or has arrived while hidden
+function openChat(focus){if(!isOpen()){chat.dataset.open="true";chat.setAttribute("aria-hidden","false");scrim.classList.add("open");fab.setAttribute("aria-expanded","true");
+    setBadge();scroll(true);if(!checked)health();}
+  if(focus!==false&&matchMedia("(hover:hover)").matches)setTimeout(function(){text.focus({preventScroll:true});},60);}
+function closeChat(){if(!isOpen())return;chat.dataset.open="false";chat.setAttribute("aria-hidden","true");scrim.classList.remove("open");fab.setAttribute("aria-expanded","false");text.blur();setBadge();}
+// the 问助手 button says when an answer is still coming, has arrived while closed, or a change waits for approval
 function setBadge(fresh){
+  var waiting=cardsWaiting();
   if(isOpen()){badge.hidden=true;return;}
-  if(busy){badge.hidden=false;badge.className="cli-badge";badge.textContent=Z("回答中…","Answering…");}
-  else if(fresh){badge.hidden=false;badge.className="cli-badge new";badge.textContent=Z("有新回复","New reply");}
+  if(busy){badge.hidden=false;badge.className="ask-badge";badge.textContent=Z("回答中…","Answering…");}
+  else if(waiting){badge.hidden=false;badge.className="ask-badge new";badge.textContent=Z("等你确认","Needs you");}
+  else if(fresh){badge.hidden=false;badge.className="ask-badge new";badge.textContent=Z("有新回复","New reply");}
   else if(fresh===undefined)return;
   else badge.hidden=true;
 }
-text.addEventListener("focus",openChat);
-badge.addEventListener("click",function(){openChat();text.focus();});
+fab.addEventListener("click",function(){if(isOpen())closeChat();else openChat();});
+scrim.addEventListener("click",closeChat);
 $("chatHide").addEventListener("click",closeChat);
 $("chatNew").addEventListener("click",newChat);
 document.addEventListener("keydown",function(e){
-  if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==="k"){e.preventDefault();openChat();text.focus();}
+  if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==="k"){e.preventDefault();openChat();}
   else if(e.key==="Escape"&&isOpen()){e.preventDefault();closeChat();}
 });
 
-/* ---------- transcript (built once; new lines are appended, so hiding/showing never loses anything) ---------- */
+/* ---------- the conversation ----------
+   A user message is {role, content}. An answer is {role:"assistant", content (its text), parts, ts}: parts in the order
+   they arrived, {t:"steps", items:[{id,label,state,ts}]}, {t:"text", text}, {t:"card", card}. */
 log.addEventListener("scroll",function(){stick=log.scrollHeight-log.scrollTop-log.clientHeight<48;});
 function scroll(force){if(force||stick)log.scrollTop=log.scrollHeight;}
 function add(el){var e0=log.querySelector(".l-empty");if(e0)e0.remove();log.appendChild(el);return el;}
-function userLine(m){var d=document.createElement("div");d.className="l-user";d.textContent=m.content;return add(d);}
-function botLine(m){var d=document.createElement("div");d.className="l-bot";d.innerHTML='<div class="m-content"></div>';add(d);if(m)fillBot(d,m);return d;}
-function fillBot(d,m){d.querySelector(".m-content").innerHTML=md(m.content);
-  var t=d.querySelector(".l-tools")||d.appendChild(document.createElement("div"));t.className="l-tools";
-  t.innerHTML="<span>"+esc(clock(m.ts))+(m.stopped?Z(" · 中途停止"," · stopped early"):"")+'</span>'+
-    (m.board?'<button type="button" class="l-board">'+Z("看候选板","See the options")+" →</button>":"")+'<button type="button">'+Z("复制","Copy")+'</button>';
-  var bb=t.querySelector(".l-board");if(bb)bb.addEventListener("click",function(){if(window.tripApp&&window.tripApp.showOpts)window.tripApp.showOpts();});
-  t.querySelector("button:last-child").addEventListener("click",function(){var b=this;
-    (navigator.clipboard?navigator.clipboard.writeText(m.content):Promise.reject()).then(function(){b.textContent=Z("已复制","Copied");setTimeout(function(){b.textContent=Z("复制","Copy");},1500);}).catch(function(){});});}
-function errLine(msg,retry){var d=document.createElement("div");d.className="l-err";d.textContent=msg;
+function userLine(m){var d=document.createElement("div");d.className="l-user appear";d.textContent=m.content;return add(d);}
+function botLine(m,live){var d=document.createElement("div");d.className="l-bot appear";add(d);paintBot(d,m,live);return d;}
+
+function stepsHtml(items,key,live){
+  var running=items.filter(function(s){return s.state==="running";}),n=items.length,last=running[running.length-1]||items[n-1];
+  var head=running.length?'<span class="spin"></span><span>'+esc(last.label||Z("正在处理","Working"))+"</span>"
+    :IC.search+"<span>"+Z("看了 <b>"+n+" 项</b>","Looked at <b>"+n+" thing"+(n>1?"s":"")+"</b>")+"</span>";
+  return '<details class="steps'+(running.length?" live":"")+'" data-steps="'+esc(key)+'"'+(openSteps[key]?" open":"")+"><summary>"+head+'<span class="chev">'+IC.chev+"</span></summary>"+
+    items.map(function(s){var st=s.state||"running";
+      return '<div class="step '+st+'">'+(st==="running"?'<span class="spin"></span>':st==="error"?IC.x:IC.check)+"<code>"+esc(s.label||"…")+'</code><span class="t">'+esc(clock(s.ts))+"</span></div>";}).join("")+"</details>";
+}
+function cardHtml(c){
+  var undo=c.kind==="undo",st=c.state;
+  var right=st==="waiting"?'<span class="wait"><span class="live-dot busy"></span>'+Z("等你确认","Waiting for you")+"</span>"
+    :st==="applied"?'<span class="wait ok">'+IC.check+Z("已确认","Approved")+(c.decided_by?" · "+esc(c.decided_by):"")+" · "+esc(clock(c.decided*1000))+"</span>"
+    :st==="declined"?'<span class="wait">'+Z("没采用","Not applied")+"</span>"
+    :st==="failed"?'<span class="wait bad">'+Z("没改成","Couldn't apply")+"</span>"
+    :st==="sending"?'<span class="wait"><span class="spin"></span>'+Z("正在改…","Applying…")+"</span>"
+    :'<span class="wait">'+Z("已失效","Expired")+"</span>";
+  var rows=(c.changes||[]).map(function(x){
+    if(undo)return '<li><span class="where">'+IC.undo+esc(x.before)+"</span></li>";
+    var verb=x.op==="remove"?Z("删掉","Remove"):x.op==="insert"?Z("新加","Add"):x.before?Z("改","Change"):Z("加上","Set");
+    return '<li><span class="where"><b>'+esc(verb)+"</b>"+esc(x.where||x.path)+"</span>"+
+      (x.before&&x.op!=="insert"?'<span class="ba"><del>'+esc(x.before)+"</del>"+(x.op!=="remove"&&x.after?'<span class="arr">→</span><ins>'+esc(x.after)+"</ins>":"")+"</span>"
+        :x.after?'<span class="ba"><ins>'+esc(x.after)+"</ins></span>":"")+"</li>";}).join("");
+  var foot=st==="waiting"?'<div class="ask-foot"><span class="grow">'+Z("确认后大家的网页都会更新；之后说“撤销”就能改回去。","Once approved, everyone's page updates. Say “undo” to put it back.")+'</span>'+
+      '<button type="button" class="btn" data-decide="0">'+Z("先不改","Not now")+'</button><button type="button" class="btn accent" data-decide="1">'+IC.check+Z("确认修改","Approve")+"</button></div>"
+    :st==="failed"?'<p class="ask-err">'+esc(c.error||"")+"</p>":st==="expired"?'<p class="ask-err">'+esc(c.error||Z("这个提议已经失效了，请让助手再提一次。","This proposal has expired; ask the assistant again."))+"</p>":"";
+  return '<div class="ask-card'+(st==="waiting"||st==="sending"?"":" settled")+'" data-card="'+esc(c.id)+'"><div class="ask-head"><h4>'+esc(c.title)+'</h4><span class="badge">'+(undo?IC.undo+Z("撤销","Undo"):IC.edit+Z("改行程","Plan change"))+"</span>"+right+"</div>"+
+    (rows?'<ul class="diff">'+rows+"</ul>":"")+foot+"</div>";
+}
+function paintBot(d,m,live){
+  var parts=m.parts||[{t:"text",text:m.content||""}],h="";
+  parts.forEach(function(p,i){
+    if(p.t==="steps")h+=stepsHtml(p.items,(m.ts||0)+"-"+i,live);
+    else if(p.t==="card")h+=cardHtml(p.card);
+    else if(p.text)h+='<div class="m-content">'+md(p.text)+"</div>";});
+  var lastPart=parts[parts.length-1];
+  if(live&&(!lastPart||lastPart.t!=="text"||!lastPart.text)&&!(lastPart&&lastPart.t==="steps"&&lastPart.items.some(function(s){return s.state==="running";})))
+    h+='<div class="l-status"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span>'+Z("思考中","Thinking")+"</span></div>";
+  if(!live){h+='<div class="l-tools"><span>'+esc(clock(m.ts))+(m.stopped?Z(" · 中途停止"," · stopped early"):"")+'</span><button type="button" data-copy="1">'+Z("复制","Copy")+"</button></div>";}
+  d.innerHTML=h;d._m=m;
+}
+log.addEventListener("toggle",function(e){var k=e.target.dataset&&e.target.dataset.steps;if(k)openSteps[k]=e.target.open;},true);
+log.addEventListener("click",function(e){var t;
+  if((t=e.target.closest("[data-copy]"))){var m=t.closest(".l-bot")._m;
+    (navigator.clipboard?navigator.clipboard.writeText(m.content):Promise.reject()).then(function(){t.textContent=Z("已复制","Copied");setTimeout(function(){t.textContent=Z("复制","Copy");},1500);}).catch(function(){});return;}
+  if((t=e.target.closest("[data-decide]"))){decide(t.closest("[data-card]").dataset.card,t.dataset.decide==="1");return;}
+  if((t=e.target.closest("[data-suggest]"))){ask(t.textContent);}
+});
+function errLine(msg,retry){var d=document.createElement("div");d.className="l-err appear";d.textContent=msg;
   if(retry){var b=document.createElement("button");b.type="button";b.className="cli-link";b.textContent=Z("重试","Try again");b.onclick=function(){d.remove();retry();};d.appendChild(b);}
   add(d);scroll(true);}
 function note(msg){var d=document.createElement("div");d.className="l-note";d.textContent=msg;add(d);scroll(true);return d;}
-function empty(){var e=document.createElement("div");e.className="l-empty";e.innerHTML="<p>"+Z("关于这趟旅行，随便问。比如：","Ask anything about the trip. For example:")+"</p>";
-  SUGGEST[isEn()?"en":"zh"].forEach(function(q){var b=document.createElement("button");b.type="button";b.textContent=q;b.onclick=function(){ask(q);};e.appendChild(b);});log.appendChild(e);}
+function empty(){var e=document.createElement("div");e.className="l-empty";e.innerHTML="<div class=\"l-hello\">"+IC.search.replace("<svg",'<svg aria-hidden="true"')+"<p>"+
+    Z("关于这趟旅行，随便问；也可以让我改行程，比如标记已订、改时间、加个酒店链接。改之前会先请你确认。","Ask anything about the trip, or ask me to change the plan: mark something booked, move a time, add a hotel link. I'll ask you to approve each change first.")+"</p></div>"+
+    SUGGEST[isEn()?"en":"zh"].map(function(q){return '<button type="button" data-suggest="1">'+esc(q)+"</button>";}).join("");log.appendChild(e);}
 function render(){
   log.innerHTML="";
   if(!S.msgs.length)empty();
-  S.msgs.forEach(function(m){if(m.role==="user")userLine(m);else botLine(m);});
+  S.msgs.forEach(function(m){if(m.role==="user")userLine(m);else botLine(m,false);});
+  log.querySelectorAll(".appear").forEach(function(x){x.classList.remove("appear");});
   scroll(true);
 }
+function cardsWaiting(){var n=0;S.msgs.forEach(function(m){(m.parts||[]).forEach(function(p){if(p.t==="card"&&p.card.state==="waiting")n++;});});return n;}
+
 function showJoin(){join.hidden=!(needCode&&!S.code);}
-function setStatus(state,msg){sub.className="cli-status"+(state?" "+state:"");sub.textContent=msg;}
 var status={state:"",local:false};
-function showStatus(){var st=status.state;
-  setStatus(st,st==="ok"?(status.local?Z("在线（本地）","Online (local)"):Z("在线","Online")):st==="down"?Z("离线","Offline"):Z("连接中…","Connecting…"));}
+function showStatus(){var st=status.state;$("chatDot").className="live-dot"+(st==="ok"?"":st==="down"?" bad":" off");
+  sub.textContent=st==="ok"?(status.local?Z("在线（本地）","Online (local)"):Z("在线","Online")):st==="down"?Z("离线","Offline"):Z("连接中…","Connecting…");}
 function health(){
   fetch(API+"/api/health").then(function(r){return r.ok?r.json():Promise.reject();})
     .then(function(j){checked=true;needCode=!!j.code;status={state:"ok",local:j.local};showStatus();showJoin();})
     .catch(function(){status={state:"down"};showStatus();});
 }
-showStatus();render();health();
-// the page switched language: redraw the status, the bar badge and (unless an answer is streaming) the transcript
-document.addEventListener("trip:lang",function(){showStatus();if(!busy)render();if(!badge.hidden)setBadge(badge.classList.contains("new"));sendLabel();});
+function myName(){try{return String(JSON.parse(localStorage.getItem("nt-me"))||"").slice(0,40);}catch(e){return "";}}
+var me=$("chatMe");me.value=myName();
+me.addEventListener("change",function(){keep("nt-me",me.value.trim());});
+showStatus();render();health();setBadge(false);
+// the page switched language: redraw the status, the button and (unless an answer is streaming) the transcript
+document.addEventListener("trip:lang",function(){showStatus();if(!busy)render();setBadge(badge.classList.contains("new")&&!cardsWaiting());sendLabel();});
+
+/* ---------- approving a change ---------- */
+// a card can be pressed while its answer is still streaming (cur), before that answer is saved
+function findCard(id){var hit=null;S.msgs.concat(cur?[cur.m]:[]).forEach(function(m){(m.parts||[]).forEach(function(p){if(p.t==="card"&&p.card.id===id)hit={m:m,p:p};});});return hit;}
+function repaint(m){if(cur&&cur.m===m){paintBot(cur.el,m,true);return;}
+  var el=[].slice.call(log.querySelectorAll(".l-bot")).filter(function(x){return x._m===m;})[0];if(el)paintBot(el,m,false);}
+function decide(id,approve){
+  var hit=findCard(id);if(!hit||hit.p.card.state!=="waiting")return;
+  var c=hit.p.card;c.state="sending";repaint(hit.m);
+  fetch(API+"/api/plan/proposals/"+encodeURIComponent(id),{method:"POST",headers:{"Content-Type":"application/json","X-Access-Code":S.code||""},
+    body:JSON.stringify({approve:approve,name:me.value.trim()||myName()})})
+  .then(function(r){return r.json().catch(function(){return {};}).then(function(j){
+    if(r.status===410){c.state="expired";c.error=j.detail;return;}
+    if(!r.ok||!j.card)throw new Error(j.detail||Z("行程服务器出错了（"+r.status+"）。","The trip server had a problem ("+r.status+")."));
+    hit.p.card=j.card;
+    if(j.card.state==="applied")document.dispatchEvent(new CustomEvent("trip:plan",{detail:{rev:j.rev}}));});})
+  .catch(function(e){c.state="waiting";errLine(e&&e.message&&e.message!=="Failed to fetch"?e.message:Z("连不上行程服务器，等有网了再按一次。","Can't reach the trip server. Try again once you're online."));})
+  .then(function(){save();repaint(hit.m);setBadge(false);});
+}
 
 /* ---------- start over ---------- */
 function newChat(){
   gen++;if(ctrl)ctrl.abort();
-  queue=[];pending=null;S.msgs=[];save();setBusy(false);ctrl=null;
-  render();openChat();text.focus();
+  queue=[];pending=null;cur=null;S.msgs=[];openSteps={};save();setBusy(false);ctrl=null;
+  render();openChat();
 }
 
 /* ---------- access code ---------- */
@@ -132,45 +210,56 @@ join.addEventListener("submit",function(e){
 });
 
 /* ---------- ask ---------- */
+// what the assistant reads back: the text of each turn, plus what became of the changes it proposed
 function history(){
-  var h=S.msgs.filter(function(m){return m.content;}).slice(-HISTORY);
+  var h=S.msgs.filter(function(m){return m.content||(m.parts&&m.parts.length);}).slice(-HISTORY).map(function(m){
+    var c=m.content||"";
+    (m.parts||[]).forEach(function(p){if(p.t!=="card")return;var k=p.card,st=k.state;
+      c+="\n\n["+(st==="applied"?"提议「"+k.title+"」：已确认，已经改好":st==="declined"?"提议「"+k.title+"」：对方没采用":st==="failed"?"提议「"+k.title+"」：确认了但没改成（"+(k.error||"")+"）":st==="expired"?"提议「"+k.title+"」：已失效，没有改":"提议「"+k.title+"」：还在等对方确认")+"]";});
+    return {role:m.role,content:c.trim()||"…"};});
   while(h.length&&h[0].role!=="user")h.shift();
-  return h.map(function(m){return {role:m.role,content:m.content};});
+  return h;
 }
-function setBusy(on){busy=on;chat.classList.toggle("busy",on);sendLabel();setBadge(false);}
+function setBusy(on){busy=on;chat.classList.toggle("busy",on);fab.classList.toggle("busy",on);sendLabel();setBadge(false);}
 function sendLabel(){send.setAttribute("aria-label",busy?Z("停止回答","Stop answering"):Z("发送","Send"));send.title=busy?Z("停止","Stop"):Z("发送","Send");}
 // a question asked mid-answer waits its turn instead of cutting the answer off
 function enqueue(q){queue.push({q:q,el:note(Z("排队中：","Up next: ")+q)});}
 function next(){if(busy||!queue.length)return;var n=queue.shift();n.el.remove();ask(n.q);}
-// the name typed on the options board or picked as payer in the expense log, so the assistant knows who asks
-function myName(){try{return String(JSON.parse(localStorage.getItem("nt-me"))||"").slice(0,40);}catch(e){return "";}}
 function ask(q){
   q=q.trim();if(!q)return;
-  openChat();
+  openChat(false);
   if(q==="/clear"||q==="/new"){newChat();return;}
   if(busy){enqueue(q);return;}
   if(needCode&&!S.code){pending=q;showJoin();$("joinCode").focus();return;}
-  var my=gen;setBusy(true);
+  var my=gen;setBusy(true);stick=true;
   var um={role:"user",content:q,ts:Date.now()};S.msgs.push(um);save();
   var uEl=userLine(um);
-  var st=add(document.createElement("div"));st.className="l-status";st.innerHTML='<span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="w">'+Z("思考中","Thinking")+'</span>';scroll(true);
-  var el=null,acc="",ctx=null;try{ctx=window.tripApp&&window.tripApp.context();}catch(e){}
+  var m={role:"assistant",content:"",parts:[],ts:Date.now()},el=botLine(m,true),ctx=null;cur={m:m,el:el};scroll(true);
+  try{ctx=window.tripApp&&window.tripApp.context();}catch(e){}
   ctrl=window.AbortController?new AbortController():null;
-
-  var board=false;
-  function finish(stopped){var m={role:"assistant",content:acc,ts:Date.now(),stopped:stopped||undefined,board:board||undefined};S.msgs.push(m);save();fillBot(el,m);}
+  var raf=0;function paint(){if(raf)return;raf=requestAnimationFrame(function(){raf=0;if(my===gen){paintBot(el,m,true);scroll();}});}
+  function textPart(){var p=m.parts[m.parts.length-1];if(!p||p.t!=="text"){p={t:"text",text:""};m.parts.push(p);}return p;}
+  function step(ev){var p=m.parts[m.parts.length-1];
+    var item=null;m.parts.forEach(function(x){if(x.t==="steps")x.items.forEach(function(s){if(s.id===ev.id)item=s;});});
+    if(!item){if(!p||p.t!=="steps"){p={t:"steps",items:[]};m.parts.push(p);}item={id:ev.id,label:"",state:"running",ts:Date.now()};p.items.push(item);}
+    if(ev.label)item.label=ev.label;if(ev.state)item.state=ev.state;}
+  function finish(stopped){
+    m.parts.forEach(function(p){if(p.t==="steps")p.items.forEach(function(s){if(s.state==="running")s.state=stopped?"error":"done";});});
+    m.parts=m.parts.filter(function(p){return p.t!=="text"||p.text.trim();});
+    m.ts=Date.now();m.stopped=stopped||undefined;cur=null;S.msgs.push(m);save();paintBot(el,m,false);}
   fetch(API+"/api/chat",{method:"POST",signal:ctrl&&ctrl.signal,headers:{"Content-Type":"application/json","X-Access-Code":S.code||""},
-    body:JSON.stringify({name:myName(),messages:history(),context:ctx})})
+    body:JSON.stringify({name:me.value.trim()||myName(),messages:history(),context:ctx})})
   .then(function(r){
     if(r.status===401){S.code=null;needCode=true;save();throw new Error(Z("这个服务器需要访问码。","This server needs the access code."));}
     if(!r.ok)return r.json().catch(function(){return {};}).then(function(j){throw new Error(j.detail||Z("行程服务器出错了（"+r.status+"）。","The trip server had a problem ("+r.status+")."));});
     var reader=r.body.getReader(),dec=new TextDecoder(),buf="";
     function handle(ev){
       if(my!==gen)return;
-      if(ev.type==="text"){if(!el){st.remove();el=botLine(null);}acc+=ev.text;el.querySelector(".m-content").innerHTML=md(acc);scroll();}
-      else if(ev.type==="status"&&!acc){st.querySelector(".w").textContent=ev.text;}
+      if(ev.type==="text"){textPart().text+=ev.text;m.content+=ev.text;}
+      else if(ev.type==="step")step(ev);
+      else if(ev.type==="approval"){m.parts.push({t:"card",card:ev.card});}
       else if(ev.type==="error"){throw new Error(ev.message);}
-      else if(ev.type==="options"){board=true;document.dispatchEvent(new CustomEvent("trip:options"));} // it changed the options board
+      paint();
     }
     function pump(){return reader.read().then(function(res){
       buf+=dec.decode(res.value||new Uint8Array(),{stream:!res.done});
@@ -180,14 +269,13 @@ function ask(q){
     });}
     return pump();
   })
-  .then(function(){if(my!==gen)return;st.remove();if(!acc)throw new Error(Z("没有收到回答。","No answer came back."));finish();})
+  .then(function(){if(my!==gen)return;if(!m.content&&!m.parts.some(function(p){return p.t==="card";}))throw new Error(Z("没有收到回答。","No answer came back."));finish();})
   .catch(function(e){
     if(my!==gen)return; // "New chat" already cleared everything
-    st.remove();
-    if(e&&e.name==="AbortError"){if(acc)finish(true);else{uEl.remove();S.msgs.pop();save();note(Z("还没回答就停止了。","Stopped before an answer came back."));}return;}
+    if(e&&e.name==="AbortError"){if(m.parts.length)finish(true);else{cur=null;el.remove();uEl.remove();S.msgs.pop();save();note(Z("还没回答就停止了。","Stopped before an answer came back."));}return;}
     var msg=e&&e.message&&e.message!=="Failed to fetch"?e.message:Z("连不上行程服务器，可能离线了。","Can't reach the trip server. It may be offline.");
-    if(acc){finish();errLine(msg);}
-    else{S.msgs.pop();save();
+    if(m.parts.length){finish();errLine(msg);}
+    else{cur=null;el.remove();S.msgs.pop();save();
       if(needCode&&!S.code){uEl.remove();pending=q;showJoin();errLine(msg);}
       else errLine(msg,function(){uEl.remove();ask(q);});}
   })
@@ -202,7 +290,7 @@ text.addEventListener("keydown",function(e){if(e.key==="Enter"&&!e.shiftKey&&!e.
 function grow(){text.style.height="auto";text.style.height=Math.min(text.scrollHeight,150)+"px";chat.classList.toggle("typed",!!text.value.trim());}
 text.addEventListener("input",grow);
 
-window.tripChat={ask:function(q){ask(q);}};
+window.tripChat={ask:function(q){ask(q);},open:function(){openChat();}};
 // the expense log talks to the same server with the same access code (typed once, in either place)
 window.tripAuth={api:API,code:function(){return S.code||"";},
   setCode:function(c){S.code=c||null;save();if(c){join.hidden=true;}else{needCode=true;showJoin();}}};

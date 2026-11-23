@@ -4,11 +4,11 @@ Trip planner for Jul 4 – Aug 1, 2027 (Iceland → Norway → Stockholm → Vis
 
 A currency menu next to the language switch shows every price in the local currency as written (ISK, NOK, SEK, DKK, €) or converted to CAD, CNY or USD with the latest rates from [open.er-api.com](https://open.er-api.com) (cached for 12 hours, with a fallback in `trip.json` under `fx`). Hover a converted price to see the original.
 
-What's on it: an overview (route ribbon, 4-week calendar with how full each day is, driver rotation, route legs), one day at a time (forecast or July normals, sunrise and sunset, transport and outdoor totals, the day's pace, who drives, what to bring, the timeline), a Google map that shows whatever you open (on phones it opens inside the stop you tap), booking cards grouped into "do now", "opens later" and "booked" (days and calendar cells flag anything still unbooked), a shared options board (候选) for choosing hotels and tours together, checklists, a shared expense log (账本), plus a floating chat assistant (Ctrl/⌘+K) that knows the plan, searches the web and answers in Chinese.
+What's on it: an overview (route ribbon, 4-week calendar with how full each day is, driver rotation, route legs), one day at a time (forecast or July normals, sunrise and sunset, transport and outdoor totals, the day's pace, who drives, what to bring, the timeline), a Google map that shows whatever you open (on phones it opens inside the stop you tap), booking cards grouped into "do now", "opens later" and "booked" (days and calendar cells flag anything still unbooked), checklists, a shared expense log (账本), plus a floating chat assistant (Ctrl/⌘+K) that knows the plan, searches the web and answers in Chinese.
 
 The expense log (账本 tab) is one shared ledger for the group: add the people, then log each expense with who paid and who shares it, in any currency. It totals spending by category, shows each person's balance and the fewest transfers to settle up, in the currency picked in the top bar (CAD when that's "local"). It lives on the backend in `expenses.json` in the Pi's data folder (back it up) behind the same access code as the chat. Each device keeps the last copy it saw, so the log still reads with no signal, and anything added offline waits on that device and syncs once the backend answers again.
 
-The options board (候选 tab) is where the group chooses things together without editing `trip.json`, and it's filled by talking to the chat assistant rather than by filling in a form. Type a rough line in the box at the top of the tab (or in the chat anywhere): paste a link and say what you think ("this Flåm place looks good https://… about 2,400 NOK a night, right by the pier"), and the assistant works out which booking from `trip.json` it belongs to, fills in the name, photo and price from the link, and files it there. When it can't tell where something goes, it asks. The same goes for decisions: "pick Flåmsbrygga for Flåm and drop the rest", "move that one to Oslo", "I vote for the hostel, and note it's far from the station". Anyone can also start a topic that isn't a booking ("Lofoten cabin"). On the board itself everyone can still vote 👍/👎, comment, pick or delete with one tap; votes and comments carry the name written at the top of the tab. The booking card on the prep tab shows how many options there are, or which one the group picked. The board lives on the backend in `options.json` in the Pi's data folder (back it up), behind the same access code as the chat. It reads and queues changes offline like the expense log. Link previews are fetched by the backend, which only fetches public web addresses, never your own machine or local network.
+The plan is live: it's kept on the backend, and the chat assistant can change it. Tell it in plain words ("we booked the Odda stay, 3,200 NOK for both nights", "this Flåm hotel looks good https://… add it to the Flåm stay", "swap 7/12 for whale watching in Húsavík") and it proposes the change as a card in the chat: what changes where, before → after. Nothing changes until someone presses 确认修改 (Approve) on it; 先不改 (Not now) drops it. Bigger changes (moving or dropping stops, changing where you sleep, reshaping days) it talks through first, then proposes. Once approved, everyone's page shows the change within a minute, or at once for whoever approved it. Each change says who approved it (the "我是" name under the chat box), and "撤销" (undo) puts any change back, again through a card. A booking it marks booked shows as booked for everyone (ticks you set yourself stay on your device). The assistant lives behind the 问助手 (Ask) button, or Ctrl/⌘+K: it opens a side panel with the recent conversation (kept on this device), and while it works it shows what it's looking at (web searches, the parts of the plan it read) in a line you can expand. Closing the panel doesn't stop an answer; the button says when a reply came in or a change is waiting for approval. How it works: the page loads the plan from the backend (`/api/plan`), falling back to the copy it saw last and then to the copy published with the site, so it still opens offline. The assistant reads the exact JSON of a part, then proposes small edits (set, insert, remove on paths like `bookings/odda-stay/cost`); before showing the card the backend checks them against the plan's existing shape and requires English for any new Chinese text. It applies them only when someone approves (`POST /api/plan/proposals/{id}`), keeps the version before each change for undo, and commits the live plan back to `docs/` on GitHub every 15 minutes when it changed. The plan is public (GitHub Pages and the repo are), so the assistant won't write confirmation numbers, passport numbers or other private details into it.
 
 Each day gets a pace, 轻松 / 适中 / 很满 (easy / moderate / full), shown as three bars on the calendar, the day strip and the day card. It's worked out from the plan: hours driving (buses, trains and ferries count about half), hours on foot, how long the day runs, and early starts or late finishes. The day card says why ("7 h driving · leave 05:30") and flags a run of full days, and the overview names the longest run. To override a day, add `"pace": 1`–`3` and an optional `"paceNote"` to it in `trip.json`.
 
@@ -22,25 +22,33 @@ The forecast comes from [Open-Meteo](https://open-meteo.com/) (free, no key) and
 
 ```
 docs/                 static site, served by GitHub Pages
-  index.html          page shell, map column, chat bar
+  index.html          page shell, map column, assistant button and panel
   sw.js               offline copy (service worker)
   styles.css
-  trip.json           THE PLAN: legs, days, places, bookings, checklists (page and AI both read this)
-  app.js              overview, day view, pace, what to bring, names switch, Google map, bookings + checklists, options board, expense log, drivers
-  chat.js             trip assistant
+  trip.json           THE PLAN as last backed up from the Pi: legs, days, places, bookings, checklists
+  app.js              overview, day view, pace, what to bring, names switch, Google map, bookings + checklists, expense log, drivers, live plan updates
+  chat.js             trip assistant: the panel, its steps and approval cards
   config.js           backend URL + Google Maps key
 backend/
-  server.py           FastAPI + Claude API, streams answers; stores the shared expense log, drivers and options board, fetches link previews
+  server.py           FastAPI + Claude API, streams answers; serves the live plan and the assistant's tools to change it; stores the expense log and drivers
+  plan.py             the live plan: checks, history, undo, taking a trip.json pushed to GitHub
   .env                secrets (not committed)
 scripts/
   build_routes.py     regenerates the drive lines in trip.json
-deploy/nordic-trip.service   the backend's systemd unit on the Pi
-scripts/pi-setup.sh   one-time setup on the Pi; scripts/pi-update.sh   what each deploy runs
+deploy/                the backend's systemd unit on the Pi, and the 15-minute plan backup timer
+scripts/pi-setup.sh   one-time setup on the Pi; scripts/pi-update.sh   what each deploy runs;
+scripts/pi-backup-plan.sh   commits the live plan back to docs/ when the chat changed it
 ```
 
 ## Edit the plan
 
-Everything lives in `docs/trip.json`:
+Usually you just ask the chat assistant (see above). To edit the file by hand, or to change many things at once:
+
+1. Pull first (`git pull`), so you start from the latest backup of the live plan. Chat edits made in the last 15 minutes may not be backed up yet; to be sure, run `bash ~/services/nordic-trip/repo/scripts/pi-backup-plan.sh` on the Pi, then pull.
+2. Edit `docs/trip.json` (and `docs/i18n/en.json`), commit and push.
+3. When pi-dash deploys the push, the backend sees that the repo's plan changed and takes it as the live plan. The live version it replaces stays in the history, so asking the assistant to undo that change brings it back.
+
+The plan's format (`docs/trip.json`):
 
 - `places`: `{"gullfoss": {"zh": "黄金瀑布", "local": "Gullfoss", "en": "Gullfoss", "ll": [lat, lon]}}`. Write `[[gullfoss]]` anywhere in text (titles, bodies, tips, bookings) and the page renders it as 黄金瀑布 (hover: Gullfoss) or Gullfoss.
 - `legs`: the overview segments, `{"c": "no", "from": "2027-07-16", "to": "2027-07-20", "title": "...", "draft": true}`.
@@ -79,8 +87,9 @@ The backend runs on the Raspberry Pi (`ssh pi`), set up like the Pi's other serv
 
 - It's the user service `nordic-trip` on `127.0.0.1:8791`, public through Tailscale Funnel at `https://pi.tail3d8516.ts.net/nordic` (the address in `docs/config.js`).
 - The chat answers through cli-bridge on the Pi (`ANTHROPIC_BASE_URL=http://127.0.0.1:8787`), so it uses the Claude Code sign-in there, not an API key.
-- Everything lives in `~/services/nordic-trip`: `repo` (a checkout of `main`), `.venv`, `.env` (settings and secrets, from `backend/.env.example`) and `data` (the expense log, drivers and options board; back this folder up).
-- **Deploys are automatic:** it's listed in `~/services/services.json`, so pi-dash checks GitHub every 5 minutes. When `main` has new commits, pi-dash pulls them, runs `scripts/pi-update.sh` (Python packages, systemd unit, restart) and health-checks it. The page itself is on GitHub Pages and updates on push too.
+- Everything lives in `~/services/nordic-trip`: `repo` (a checkout of `main`), `.venv`, `.env` (settings and secrets, from `backend/.env.example`) and `data` (the expense log, drivers, and `plan/`: the live plan, its change history and the versions kept for undo; back this folder up).
+- The user timer `nordic-trip-backup.timer` runs `scripts/pi-backup-plan.sh` every 15 minutes: when the chat changed the plan, it commits `docs/trip.json` and `docs/i18n/en.json` and pushes them, so GitHub has the history and GitHub Pages has a current fallback copy.
+- **Deploys are automatic:** it's listed in `~/services/services.json`, so pi-dash checks GitHub every 5 minutes. When `main` has new commits, pi-dash pulls them, runs `scripts/pi-update.sh` (Python packages, systemd units, restart) and health-checks it. The page itself is on GitHub Pages and updates on push too.
 
 Useful commands on the Pi:
 
@@ -108,7 +117,7 @@ Without a key the page uses Google's basic embedded map: one stop or one day's d
 python3 -m http.server 8001 --directory docs
 ```
 
-Then open `http://localhost:8001/?api=http://localhost:8791` to point the chat at a backend you run yourself with `cd backend && uv run python server.py` (it needs a `backend/.env`; its data files go in `backend/`). The backend also serves the site itself at `http://localhost:8791/`.
+Then open `http://localhost:8001/?api=http://localhost:8791` to point the chat at a backend you run yourself with `cd backend && uv run python server.py` (it needs a `backend/.env`; its data files and live plan go in `backend/`). The backend also serves the site itself at `http://localhost:8791/`.
 
 ## Host the frontend
 

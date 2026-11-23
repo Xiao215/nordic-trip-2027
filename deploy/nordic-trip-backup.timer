@@ -1,0 +1,10 @@
+# Every 15 minutes: back up the live plan to GitHub when it changed.
+[Unit]
+Description=Nordic Trip 2027: back up the live plan every 15 minutes
+
+[Timer]
+OnBootSec=5min
+OnUnitActiveSec=15min
+
+[Install]
+WantedBy=timers.target

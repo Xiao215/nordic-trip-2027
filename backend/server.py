@@ -1,18 +1,21 @@
 """Chat backend for the Nordic Trip 2027 planner.
 
-One job: answer questions about the trip. The plan itself is read from ../docs/trip.json
-(the same file the page renders), so editing the itinerary updates both.
+Answers questions about the trip, and keeps the live plan: the page loads it from here and the assistant can
+change it in the chat (see plan.py). The repo's docs/trip.json is where it starts and where it's backed up.
 Exposed to the internet through Tailscale Funnel; see ../README.md.
 """
 
 import asyncio
+import gzip
 import hmac
 import json
 import os
 import re
+import secrets
+import time
 from datetime import datetime
 from pathlib import Path
-from typing import Literal
+from typing import Any
 from zoneinfo import ZoneInfo
 
 import anthropic
@@ -23,14 +26,16 @@ from fastapi.responses import Response, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
+from plan import Plan, PlanError
+
 load_dotenv(Path(__file__).with_name(".env"), override=True)  # .env wins over the shell (on the Pi there is none: systemd passes it)
 
 DOCS = Path(__file__).resolve().parent.parent / "docs"
-TRIP_FILE = DOCS / "trip.json"
-# The group's shared data (expense log, drivers, options board). On the Pi it lives outside the git checkout
+# The group's shared data (expense log, drivers, the live plan). On the Pi it lives outside the git checkout
 # (~/services/nordic-trip/data) so deploys never touch it; locally it defaults to this folder.
 DATA = Path(os.getenv("DATA_DIR") or Path(__file__).parent).expanduser()
 DATA.mkdir(parents=True, exist_ok=True)
+PLAN = Plan(DATA, DOCS)  # the live plan, in DATA/plan
 MODEL = os.getenv("MODEL", "claude-opus-5-5")
 EFFORT = os.getenv("EFFORT", "low")
 BASE_URL = os.getenv("ANTHROPIC_BASE_URL", "")
@@ -132,7 +137,8 @@ def render_trip(t: dict) -> str:
             out.append(f"    Map: {_maps(places[s['place']]['ll'])}")
     out += ["", "## Bookings"]
     for b in t["bookings"]:
-        out.append(f"### {tx(b['what'])} (id: {b['id']}; for {tx(b.get('for', ''))}; book: {tx(b.get('when', b.get('opens', '')))})")
+        out.append(f"### {tx(b['what'])} (id: {b['id']}; for {tx(b.get('for', ''))}; book: {tx(b.get('when', b.get('opens', '')))})"
+                   + (" BOOKED" if b.get("booked") else ""))
         if b.get("cost"):
             out.append(f"Cost: {tx(b['cost'])}")
         if b.get("summary"):
@@ -166,13 +172,16 @@ SYSTEM_TEMPLATE = """你是「北欧之旅 2027」的行程助手。这是一趟
 
 先根据下面的行程回答。行程里没有的（天气、营业时间、路况和 F 路开放情况、价格、渡轮和航班时刻、门票），就上网查，并简短说明来源；冰岛路况以 road.is 和 safetravel.is 为准。行程和网上信息不一致时要指出来。不知道就说不知道，绝不编造时间、价格或电话。
 
-回答要短而实用：先用一两句话给出答案，确实有帮助时再加几条要点。时间用当地时间、24 小时制（冰岛 UTC+0，挪威、瑞典、丹麦夏令时 UTC+2）。有人问某地在哪，就附上 Google 地图链接。价格用当地货币（ISK、NOK、SEK、DKK）；如果 <context> 里有 currency（CAD、CNY 或 USD），在括号里附上大约的换算。有人想改行程时，说明改动会影响什么（时间、预订、还车地点等），并提醒网页上的行程只有在行程作者修改 trip.json 后才会更新。
+回答要短而实用：先用一两句话给出答案，确实有帮助时再加几条要点。时间用当地时间、24 小时制（冰岛 UTC+0，挪威、瑞典、丹麦夏令时 UTC+2）。有人问某地在哪，就附上 Google 地图链接。价格用当地货币（ISK、NOK、SEK、DKK）；如果 <context> 里有 currency（CAD、CNY 或 USD），在括号里附上大约的换算。有人想改行程时，说明改动会影响什么（时间、预订、还车地点等）。
 
-网页上还有一块大家共用的「候选」板：每个预订（或大家自己开的话题）下面放几个候选（酒店、小屋、游船、餐厅……），大家投票、留言，最后选定一个。板上的候选都是通过你来加和改的，所以大家会跟你说得很随意，比如贴个链接加一句“这家不错，一晚 1,200”，或者“北边住的就定第二个吧，别的删了”。
-- 有人贴了链接，或者说想把某个地方加进候选：直接用 add_options 加，不要先上网查（没给链接时才上网找到真实的页面）。价格和备注从对方的话里取（为什么不错、离哪里近），按城市、日期和类型放进 trip_plan 里对应的预订（用预订后面的 id）。放在哪拿不准、或者哪个预订都不合适时，先简短问一句，给出最可能的一两个预订或“开个新话题”让对方选，不要乱放。
-- 有人要选定、删掉、改、移动、投票或留言：先用 list_options 看板上有什么、找到候选的 id，再用 change_options 改。“就它了，别的删掉”就是选定它，并删掉同一个预订下的其它候选。说的是哪一个拿不准时，先问。
-- 只是问有什么推荐时，先回答，不要自己加；对方说要加再加。
-- 改完用一两句话说清楚改了什么、在哪个预订下面，不用再列一遍板上的内容。
+网页上的行程你可以改：你用 edit_plan 提出改动，网页上会出现一张确认卡片，列出每处改动的前后对比，对方点“确认”才会真正改，大家的网页随即更新。大家会跟你说得很随意，比如“我们订好 Odda 的住宿了”、“第 12 天下午改成去看冰川”、“这家酒店不错 https://…，一晚 1,890 NOK，加到弗洛姆的住宿里”。
+- 改之前先用 read_plan 读出要改的那部分原样的 JSON，再用 edit_plan 提出改动，沿用原来的字段和写法。一件事的改动放在一次 edit_plan 里。
+- 意思明确就直接提出改动，不用先口头问“要不要改”，卡片就是确认。把别人贴的链接加进对应预订的 links（标签写名字和价格，比如 ["Flåmsbrygga · 约 2,400 NOK/晚", "https://…"]），需要的话在 tip 里加一句为什么不错。
+- 大一点的改动（删掉或挪动景点、换住的地方、调整好几天的安排、改路线）提出之前，先用一两句话说清楚会影响什么（时间、预订、还车地点、开车时间）；有几种改法时先问对方选哪种。
+- 改哪里、改成什么拿不准时，先简短问一句，给出最可能的一两个选项。只是问建议时先回答，对方说要改再提。
+- 提出后用一两句话说你提议了什么；之后对话里会写明对方确认了还是没采用。有人要撤销时，用 plan_history 找到那次改动，再用 undo_plan_change（也会出确认卡片）。
+- 行程网页是公开的，也会备份到公开的 GitHub，所以绝不要把预订确认号、护照号、电话、住址、付款信息写进行程；有人发来这些，就提醒他们自己保存。
+- 新加或改动的中文文字，要在 en 里给出英文（英文网页用），地名标记 [[id]] 原样保留。
 整个行程都还是初步的，欢迎帮忙出主意、调整，但不要说哪部分“已定”或“是草案”。
 
 签证、入境、TRV、ETIAS 这类问题要看对方用哪本护照、住在哪里：<context> 里有 passport 时，按 trip_plan 里对应那本护照的步骤回答；没有时先问一句，或者把中国护照和加拿大护照的情况分开说。
@@ -183,15 +192,13 @@ Latency-sensitive; begin your visible answer immediately.
 {plan}
 </trip_plan>"""
 
-_cache: dict = {"mtime": None, "system": None}
+_cache: dict = {"rev": None, "system": None}
 
 
 def system_prompt() -> str:
-    """Re-read trip.json only when it changes, so the cached prompt prefix stays byte-identical."""
-    mtime = TRIP_FILE.stat().st_mtime
-    if _cache["mtime"] != mtime:
-        trip = json.loads(TRIP_FILE.read_text())
-        _cache.update(mtime=mtime, system=SYSTEM_TEMPLATE.format(plan=render_trip(trip)))
+    """Re-rendered only when the plan changes, so the cached prompt prefix stays byte-identical."""
+    if _cache["rev"] != PLAN.rev:
+        _cache.update(rev=PLAN.rev, system=SYSTEM_TEMPLATE.format(plan=render_trip(PLAN.trip)))
     return _cache["system"]
 
 
@@ -301,12 +308,12 @@ async def answer(messages: list[dict], lang_en: bool = False, asker: str = ""):
         extra = {"betas": ["server-side-fallback-2026-07-01"], "fallbacks": FALLBACKS}
     # tool inputs here are short, so they stream as generated (and are validated before running); a local
     # Anthropic-compatible server may not know the field, so it's left off there
-    own = [dict(t, eager_input_streaming=True) for t in OPTION_TOOLS] if not LOCAL_AI else OPTION_TOOLS
+    own = [dict(t, eager_input_streaming=True) for t in PLAN_TOOLS] if not LOCAL_AI else PLAN_TOOLS
     tools = [WEB_SEARCH, *own]
     wrote = False
     try:
         # a long web search can pause the turn, and each round of tool calls takes another request
-        for _ in range(8):
+        for _ in range(12):
             try:
                 stream_cm = client.beta.messages.stream(
                     model=MODEL,
@@ -337,17 +344,17 @@ async def answer(messages: list[dict], lang_en: bool = False, asker: str = ""):
                             yield sse({"type": "text", "text": "\n\n"})
                         fresh, wrote = False, True
                         yield sse({"type": "text", "text": event.text})
+                    # each tool call shows as a step: started, then labelled with what it looked at, then done
                     elif event.type == "content_block_start":
-                        kind = event.content_block.type
-                        if kind == "server_tool_use":
-                            yield sse({"type": "status", "text": "Searching the web" if lang_en else "正在上网查"})
-                        elif kind == "web_search_tool_result":
-                            yield sse({"type": "status", "text": "Reading results" if lang_en else "正在看搜索结果"})
-                        elif kind == "tool_use":
-                            what = {"list_options": ("Reading the options board", "正在看候选板"),
-                                    "add_options": ("Adding to the options board", "正在加进候选板")}.get(
-                                        event.content_block.name, ("Updating the options board", "正在改候选板"))
-                            yield sse({"type": "status", "text": what[0] if lang_en else what[1]})
+                        b = event.content_block
+                        if b.type in ("server_tool_use", "tool_use"):
+                            yield sse({"type": "step", "id": b.id, "label": step_label(b.name, None, lang_en), "state": "running"})
+                        elif b.type == "web_search_tool_result":
+                            yield sse({"type": "step", "id": b.tool_use_id, "state": "done"})
+                    elif event.type == "content_block_stop":
+                        b = getattr(event, "content_block", None)
+                        if b is not None and b.type in ("server_tool_use", "tool_use"):
+                            yield sse({"type": "step", "id": b.id, "label": step_label(b.name, b.input if isinstance(b.input, dict) else {}, lang_en)})
                 final = await stream.get_final_message()
             except ValueError:
                 # a tool call whose streamed input isn't JSON at all: nothing to answer, so ask again
@@ -363,15 +370,15 @@ async def answer(messages: list[dict], lang_en: bool = False, asker: str = ""):
                 continue
             if final.stop_reason == "tool_use":
                 messages.append({"role": "assistant", "content": final.content})
-                results, changed = [], False
+                results = []
                 for b in final.content:
                     if b.type != "tool_use":
                         continue
-                    text, err, did = await run_option_tool(b.name, b.input if isinstance(b.input, dict) else {}, asker, lang_en)
-                    changed = changed or did
+                    text, err, card = await run_plan_tool(b.name, b.input if isinstance(b.input, dict) else {}, asker, lang_en)
+                    yield sse({"type": "step", "id": b.id, "state": "error" if err else "done"})
+                    if card:
+                        yield sse({"type": "approval", "card": card})
                     results.append({"type": "tool_result", "tool_use_id": b.id, "content": text, **({"is_error": True} if err else {})})
-                if changed:
-                    yield sse({"type": "options"})
                 messages.append({"role": "user", "content": results})
                 continue
             if final.stop_reason == "refusal":
@@ -574,532 +581,217 @@ async def delete_driver(body: PersonIn, x_access_code: str | None = Header(defau
         return data
 
 
-# ---------- shared options board ----------
-# Hotels, cabins, tours: anyone with the code pastes a link under a booking from trip.json (its id) or under a
-# topic of their own, the group votes and comments, and one option per slot gets picked. Writes arrive as a
-# batch of small operations (the page queues them offline, ids are picked by the page so a retry is harmless),
-# and every write answers with the whole board.
+# ---------- the live plan ----------
+# The page loads the plan from here (falling back to its own copy offline), and the assistant changes it with the
+# tools below. Reading needs no access code: the plan is public anyway (GitHub Pages and the repo).
 
-OPTIONS_FILE = DATA / "options.json"
-ID = r"^[A-Za-z0-9_-]{6,40}$"
-SLOT = re.compile(r"^[\w-]{1,60}$")
-_options_lock = asyncio.Lock()
+_plan_lock = asyncio.Lock()
+_plan_gz: dict = {"rev": None, "body": b""}
 
 
-def read_options() -> dict:
-    try:
-        data = json.loads(OPTIONS_FILE.read_text())
-    except FileNotFoundError:
-        data = {}
-    return {"topics": data.get("topics", []), "items": data.get("items", []), "picked": data.get("picked", {})}
+def plan_meta() -> dict:
+    return {"rev": PLAN.rev, "last": PLAN.last()}
 
 
-def booking_ids() -> set[str]:
-    try:
-        return {b["id"] for b in json.loads(TRIP_FILE.read_text()).get("bookings", [])}
-    except (OSError, ValueError, KeyError):
-        return set()
+@app.get("/api/plan/rev")
+async def plan_rev():
+    return Response(json.dumps(plan_meta(), ensure_ascii=False), media_type="application/json", headers={"Cache-Control": "no-store"})
 
 
-def now_ms() -> int:
-    return int(datetime.now(TZ).timestamp() * 1000)
+@app.get("/api/plan")
+async def plan(if_none_match: str | None = Header(default=None), accept_encoding: str | None = Header(default=None)):
+    etag = f'"{PLAN.rev}"'
+    if if_none_match == etag:
+        return Response(status_code=304, headers={"ETag": etag})
+    if _plan_gz["rev"] != PLAN.rev:  # about 450 KB of JSON, 100 KB gzipped: compressed once per version
+        body = json.dumps({**plan_meta(), "trip": PLAN.trip, "en": PLAN.en}, ensure_ascii=False, separators=(",", ":")).encode()
+        _plan_gz.update(rev=PLAN.rev, raw=body, body=gzip.compress(body, 6))
+    headers = {"Cache-Control": "no-cache", "ETag": etag, "Vary": "Accept-Encoding"}
+    if "gzip" in (accept_encoding or ""):
+        return Response(_plan_gz["body"], media_type="application/json", headers={**headers, "Content-Encoding": "gzip"})
+    return Response(_plan_gz["raw"], media_type="application/json", headers=headers)
 
 
-def clean(s: str | None, n: int) -> str:
-    return re.sub(r"\s+", " ", s or "").strip()[:n]
+class PlanChange(BaseModel):
+    op: str = Field(pattern="^(set|insert|remove)$")
+    path: str = Field(min_length=1, max_length=200)
+    value: Any = None
 
 
-def web_url(u: str | None) -> str:
-    u = (u or "").strip()
-    return u if re.match(r"^https?://[^\s/]+", u) and len(u) <= 1000 else ""
+class EditPlanIn(BaseModel):
+    summary: str = Field(min_length=1, max_length=300)
+    changes: list[PlanChange] = Field(min_length=1, max_length=40)
+    en: dict[str, str] = Field(default_factory=dict)
 
 
-class OptionOp(BaseModel):
-    op: str = Field(pattern="^(topic|untopic|add|edit|del|vote|comment|uncomment|pick|move)$")
-    id: str | None = Field(default=None, pattern=ID)
-    slot: str | None = Field(default=None, max_length=60)
-    title: str | None = Field(default=None, max_length=200)
-    url: str | None = Field(default=None, max_length=1000)
-    image: str | None = Field(default=None, max_length=1000)
-    site: str | None = Field(default=None, max_length=80)
-    price: str | None = Field(default=None, max_length=80)
-    note: str | None = Field(default=None, max_length=800)
-    by: str | None = Field(default=None, max_length=24)
-    v: int | None = Field(default=None, ge=-1, le=1)
-    cid: str | None = Field(default=None, pattern=ID)
-    text: str | None = Field(default=None, max_length=500)
+class ReadPlanIn(BaseModel):
+    path: str = Field(default="", max_length=200)
 
 
-class OptionOpsIn(BaseModel):
-    ops: list[OptionOp] = Field(min_length=1, max_length=100)
+class UndoIn(BaseModel):
+    change_id: str = Field(min_length=1, max_length=40)
+    also_later: bool = False
 
 
-def apply_option(data: dict, o: OptionOp, bookings: set[str], via: str | None = None) -> None:
-    """Applies one change to the board; raises ValueError with a message for the person if it can't."""
-    items, topics = data["items"], data["topics"]
-    item = next((x for x in items if x["id"] == o.id), None) if o.id else None
-    by = clean(o.by, 24)
-    if o.op == "topic":
-        if not o.id or any(t["id"] == o.id for t in topics):
-            return
-        title = clean(o.title, 80)
-        if not title:
-            raise ValueError("话题要有个名字。")
-        if len(topics) >= 60:
-            raise ValueError("话题太多了，先删掉几个。")
-        topics.append({"id": o.id, "title": title, "by": by, "ts": now_ms()})
-    elif o.op == "untopic":
-        data["topics"] = [t for t in topics if t["id"] != o.id]
-        data["items"] = [x for x in items if x["slot"] != o.id]
-        data["picked"].pop(o.id, None)
-    elif o.op == "add":
-        if not o.id or item:
-            return  # already saved (the page retried after a dropped connection)
-        slot = o.slot or ""
-        if slot not in bookings and not any(t["id"] == slot for t in data["topics"]):
-            raise ValueError("这个候选要放在的预订或话题已经不在了。")
-        url, title = web_url(o.url), clean(o.title, 200)
-        if not title and not url:
-            raise ValueError("候选至少要有名字或链接。")
-        if len(items) >= 1500:
-            raise ValueError("候选太多了，先删掉一些。")
-        new = {"id": o.id, "slot": slot, "url": url, "title": title, "image": web_url(o.image), "site": clean(o.site, 80),
-               "price": clean(o.price, 80), "note": (o.note or "").strip()[:800], "by": by, "ts": now_ms(), "votes": {}, "comments": []}
-        if via:
-            new["via"] = via
-        items.append(new)
-    elif o.op == "pick" and not o.id:
-        data["picked"].pop(o.slot or "", None)
-    elif not item:
-        return  # deleted meanwhile on another phone: nothing left to change
-    elif o.op == "edit":
-        for k, n in (("title", 200), ("price", 80), ("site", 80)):
-            if getattr(o, k) is not None:
-                item[k] = clean(getattr(o, k), n)
-        if o.note is not None:
-            item["note"] = o.note.strip()[:800]
-        if o.url is not None:
-            item["url"] = web_url(o.url)
-        if o.image is not None:
-            item["image"] = web_url(o.image)
-        if not item["title"] and not item["url"]:
-            raise ValueError("候选至少要有名字或链接。")
-    elif o.op == "del":
-        data["items"] = [x for x in items if x["id"] != o.id]
-        if data["picked"].get(item["slot"]) == o.id:
-            del data["picked"][item["slot"]]
-    elif o.op == "vote":
-        if not by:
-            raise ValueError("先写上你是谁，再投票。")
-        if o.v:
-            item["votes"][by] = o.v
-        else:
-            item["votes"].pop(by, None)
-    elif o.op == "comment":
-        text = (o.text or "").strip()[:500]
-        if not by or not text or not o.cid:
-            raise ValueError("留言要写上你是谁和内容。")
-        if not any(c["id"] == o.cid for c in item["comments"]) and len(item["comments"]) < 200:
-            item["comments"].append({"id": o.cid, "by": by, "text": text, "ts": now_ms()})
-    elif o.op == "uncomment":
-        item["comments"] = [c for c in item["comments"] if c["id"] != o.cid]
-    elif o.op == "pick":
-        data["picked"][item["slot"]] = item["id"]
-    elif o.op == "move":
-        slot = o.slot or ""
-        if slot not in bookings and not any(t["id"] == slot for t in data["topics"]):
-            raise ValueError("要移去的预订或话题不在了。")
-        if slot != item["slot"]:
-            if data["picked"].get(item["slot"]) == item["id"]:
-                del data["picked"][item["slot"]]
-            item["slot"] = slot
-
-
-@app.get("/api/options")
-async def options(x_access_code: str | None = Header(default=None)):
-    check_code(x_access_code)
-    return read_options()
-
-
-@app.post("/api/options")
-async def change_options(body: OptionOpsIn, x_access_code: str | None = Header(default=None)):
-    check_code(x_access_code)
-    bookings, errors = booking_ids(), []
-    async with _options_lock:
-        data = read_options()
-        for o in body.ops:
-            try:
-                apply_option(data, o, bookings)
-            except ValueError as e:
-                errors.append(str(e))
-        write_json(OPTIONS_FILE, data)
-    return {**data, "errors": errors}
-
-
-# ---------- link previews ----------
-# A link given to the assistant brings the name, photo and price from the page's preview tags (the ones chat apps use).
-# The backend is reachable from the internet, so it only fetches public web addresses: never this machine
-# or the local network, and it rechecks every redirect.
-
-PREVIEW_UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Safari/605.1.15"
-_previews: dict[str, dict] = {}
-
-
-async def public_url(url: str) -> bool | None:
-    """True for a public web address, False for this machine or a private network, None if it doesn't resolve."""
-    import ipaddress
-    import socket
-    from urllib.parse import urlsplit
-
-    p = urlsplit(url)
-    if p.scheme not in ("http", "https") or not p.hostname or p.port not in (None, 80, 443):
-        return False
-    try:
-        infos = await asyncio.get_running_loop().getaddrinfo(p.hostname, p.port or (443 if p.scheme == "https" else 80), type=socket.SOCK_STREAM)
-    except OSError:
-        return None
-    return bool(infos) and all(ipaddress.ip_address(i[4][0]).is_global for i in infos)
-
-
-def _meta(html: str, *keys: str) -> str:
-    import html as H
-
-    for k in keys:
-        for pat in (rf'<meta[^>]+(?:property|name|itemprop)\s*=\s*["\']{re.escape(k)}["\'][^>]*?content\s*=\s*["\']([^"\']*)',
-                    rf'<meta[^>]+content\s*=\s*["\']([^"\']*)["\'][^>]*?(?:property|name|itemprop)\s*=\s*["\']{re.escape(k)}["\']'):
-            m = re.search(pat, html, re.I)
-            if m and m.group(1).strip():
-                return H.unescape(m.group(1)).strip()
-    return ""
-
-
-def parse_preview(html: str, url: str) -> dict:
-    import html as H
-    from urllib.parse import urljoin, urlsplit
-
-    title = _meta(html, "og:title", "twitter:title")
-    if not title:
-        m = re.search(r"<title[^>]*>(.*?)</title>", html, re.I | re.S)
-        title = H.unescape(m.group(1)).strip() if m else ""
-    image = _meta(html, "og:image:secure_url", "og:image", "twitter:image", "twitter:image:src")
-    price = _meta(html, "product:price:amount", "og:price:amount")
-    cur = _meta(html, "product:price:currency", "og:price:currency")
-    if not price:  # schema.org data, e.g. "priceRange": "€€" or an offer's price
-        m = re.search(r'"price"\s*:\s*"?([\d.,]+)"?[^{}]*?"priceCurrency"\s*:\s*"([A-Z]{3})"', html) or \
-            re.search(r'"priceCurrency"\s*:\s*"([A-Z]{3})"[^{}]*?"price"\s*:\s*"?([\d.,]+)', html)
-        if m:
-            a, b = m.groups()
-            price, cur = (a, b) if a[0].isdigit() else (b, a)
-    return {
-        "url": url,
-        "title": clean(title, 200),
-        "image": web_url(urljoin(url, image)) if image else "",
-        "site": clean(_meta(html, "og:site_name") or (urlsplit(url).hostname or "").removeprefix("www."), 80),
-        "price": clean(f"{price} {cur}".strip(), 80) if price else "",
-        "desc": clean(_meta(html, "og:description", "description", "twitter:description"), 300),
-    }
-
-
-async def link_preview(url: str, lang: str = "zh") -> dict:
-    try:  # the HTTP client that comes with the anthropic SDK: httpx2 from 1.x, httpx before
-        import httpx2 as httpx
-    except ImportError:
-        import httpx
-    from urllib.parse import urljoin
-
-    url = web_url(url)
-    if not url:
-        raise HTTPException(400, "这不是一个网址。")
-    if url in _previews:
-        return _previews[url]
-    out = {"url": url, "title": "", "image": "", "site": "", "price": "", "desc": ""}
-    headers = {"User-Agent": PREVIEW_UA, "Accept": "text/html,application/xhtml+xml",
-               "Accept-Language": "en-US,en;q=0.8" if lang == "en" else "zh-CN,zh;q=0.9,en;q=0.7"}
-    try:
-        async with httpx.AsyncClient(timeout=8, follow_redirects=False, headers=headers) as http:
-            here = url
-            for _ in range(5):
-                ok = await public_url(here)
-                if ok is None:
-                    break
-                if not ok:
-                    raise HTTPException(400, "只能预览公开的网页。")
-                async with http.stream("GET", here) as r:
-                    if r.is_redirect and r.headers.get("location"):
-                        here = urljoin(here, r.headers["location"])
-                        continue
-                    if r.status_code >= 400 or "html" not in r.headers.get("content-type", "html"):
-                        break
-                    buf = b""
-                    async for chunk in r.aiter_bytes():
-                        buf += chunk
-                        if len(buf) > 1_500_000 or (len(buf) > 400_000 and b"</head>" in buf):
-                            break
-                    html = buf.decode(r.encoding or "utf-8", "replace")
-                    hop = re.search(r'<meta[^>]+http-equiv\s*=\s*["\']?refresh["\']?[^>]+content\s*=\s*["\']\s*\d*\s*;\s*url\s*=\s*([^"\'>\s]+)', html, re.I)
-                    if hop and len(html) < 20000:  # a "redirecting..." page rather than the real one
-                        here = urljoin(here, hop.group(1))
-                        continue
-                    out = parse_preview(html, url)
-                    break
-    except httpx.HTTPError:
-        pass  # a site that blocks previews still gets saved, with its address as the name until someone types one
-    if not out["site"]:
-        out["site"] = re.sub(r"^https?://(www\.)?([^/:]+).*", r"\2", url)
-    if not out["title"]:  # sites that block previews (Booking.com) often still name the place in the link
-        slug = re.sub(r"(\.[a-z]{2}(-[a-z]{2})?)?\.html?$", "", url.split("?")[0].rstrip("/").rsplit("/", 1)[-1])
-        if re.search(r"[A-Za-z]{3}", slug) and "." not in slug:
-            out["title"] = clean(re.sub(r"[-_+]+", " ", slug), 200).title()
-    if out["image"].startswith("http://"):
-        out["image"] = "https://" + out["image"][7:]
-    if len(_previews) > 300:
-        _previews.clear()
-    _previews[url] = out
-    return out
-
-
-# ---------- the assistant's tools for the options board ----------
-# The board is filled through the chat: people paste a link or a rough line and the assistant files it under the
-# right booking; "pick this one and drop the rest" works the same way.
-
-class ToolOption(BaseModel):
-    title: str = Field(min_length=1, max_length=200)
-    url: str = Field(default="", max_length=1000)
-    price: str = Field(default="", max_length=80)
-    note: str = Field(default="", max_length=800)
-
-
-class AddOptionsIn(BaseModel):
-    slot: str = Field(default="", max_length=60)
-    new_topic: str = Field(default="", max_length=80)
-    options: list[ToolOption] = Field(min_length=1, max_length=8)
-
-
-class ToolChange(BaseModel):
-    action: Literal["pick", "unpick", "remove", "edit", "move", "vote", "comment", "remove_topic", "rename_topic"]
-    option_id: str = Field(default="", max_length=40)
-    slot: str = Field(default="", max_length=60)
-    remove_others: bool = False
-    title: str | None = Field(default=None, max_length=200)
-    price: str | None = Field(default=None, max_length=80)
-    note: str | None = Field(default=None, max_length=800)
-    url: str | None = Field(default=None, max_length=1000)
-    vote: Literal[1, 0, -1] = 1
-    text: str = Field(default="", max_length=500)
-    person: str = Field(default="", max_length=24)
-
-
-class ChangeOptionsIn(BaseModel):
-    changes: list[ToolChange] = Field(min_length=1, max_length=40)
-
-
-OPTION_TOOLS = [
+PLAN_TOOLS = [
     {
-        "name": "list_options",
-        "description": "Read the group's shared options board: every booking or topic that has options, each option's id, "
-                       "name, price, link, note, who added it, votes, comments, and which one is picked. Call it before "
-                       "changing anything on the board, so you have the option ids, and when asked what's been suggested.",
+        "name": "read_plan",
+        "description": "Read the exact JSON of part of the trip plan the page shows, before changing it. path picks the "
+                       "part: \"days/2027-07-19\", \"days/2027-07-19/segs/2\", \"bookings/odda-stay\", \"places/flam\", "
+                       "\"prep\", \"legs/2\", \"entry\". A list item is picked by its id or date, or by its position from 0. "
+                       "An empty path gives an outline (day dates, booking ids, place ids). Comes back with \"en\": the English "
+                       "the page shows for each piece of Chinese text in it.",
+        "input_schema": {"type": "object", "properties": {"path": {"type": "string"}}, "additionalProperties": False},
+    },
+    {
+        "name": "edit_plan",
+        "description": "Propose a change to the trip plan. The person gets an approval card on the page listing each "
+                       "change (before and after) and it's applied, for everyone, only when they approve it. Each change is one op on a path "
+                       "(the same paths as read_plan): set replaces a value or adds a field, insert puts a new item into a "
+                       "list before the item at the path (\"-\" as the last segment appends), remove deletes it. Keep the "
+                       "fields and formats the plan already uses (read the part first): text can use [[place_id]], **bold** "
+                       "and [text](https://url); a new place goes in places first ({zh, local, en, ll: [lat, lng]}). For "
+                       "every new or changed Chinese text, give its English in en, keyed by the exact Chinese, with the same "
+                       "[[place_id]] markers. Mark a booking booked for everyone with set bookings/<id>/booked true. All "
+                       "changes are checked now and applied together on approval, or none are. summary: one short line in the asker's "
+                       "language saying what changed, shown in the history.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "summary": {"type": "string"},
+                "changes": {"type": "array", "maxItems": 40, "items": {
+                    "type": "object",
+                    "properties": {"op": {"type": "string", "enum": ["set", "insert", "remove"]},
+                                   "path": {"type": "string"},
+                                   "value": {"description": "The new value (any JSON) for set and insert."}},
+                    "required": ["op", "path"], "additionalProperties": False}},
+                "en": {"type": "object", "additionalProperties": {"type": "string"},
+                       "description": "English for each new Chinese text: {\"中文\": \"English\"}."},
+            },
+            "required": ["summary", "changes"],
+            "additionalProperties": False,
+        },
+    },
+    {
+        "name": "plan_history",
+        "description": "The latest changes to the plan, newest first: id, when (Toronto time), who asked, what changed, and "
+                       "whether it was undone. Use it to find a change to undo, or when asked what changed.",
         "input_schema": {"type": "object", "properties": {}, "additionalProperties": False},
     },
     {
-        "name": "add_options",
-        "description": "Save options (hotels, cabins, tours, restaurants...) to the shared options board so the group can vote. "
-                       "Use it when someone pastes a link or names a place they want on the board, even in a rough note. "
-                       "Put them under the booking they belong to, with its id from trip_plan (\"(id: ...)\" after each "
-                       "booking), or under an existing topic id from list_options, or pass new_topic to start a topic. Pass "
-                       "the link they gave (it fills in the photo and site), a price as they or the site said it, and a "
-                       "one-line note from what they said about it. If they gave no link, find the real page first. Never "
-                       "invent URLs or prices.",
-        "input_schema": {
-            "type": "object",
-            "properties": {
-                "slot": {"type": "string", "description": "A booking id from trip_plan or a topic id from list_options."},
-                "new_topic": {"type": "string", "description": "Instead of slot: the name of a new topic, e.g. 'Lofoten cabin'."},
-                "options": {"type": "array", "maxItems": 8, "items": {
-                    "type": "object",
-                    "properties": {"title": {"type": "string"}, "url": {"type": "string"}, "price": {"type": "string"}, "note": {"type": "string"}},
-                    "required": ["title"], "additionalProperties": False}},
-            },
-            "required": ["options"],
-            "additionalProperties": False,
-        },
-    },
-    {
-        "name": "change_options",
-        "description": "Change the shared options board, in order: pick an option for its booking (remove_others also deletes "
-                       "the other options under that booking), unpick (slot), remove an option, edit its title, price, note "
-                       "or url, move it to another booking or topic (slot), vote on it (1 for, -1 against, 0 to take a vote "
-                       "back), comment on it, remove a topic with its options (slot), or rename a topic (slot, title). Votes "
-                       "and comments go under the person asking; set person only when they say it's for someone else or "
-                       "tell you their name. Take option ids from list_options.",
-        "input_schema": {
-            "type": "object",
-            "properties": {
-                "changes": {"type": "array", "maxItems": 40, "items": {
-                    "type": "object",
-                    "properties": {
-                        "action": {"type": "string", "enum": ["pick", "unpick", "remove", "edit", "move", "vote", "comment", "remove_topic", "rename_topic"]},
-                        "option_id": {"type": "string"},
-                        "slot": {"type": "string", "description": "For unpick, move, remove_topic and rename_topic: a booking or topic id."},
-                        "remove_others": {"type": "boolean", "description": "For pick: also delete every other option under the same booking or topic."},
-                        "title": {"type": "string"},
-                        "price": {"type": "string"},
-                        "note": {"type": "string"},
-                        "url": {"type": "string"},
-                        "vote": {"type": "integer", "enum": [1, 0, -1]},
-                        "text": {"type": "string", "description": "For comment."},
-                        "person": {"type": "string", "description": "Whose vote or comment, when it isn't the person asking."},
-                    },
-                    "required": ["action"], "additionalProperties": False}},
-            },
-            "required": ["changes"],
-            "additionalProperties": False,
-        },
+        "name": "undo_plan_change",
+        "description": "Propose putting the plan back to how it was before a change (an id from plan_history); like "
+                       "edit_plan it waits for the person to approve a card. If later changes "
+                       "exist they'd be undone too, so the first call is refused with the list; check with the person, then "
+                       "call again with also_later true. An undo can itself be undone.",
+        "input_schema": {"type": "object", "properties": {"change_id": {"type": "string"}, "also_later": {"type": "boolean"}},
+                         "required": ["change_id"], "additionalProperties": False},
     },
 ]
+# Changes wait for a person: edit_plan and undo_plan_change check the change and turn it into a proposal, which the
+# chat shows as a card with Approve / Not now. Only the card's Approve applies it (POST /api/plan/proposals/<id>).
+# Proposals live in memory: after a restart (a deploy) an old card says to ask again.
+PROPOSALS: dict[str, dict] = {}
 
 
-def _new_id() -> str:
-    import secrets
+def step_label(name: str, inp: dict | None, lang_en: bool) -> str:
+    inp = inp or {}
+    if name == "web_search":
+        q = str(inp.get("query", ""))
+        return (f"Searched the web: {q}" if lang_en else f"上网查：{q}") if q else ("Searching the web" if lang_en else "上网查")
+    if name == "read_plan":
+        path = str(inp.get("path", "")) or ("outline" if lang_en else "概览")
+        return f"Read the plan: {path}" if lang_en else f"读行程：{path}"
+    if name == "edit_plan":
+        return f"Prepared a change: {inp.get('summary', '')}" if lang_en else f"准备改动：{inp.get('summary', '')}"
+    if name == "plan_history":
+        return "Read the change history" if lang_en else "看改动记录"
+    if name == "undo_plan_change":
+        return f"Prepared an undo: {inp.get('change_id', '')}" if lang_en else f"准备撤销：{inp.get('change_id', '')}"
+    return name
 
-    return secrets.token_urlsafe(9).replace("-", "a").replace("_", "b")
+
+def _propose(kind: str, payload: dict, title: str, changes: list[dict], by: str) -> dict:
+    now = time.time()
+    for k in [k for k, v in PROPOSALS.items() if now - v["ts"] > 3 * 86400] + list(PROPOSALS)[:-200]:
+        PROPOSALS.pop(k, None)
+    pid = secrets.token_urlsafe(8)
+    card = {"id": pid, "kind": kind, "title": title, "changes": changes, "by": by, "ts": now, "state": "waiting"}
+    PROPOSALS[pid] = {**card, "payload": payload}
+    return card
 
 
-def board_text(data: dict) -> str:
-    """The board as short text for the assistant: slots in trip order, best-voted first."""
+def _card(p: dict) -> dict:
+    return {k: v for k, v in p.items() if k != "payload"}
+
+
+async def run_plan_tool(name: str, raw: dict, asker: str, lang_en: bool) -> tuple[str, bool, dict | None]:
+    """Runs one of the assistant's tools: (result for the model, is_error, an approval card when it proposed a change)."""
+    by = (asker or "").strip()[:24]
+    waiting = ("Proposal {id} is waiting for approval: the page shows the person a card listing these changes, with "
+               "Approve and Not now. Nothing is applied until they approve it there. In a sentence or two, say what you "
+               "proposed and what it affects; don't ask them to type yes.")
     try:
-        bookings = json.loads(TRIP_FILE.read_text()).get("bookings", [])
-    except (OSError, ValueError):
-        bookings = []
-    names = {b["id"]: re.sub(r"\[\[(\w+)\]\]", r"\1", b.get("what", b["id"])) for b in bookings}
-    slots = [(b["id"], names[b["id"]], "booking") for b in bookings] + [(t["id"], t["title"], "topic") for t in data["topics"]]
-    out = []
-    for sid, name, kind in slots:
-        items = sorted((x for x in data["items"] if x["slot"] == sid), key=lambda x: -sum(x["votes"].values()))
-        if not items and kind == "booking":
-            continue
-        out.append(f"## {name} ({kind} id: {sid})")
-        if not items:
-            out.append("(no options yet)")
-        for x in items:
-            up = [p for p, v in x["votes"].items() if v > 0]
-            down = [p for p, v in x["votes"].items() if v < 0]
-            bits = [x["title"] or x["site"] or x["url"], x["price"], x["url"], f"added by {x['by']}" if x["by"] else "",
-                    f"for: {', '.join(up)}" if up else "", f"against: {', '.join(down)}" if down else ""]
-            out.append(f"- [{x['id']}]{' PICKED' if data['picked'].get(sid) == x['id'] else ''} " + " | ".join(b for b in bits if b))
-            if x["note"]:
-                out.append(f"  note: {x['note']}")
-            out += [f"  {c['by']}: {c['text']}" for c in x["comments"][-10:]]
-    return "\n".join(out)[:30000] or "The board is empty."
+        if name == "read_plan":
+            part = PLAN.part(ReadPlanIn.model_validate(raw).path)
+            text = json.dumps(part, ensure_ascii=False, indent=1)
+            if len(text) > 60000:
+                return f"That part is {len(text)} characters: read a smaller part (one day, one booking).", True, None
+            return text, False, None
+        if name == "plan_history":
+            return json.dumps(PLAN.history(), ensure_ascii=False), False, None
+        if name == "edit_plan":
+            body = EditPlanIn.model_validate(raw)
+            changes = [c.model_dump() for c in body.changes]
+            PLAN.try_edit(changes, body.en, validate=render_trip)  # refuse now what couldn't be applied later
+            card = _propose("edit", {"changes": changes, "en": body.en, "summary": body.summary.strip()},
+                            body.summary.strip(), PLAN.preview(changes, lang_en), by)
+            print(f"[plan] proposal {card['id']} by {by or '?'}: {body.summary}", flush=True)
+            return waiting.format(id=card["id"]), False, card
+        if name == "undo_plan_change":
+            body = UndoIn.model_validate(raw)
+            r, later, _ = PLAN.try_undo(body.change_id, body.also_later)
+            undone = [{"op": "undo", "path": x["id"], "before": x.get("summary", ""), "after": ""} for x in [r] + later]
+            card = _propose("undo", {"change_id": body.change_id, "also_later": body.also_later},
+                            ("Undo: " if lang_en else "撤销：") + r.get("summary", ""), undone, by)
+            print(f"[plan] proposal {card['id']} by {by or '?'}: undo {body.change_id}", flush=True)
+            return waiting.format(id=card["id"]), False, card
+    except PlanError as e:
+        return str(e), True, None
+    except ValueError as e:  # the input didn't match the tool's schema
+        return json.dumps({"INVALID_INPUT": str(e)[:800]}), True, None
+    return f"Unknown tool {name}.", True, None
 
 
-async def run_option_tool(name: str, raw: dict, asker: str, lang_en: bool) -> tuple[str, bool, bool]:
-    """Runs one of the assistant's tools: (result for the model, is_error, whether the board changed)."""
-    lang = "en" if lang_en else "zh"
-    if name == "list_options":
-        return board_text(read_options()), False, False
-    if name == "add_options":
-        return await _add_options(raw, asker, lang)
-    if name == "change_options":
-        return await _change_options(raw, asker, lang)
-    return f"Unknown tool {name}.", True, False
+class DecideIn(BaseModel):
+    approve: bool
+    name: str = Field(default="", max_length=40)
 
 
-async def _add_options(raw: dict, asker: str, lang: str) -> tuple[str, bool, bool]:
-    try:
-        body = AddOptionsIn.model_validate(raw)
-    except ValueError as e:
-        return json.dumps({"INVALID_INPUT": str(e)[:500]}), True, False
-    previews = await asyncio.gather(*[link_preview(o.url, lang) if web_url(o.url) else asyncio.sleep(0)
-                                      for o in body.options], return_exceptions=True)
-    bookings, by = booking_ids(), clean(asker, 24) or "行程助手"
-    async with _options_lock:
-        data = read_options()
-        slot, ids = body.slot, []
-        try:
-            if body.new_topic.strip():
-                slot = _new_id()
-                apply_option(data, OptionOp(op="topic", id=slot, title=body.new_topic, by=by), bookings)
-            for o, pv in zip(body.options, previews):
-                pv = pv if isinstance(pv, dict) else {}
-                ids.append(_new_id())
-                apply_option(data, OptionOp(op="add", id=ids[-1], slot=slot, title=o.title, url=o.url, image=pv.get("image"),
-                                            site=pv.get("site"), price=o.price or pv.get("price"), note=o.note, by=by), bookings, via="chat")
-        except ValueError as e:
-            return json.dumps({"error": str(e), "booking_ids": sorted(bookings)}, ensure_ascii=False), True, False
-        write_json(OPTIONS_FILE, data)
-    return json.dumps({"saved": len(ids), "slot": slot, "option_ids": ids}), False, True
-
-
-async def _change_options(raw: dict, asker: str, lang: str) -> tuple[str, bool, bool]:
-    try:
-        body = ChangeOptionsIn.model_validate(raw)
-    except ValueError as e:
-        return json.dumps({"INVALID_INPUT": str(e)[:500]}), True, False
-    # a new link on an edit brings its own photo; fetched before taking the lock
-    pvs = {}
-    for c in body.changes:
-        if c.action == "edit" and c.url and web_url(c.url) and c.url not in pvs:
-            try:
-                pvs[c.url] = await link_preview(c.url, lang)
-            except Exception:
-                pvs[c.url] = {}
-    bookings, done, failed = booking_ids(), [], []
-    async with _options_lock:
-        data = read_options()
-        for c in body.changes:
-            item = next((x for x in data["items"] if x["id"] == c.option_id), None)
-            topic = next((t for t in data["topics"] if t["id"] == c.slot), None)
-            who = clean(c.person or asker, 24)
-            try:
-                if c.action in ("pick", "remove", "edit", "move", "vote", "comment") and not item:
-                    raise ValueError(f"no option with id {c.option_id!r}; call list_options for the ids")
-                if c.action == "pick":
-                    apply_option(data, OptionOp(op="pick", id=item["id"]), bookings)
-                    if c.remove_others:
-                        gone = [x["id"] for x in data["items"] if x["slot"] == item["slot"] and x["id"] != item["id"]]
-                        data["items"] = [x for x in data["items"] if x["id"] not in gone]
-                        done.append(f"picked {item['id']} and removed {len(gone)} other(s)")
+@app.post("/api/plan/proposals/{pid}")
+async def decide(pid: str, body: DecideIn, x_access_code: str | None = Header(default=None)):
+    check_code(x_access_code)
+    p = PROPOSALS.get(pid)
+    if not p:
+        raise HTTPException(410, "这个提议已经失效了（服务器重启过），请让助手再提一次。")
+    if p["state"] == "waiting":
+        who = body.name.strip()[:24]
+        p.update(decided=time.time(), decided_by=who)
+        if not body.approve:
+            p["state"] = "declined"
+        else:
+            async with _plan_lock:
+                try:
+                    q, extra = p["payload"], {"approved_by": who} if who else {}
+                    if p["kind"] == "edit":
+                        out = PLAN.edit(q["changes"], q["en"], p["by"], q["summary"], validate=render_trip, extra=extra)
                     else:
-                        done.append(f"picked {item['id']}")
-                elif c.action == "unpick":
-                    data["picked"].pop(c.slot, None)
-                    done.append(f"unpicked {c.slot}")
-                elif c.action == "remove":
-                    apply_option(data, OptionOp(op="del", id=item["id"]), bookings)
-                    done.append(f"removed {item['id']}")
-                elif c.action == "edit":
-                    pv = pvs.get(c.url or "", {})
-                    apply_option(data, OptionOp(op="edit", id=item["id"], title=c.title, price=c.price, note=c.note, url=c.url,
-                                                image=pv.get("image", "") if c.url is not None else None,
-                                                site=pv.get("site", "") if c.url is not None else None), bookings)
-                    done.append(f"edited {item['id']}")
-                elif c.action == "move":
-                    apply_option(data, OptionOp(op="move", id=item["id"], slot=c.slot), bookings)
-                    done.append(f"moved {item['id']} to {c.slot}")
-                elif c.action in ("vote", "comment"):
-                    if not who:
-                        raise ValueError("nobody's name is set: ask who this is for (or ask them to type their name on the page)")
-                    if c.action == "vote":
-                        apply_option(data, OptionOp(op="vote", id=item["id"], v=c.vote, by=who), bookings)
-                    else:
-                        apply_option(data, OptionOp(op="comment", id=item["id"], cid=_new_id(), text=c.text, by=who), bookings)
-                    done.append(f"{c.action} on {item['id']} as {who}")
-                elif not topic:
-                    raise ValueError(f"no topic with id {c.slot!r} (bookings from trip_plan can't be removed or renamed)")
-                elif c.action == "remove_topic":
-                    apply_option(data, OptionOp(op="untopic", id=topic["id"]), bookings)
-                    done.append(f"removed topic {topic['id']}")
-                else:
-                    if not clean(c.title, 80):
-                        raise ValueError("rename_topic needs a title")
-                    topic["title"] = clean(c.title, 80)
-                    done.append(f"renamed topic {topic['id']}")
-            except ValueError as e:
-                failed.append(f"{c.action} {c.option_id or c.slot}: {e}")
-        if done:
-            write_json(OPTIONS_FILE, data)
-    return json.dumps({"done": done, "failed": failed}, ensure_ascii=False), not done, bool(done)
+                        out = PLAN.undo(q["change_id"], p["by"], q["also_later"], extra=extra)
+                    p.update(state="applied", change_id=out["change_id"])
+                    print(f"[plan] {out['change_id']} applied proposal {pid} (approved by {who or '?'})", flush=True)
+                except PlanError as e:
+                    p.update(state="failed", error=str(e)[:600])
+    return {"card": _card(p), **plan_meta()}
 
 
 # ---------- the site itself ----------

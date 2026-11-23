@@ -27,7 +27,6 @@
           <button role="tab" class="seg-btn" data-view="all" aria-selected="true"><span data-i18n="总览" data-i18n-sm="Trip">总览</span> <small id="allSub"></small></button>
           <button role="tab" class="seg-btn" data-view="day" aria-selected="false"><span data-i18n="每日" data-i18n-sm="Day">每日</span> <small id="daySub"></small></button>
           <button role="tab" class="seg-btn" data-view="prep" aria-selected="false"><span data-i18n="准备" data-i18n-sm="Prep">准备</span> <small id="prepCount"></small></button>
-          <button role="tab" class="seg-btn" data-view="opts" aria-selected="false"><span data-i18n="候选" data-i18n-sm="Ideas">候选</span> <small id="optsSub"></small></button>
           <button role="tab" class="seg-btn" data-view="money" aria-selected="false"><span data-i18n="账本" data-i18n-sm="Money">账本</span> <small id="moneySub"></small></button>
         </div>
         <!-- phones: currency and language fold into this one button -->
@@ -99,13 +98,6 @@
       </footer>
     </section>
 
-    <section id="optsView" class="view" hidden>
-      <div class="tl-head"><h2 data-i18n="候选">候选</h2><span class="hint" data-i18n="看到好的就跟助手说一声，大家投票、留言，再选定一个">看到好的就跟助手说一声，大家投票、留言，再选定一个</span></div>
-      <div id="optsGate"></div>
-      <form class="opt-add opt-ask" id="optAsk" autocomplete="off" hidden></form>
-      <div id="optBoard"></div>
-    </section>
-
     <section id="moneyView" class="view" hidden>
       <div class="tl-head"><h2 data-i18n="账本">账本</h2><span class="hint" id="moneyHint"></span></div>
       <div id="moneyGate"></div>
@@ -138,37 +130,47 @@
   <button type="button" class="lb-nav next" id="lbNext" aria-label="下一张" data-i18n-aria-label="下一张"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7.5 4.5L13 10l-5.5 5.5"/></svg></button>
 </div>
 
-<section class="cli" id="chat" data-open="false" aria-label="行程助手" data-i18n-aria-label="行程助手">
-  <div class="cli-box">
-    <header class="cli-head">
-      <div class="cli-title"><b data-i18n="行程助手">行程助手</b><span class="cli-status" id="chatSub">连接中…</span></div>
-      <button type="button" class="cli-btn" id="chatNew" title="清空对话，重新开始" data-i18n-title="清空对话，重新开始">
-        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 4v12M4 10h12"/></svg><span data-i18n="新对话">新对话</span>
-      </button>
-      <button type="button" class="cli-btn icon" id="chatHide" aria-label="收起对话" data-i18n-aria-label="收起对话" title="收起（Esc）。收起后回答会继续。" data-i18n-title="收起（Esc）。收起后回答会继续。">
-        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 8l5 5 5-5"/></svg>
-      </button>
-    </header>
-    <div class="cli-log" id="chatLog" aria-live="polite"></div>
-    <form class="cli-join" id="chatJoin" hidden>
-      <span data-i18n="输入访问码：">输入访问码：</span>
-      <input id="joinCode" type="password" autocomplete="off" aria-label="访问码" data-i18n-aria-label="访问码" placeholder="访问码" data-i18n-placeholder="访问码">
-      <button type="submit" data-i18n="确定">确定</button>
-      <span class="cli-err" id="joinErr" role="alert"></span>
-    </form>
-    <form class="cli-input" id="chatForm">
-      <svg class="cli-icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h7A2.5 2.5 0 0 1 16 5.5v5a2.5 2.5 0 0 1-2.5 2.5H9l-4 3.5V13a2.5 2.5 0 0 1-1-2z"/></svg>
-      <textarea id="chatText" rows="1" placeholder="问问行程助手…" data-i18n-placeholder="问问行程助手…" aria-label="问行程助手" data-i18n-aria-label="问行程助手" maxlength="2000"></textarea>
-      <button type="button" class="cli-badge" id="chatBadge" hidden></button>
-      <kbd class="cli-kbd" id="chatKbd">⌘K</kbd>
-      <button type="submit" class="cli-send" id="chatSend" aria-label="发送" title="发送">
+<!-- the trip assistant: a button that opens a side drawer (Ctrl/⌘+K) -->
+<button type="button" class="ask-btn" id="askBtn" aria-controls="chat" aria-expanded="false" title="问行程助手（⌘K）" data-i18n-title="问行程助手（⌘K）">
+  <svg class="spark" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2.5l1.6 4.4 4.4 1.6-4.4 1.6L10 14.5l-1.6-4.4L4 8.5l4.4-1.6z"/><path d="M15.5 13l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7z"/></svg>
+  <span data-i18n="问助手">问助手</span><kbd id="chatKbd">⌘K</kbd>
+  <span class="ask-badge" id="chatBadge" hidden></span>
+</button>
+<div class="chat-scrim" id="chatScrim" aria-hidden="true"></div>
+<aside class="drawer" id="chat" data-open="false" aria-hidden="true" aria-label="行程助手" data-i18n-aria-label="行程助手">
+  <header class="drawer-head">
+    <svg class="spark" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2.5l1.6 4.4 4.4 1.6-4.4 1.6L10 14.5l-1.6-4.4L4 8.5l4.4-1.6z"/><path d="M15.5 13l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7z"/></svg>
+    <h2 data-i18n="行程助手">行程助手</h2>
+    <span class="drawer-status"><span class="live-dot off" id="chatDot"></span><span id="chatSub">连接中…</span></span>
+    <span class="grow"></span>
+    <button type="button" class="icon-btn" id="chatNew" aria-label="新对话" data-i18n-aria-label="新对话" title="清空对话，重新开始" data-i18n-title="清空对话，重新开始">
+      <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 4v12M4 10h12"/></svg>
+    </button>
+    <button type="button" class="icon-btn" id="chatHide" aria-label="关闭" data-i18n-aria-label="关闭" title="关闭（Esc）。关了回答也会继续。" data-i18n-title="关闭（Esc）。关了回答也会继续。">
+      <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15"/></svg>
+    </button>
+  </header>
+  <div class="chat-log" id="chatLog" aria-live="polite"></div>
+  <form class="chat-join" id="chatJoin" hidden>
+    <span data-i18n="输入访问码：">输入访问码：</span>
+    <input id="joinCode" type="password" autocomplete="off" aria-label="访问码" data-i18n-aria-label="访问码" placeholder="访问码" data-i18n-placeholder="访问码">
+    <button type="submit" class="btn accent" data-i18n="确定">确定</button>
+    <span class="chat-err" id="joinErr" role="alert"></span>
+  </form>
+  <form class="composer" id="chatForm">
+    <div class="composer-box">
+      <textarea id="chatText" rows="1" placeholder="问问行程助手，或让它改行程…" data-i18n-placeholder="问问行程助手，或让它改行程…" aria-label="问行程助手" data-i18n-aria-label="问行程助手" maxlength="2000"></textarea>
+      <button type="submit" class="send" id="chatSend" aria-label="发送" title="发送">
         <svg class="i-send" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 16V4M5 9l5-5 5 5"/></svg>
         <svg class="i-stop" viewBox="0 0 20 20" aria-hidden="true"><rect x="6" y="6" width="8" height="8" rx="1.5"/></svg>
       </button>
-    </form>
-    <div class="cli-foot" data-i18n="回车发送 · Shift+回车换行 · Esc 收起">回车发送 · Shift+回车换行 · Esc 收起</div>
-  </div>
-</section>
+    </div>
+    <div class="composer-foot">
+      <span data-i18n="随便问 · 改行程前会先等你确认">随便问 · 改行程前会先等你确认</span>
+      <label class="me"><span data-i18n="我是">我是</span><input id="chatMe" maxlength="40" autocomplete="nickname" placeholder="名字" data-i18n-placeholder="名字"></label>
+    </div>
+  </form>
+</aside>
 
 <script src="config.js"></script>
 <script src="app.js"></script>
