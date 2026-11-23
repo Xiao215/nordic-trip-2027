@@ -954,8 +954,9 @@ function fitView(){
   if(state.view!=="day"){fitPts(allPts());return;}
   if(!D){var p=wxPlace(state.date);fitPts(p?[N[p]]:allPts(),7);return;}
   fitPts(dayPts(D),13);}
-// A stop shows on the day's whole route, centred on the stop, so you see where it sits in the day's driving
-// (the stop is in the middle of the map; the caption names it). A move shows itself.
+// A stop shows where it sits in the day's driving. With the map key: the whole day's route, centred on the stop
+// (its marker is highlighted). On the keyless embed the red pin can only go at a route's end, so the route runs
+// from the day's start to this stop, and Google's card gives the distance and time to get there. A move shows itself.
 function around(pts,c){return pts.concat(pts.map(function(p){return [2*c[0]-p[0],2*c[1]-p[1]];}));}
 function stopOnRoute(s){var D=day();if(!D||s.t!=="stop"||!s.place)return null;
   var r=embedDayRoute(D),at=LL(s.place),i=-1;r.forEach(function(p,k){if(i<0&&p[0]===at[0]&&p[1]===at[1])i=k;});
@@ -963,7 +964,8 @@ function stopOnRoute(s){var D=day();if(!D||s.t!=="stop"||!s.place)return null;
 function frame(s){
   var on=stopOnRoute(s);caption();
   if(embed){
-    if(on){embedTo("https://maps.google.com/maps?saddr="+ll2(on.route[0])+"&daddr="+on.route.slice(1).map(ll2).join("+to:")+embedFit(around(on.route,on.at))+embedTail());return;}
+    if(on&&on.i>0){var r=on.route.slice(0,on.i+1);
+      embedTo("https://maps.google.com/maps?saddr="+ll2(r[0])+"&daddr="+r.slice(1).map(ll2).join("+to:")+embedFit(r)+embedTail());return;}
     if(s.t==="move"){var ids=s.path.filter(function(x){return typeof x==="string";});
       if(s.mode==="drive"&&ids.length>1)embedRoute(ids.map(LL));else embedPlace(LL(ids[ids.length-1]),s.mode==="flight"?6:9);}
     else embedPlace(LL(s.place),s.zoom||14);return;}

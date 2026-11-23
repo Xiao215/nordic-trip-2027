@@ -109,7 +109,7 @@ bash <(curl -fsSL https://raw.githubusercontent.com/Xiao215/nordic-trip-2027/mai
 
 ## Google Maps
 
-Without a key the page uses Google's basic embedded map: one day's drive at a time (opening a stop centres it on that day's route), and a country view on the overview. With a key (Maps JavaScript API, restricted to `https://xiao215.github.io/*` and `http://localhost:8001/*`) you get every drive on real roads, flights as great circles, numbered stop pins and where-you-sleep pins for the whole month. Paste it into `googleMapsKey` in `docs/config.js`.
+Without a key the page uses Google's basic embedded map: one day's drive at a time (opening a stop shows the drive from the day's start to it, with the red pin on it), and a country view on the overview. With a key (Maps JavaScript API, restricted to `https://xiao215.github.io/*`, `https://pi.tail3d8516.ts.net/*` and `http://localhost:8001/*`) you get every drive on real roads, flights as great circles, numbered stop pins and where-you-sleep pins for the whole month; opening a stop highlights its pin on the whole day's route. Paste it into `googleMapsKey` in `docs/config.js`.
 
 ## Local testing
 
