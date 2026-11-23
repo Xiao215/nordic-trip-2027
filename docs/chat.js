@@ -215,9 +215,6 @@ function health(){
     .then(function(j){checked=true;needCode=!!j.code;status={state:"ok",local:j.local};showStatus();showJoin();})
     .catch(function(){status={state:"down"};showStatus();});
 }
-function myName(){try{return String(JSON.parse(localStorage.getItem("nt-me"))||"").slice(0,40);}catch(e){return "";}}
-var me=$("chatMe");me.value=myName();
-me.addEventListener("change",function(){keep("nt-me",me.value.trim());});
 showStatus();render();health();setBadge(false);
 // the page switched language: redraw the status, the button and (unless an answer is streaming) the transcript
 document.addEventListener("trip:lang",function(){showStatus();headTitle();if(listing)paintList();if(!busy)render();setBadge(badge.classList.contains("new")&&!cardsWaiting());sendLabel();});
@@ -231,7 +228,7 @@ function decide(id,approve){
   var hit=findCard(id);if(!hit||hit.p.card.state!=="waiting")return;
   var c=hit.p.card;c.state="sending";repaint(hit.m);
   fetch(API+"/api/plan/proposals/"+encodeURIComponent(id),{method:"POST",headers:{"Content-Type":"application/json","X-Access-Code":S.code||""},
-    body:JSON.stringify({approve:approve,name:me.value.trim()||myName()})})
+    body:JSON.stringify({approve:approve,name:""})})
   .then(function(r){return r.json().catch(function(){return {};}).then(function(j){
     if(r.status===410){c.state="expired";c.error=j.detail;return;}
     if(!r.ok||!j.card)throw new Error(j.detail||Z("行程服务器出错了（"+r.status+"）。","The trip server had a problem ("+r.status+")."));
@@ -311,7 +308,7 @@ function ask(q,imgs){
     m.parts=m.parts.filter(function(p){return p.t!=="text"||p.text.trim();});
     m.ts=Date.now();m.stopped=stopped||undefined;cur=null;C.msgs.push(m);C.ts=Date.now();save();paintBot(el,m,false);}
   fetch(API+"/api/chat",{method:"POST",signal:ctrl&&ctrl.signal,headers:{"Content-Type":"application/json","X-Access-Code":S.code||""},
-    body:JSON.stringify({name:me.value.trim()||myName(),messages:withPhotos(history(C),q,imgs),context:ctx})})
+    body:JSON.stringify({name:"",messages:withPhotos(history(C),q,imgs),context:ctx})})
   .then(function(r){
     if(r.status===401){S.code=null;needCode=true;save();throw new Error(Z("这个服务器需要访问码。","This server needs the access code."));}
     if(!r.ok)return r.json().catch(function(){return {};}).then(function(j){throw new Error(j.detail||Z("行程服务器出错了（"+r.status+"）。","The trip server had a problem ("+r.status+")."));});

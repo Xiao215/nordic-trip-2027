@@ -602,11 +602,6 @@ li.now>.row .t{color:var(--sun);font-weight:600}
 .drawer.busy:not(.typed) .send{background:var(--ink)}
 .drawer.busy:not(.typed) .send .i-send{display:none}
 .drawer.busy:not(.typed) .send .i-stop{display:block}
-.composer-foot{display:flex;align-items:center;gap:10px;margin-top:7px;font-size:11.5px;color:var(--muted)}
-.composer-foot>span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.me{display:flex;align-items:center;gap:5px;white-space:nowrap}
-.me input{width:92px;font:inherit;font-size:12px;color:var(--ink);background:transparent;border:0;border-bottom:1px dashed var(--line);padding:1px 2px;outline:none}
-.me input:focus{border-bottom-color:var(--fjord)}
 @media (prefers-reduced-motion:reduce){.dots i,.spin,.live-dot.busy,.ask-btn.busy .spark{animation:none}.dots i{opacity:.6}.drawer,.drawer[data-open="true"],.chat-scrim{transition:none}}
 
 /* ---------- shared expense log ---------- */
