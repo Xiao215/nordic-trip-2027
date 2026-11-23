@@ -106,7 +106,7 @@ var UIEN={
   "连不上行程服务器，联网后才能改司机名单。":"Can't reach the trip server. The driver list can be changed once you're online.",
   "把 {p} 从司机里移除？已经排给 {p} 的车程会空出来。":"Remove {p} from the drivers? Their drives will have no driver.",
   // options board
-  "候选":"Options","看到好的就贴上来，大家投票、留言，再选定一个":"Paste anything good, vote and comment together, then pick one",
+  "候选":"Options","看到好的就跟助手说一声，大家投票、留言，再选定一个":"Found something good? Tell the assistant, then vote, comment and pick one together",
   "{p} 开的话题":"Topic started by {p}","话题":"Topics","有一处改动没存上：内容太长或格式不对。":"One change wasn't saved: it was too long or not in the right format.",
   "先在上面写上你是谁，大家才知道是谁投的。":"Write your name at the top first, so everyone knows who voted.",
   "大家选了":"Picked","看候选":"See the options","1 个候选，去投票":"1 option, go vote","{n} 个候选，去投票":"{n} options, go vote",
@@ -114,18 +114,14 @@ var UIEN={
   "候选存在行程服务器上，跟行程助手用同一个访问码。":"The options live on the trip server and use the same access code as the assistant.",
   "连不上行程服务器。下面是这台设备上次看到的候选；改动会先存在这里，连上后自动同步。":"Can't reach the trip server. These are the options as this device last saw them; changes wait here and sync once you're back online.",
   "正在载入候选…":"Loading the options…","定了：{w}":"Picked: {w}","加一个":"Add one","删掉这个话题":"Delete this topic",
-  "还没有候选。看到好的就贴上来。":"No options yet. Paste one when you find it.","另外 1 个候选":"1 other option","另外 {n} 个候选":"{n} other options",
-  "还没有候选。在上面贴一个链接、选好放在哪个预订下面，大家就能投票了。也可以让行程助手帮你找几个加进来。":"No options yet. Paste a link above and choose which booking it's for, and everyone can vote. You can also ask the trip assistant to find a few and add them.",
+  "还没有候选。看到好的就跟助手说。":"No options yet. Tell the assistant when you find one.","另外 1 个候选":"1 other option","另外 {n} 个候选":"{n} other options",
+  "还没有候选。在上面跟助手说一声，比如贴个链接，它会放到对应的预订下面，大家就能投票了。也可以让它帮你找几个。":"No options yet. Tell the assistant above, for example by pasting a link: it files it under the right booking and everyone can vote. It can also find a few for you.",
   "选定":"Picked","看预订":"Booking","名字":"Name","价格":"Price","链接":"Link","备注":"Note","保存":"Save","取消":"Cancel","投票":"Votes",
   "赞成":"Yes","不太行":"Not for me","留言":"Comments","选定了":"Picked","就它了":"Pick this","编辑":"Edit","删掉":"Delete",
-  "说点什么…":"Say something…","发送":"Send","加一个候选":"Add an option","我是":"I'm","你的名字":"Your name",
-  "贴一个链接：Booking、Airbnb、酒店官网、游船……":"Paste a link: Booking, Airbnb, a hotel's own site, a boat tour…",
-  "名字（贴了链接会自动填）":"Name (filled in from the link)","价格，比如 1,890 NOK/晚":"Price, e.g. 1,890 NOK/night",
-  "为什么不错？比如：离步道口 10 分钟，带厨房":"Why it's good, e.g. 10 min from the trailhead, has a kitchen",
-  "放在":"For","+ 新话题…":"+ New topic…","新话题，比如：罗弗敦小屋":"New topic, e.g. Lofoten cabin","新话题":"New topic","加进候选":"Add it",
-  "正在读取链接…":"Reading the link…","这个网站不给预览，名字自己写一下":"this site blocks previews, so type the name",
-  "现在读不到这个链接，名字和价格自己填一下也行。":"Couldn't read that link right now. You can type the name and price yourself.",
-  "先写上你是谁。":"Write your name first.","贴个链接，或者写个名字。":"Paste a link or type a name.","给新话题起个名字。":"Give the new topic a name.",
+  "说点什么…":"Say something…","发送":"Send","我是":"I'm","你的名字":"Your name","跟助手说":"Tell the assistant","发给助手":"Send to the assistant","先写上你是谁。":"Write your name first.",
+  "随便写。比如：弗洛姆这家不错 https://… 一晚 1,890 NOK；或者：冰岛北边住的就定第二个，别的删了":"Write it any way you like, e.g. \u201cthis Flåm place looks good https://… 1,890 NOK a night\u201d, or \u201cpick the second one for north Iceland and drop the rest\u201d",
+  "放在哪个预订下面，助手会自己判断；拿不准会先问你。":"The assistant works out which booking it's for, and asks if it isn't sure.","加到「{w}」：":"For \u201c{w}\u201d: ",
+  "在聊天里看助手的回复":"The assistant answers in the chat",
   "删掉「{w}」这个候选？投票和留言也会一起删掉。":"Delete “{w}”? Its votes and comments go too.",
   "删掉话题「{w}」和里面所有候选？":"Delete the topic “{w}” and every option in it?",
   "{p} 加的":"added by {p}","{p} 让助手加的":"added by the assistant for {p}",
@@ -298,7 +294,7 @@ function boot(trip){
   window.addEventListener("hashchange",function(){var h=decodeURIComponent(location.hash.slice(1));
     if(DATES.indexOf(h)>=0&&!(state.view==="day"&&state.date===h))setView("day",h);else if(VIEWS[h]&&state.view!==h)setView(h);});
   window.tripApp={context:function(){var c=viewContext(),pp=passportText();if(pp)c.passport=pp;return c;},
-    lang:function(){return en()?"en":"zh";}};
+    lang:function(){return en()?"en":"zh";},showOpts:function(){setView("opts");}};
   function viewContext(){var D=day(),s=D&&state.sel!=null?D.segs[state.sel]:null;
     var lang=en()?"en":"zh",curTxt=curContext();
     if(state.view==="prep")return {lang:lang,currency:curTxt,day:"Prep tab",looking_at:"visas, bookings and checklists"};
@@ -1254,9 +1250,8 @@ $("drivers").addEventListener("click",function(e){
 // same access code as the chat). This device keeps the last copy it saw, and changes made offline wait in an
 // outbox; each change is applied here at once the same way the server applies it, so nothing waits on the network.
 var OPT=store("nt-opts")||{topics:[],items:[],picked:{}},OOUT=store("nt-opts-out")||[],oState={status:"",err:""},oTimer=null,oFlushing=null;
-var OF={key:null,pvFor:"",pvTimer:null},OPEN_C={},OPEN_M={},OEDIT=null;
+var OASK=null,OPEN_C={},OPEN_M={};
 var OICON={up:'<svg viewBox="0 0 20 20"><path d="M6 9.5V16H3.5V9.5zM6 9.5l3.2-6c1.3 0 2.1 1 1.8 2.3L10.5 8h4.6c1 0 1.7.9 1.5 1.9l-1.1 4.6c-.2.9-1 1.5-1.9 1.5H6"/></svg>',
-  edit:'<svg viewBox="0 0 20 20"><path d="M4 16l.8-3.4L13 4.4a1.4 1.4 0 0 1 2 0l.6.6a1.4 1.4 0 0 1 0 2L7.4 15.2zM11.5 6l2.5 2.5"/></svg>',
   plus:'<svg viewBox="0 0 20 20"><path d="M10 4v12M4 10h12"/></svg>'};
 function me(){return store("nt-me")||"";}
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,8);}
@@ -1281,12 +1276,12 @@ function optSlots(d){var list=T.bookings.map(function(b){return {id:b.id,b:b,tit
 window.optImg=function(im){var r=im.naturalWidth/(im.naturalHeight||1);if(r<1.25||r>2.4||im.naturalWidth<360||/\.(png|svg)(\?|$)/i.test(im.src))im.classList.add("fit");im.classList.add("ok");};
 function score(x){var s=0;Object.keys(x.votes||{}).forEach(function(p){s+=x.votes[p];});return s;}
 function gotOpts(j){OPT={topics:j.topics||[],items:j.items||[],picked:j.picked||{}};store("nt-opts",OPT);}
-function loadOpts(quiet){
+function loadOpts(quiet,then){
   clearInterval(oTimer);oTimer=setInterval(function(){if(state.view==="opts"&&document.visibilityState==="visible")loadOpts(true);},30000);
   if(!auth().code()){oState.status="code";renderOpts();return;}
   if(oState.status!=="ok")oState.status="loading";if(!quiet)renderOpts();
   mApi("/api/options").then(function(j){gotOpts(j);oState.status="ok";return flushOpts();})
-    .catch(function(e){oState.status=e&&e.code===401?"code":"off";}).then(function(){renderOpts(quiet);});}
+    .catch(function(e){oState.status=e&&e.code===401?"code":"off";}).then(function(){renderOpts(quiet);if(then)then();});}
 // sends the whole outbox in one batch; anything added meanwhile goes in the next one
 function flushOpts(){if(oFlushing)return oFlushing;if(!OOUT.length)return Promise.resolve();var batch=OOUT.slice();
   oFlushing=mApi("/api/options",{body:{ops:batch}}).then(function(j){OOUT.splice(0,batch.length);store("nt-opts-out",OOUT);gotOpts(j);oState.status="ok";
@@ -1303,7 +1298,10 @@ function needMe(){if(me())return false;var f=$("optMe");oState.err=U("先在上�
 function cTime(ts){var d=new Date(ts);return (d.getMonth()+1)+"/"+d.getDate()+" "+(d.getHours()<10?"0":"")+d.getHours()+":"+(d.getMinutes()<10?"0":"")+d.getMinutes();}
 function goOpts(slot,add){setView("opts");setTimeout(function(){var s=$("os-"+slot);
   if(s&&!add){s.scrollIntoView({block:"start",behavior:"smooth"});return;}
-  var f=$("optAdd");if(f.slot){f.slot.value=slot;slotChanged();}f.scrollIntoView({block:"start",behavior:"smooth"});if(f.url)f.url.focus({preventScroll:true});},60);}
+  var sl=optSlots(board()).filter(function(x){return x.id===slot;})[0];askOpts(sl?U("加到「{w}」：",{w:sl.plain}):"");},60);}
+// puts the cursor in the line to the assistant, optionally starting it for them
+function askOpts(start){var f=$("optAsk");if(!f||!f.q)return;if(start&&f.q.value.indexOf(start)!==0)f.q.value=start+f.q.value;
+  f.scrollIntoView({block:"start",behavior:"smooth"});f.q.focus({preventScroll:true});var n=f.q.value.length;f.q.setSelectionRange(n,n);}
 
 // the booking cards on the prep tab say how the choosing is going
 function paintOptCounts(d){if(!T)return;d=d||board();var n={};d.items.forEach(function(x){n[x.slot]=(n[x.slot]||0)+1;});
@@ -1325,8 +1323,8 @@ function renderOpts(quiet){if(!T)return;var d=board(),st=oState.status,pend=OOUT
   if(oState.err)g+='<p class="mny-note warn">'+esc(oState.err)+"</p>";
   $("optsGate").innerHTML=g;
   var locked=st==="code"&&!d.items.length&&!d.topics.length;
-  $("optAdd").hidden=locked;$("optBoard").hidden=locked;if(locked)return;
-  renderOptForm(d);
+  $("optAsk").hidden=locked;$("optBoard").hidden=locked;if(locked)return;
+  renderOptAsk();
   // a refresh in the background never eats a comment or an edit half typed
   var a=document.activeElement;if(quiet&&a&&$("optBoard").contains(a)&&/^(INPUT|TEXTAREA)$/.test(a.tagName))return;
   var by={};d.items.forEach(function(x){(by[x.slot]=by[x.slot]||[]).push(x);});
@@ -1336,11 +1334,11 @@ function renderOpts(quiet){if(!T)return;var d=board(),st=oState.status,pend=OOUT
     var head='<div class="opt-sh"><div class="opt-st"><h3>'+s.title+"</h3>"+(sub?"<small>"+sub+"</small>":"")+'</div><div class="opt-sa">'+
       '<button type="button" class="pill" data-opt-new="'+esc(s.id)+'">'+OICON.plus+U("加一个")+"</button>"+
       (s.b?'<button type="button" class="pill" data-open-booking="'+esc(s.id)+'">'+U("看预订")+" →</button>":'<button type="button" class="opt-icon" data-untopic="'+esc(s.id)+'" aria-label="'+esc(U("删掉这个话题"))+'" title="'+esc(U("删掉这个话题"))+'">×</button>')+"</div></div>";
-    var body=!list.length?'<p class="mny-empty">'+U("还没有候选。看到好的就贴上来。")+"</p>":
+    var body=!list.length?'<p class="mny-empty">'+U("还没有候选。看到好的就跟助手说。")+"</p>":
       pick?'<div class="opt-grid">'+optCard(pick,true)+"</div>"+(rest.length?'<details class="opt-more" data-more="'+esc(s.id)+'"'+(OPEN_M[s.id]?" open":"")+"><summary>"+U(rest.length===1?"另外 1 个候选":"另外 {n} 个候选",{n:rest.length})+'</summary><div class="opt-grid">'+rest.map(function(x){return optCard(x,false);}).join("")+"</div></details>":""):
       '<div class="opt-grid">'+list.map(function(x){return optCard(x,false);}).join("")+"</div>";
     return '<section class="opt-slot'+(pick?" decided":"")+'" id="os-'+esc(s.id)+'">'+head+body+"</section>";});
-  $("optBoard").innerHTML=h.join("")||'<p class="mny-empty opt-empty">'+U("还没有候选。在上面贴一个链接、选好放在哪个预订下面，大家就能投票了。也可以让行程助手帮你找几个加进来。")+"</p>";}
+  $("optBoard").innerHTML=h.join("")||'<p class="mny-empty opt-empty">'+U("还没有候选。在上面跟助手说一声，比如贴个链接，它会放到对应的预订下面，大家就能投票了。也可以让它帮你找几个。")+"</p>";}
 
 function optCard(x,picked){var my=me(),up=[],dn=[],mine=(x.votes||{})[my]||0;
   Object.keys(x.votes||{}).forEach(function(p){(x.votes[p]>0?up:dn).push(p);});
@@ -1351,19 +1349,12 @@ function optCard(x,picked){var my=me(),up=[],dn=[],mine=(x.votes||{})[my]||0;
     (x.image?'<img src="'+esc(x.image)+'" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onload="optImg(this)" onerror="this.remove()">':"")+
     (picked?'<span class="opt-badge">'+ICON.check+U("选定")+"</span>":"")+(x.url?"</a>":"</span>");
   h+='<div class="opt-b">';
-  if(OEDIT===x.id){
-    h+='<form class="opt-edit" data-edit-form="'+id+'"><input name="title" maxlength="200" value="'+esc(x.title)+'" placeholder="'+esc(U("名字"))+'" aria-label="'+esc(U("名字"))+'">'+
-      '<input name="price" maxlength="80" value="'+esc(x.price)+'" placeholder="'+esc(U("价格"))+'" aria-label="'+esc(U("价格"))+'">'+
-      '<input name="url" type="url" maxlength="1000" value="'+esc(x.url)+'" placeholder="'+esc(U("链接"))+'" aria-label="'+esc(U("链接"))+'">'+
-      '<textarea name="note" rows="2" maxlength="800" placeholder="'+esc(U("备注"))+'" aria-label="'+esc(U("备注"))+'">'+esc(x.note)+"</textarea>"+
-      '<div class="mny-row"><button class="pill primary" type="submit">'+ICON.check+U("保存")+'</button><button class="pill" type="button" data-oedit-cancel="1">'+U("取消")+"</button></div></form>";
-  }else{
-    h+='<div class="opt-t">'+(x.url?"<a"+href+">"+esc(nm)+"</a>":"<b>"+esc(nm)+"</b>")+"</div>";
+      h+='<div class="opt-t">'+(x.url?"<a"+href+">"+esc(nm)+"</a>":"<b>"+esc(nm)+"</b>")+"</div>";
     var meta=[x.price?'<b class="opt-price" title="'+esc(x.price)+'">'+esc(money(x.price))+"</b>":"",x.title&&x.site?esc(x.site):"",
       x.by?esc(U(x.via==="chat"?"{p} 让助手加的":"{p} 加的",{p:x.by})):""].filter(Boolean);
     if(x.pending)meta.push('<span class="mny-pend">'+U("等待同步")+"</span>");
     h+='<div class="opt-meta">'+meta.join(" · ")+"</div>";
-    if(x.note)h+='<p class="opt-note">'+esc(x.note)+"</p>";}
+    if(x.note)h+='<p class="opt-note">'+esc(x.note)+"</p>";
   var nc=(x.comments||[]).length,open=!!OPEN_C[x.id];
   h+='<div class="opt-acts"><span class="opt-votes" role="group" aria-label="'+esc(U("投票"))+'">'+
     '<button type="button" class="opt-v up" data-vote="'+id+'" data-v="1" aria-pressed="'+(mine>0)+'" aria-label="'+esc(U("赞成"))+'" title="'+esc(up.join("、")||U("赞成"))+'">'+OICON.up+"<span>"+up.length+"</span></button>"+
@@ -1371,7 +1362,6 @@ function optCard(x,picked){var my=me(),up=[],dn=[],mine=(x.votes||{})[my]||0;
     '<button type="button" class="opt-v cmt" data-cmts="'+id+'" aria-expanded="'+open+'" aria-label="'+esc(U("留言"))+'">'+ICON.ask+"<span>"+nc+"</span></button>"+
     '<span class="opt-sp"></span>'+
     '<button type="button" class="pill'+(picked?" on":"")+'" data-pick="'+id+'" aria-pressed="'+picked+'">'+ICON.check+U(picked?"选定了":"就它了")+"</button>"+
-    '<button type="button" class="opt-icon" data-oedit="'+id+'" aria-label="'+esc(U("编辑"))+'" title="'+esc(U("编辑"))+'">'+OICON.edit+"</button>"+
     '<button type="button" class="opt-icon" data-odel="'+id+'" aria-label="'+esc(U("删掉"))+'" title="'+esc(U("删掉"))+'">×</button></div>';
   if(up.length||dn.length)h+='<p class="opt-who">'+(up.length?'<span class="up">'+OICON.up+esc(up.join("、"))+"</span>":"")+(dn.length?'<span class="down">'+OICON.up+esc(dn.join("、"))+"</span>":"")+"</p>";
   if(open)h+='<div class="opt-cmts">'+(nc?"<ul>"+x.comments.map(function(c){return "<li><b>"+esc(c.by)+"</b><span>"+esc(c.text)+"</span><small>"+(c.pending?U("等待同步"):cTime(c.ts))+"</small>"+
@@ -1379,47 +1369,22 @@ function optCard(x,picked){var my=me(),up=[],dn=[],mine=(x.votes||{})[my]||0;
     '<form class="opt-cf" data-cmt-form="'+id+'"><input name="text" maxlength="500" autocomplete="off" placeholder="'+esc(U("说点什么…"))+'" aria-label="'+esc(U("留言"))+'"><button class="pill" type="submit">'+U("发送")+"</button></form></div>";
   return h+"</div></article>";}
 
-// The add form is rebuilt only when the places to put an option or the language change, so a refresh never eats what you're typing.
-function renderOptForm(d){var f=$("optAdd"),slots=optSlots(d),key=NM+"|"+slots.map(function(s){return s.id+":"+s.plain;}).join("\u0001");if(key===OF.key)return;OF.key=key;
-  var old={};["url","title","price","note","topic","slot"].forEach(function(k){if(f[k])old[k]=f[k].value;});
+// The line to the assistant is built once per language, so a refresh never eats what you're typing.
+function renderOptAsk(){var f=$("optAsk");if(OASK===NM)return;OASK=NM;var q=f.q?f.q.value:"";
   var ppl={};MNY.people.concat(DRV.drivers).forEach(function(p){ppl[p]=1;});
-  function opt(s){return '<option value="'+esc(s.id)+'">'+esc(s.plain)+(s.sub&&s.b?" · "+esc(s.sub):"")+"</option>";}
-  var bk=slots.filter(function(s){return s.b;}),tp=slots.filter(function(s){return s.topic;});
-  f.innerHTML='<div class="opt-fh"><h3>'+U("加一个候选")+'</h3><label class="mny-lab">'+U("我是")+' <input id="optMe" maxlength="24" list="optPeople" autocomplete="off" value="'+esc(me())+'" placeholder="'+esc(U("你的名字"))+'" aria-label="'+esc(U("你的名字"))+'"></label>'+
+  f.innerHTML='<div class="opt-fh"><h3>'+ICON.ask+U("跟助手说")+'</h3><label class="mny-lab">'+U("我是")+' <input id="optMe" maxlength="24" list="optPeople" autocomplete="off" value="'+esc(me())+'" placeholder="'+esc(U("你的名字"))+'" aria-label="'+esc(U("你的名字"))+'"></label>'+
       '<datalist id="optPeople">'+Object.keys(ppl).map(function(p){return '<option value="'+esc(p)+'">';}).join("")+"</datalist></div>"+
-    '<input name="url" type="url" inputmode="url" autocomplete="off" maxlength="1000" placeholder="'+esc(U("贴一个链接：Booking、Airbnb、酒店官网、游船……"))+'" aria-label="'+esc(U("链接"))+'">'+
-    '<div class="opt-pv" id="optPv" hidden></div>'+
-    '<div class="mny-row"><input name="title" maxlength="200" placeholder="'+esc(U("名字（贴了链接会自动填）"))+'" aria-label="'+esc(U("名字"))+'"><input name="price" maxlength="80" placeholder="'+esc(U("价格，比如 1,890 NOK/晚"))+'" aria-label="'+esc(U("价格"))+'"></div>'+
-    '<textarea name="note" rows="2" maxlength="800" placeholder="'+esc(U("为什么不错？比如：离步道口 10 分钟，带厨房"))+'" aria-label="'+esc(U("备注"))+'"></textarea>'+
-    '<div class="mny-row"><label class="mny-lab">'+U("放在")+' <select name="slot" aria-label="'+esc(U("放在"))+'"><optgroup label="'+esc(U("预订"))+'">'+bk.map(opt).join("")+"</optgroup>"+
-      (tp.length?'<optgroup label="'+esc(U("话题"))+'">'+tp.map(opt).join("")+"</optgroup>":"")+'<option value="__new">'+esc(U("+ 新话题…"))+"</option></select></label>"+
-      '<input name="topic" maxlength="80" hidden placeholder="'+esc(U("新话题，比如：罗弗敦小屋"))+'" aria-label="'+esc(U("新话题"))+'"></div>'+
-    '<div class="mny-row"><button class="pill primary" type="submit">'+OICON.plus+U("加进候选")+'</button><span class="mny-err" id="optErr" role="alert"></span></div>';
-  Object.keys(old).forEach(function(k){if(old[k]&&f[k])f[k].value=old[k];});
-  if(!f.slot.value)f.slot.selectedIndex=0;slotChanged();OF.pvFor="";if(f.url.value)preview(f.url.value);}
-function slotChanged(){var f=$("optAdd");if(!f.topic)return;f.topic.hidden=f.slot.value!=="__new";}
-// fills the name, photo and price from the link's preview
-function preview(u){var f=$("optAdd"),box=$("optPv");u=(u||"").trim();if(!/^https?:\/\/\S+\.\S+/.test(u)){box.hidden=true;OF.pvFor="";return;}if(u===OF.pvFor)return;OF.pvFor=u;
-  box.hidden=false;box.innerHTML='<span class="opt-pv-w">'+U("正在读取链接…")+"</span>";
-  mApi("/api/preview?url="+encodeURIComponent(u)+"&lang="+(en()?"en":"zh")).then(function(p){if(OF.pvFor!==u)return;OF.pv=p;
-    ["title","price"].forEach(function(k){if(p[k]&&(!f[k].value||f[k].dataset.auto)){f[k].value=p[k];f[k].dataset.auto="1";}});
-    box.innerHTML=(p.image?'<img src="'+esc(p.image)+'" alt="" referrerpolicy="no-referrer" onerror="this.remove()">':"")+'<span><b>'+esc(p.title||p.site)+"</b><small>"+esc(p.site)+(p.title?"":" · "+U("这个网站不给预览，名字自己写一下"))+"</small>"+(p.desc?"<small>"+esc(p.desc)+"</small>":"")+"</span>";},
-    function(e){if(OF.pvFor!==u)return;OF.pv=null;box.innerHTML='<span class="opt-pv-w">'+esc(e.code===400?e.message:U("现在读不到这个链接，名字和价格自己填一下也行。"))+"</span>";});}
-$("optAdd").addEventListener("input",function(e){var t=e.target;if(t.name==="title"||t.name==="price")delete t.dataset.auto;
-  if(t.name==="url"){clearTimeout(OF.pvTimer);OF.pvTimer=setTimeout(function(){preview(t.value);},450);}});
-$("optAdd").addEventListener("change",function(e){if(e.target.name==="slot"){slotChanged();if(e.target.value==="__new")this.topic.focus();}
+    '<textarea name="q" rows="3" maxlength="4000" placeholder="'+esc(U("随便写。比如：弗洛姆这家不错 https://… 一晚 1,890 NOK；或者：冰岛北边住的就定第二个，别的删了"))+'" aria-label="'+esc(U("跟助手说"))+'"></textarea>'+
+    '<div class="mny-row"><button class="pill primary" type="submit">'+U("发给助手")+'</button><span class="hint" id="optAskHint">'+U("放在哪个预订下面，助手会自己判断；拿不准会先问你。")+'</span><span class="mny-err" id="optErr" role="alert"></span></div>';
+  f.q.value=q;}
+$("optAsk").addEventListener("change",function(e){
   if(e.target.id==="optMe"){var v=e.target.value.trim();store("nt-me",v);if(oState.err&&v){oState.err="";}renderOpts();}});
-$("optAdd").addEventListener("submit",function(e){e.preventDefault();var f=this,err=$("optErr"),who=$("optMe").value.trim();
-  var url=f.url.value.trim(),title=f.title.value.trim(),slot=f.slot.value,pv=OF.pv&&OF.pv.url===url?OF.pv:{};
+$("optAsk").addEventListener("keydown",function(e){if(e.target.name==="q"&&e.key==="Enter"&&!e.shiftKey&&!e.isComposing){e.preventDefault();this.requestSubmit();}});
+$("optAsk").addEventListener("submit",function(e){e.preventDefault();var f=this,err=$("optErr"),who=$("optMe").value.trim(),q=f.q.value.trim();
   if(!who){err.textContent=U("先写上你是谁。");$("optMe").focus();return;}store("nt-me",who);
-  if(url&&!/^https?:\/\//.test(url))url="https://"+url;
-  if(!url&&!title){err.textContent=U("贴个链接，或者写个名字。");f.url.focus();return;}
-  if(slot==="__new"){var tt=f.topic.value.trim();if(!tt){err.textContent=U("给新话题起个名字。");f.topic.focus();return;}slot=uid();optOp({op:"topic",id:slot,title:tt,by:who});}
-  err.textContent="";var id=uid();
-  optOp({op:"add",id:id,slot:slot,url:url,title:title,price:f.price.value.trim(),note:f.note.value.trim(),image:pv.image||"",site:pv.site||(url?url.replace(/^https?:\/\/(www\.)?([^\/:?#]+).*/,"$2"):""),by:who});
-  ["url","title","price","note","topic"].forEach(function(k){f[k].value="";delete f[k].dataset.auto;});$("optPv").hidden=true;OF.pvFor="";OF.pv=null;
-  renderOptForm(board());f.slot.value=slot;slotChanged();
-  var el=$("opt-"+id);if(el){el.scrollIntoView({block:"center",behavior:"smooth"});replay(el,"flash");}});
+  if(!q){f.q.focus();return;}
+  if(!window.tripChat)return;err.textContent="";f.q.value="";window.tripChat.ask(q);
+  $("optAskHint").textContent=U("在聊天里看助手的回复");});
 $("optsView").addEventListener("submit",function(e){var t=e.target;
   if(t.id==="optCode"){e.preventDefault();var code=$("optCodeIn").value.trim(),er=$("optCodeErr"),A=auth();if(!code)return;er.textContent=U("验证中…");
     fetch(A.api+"/api/check",{method:"POST",headers:{"X-Access-Code":code}}).then(function(r){
@@ -1427,11 +1392,7 @@ $("optsView").addEventListener("submit",function(e){var t=e.target;
       .catch(function(){er.textContent=U("连不上行程服务器。");});return;}
   if(t.dataset.cmtForm){e.preventDefault();var v=t.text.value.trim();if(!v)return;if(needMe())return;OPEN_C[t.dataset.cmtForm]=1;
     optOp({op:"comment",id:t.dataset.cmtForm,cid:uid(),text:v});var nf=document.querySelector('[data-cmt-form="'+t.dataset.cmtForm+'"]');if(nf)nf.text.focus();return;}
-  if(t.dataset.editForm){e.preventDefault();var x=board().items.filter(function(i){return i.id===t.dataset.editForm;})[0];if(!x){OEDIT=null;renderOpts();return;}
-    var ch={op:"edit",id:x.id},u=t.url.value.trim();if(u&&!/^https?:\/\//.test(u))u="https://"+u;
-    if(!t.title.value.trim()&&!u){t.title.focus();return;}
-    [["title",t.title.value.trim()],["price",t.price.value.trim()],["note",t.note.value.trim()],["url",u]].forEach(function(kv){if(kv[1]!==(x[kv[0]]||""))ch[kv[0]]=kv[1];});
-    OEDIT=null;if(Object.keys(ch).length>2)optOp(ch);else renderOpts();}});
+});
 $("optsView").addEventListener("click",function(e){var t;
   if((t=e.target.closest("[data-vote]"))){if(needMe())return;var x=board().items.filter(function(i){return i.id===t.dataset.vote;})[0];if(!x)return;
     var v=+t.dataset.v,cur=(x.votes||{})[me()]||0;optOp({op:"vote",id:x.id,v:cur===v?0:v});return;}
@@ -1439,8 +1400,6 @@ $("optsView").addEventListener("click",function(e){var t;
     if(OPEN_C[cid]){var cf=document.querySelector('[data-cmt-form="'+cid+'"]');if(cf)cf.text.focus();}return;}
   if((t=e.target.closest("[data-pick]"))){var px=board().items.filter(function(i){return i.id===t.dataset.pick;})[0];if(!px)return;
     var on=board().picked[px.slot]===px.id;optOp(on?{op:"pick",slot:px.slot,id:null}:{op:"pick",id:px.id});return;}
-  if((t=e.target.closest("[data-oedit]"))){OEDIT=t.dataset.oedit;renderOpts();var ef=document.querySelector('[data-edit-form="'+OEDIT+'"]');if(ef)ef.title.focus();return;}
-  if(e.target.closest("[data-oedit-cancel]")){OEDIT=null;renderOpts();return;}
   if((t=e.target.closest("[data-odel]"))){var dx=board().items.filter(function(i){return i.id===t.dataset.odel;})[0];
     if(dx&&confirm(U("删掉「{w}」这个候选？投票和留言也会一起删掉。",{w:dx.title||dx.site||dx.url})))optOp({op:"del",id:dx.id});return;}
   if((t=e.target.closest("[data-uncmt]"))){optOp({op:"uncomment",id:t.dataset.oid,cid:t.dataset.uncmt});return;}
@@ -1450,7 +1409,8 @@ $("optsView").addEventListener("click",function(e){var t;
   if((t=e.target.closest("[data-open-booking]"))){openBooking(t.dataset.openBooking);return;}});
 $("optBoard").addEventListener("toggle",function(e){if(e.target.dataset&&e.target.dataset.more)OPEN_M[e.target.dataset.more]=e.target.open;},true);
 // the assistant added options from the chat
-document.addEventListener("trip:options",function(){loadOpts(true);});
+document.addEventListener("trip:options",function(){var was={};board().items.forEach(function(x){was[x.id]=JSON.stringify(x);});
+  loadOpts(true,function(){board().items.forEach(function(x){if(was[x.id]!==JSON.stringify(x))replay($("opt-"+x.id),"flash");});});});
 window.addEventListener("online",function(){if(OOUT.length||state.view==="opts")loadOpts(true);});
 
 /* ---------- offline ---------- */

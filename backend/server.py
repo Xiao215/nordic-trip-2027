@@ -12,6 +12,7 @@ import os
 import re
 from datetime import datetime
 from pathlib import Path
+from typing import Literal
 from zoneinfo import ZoneInfo
 
 import anthropic
@@ -167,7 +168,12 @@ SYSTEM_TEMPLATE = """你是「北欧之旅 2027」的行程助手。这是一趟
 
 回答要短而实用：先用一两句话给出答案，确实有帮助时再加几条要点。时间用当地时间、24 小时制（冰岛 UTC+0，挪威、瑞典、丹麦夏令时 UTC+2）。有人问某地在哪，就附上 Google 地图链接。价格用当地货币（ISK、NOK、SEK、DKK）；如果 <context> 里有 currency（CAD、CNY 或 USD），在括号里附上大约的换算。有人想改行程时，说明改动会影响什么（时间、预订、还车地点等），并提醒网页上的行程只有在行程作者修改 trip.json 后才会更新。
 
-网页上还有一块大家共用的「候选」板：每个预订（或大家自己开的话题）下面可以放几个候选（酒店、小屋、游船、餐厅……），大家投票、留言，最后选定一个。想知道大家挑了什么、投了谁，用 list_options 看。有人请你把候选加进去、存下来、列到板上时，先上网查到真实的页面，再用 add_options 加进对应的预订（用 trip_plan 里每个预订后面的 id）或话题；只是问有什么推荐时，先回答，不要自己加。加完告诉对方加了哪几个、加在哪里，大家可以在「候选」页投票。整个行程都还是初步的，欢迎帮忙出主意、调整，但不要说哪部分“已定”或“是草案”。
+网页上还有一块大家共用的「候选」板：每个预订（或大家自己开的话题）下面放几个候选（酒店、小屋、游船、餐厅……），大家投票、留言，最后选定一个。板上的候选都是通过你来加和改的，所以大家会跟你说得很随意，比如贴个链接加一句“这家不错，一晚 1,200”，或者“北边住的就定第二个吧，别的删了”。
+- 有人贴了链接，或者说想把某个地方加进候选：直接用 add_options 加，不要先上网查（没给链接时才上网找到真实的页面）。价格和备注从对方的话里取（为什么不错、离哪里近），按城市、日期和类型放进 trip_plan 里对应的预订（用预订后面的 id）。放在哪拿不准、或者哪个预订都不合适时，先简短问一句，给出最可能的一两个预订或“开个新话题”让对方选，不要乱放。
+- 有人要选定、删掉、改、移动、投票或留言：先用 list_options 看板上有什么、找到候选的 id，再用 change_options 改。“就它了，别的删掉”就是选定它，并删掉同一个预订下的其它候选。说的是哪一个拿不准时，先问。
+- 只是问有什么推荐时，先回答，不要自己加；对方说要加再加。
+- 改完用一两句话说清楚改了什么、在哪个预订下面，不用再列一遍板上的内容。
+整个行程都还是初步的，欢迎帮忙出主意、调整，但不要说哪部分“已定”或“是草案”。
 
 签证、入境、TRV、ETIAS 这类问题要看对方用哪本护照、住在哪里：<context> 里有 passport 时，按 trip_plan 里对应那本护照的步骤回答；没有时先问一句，或者把中国护照和加拿大护照的情况分开说。
 
@@ -338,9 +344,10 @@ async def answer(messages: list[dict], lang_en: bool = False, asker: str = ""):
                         elif kind == "web_search_tool_result":
                             yield sse({"type": "status", "text": "Reading results" if lang_en else "正在看搜索结果"})
                         elif kind == "tool_use":
-                            look = event.content_block.name == "list_options"
-                            yield sse({"type": "status", "text": ("Reading the options board" if look else "Adding to the options board") if lang_en
-                                       else ("正在看候选板" if look else "正在加进候选板")})
+                            what = {"list_options": ("Reading the options board", "正在看候选板"),
+                                    "add_options": ("Adding to the options board", "正在加进候选板")}.get(
+                                        event.content_block.name, ("Updating the options board", "正在改候选板"))
+                            yield sse({"type": "status", "text": what[0] if lang_en else what[1]})
                 final = await stream.get_final_message()
             except ValueError:
                 # a tool call whose streamed input isn't JSON at all: nothing to answer, so ask again
@@ -608,7 +615,7 @@ def web_url(u: str | None) -> str:
 
 
 class OptionOp(BaseModel):
-    op: str = Field(pattern="^(topic|untopic|add|edit|del|vote|comment|uncomment|pick)$")
+    op: str = Field(pattern="^(topic|untopic|add|edit|del|vote|comment|uncomment|pick|move)$")
     id: str | None = Field(default=None, pattern=ID)
     slot: str | None = Field(default=None, max_length=60)
     title: str | None = Field(default=None, max_length=200)
@@ -698,6 +705,14 @@ def apply_option(data: dict, o: OptionOp, bookings: set[str], via: str | None = 
         item["comments"] = [c for c in item["comments"] if c["id"] != o.cid]
     elif o.op == "pick":
         data["picked"][item["slot"]] = item["id"]
+    elif o.op == "move":
+        slot = o.slot or ""
+        if slot not in bookings and not any(t["id"] == slot for t in data["topics"]):
+            raise ValueError("要移去的预订或话题不在了。")
+        if slot != item["slot"]:
+            if data["picked"].get(item["slot"]) == item["id"]:
+                del data["picked"][item["slot"]]
+            item["slot"] = slot
 
 
 @app.get("/api/options")
@@ -722,7 +737,7 @@ async def change_options(body: OptionOpsIn, x_access_code: str | None = Header(d
 
 
 # ---------- link previews ----------
-# Pasting a link fills in the name, photo and price from the page's preview tags (the ones chat apps use).
+# A link given to the assistant brings the name, photo and price from the page's preview tags (the ones chat apps use).
 # The backend is reachable from the internet, so it only fetches public web addresses: never this machine
 # or the local network, and it rechecks every redirect.
 
@@ -843,13 +858,9 @@ async def link_preview(url: str, lang: str = "zh") -> dict:
     return out
 
 
-@app.get("/api/preview")
-async def preview(url: str, lang: str = "zh", x_access_code: str | None = Header(default=None)):
-    check_code(x_access_code)
-    return await link_preview(url, lang)
-
-
 # ---------- the assistant's tools for the options board ----------
+# The board is filled through the chat: people paste a link or a rough line and the assistant files it under the
+# right booking; "pick this one and drop the rest" works the same way.
 
 class ToolOption(BaseModel):
     title: str = Field(min_length=1, max_length=200)
@@ -864,21 +875,41 @@ class AddOptionsIn(BaseModel):
     options: list[ToolOption] = Field(min_length=1, max_length=8)
 
 
+class ToolChange(BaseModel):
+    action: Literal["pick", "unpick", "remove", "edit", "move", "vote", "comment", "remove_topic", "rename_topic"]
+    option_id: str = Field(default="", max_length=40)
+    slot: str = Field(default="", max_length=60)
+    remove_others: bool = False
+    title: str | None = Field(default=None, max_length=200)
+    price: str | None = Field(default=None, max_length=80)
+    note: str | None = Field(default=None, max_length=800)
+    url: str | None = Field(default=None, max_length=1000)
+    vote: Literal[1, 0, -1] = 1
+    text: str = Field(default="", max_length=500)
+    person: str = Field(default="", max_length=24)
+
+
+class ChangeOptionsIn(BaseModel):
+    changes: list[ToolChange] = Field(min_length=1, max_length=40)
+
+
 OPTION_TOOLS = [
     {
         "name": "list_options",
-        "description": "Read the group's shared options board: the topics, every option saved under each booking or topic, "
-                       "votes, comments and which option is picked. Use it before adding, or when asked what's been suggested.",
+        "description": "Read the group's shared options board: every booking or topic that has options, each option's id, "
+                       "name, price, link, note, who added it, votes, comments, and which one is picked. Call it before "
+                       "changing anything on the board, so you have the option ids, and when asked what's been suggested.",
         "input_schema": {"type": "object", "properties": {}, "additionalProperties": False},
     },
     {
         "name": "add_options",
         "description": "Save options (hotels, cabins, tours, restaurants...) to the shared options board so the group can vote. "
-                       "Only call this when the person asks to add, save or list options on the board, not when they only ask "
-                       "for ideas. Put them under a booking with its id from trip_plan (\"(id: ...)\" after each booking), or under "
-                       "an existing topic id from list_options, or pass new_topic to start a topic. Give each option its real "
-                       "page URL when you have one (it fills in the photo), a price as the site shows it, and a one-line note on "
-                       "why it fits. Never invent URLs or prices.",
+                       "Use it when someone pastes a link or names a place they want on the board, even in a rough note. "
+                       "Put them under the booking they belong to, with its id from trip_plan (\"(id: ...)\" after each "
+                       "booking), or under an existing topic id from list_options, or pass new_topic to start a topic. Pass "
+                       "the link they gave (it fills in the photo and site), a price as they or the site said it, and a "
+                       "one-line note from what they said about it. If they gave no link, find the real page first. Never "
+                       "invent URLs or prices.",
         "input_schema": {
             "type": "object",
             "properties": {
@@ -893,6 +924,38 @@ OPTION_TOOLS = [
             "additionalProperties": False,
         },
     },
+    {
+        "name": "change_options",
+        "description": "Change the shared options board, in order: pick an option for its booking (remove_others also deletes "
+                       "the other options under that booking), unpick (slot), remove an option, edit its title, price, note "
+                       "or url, move it to another booking or topic (slot), vote on it (1 for, -1 against, 0 to take a vote "
+                       "back), comment on it, remove a topic with its options (slot), or rename a topic (slot, title). Votes "
+                       "and comments go under the person asking; set person only when they say it's for someone else or "
+                       "tell you their name. Take option ids from list_options.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "changes": {"type": "array", "maxItems": 40, "items": {
+                    "type": "object",
+                    "properties": {
+                        "action": {"type": "string", "enum": ["pick", "unpick", "remove", "edit", "move", "vote", "comment", "remove_topic", "rename_topic"]},
+                        "option_id": {"type": "string"},
+                        "slot": {"type": "string", "description": "For unpick, move, remove_topic and rename_topic: a booking or topic id."},
+                        "remove_others": {"type": "boolean", "description": "For pick: also delete every other option under the same booking or topic."},
+                        "title": {"type": "string"},
+                        "price": {"type": "string"},
+                        "note": {"type": "string"},
+                        "url": {"type": "string"},
+                        "vote": {"type": "integer", "enum": [1, 0, -1]},
+                        "text": {"type": "string", "description": "For comment."},
+                        "person": {"type": "string", "description": "Whose vote or comment, when it isn't the person asking."},
+                    },
+                    "required": ["action"], "additionalProperties": False}},
+            },
+            "required": ["changes"],
+            "additionalProperties": False,
+        },
+    },
 ]
 
 
@@ -902,35 +965,141 @@ def _new_id() -> str:
     return secrets.token_urlsafe(9).replace("-", "a").replace("_", "b")
 
 
+def board_text(data: dict) -> str:
+    """The board as short text for the assistant: slots in trip order, best-voted first."""
+    try:
+        bookings = json.loads(TRIP_FILE.read_text()).get("bookings", [])
+    except (OSError, ValueError):
+        bookings = []
+    names = {b["id"]: re.sub(r"\[\[(\w+)\]\]", r"\1", b.get("what", b["id"])) for b in bookings}
+    slots = [(b["id"], names[b["id"]], "booking") for b in bookings] + [(t["id"], t["title"], "topic") for t in data["topics"]]
+    out = []
+    for sid, name, kind in slots:
+        items = sorted((x for x in data["items"] if x["slot"] == sid), key=lambda x: -sum(x["votes"].values()))
+        if not items and kind == "booking":
+            continue
+        out.append(f"## {name} ({kind} id: {sid})")
+        if not items:
+            out.append("(no options yet)")
+        for x in items:
+            up = [p for p, v in x["votes"].items() if v > 0]
+            down = [p for p, v in x["votes"].items() if v < 0]
+            bits = [x["title"] or x["site"] or x["url"], x["price"], x["url"], f"added by {x['by']}" if x["by"] else "",
+                    f"for: {', '.join(up)}" if up else "", f"against: {', '.join(down)}" if down else ""]
+            out.append(f"- [{x['id']}]{' PICKED' if data['picked'].get(sid) == x['id'] else ''} " + " | ".join(b for b in bits if b))
+            if x["note"]:
+                out.append(f"  note: {x['note']}")
+            out += [f"  {c['by']}: {c['text']}" for c in x["comments"][-10:]]
+    return "\n".join(out)[:30000] or "The board is empty."
+
+
 async def run_option_tool(name: str, raw: dict, asker: str, lang_en: bool) -> tuple[str, bool, bool]:
     """Runs one of the assistant's tools: (result for the model, is_error, whether the board changed)."""
+    lang = "en" if lang_en else "zh"
     if name == "list_options":
-        data = read_options()
-        return json.dumps(data, ensure_ascii=False)[:30000], False, False
-    if name != "add_options":
-        return f"Unknown tool {name}.", True, False
+        return board_text(read_options()), False, False
+    if name == "add_options":
+        return await _add_options(raw, asker, lang)
+    if name == "change_options":
+        return await _change_options(raw, asker, lang)
+    return f"Unknown tool {name}.", True, False
+
+
+async def _add_options(raw: dict, asker: str, lang: str) -> tuple[str, bool, bool]:
     try:
         body = AddOptionsIn.model_validate(raw)
     except ValueError as e:
         return json.dumps({"INVALID_INPUT": str(e)[:500]}), True, False
-    previews = await asyncio.gather(*[link_preview(o.url, "en" if lang_en else "zh") if web_url(o.url) else asyncio.sleep(0)
+    previews = await asyncio.gather(*[link_preview(o.url, lang) if web_url(o.url) else asyncio.sleep(0)
                                       for o in body.options], return_exceptions=True)
     bookings, by = booking_ids(), clean(asker, 24) or "行程助手"
     async with _options_lock:
         data = read_options()
-        slot = body.slot
+        slot, ids = body.slot, []
         try:
             if body.new_topic.strip():
                 slot = _new_id()
                 apply_option(data, OptionOp(op="topic", id=slot, title=body.new_topic, by=by), bookings)
             for o, pv in zip(body.options, previews):
                 pv = pv if isinstance(pv, dict) else {}
-                apply_option(data, OptionOp(op="add", id=_new_id(), slot=slot, title=o.title, url=o.url, image=pv.get("image"),
+                ids.append(_new_id())
+                apply_option(data, OptionOp(op="add", id=ids[-1], slot=slot, title=o.title, url=o.url, image=pv.get("image"),
                                             site=pv.get("site"), price=o.price or pv.get("price"), note=o.note, by=by), bookings, via="chat")
         except ValueError as e:
             return json.dumps({"error": str(e), "booking_ids": sorted(bookings)}, ensure_ascii=False), True, False
         write_json(OPTIONS_FILE, data)
-    return json.dumps({"saved": len(body.options), "slot": slot}), False, True
+    return json.dumps({"saved": len(ids), "slot": slot, "option_ids": ids}), False, True
+
+
+async def _change_options(raw: dict, asker: str, lang: str) -> tuple[str, bool, bool]:
+    try:
+        body = ChangeOptionsIn.model_validate(raw)
+    except ValueError as e:
+        return json.dumps({"INVALID_INPUT": str(e)[:500]}), True, False
+    # a new link on an edit brings its own photo; fetched before taking the lock
+    pvs = {}
+    for c in body.changes:
+        if c.action == "edit" and c.url and web_url(c.url) and c.url not in pvs:
+            try:
+                pvs[c.url] = await link_preview(c.url, lang)
+            except Exception:
+                pvs[c.url] = {}
+    bookings, done, failed = booking_ids(), [], []
+    async with _options_lock:
+        data = read_options()
+        for c in body.changes:
+            item = next((x for x in data["items"] if x["id"] == c.option_id), None)
+            topic = next((t for t in data["topics"] if t["id"] == c.slot), None)
+            who = clean(c.person or asker, 24)
+            try:
+                if c.action in ("pick", "remove", "edit", "move", "vote", "comment") and not item:
+                    raise ValueError(f"no option with id {c.option_id!r}; call list_options for the ids")
+                if c.action == "pick":
+                    apply_option(data, OptionOp(op="pick", id=item["id"]), bookings)
+                    if c.remove_others:
+                        gone = [x["id"] for x in data["items"] if x["slot"] == item["slot"] and x["id"] != item["id"]]
+                        data["items"] = [x for x in data["items"] if x["id"] not in gone]
+                        done.append(f"picked {item['id']} and removed {len(gone)} other(s)")
+                    else:
+                        done.append(f"picked {item['id']}")
+                elif c.action == "unpick":
+                    data["picked"].pop(c.slot, None)
+                    done.append(f"unpicked {c.slot}")
+                elif c.action == "remove":
+                    apply_option(data, OptionOp(op="del", id=item["id"]), bookings)
+                    done.append(f"removed {item['id']}")
+                elif c.action == "edit":
+                    pv = pvs.get(c.url or "", {})
+                    apply_option(data, OptionOp(op="edit", id=item["id"], title=c.title, price=c.price, note=c.note, url=c.url,
+                                                image=pv.get("image", "") if c.url is not None else None,
+                                                site=pv.get("site", "") if c.url is not None else None), bookings)
+                    done.append(f"edited {item['id']}")
+                elif c.action == "move":
+                    apply_option(data, OptionOp(op="move", id=item["id"], slot=c.slot), bookings)
+                    done.append(f"moved {item['id']} to {c.slot}")
+                elif c.action in ("vote", "comment"):
+                    if not who:
+                        raise ValueError("nobody's name is set: ask who this is for (or ask them to type their name on the page)")
+                    if c.action == "vote":
+                        apply_option(data, OptionOp(op="vote", id=item["id"], v=c.vote, by=who), bookings)
+                    else:
+                        apply_option(data, OptionOp(op="comment", id=item["id"], cid=_new_id(), text=c.text, by=who), bookings)
+                    done.append(f"{c.action} on {item['id']} as {who}")
+                elif not topic:
+                    raise ValueError(f"no topic with id {c.slot!r} (bookings from trip_plan can't be removed or renamed)")
+                elif c.action == "remove_topic":
+                    apply_option(data, OptionOp(op="untopic", id=topic["id"]), bookings)
+                    done.append(f"removed topic {topic['id']}")
+                else:
+                    if not clean(c.title, 80):
+                        raise ValueError("rename_topic needs a title")
+                    topic["title"] = clean(c.title, 80)
+                    done.append(f"renamed topic {topic['id']}")
+            except ValueError as e:
+                failed.append(f"{c.action} {c.option_id or c.slot}: {e}")
+        if done:
+            write_json(OPTIONS_FILE, data)
+    return json.dumps({"done": done, "failed": failed}, ensure_ascii=False), not done, bool(done)
 
 
 # ---------- the site itself ----------

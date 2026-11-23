@@ -82,8 +82,10 @@ function userLine(m){var d=document.createElement("div");d.className="l-user";d.
 function botLine(m){var d=document.createElement("div");d.className="l-bot";d.innerHTML='<div class="m-content"></div>';add(d);if(m)fillBot(d,m);return d;}
 function fillBot(d,m){d.querySelector(".m-content").innerHTML=md(m.content);
   var t=d.querySelector(".l-tools")||d.appendChild(document.createElement("div"));t.className="l-tools";
-  t.innerHTML="<span>"+esc(clock(m.ts))+(m.stopped?Z(" · 中途停止"," · stopped early"):"")+'</span><button type="button">'+Z("复制","Copy")+'</button>';
-  t.querySelector("button").addEventListener("click",function(){var b=this;
+  t.innerHTML="<span>"+esc(clock(m.ts))+(m.stopped?Z(" · 中途停止"," · stopped early"):"")+'</span>'+
+    (m.board?'<button type="button" class="l-board">'+Z("看候选板","See the options")+" →</button>":"")+'<button type="button">'+Z("复制","Copy")+'</button>';
+  var bb=t.querySelector(".l-board");if(bb)bb.addEventListener("click",function(){if(window.tripApp&&window.tripApp.showOpts)window.tripApp.showOpts();});
+  t.querySelector("button:last-child").addEventListener("click",function(){var b=this;
     (navigator.clipboard?navigator.clipboard.writeText(m.content):Promise.reject()).then(function(){b.textContent=Z("已复制","Copied");setTimeout(function(){b.textContent=Z("复制","Copy");},1500);}).catch(function(){});});}
 function errLine(msg,retry){var d=document.createElement("div");d.className="l-err";d.textContent=msg;
   if(retry){var b=document.createElement("button");b.type="button";b.className="cli-link";b.textContent=Z("重试","Try again");b.onclick=function(){d.remove();retry();};d.appendChild(b);}
@@ -155,7 +157,8 @@ function ask(q){
   var el=null,acc="",ctx=null;try{ctx=window.tripApp&&window.tripApp.context();}catch(e){}
   ctrl=window.AbortController?new AbortController():null;
 
-  function finish(stopped){var m={role:"assistant",content:acc,ts:Date.now(),stopped:stopped||undefined};S.msgs.push(m);save();fillBot(el,m);}
+  var board=false;
+  function finish(stopped){var m={role:"assistant",content:acc,ts:Date.now(),stopped:stopped||undefined,board:board||undefined};S.msgs.push(m);save();fillBot(el,m);}
   fetch(API+"/api/chat",{method:"POST",signal:ctrl&&ctrl.signal,headers:{"Content-Type":"application/json","X-Access-Code":S.code||""},
     body:JSON.stringify({name:myName(),messages:history(),context:ctx})})
   .then(function(r){
@@ -167,7 +170,7 @@ function ask(q){
       if(ev.type==="text"){if(!el){st.remove();el=botLine(null);}acc+=ev.text;el.querySelector(".m-content").innerHTML=md(acc);scroll();}
       else if(ev.type==="status"&&!acc){st.querySelector(".w").textContent=ev.text;}
       else if(ev.type==="error"){throw new Error(ev.message);}
-      else if(ev.type==="options"){document.dispatchEvent(new CustomEvent("trip:options"));} // it added to the options board
+      else if(ev.type==="options"){board=true;document.dispatchEvent(new CustomEvent("trip:options"));} // it changed the options board
     }
     function pump(){return reader.read().then(function(res){
       buf+=dec.decode(res.value||new Uint8Array(),{stream:!res.done});
