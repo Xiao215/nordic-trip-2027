@@ -30,7 +30,8 @@ MAPS = {"/places", "/countries", "/kinds"}  # objects keyed by id rather than re
 # Chinese text the page doesn't look up in en.json (place and country names carry their own English)
 NO_EN = {"/places/{}/zh", "/countries/{}/zh"}
 # fields the page understands that the plan may not use yet: pattern -> {field: kinds}
-EXTRA = {"/bookings/[]": {"booked": {"bool"}}}
+EXTRA = {"/bookings/[]": {"booked": {"bool"}}, "/days/[]": {"options": {"list"}}}
+MODES = {"drive", "flight", "ferry", "train", "bus", "walk", "bike"}
 KEEP = 400  # snapshots kept for undo
 # field names in words, for the approval card
 FIELD = {
@@ -44,6 +45,8 @@ FIELD = {
     "mins": ("时长", "Duration"), "kind": ("类型", "Kind"), "verb": ("动作", "Action"), "items": ("条目", "Items"), "t": ("内容", "Text"),
     "more": ("详情", "More"), "pace": ("节奏", "Pace"), "paceNote": ("节奏说明", "Pace note"), "zh": ("中文名", "Chinese name"),
     "local": ("当地名", "Local name"), "en": ("英文名", "English name"), "ll": ("坐标", "Coordinates"), "photos": ("照片", "Photos"),
+    "options": ("可选", "Optional"), "after": ("放在哪站后面", "After stop"), "why": ("为什么没排", "Why not planned"),
+    "in": ("怎么过去", "Getting there"), "out": ("怎么回来", "Getting back"),
 }
 
 
@@ -150,6 +153,28 @@ def check(trip: dict, shape: dict) -> list[str]:
             for p in sg.get("path", []) if sg.get("t") == "move" else []:
                 if isinstance(p, str) and p not in places:
                     errors.append(f"days/{date}/segs/{i}/path: {p} is not a place id")
+        # optional extras: {after?, place, name?, kind, start?, end?, mins?, body?, facts?, tips?, why?, in?, out?}
+        for i, o in enumerate(d.get("options", []) if isinstance(d.get("options"), list) else []):
+            w = f"days/{date}/options/{i}"
+            if not isinstance(o, dict):
+                errors.append(f"{w}: should be an object")
+                continue
+            if o.get("place") not in places:
+                errors.append(f"{w}/place: {o.get('place')} is not a place id")
+            if "after" in o and o["after"] not in places:
+                errors.append(f"{w}/after: {o['after']} is not a place id (use the place of a stop that day)")
+            if o.get("kind") not in trip.get("kinds", {}):
+                errors.append(f"{w}/kind: {o.get('kind')} is not one of {', '.join(trip.get('kinds', {}))}")
+            for side in ("in", "out"):
+                m = o.get(side)
+                if m is None:
+                    continue
+                if not isinstance(m, dict) or m.get("mode") not in MODES:
+                    errors.append(f"{w}/{side}: needs mode, one of {', '.join(sorted(MODES))}")
+                    continue
+                for p in m.get("path", []):
+                    if isinstance(p, str) and p not in places:
+                        errors.append(f"{w}/{side}/path: {p} is not a place id")
     if seen != sorted(seen):
         errors.append("days: must stay in date order")
     for name in ("bookings", "legs", "prep"):

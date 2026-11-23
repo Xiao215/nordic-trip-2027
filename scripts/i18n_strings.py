@@ -18,7 +18,7 @@ TODO = ROOT / "plan/i18n-todo.json"
 # keys whose values are data, not prose
 SKIP = {"ll", "geom", "date", "start", "end", "c", "kind", "mode", "path", "place", "stay", "wx", "id", "opens",
         "color", "tz", "center", "zoom", "climate", "local", "en", "zh", "from", "to", "km", "mins", "route",
-        "routeMode", "dates", "hot", "draft", "gid"}
+        "routeMode", "dates", "hot", "draft", "gid", "after"}
 CJK = re.compile(r"[㐀-鿿]")
 
 

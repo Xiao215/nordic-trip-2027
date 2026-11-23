@@ -136,6 +136,19 @@ def render_trip(t: dict) -> str:
             for tip in s.get("tips", []):
                 out.append(f"    Tip: {tx(tip)}")
             out.append(f"    Map: {_maps(places[s['place']]['ll'])}")
+        for o in d.get("options", []):
+            when = o.get("start", "") + (f"–{o['end']}" if o.get("end") and o.get("end") != o.get("start") else "")
+            where = f" after {name(o['after'])}" if o.get("after") else ""
+            line = f"- OPTIONAL{where} (not in the plan, shown folded under 可选): {(when + ' ') if when else ''}{tx(o.get('name') or '[[' + o['place'] + ']]')} [{t['kinds'].get(o.get('kind'), o.get('kind'))}]"
+            if o.get("why"):
+                line += f". Why not planned: {tx(o['why'])}"
+            out.append(line)
+            if o.get("body"):
+                out.append(f"    {tx(o['body'])}")
+            for side in ("in", "out"):
+                m = o.get(side)
+                if m:
+                    out.append(f"    {'Getting there' if side == 'in' else 'Getting back'}: {m.get('mode', '')} {m.get('mins', '')} min" + (f". {tx(m['note'])}" if m.get("note") else ""))
     out += ["", "## Bookings"]
     for b in t["bookings"]:
         out.append(f"### {tx(b['what'])} (id: {b['id']}; for {tx(b.get('for', ''))}; book: {tx(b.get('when', b.get('opens', '')))})"
@@ -681,7 +694,7 @@ PLAN_TOOLS = [
                        "fields and formats the plan already uses (read the part first): text can use [[place_id]], **bold** "
                        "and [text](https://url); a new place goes in places first ({zh, local, en, ll: [lat, lng]}). For "
                        "every new or changed Chinese text, give its English in en, keyed by the exact Chinese, with the same "
-                       "[[place_id]] markers. Mark a booking booked for everyone with set bookings/<id>/booked true. All "
+                       "[[place_id]] markers. Mark a booking booked for everyone with set bookings/<id>/booked true. Something worth doing that isn't in the day's plan (left out, or for spare time) goes in that day's options list, never in segs: {after: place id of the stop it follows, place, name, kind, start/end or mins, body, facts, tips, why (why it's not in the plan), in and out: {mode, mins, path: [from, to], note}}; the page shows them folded under 可选 after that stop. All "
                        "changes are checked now and applied together on approval, or none are. summary: one short line in the asker's "
                        "language saying what changed, shown in the history.",
         "input_schema": {

@@ -63,6 +63,7 @@ var UIEN={
   "{d}（{w}）还没排，按目前的路线，这天可以怎么安排？":"{d} ({w}) isn't planned yet. Given the current route, what could we do that day?",
   "交通":"Transport","户外":"Outdoors","住宿":"Stay","日落":"Sunset"," · 约 {n} 公里":" · about {n} km",
   "在 Google 地图打开":"Open in Google Maps","导航":"Directions","问问这个":"Ask about this",
+  "可选 · {n}":"Optional · {n}","或":"or","没排进行程：":"Not in the plan: ",
   "{w} 这段{m}有什么要注意的？":"Anything to know about the {m} {w}?","多讲讲「{w}」，有什么要注意的？":"Tell me more about {w}. Anything to watch out for?",
   "晴":"Clear","晴间多云":"Partly cloudy","阴":"Overcast","雾":"Fog","毛毛雨":"Drizzle","雨":"Rain","雪":"Snow","阵雨":"Showers","阵雪":"Snow showers","雷雨":"Thunderstorms",
   " · 降水概率 {n}%":" · {n}% chance of rain","风速最高 {n} m/s":"Wind up to {n} m/s","7 月常年":"Typical July"," · 约 {n} 天有雨":" · ~{n} rainy days",
@@ -588,7 +589,7 @@ function renderDay(){
 }
 function renderRows(){
   var D=day(),ol=$("rows");placeMap(null,true);ol.innerHTML="";if(!D)return;
-  var cur=liveDate()===state.date?nowSeg():null;
+  var cur=liveDate()===state.date?nowSeg():null,opts=optGroups(D),optDone={};
   D.segs.forEach(function(s){
     var li=document.createElement("li");li.dataset.i=s.i;li.style.setProperty("--n",Math.min(s.i,14));if(cur&&cur.i===s.i)li.classList.add("now");
     var b=document.createElement("button");b.className="row"+(s.t==="move"?" move":"");b.setAttribute("aria-expanded","false");
@@ -599,14 +600,49 @@ function renderRows(){
       b.innerHTML='<span class="t">'+(s.start?esc(s.start):"")+'</span><span class="num">'+s.num+'</span><span class="n">'+tx(s.name||"[["+s.place+"]]")+(cur&&cur.i===s.i?'<span class="now-tag">'+U("现在")+'</span>':"")+"</span>"+ICON.chev+'<span class="s">'+esc(bits)+"</span>";}
     b.addEventListener("click",function(){if(state.sel===s.i){state.sel=null;paintOpen();markSel();fitView();}else select(s.i,true);});
     li.appendChild(b);ol.appendChild(li);
+    if(s.t==="stop"&&opts[s.place]&&!optDone[s.place]){optDone[s.place]=1;ol.appendChild(optRow(opts[s.place],s.place));}
   });
+  // options whose stop isn't in the day (or that name none) go at the end
+  Object.keys(opts).forEach(function(k){if(!optDone[k])ol.appendChild(optRow(opts[k],k));});
 }
+/* ---------- optional extras between stops ---------- */
+// day.options: things left out of the plan, kept for when there's time. They hang after the stop they
+// name ("after": a place id) as one quiet "可选 · N" line and only show in full when someone opens it.
+var OPTOPEN={};
+function optGroups(D){var g={};(D.options||[]).forEach(function(o){var k=o.after||"";(g[k]=g[k]||[]).push(o);});return g;}
+function optMove(m){if(!m)return "";var bits=[];if(m.mins)bits.push(esc(hm(m.mins)));
+  var ids=(m.path||[]).filter(function(x){return typeof x==="string";});if(ids.length>1)bits.push(tx("[["+ids[0]+"]] → [["+ids[ids.length-1]+"]]"));
+  if(m.note)bits.push('<em>'+tx(m.note)+'</em>');
+  return '<div class="opt-mv"><span class="opt-ic" title="'+esc(mode(m.mode))+'">'+(ICON[m.mode]||ICON.drive)+'</span><span>'+esc(mode(m.mode))+(bits.length?" "+bits.join(" · "):"")+'</span></div>';}
+function optCard(o,k){
+  var when=o.start?(o.end&&o.end!==o.start?o.start+" – "+o.end:o.start):o.mins?hm(o.mins):"",kind=L(T.kinds[o.kind])||"",h="";
+  h+='<div class="opt-card" style="--k:'+(KCOL[o.kind]||KCOL.visit)+'"><div class="opt-meta">'+esc([when,kind].filter(Boolean).join(" · "))+'</div>';
+  h+='<h4>'+tx(o.name||"[["+o.place+"]]")+'</h4>';
+  if(o.why)h+='<p class="opt-why">'+U("没排进行程：")+tx(o.why)+'</p>';
+  if(o.body)h+='<p class="body">'+tx(o.body)+'</p>';
+  if(o.facts&&o.facts.length)h+='<dl class="facts">'+o.facts.map(function(f){return "<div><dt>"+esc(L(f[0]))+"</dt><dd>"+tx(f[1])+"</dd></div>";}).join("")+"</dl>";
+  if(o.tips&&o.tips.length)h+='<ul class="tips">'+o.tips.map(function(t){return "<li>"+tx(t)+"</li>";}).join("")+"</ul>";
+  h+='<div class="actions">'+(o.place&&N[o.place]?'<a class="pill" target="_blank" rel="noopener" href="'+esc(gPlace(o.place))+'">'+ICON.maps+U("在 Google 地图打开")+"</a>":"")+
+     '<button class="pill ask" type="button" data-opt-ask="'+esc(k)+'">'+ICON.ask+U("问问这个")+"</button></div></div>";
+  return optMove(o["in"])+h+optMove(o.out);}
+function optRow(list,key){
+  var li=document.createElement("li"),id=state.date+"|"+key,open=!!OPTOPEN[id];li.className="opts"+(open?" open":"");li.dataset.opt=key;
+  li.innerHTML='<button type="button" class="opt-toggle" aria-expanded="'+open+'"><span class="opt-ar">›</span>'+esc(U("可选 · {n}",{n:list.length}))+'</button>'+
+    '<div class="opt-list"'+(open?"":" hidden")+'>'+list.map(function(o,j){return optCard(o,key+"#"+j);}).join('<div class="opt-or">'+esc(U("或"))+'</div>')+'</div>';
+  return li;}
+$("rows").addEventListener("click",function(e){
+  var t=e.target.closest(".opt-toggle");
+  if(t){var li=t.closest("li.opts"),id=state.date+"|"+li.dataset.opt,on=!OPTOPEN[id];OPTOPEN[id]=on;
+    li.classList.toggle("open",on);t.setAttribute("aria-expanded",on);li.querySelector(".opt-list").hidden=!on;return;}
+  var a=e.target.closest("[data-opt-ask]");
+  if(a){var k=a.dataset.optAsk.split("#"),o=optGroups(day())[k[0]][+k[1]];
+    if(o&&window.tripChat)window.tripChat.ask(U("多讲讲「{w}」，有什么要注意的？",{w:plain(o.name||"[["+o.place+"]]")}));}});
 function select(i,scroll){state.sel=i;paintOpen();var s=day().segs[i];
   markSel();frame(s);caption();
   if(scroll===false){var li=document.querySelector('#rows>li[data-i="'+i+'"]');if(li)li.scrollIntoView({block:"center"});}}
 function paintOpen(){
   var from=STAGE.closest("#rows>li");
-  document.querySelectorAll("#rows>li").forEach(function(li){var i=+li.dataset.i,on=i===state.sel;
+  document.querySelectorAll("#rows>li[data-i]").forEach(function(li){var i=+li.dataset.i,on=i===state.sel;
     li.classList.toggle("open",on);li.querySelector(".row").setAttribute("aria-expanded",on);
     var d=li.querySelector(".detail");if(on&&!d){li.appendChild(detail(day().segs[i]));}else if(!on&&d)d.remove();});
   placeMap(document.querySelector("#rows>li.open")||from);
