@@ -32,7 +32,10 @@ MAPS = {"/places", "/countries", "/kinds"}  # objects keyed by id rather than re
 NO_EN = {"/places/{}/zh", "/countries/{}/zh"}
 # fields the page understands that the plan may not use yet: pattern -> {field: kinds}
 EXTRA = {"/bookings/[]": {"booked": {"bool"}}, "/days/[]": {"options": {"list"}}, "/days/[]/segs/[]": {"group": {"str"}},
-         "/places/{}": {"story": {"list"}}}
+         "/places/{}": {"story": {"list"}}, "/places/{}/photos/[]": {"license": {"str"}}}
+# fields that may be left out even where every record so far has them: a photo from Wikimedia Commons has a
+# license and no author_link (that one is Unsplash's photographer page)
+OPTIONAL = {"/places/{}/photos/[]": {"author_link"}}
 MODES = {"drive", "flight", "ferry", "train", "bus", "walk", "bike"}
 KEEP = 400  # snapshots kept for undo
 # field names in words, for the approval card
@@ -46,7 +49,7 @@ FIELD = {
     "note": ("备注", "Note"), "facts": ("信息", "Facts"), "place": ("地点", "Place"), "path": ("路线", "Route"), "mode": ("交通方式", "Mode"),
     "mins": ("时长", "Duration"), "kind": ("类型", "Kind"), "verb": ("动作", "Action"), "items": ("条目", "Items"), "t": ("内容", "Text"),
     "more": ("详情", "More"), "pace": ("节奏", "Pace"), "paceNote": ("节奏说明", "Pace note"), "zh": ("中文名", "Chinese name"),
-    "local": ("当地名", "Local name"), "en": ("英文名", "English name"), "ll": ("坐标", "Coordinates"), "photos": ("照片", "Photos"),
+    "local": ("当地名", "Local name"), "en": ("英文名", "English name"), "ll": ("坐标", "Coordinates"), "photos": ("照片", "Photos"), "license": ("授权", "License"),
     "options": ("可选", "Optional"), "after": ("放在哪站后面", "After stop"), "why": ("为什么没排", "Why not planned"),
     "in": ("怎么过去", "Getting there"), "out": ("怎么回来", "Getting back"),
     "group": ("步行路线", "Walk"), "story": ("背景和小知识", "Background & fun facts"),
@@ -118,7 +121,7 @@ def check(trip: dict, shape: dict) -> list[str]:
             for k in v:
                 if k not in s["fields"]:
                     errors.append(f"{where}/{k}: unknown field (fields here: {', '.join(sorted(s['fields']))})")
-            need = [k for k, c in s["fields"].items() if c == s["n"] and s["n"] > 1 and k not in v]
+            need = [k for k, c in s["fields"].items() if c == s["n"] and s["n"] > 1 and k not in v and k not in OPTIONAL.get(pat, ())]
             if need:
                 errors.append(f"{where or '/'}: missing {', '.join(need)}")
         for k, x, cp in _children(v, pat):
