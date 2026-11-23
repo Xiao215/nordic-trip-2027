@@ -889,7 +889,9 @@ function useEmbed(){
   embed=document.createElement("iframe");embed.title=U("Google 地图");embed.setAttribute("allowfullscreen","");box.appendChild(embed);
   var D=day();if(state.view==="day"&&D&&state.sel!=null)frame(D.segs[state.sel]);else fitView();
 }
-function embedTo(src){if(embed&&embed.getAttribute("src")!==src)embed.setAttribute("src",src);}
+// reload=true after a resize: Google's embed doesn't re-centre itself when its frame changes size
+var reloadEmbed=false;
+function embedTo(src){if(embed&&(reloadEmbed||embed.getAttribute("src")!==src))embed.setAttribute("src",src);reloadEmbed=false;}
 function ll2(p){return p[0]+","+p[1];}
 // t=k is satellite; the embed's own route framing ignores the frame's shape, so routes get an explicit ll/z
 function embedTail(){return "&t=k&hl="+(NM==="zh"?"zh-CN":"en")+"&output=embed";}
@@ -968,6 +970,14 @@ function frame(s){
   if(!map)return;
   if(on){fitPts(around(dayPts(day()),on.at),14);return;}
   if(s.pts&&s.pts.length>1)fitPts(s.pts,s.t==="move"?13:15);else fitPts([LL(s.place)],s.zoom||14);}
+// The map box follows the window (and moves into an open stop on phones). Once a resize settles, frame the same
+// view again for the new size: the embed was centred and zoomed for the old one.
+function refit(){reloadEmbed=true;var D=day();if(state.view==="day"&&D&&state.sel!=null)frame(D.segs[state.sel]);else fitView();}
+(function(){var box=$("map"),last=null,t=null;if(!window.ResizeObserver)return;
+  new ResizeObserver(function(){var w=box.clientWidth,h=box.clientHeight;
+    if(!last||!w||!h){last=[w,h];return;}
+    if(Math.abs(w-last[0])<40&&Math.abs(h-last[1])<40)return;
+    clearTimeout(t);t=setTimeout(function(){last=[box.clientWidth,box.clientHeight];if(T)refit();},350);}).observe(box);})();
 $("fitBtn").addEventListener("click",function(){if(state.view==="day"&&state.sel!=null){state.sel=null;paintOpen();markSel();}fitView();});
 
 var drawnFor=null;
