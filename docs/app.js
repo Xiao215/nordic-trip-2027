@@ -63,7 +63,7 @@ var UIEN={
   "{d}（{w}）还没排，按目前的路线，这天可以怎么安排？":"{d} ({w}) isn't planned yet. Given the current route, what could we do that day?",
   "交通":"Transport","户外":"Outdoors","住宿":"Stay","日落":"Sunset"," · 约 {n} 公里":" · about {n} km",
   "在 Google 地图打开":"Open in Google Maps","导航":"Directions","问问这个":"Ask about this",
-  "可选 · {n}":"Optional · {n}","或":"or","没排进行程：":"Not in the plan: ",
+  "回到起点":"back to the start","{n} 站":"{n} stops","走路约 {t}":"about {t} on foot","约 {n} 米":"about {n} m","约 {n} 公里":"about {n} km","导航（整条步行路线）":"Directions (whole walk)","背景和小知识":"Background & fun facts","历史":"History","冷知识":"Fun fact","名字的来历":"The name","可选 · {n}":"Optional · {n}","或":"or","没排进行程：":"Not in the plan: ",
   "{w} 这段{m}有什么要注意的？":"Anything to know about the {m} {w}?","多讲讲「{w}」，有什么要注意的？":"Tell me more about {w}. Anything to watch out for?",
   "晴":"Clear","晴间多云":"Partly cloudy","阴":"Overcast","雾":"Fog","毛毛雨":"Drizzle","雨":"Rain","雪":"Snow","阵雨":"Showers","阵雪":"Snow showers","雷雨":"Thunderstorms",
   " · 降水概率 {n}%":" · {n}% chance of rain","风速最高 {n} m/s":"Wind up to {n} m/s","7 月常年":"Typical July"," · 约 {n} 天有雨":" · ~{n} rainy days",
@@ -589,22 +589,75 @@ function renderDay(){
 }
 function renderRows(){
   var D=day(),ol=$("rows");placeMap(null,true);ol.innerHTML="";if(!D)return;
-  var cur=liveDate()===state.date?nowSeg():null,opts=optGroups(D),optDone={};
-  D.segs.forEach(function(s){
-    var li=document.createElement("li");li.dataset.i=s.i;li.style.setProperty("--n",Math.min(s.i,14));if(cur&&cur.i===s.i)li.classList.add("now");
-    var b=document.createElement("button");b.className="row"+(s.t==="move"?" move":"");b.setAttribute("aria-expanded","false");
-    if(s.t==="move"){var dm=dur(s);
-      b.innerHTML='<span class="t"></span><span class="num" title="'+esc(mode(s.mode))+'">'+(ICON[s.mode]||ICON.drive)+'</span><span class="n">'+(dm?esc(hm(dm))+" · ":"")+moveLabel(s)+(s.dk?'<span class="drv-tag" data-dk="'+esc(s.dk)+'">'+esc(driverOf(s.dk)||"")+"</span>":"")+"</span>"+ICON.chev;}
-    else{b.style.setProperty("--k",KCOL[s.kind]||KCOL.visit);
-      var bits=[s.start&&s.end&&s.start!==s.end?hm(dur(s)):s.mins?hm(s.mins):"",L(T.kinds[s.kind])].filter(Boolean).join(" · ");
-      b.innerHTML='<span class="t">'+(s.start?esc(s.start):"")+'</span><span class="num">'+s.num+'</span><span class="n">'+tx(s.name||"[["+s.place+"]]")+(cur&&cur.i===s.i?'<span class="now-tag">'+U("现在")+'</span>':"")+"</span>"+ICON.chev+'<span class="s">'+esc(bits)+"</span>";}
-    b.addEventListener("click",function(){if(state.sel===s.i){state.sel=null;paintOpen();markSel();fitView();}else select(s.i,true);});
-    li.appendChild(b);ol.appendChild(li);
-    if(s.t==="stop"&&opts[s.place]&&!optDone[s.place]){optDone[s.place]=1;ol.appendChild(optRow(opts[s.place],s.place));}
-  });
+  var cur=liveDate()===state.date?nowSeg():null,opts=optGroups(D),optDone={},segs=D.segs;
+  function after(s,to){if(s.t==="stop"&&opts[s.place]&&!optDone[s.place]){optDone[s.place]=1;to.appendChild(optRow(opts[s.place],s.place));}}
+  for(var i=0;i<segs.length;i++){var s=segs[i];
+    if(s.group){var run=[s];while(i+1<segs.length&&segs[i+1].group===s.group)run.push(segs[++i]);
+      if(run.some(function(x){return x.t==="stop";})){var g=grpRow(run,cur);ol.appendChild(g);run.forEach(function(x){after(x,ol);});continue;}
+      i-=run.length-1;}
+    ol.appendChild(segLi(s,cur));after(s,ol);}
   // options whose stop isn't in the day (or that name none) go at the end
   Object.keys(opts).forEach(function(k){if(!optDone[k])ol.appendChild(optRow(opts[k],k));});
 }
+function segLi(s,cur,inGrp){
+  var li=document.createElement("li");li.dataset.i=s.i;li.style.setProperty("--n",Math.min(s.i,14));if(cur&&cur.i===s.i)li.classList.add("now");
+  var b=document.createElement("button");b.className="row"+(s.t==="move"?" move":"");b.setAttribute("aria-expanded","false");
+  if(s.t==="move"){var dm=dur(s),km=inGrp&&s.mode==="walk"?walkKm(s):0;
+    b.innerHTML='<span class="t"></span><span class="num" title="'+esc(mode(s.mode))+'">'+(ICON[s.mode]||ICON.drive)+'</span><span class="n">'+
+      (inGrp&&s.mode==="walk"?esc([cap(mode(s.mode))+(dm?" "+hm(dm):""),km?distTxt(km):""].filter(Boolean).join(" · "))+(s.label?" · "+tx(s.label):"")
+        :(dm?esc(hm(dm))+" · ":"")+moveLabel(s))+
+      (s.dk?'<span class="drv-tag" data-dk="'+esc(s.dk)+'">'+esc(driverOf(s.dk)||"")+"</span>":"")+"</span>"+ICON.chev;}
+  else{b.style.setProperty("--k",KCOL[s.kind]||KCOL.visit);
+    var bits=[s.start&&s.end&&s.start!==s.end?hm(dur(s)):s.mins?hm(s.mins):"",L(T.kinds[s.kind])].filter(Boolean).join(" · ");
+    b.innerHTML='<span class="t">'+(s.start?esc(s.start):"")+'</span><span class="num">'+s.num+'</span><span class="n">'+tx(s.name||"[["+s.place+"]]")+(cur&&cur.i===s.i?'<span class="now-tag">'+U("现在")+'</span>':"")+"</span>"+ICON.chev+'<span class="s">'+esc(bits)+"</span>";}
+  b.addEventListener("click",function(){if(state.sel===s.i){state.sel=null;paintOpen();markSel();fitView();}else select(s.i,true);});
+  li.appendChild(b);return li;}
+/* ---------- a walk through several stops, shown as one row ---------- */
+// Consecutive segs that share a "group" name (stops a short walk apart, and the walks between them) fold
+// into one row: the name, how long it all takes, the stops as a little route, and the walking in total.
+// Opening it lists the stops and walks inside; each stop opens on its own, like any other.
+var GOPEN={};
+function hav(a,b){var R=6371,r=Math.PI/180,dl=(b[0]-a[0])*r,dn=(b[1]-a[1])*r,x=Math.sin(dl/2)*Math.sin(dl/2)+Math.cos(a[0]*r)*Math.cos(b[0]*r)*Math.sin(dn/2)*Math.sin(dn/2);return 2*R*Math.asin(Math.sqrt(x));}
+// a walk's length: its own km if the plan has one, else the straight line between its points plus a quarter for streets
+function walkKm(s){if(s.km)return s.km;var ps=(s.path||[]).map(function(x){return typeof x==="string"?(N[x]||null):x;}).filter(Boolean),k=0;
+  for(var j=1;j<ps.length;j++)k+=hav(ps[j-1],ps[j]);return Math.round(k*1.25*10)/10;}
+function distTxt(km){return km<1?U("约 {n} 米",{n:Math.max(100,Math.round(km*10)*100)}):U("约 {n} 公里",{n:Math.round(km*10)/10});}
+function cap(t){return t.charAt(0).toUpperCase()+t.slice(1);}
+function grpStops(run){return run.filter(function(x){return x.t==="stop";});}
+function grpRow(run,cur){
+  var li=document.createElement("li"),first=run[0],last=run[run.length-1],id=state.date+"|"+first.i,open=!!GOPEN[id]||run.some(function(x){return x.i===state.sel;});
+  li.className="grp"+(open?" open":"");li.dataset.g=first.i;if(cur&&run.some(function(x){return x.i===cur.i;}))li.classList.add("now");
+  var st=grpStops(run),walks=run.filter(function(x){return x.t==="move"&&x.mode==="walk";}),wm=0,km=0;
+  walks.forEach(function(w){wm+=dur(w);km+=walkKm(w);});
+  var t0=first.start||"",t1=last.end||last.start||"",span=t0&&t1?(mins(t1)-mins(t0)+1440)%1440:0;
+  var bits=[span?hm(span):"",U("{n} 站",{n:st.length}),wm?U("走路约 {t}",{t:hm(wm)})+(km?" · "+distTxt(km):""):""].filter(Boolean).join(" · ");
+  var ends=[];run.forEach(function(x){var p=x.t==="stop"?x.place:null;if(p&&ends[ends.length-1]!==p)ends.push(p);});
+  // a walk that ends where it began says so instead of naming the place again
+  var loop=false;if(last.t==="move"){var e=last.path[last.path.length-1],b0=first.t==="move"?first.path[0]:first.place;
+    if(e===b0)loop=true;else if(typeof e==="string"&&ends[ends.length-1]!==e)ends.push(e);}
+  var chips=ends.map(function(p){return '<span class="chip">'+tx("[["+p+"]]")+"</span>";}).concat(loop?['<span class="chip back">'+esc(U("回到起点"))+"</span>"]:[]).join('<span class="ar">→</span>');
+  var b=document.createElement("button");b.className="row grp-row";b.setAttribute("aria-expanded",open);
+  b.innerHTML='<span class="t">'+esc(t0)+'</span><span class="num">'+ICON.walk+'</span><span class="n">'+tx(first.group)+(li.classList.contains("now")?'<span class="now-tag">'+U("现在")+"</span>":"")+"</span>"+ICON.chev+
+    '<span class="s">'+esc(bits)+'</span><span class="chips">'+chips+"</span>";
+  li.appendChild(b);
+  var fold=document.createElement("div");fold.className="grp-fold";fold.inert=!open;
+  var inn=document.createElement("div");inn.className="grp-in";var ul=document.createElement("ol");ul.className="grp-list";
+  run.forEach(function(x){ul.appendChild(segLi(x,cur,true));});
+  var pts=[];run.forEach(function(x){(x.t==="stop"?[x.place]:x.path).forEach(function(p){if(typeof p==="string"&&pts[pts.length-1]!==p)pts.push(p);});});
+  var acts=document.createElement("div");acts.className="actions grp-acts";
+  acts.innerHTML=(pts.length>1?'<a class="pill" target="_blank" rel="noopener" href="'+esc(gRoute(pts.slice(0,10),"walking"))+'">'+ICON.dir+U("导航（整条步行路线）")+"</a>":"")+
+    '<button class="pill ask" type="button">'+ICON.ask+U("问问这个")+"</button>";
+  acts.querySelector(".ask").addEventListener("click",function(){if(window.tripChat)window.tripChat.ask(U("多讲讲「{w}」，有什么要注意的？",{w:plain(first.group)}));});
+  var box=document.createElement("div");box.className="grp-box";box.appendChild(ul);box.appendChild(acts);inn.appendChild(box);fold.appendChild(inn);li.appendChild(fold);
+  b.addEventListener("click",function(){var on=!li.classList.contains("open");GOPEN[id]=on;
+    if(!on&&run.some(function(x){return x.i===state.sel;})){state.sel=null;paintOpen();markSel();}
+    li.classList.toggle("open",on);b.setAttribute("aria-expanded",on);fold.inert=!on;
+    if(on&&state.sel==null)frameGroup(pts);else if(!on&&state.sel==null)fitView();});
+  return li;}
+// opening a walk frames its stops on the map
+function frameGroup(ids){var ps=ids.map(LL);caption();
+  if(embed){if(ps.length>1)embedRoute(ps);else embedPlace(ps[0],15);return;}
+  if(map)fitPts(ps,16);}
 /* ---------- optional extras between stops ---------- */
 // day.options: things left out of the plan, kept for when there's time. They hang after the stop they
 // name ("after": a place id) as one quiet "可选 · N" line and only show in full when someone opens it.
@@ -639,24 +692,36 @@ $("rows").addEventListener("click",function(e){
     if(o&&window.tripChat)window.tripChat.ask(U("多讲讲「{w}」，有什么要注意的？",{w:plain(o.name||"[["+o.place+"]]")}));}});
 function select(i,scroll){state.sel=i;paintOpen();var s=day().segs[i];
   markSel();frame(s);caption();
-  if(scroll===false){var li=document.querySelector('#rows>li[data-i="'+i+'"]');if(li)li.scrollIntoView({block:"center"});}}
+  if(scroll===false){var li=document.querySelector('#rows li[data-i="'+i+'"]');if(li)li.scrollIntoView({block:"center"});}}
 function paintOpen(){
-  var from=STAGE.closest("#rows>li");
-  document.querySelectorAll("#rows>li[data-i]").forEach(function(li){var i=+li.dataset.i,on=i===state.sel;
+  var from=STAGE.closest("#rows li[data-i]");var added=[];
+  document.querySelectorAll("#rows li[data-i]").forEach(function(li){var i=+li.dataset.i,on=i===state.sel;
     li.classList.toggle("open",on);li.querySelector(".row").setAttribute("aria-expanded",on);
-    var d=li.querySelector(".detail:not(.closing)");if(on&&!d){li.appendChild(detail(day().segs[i]));}else if(!on&&d)foldAway(d);});
-  placeMap(document.querySelector("#rows>li.open")||from);
+    var d=li.querySelector(".detail:not(.closing)");if(on&&!d){d=detail(day().segs[i]);li.appendChild(d);added.push(d);}else if(!on&&d)foldAway(d);});
+  var g=state.sel!=null&&document.querySelector('#rows li[data-i="'+state.sel+'"]'),gl=g&&g.closest("li.grp");
+  if(gl&&!gl.classList.contains("open")){gl.classList.add("open");gl.querySelector(".grp-row").setAttribute("aria-expanded",true);gl.querySelector(".grp-fold").inert=false;GOPEN[state.date+"|"+gl.dataset.g]=true;}
+  placeMap(document.querySelector("#rows li[data-i].open")||from);
+  added.forEach(foldIn);
   document.dispatchEvent(new CustomEvent("trip:view"));
 }
-// a closing stop's details fold up before they go (at once when motion is reduced)
-function foldAway(d){if(matchMedia("(prefers-reduced-motion:reduce)").matches){d.remove();return;}
-  d.classList.add("closing");d.addEventListener("animationend",function(){d.remove();},{once:true});setTimeout(function(){if(d.isConnected)d.remove();},400);}
+// A stop's details grow from nothing and shrink back before they go, height included, so the rows
+// below slide instead of jumping (at once when motion is reduced).
+function still(){return matchMedia("(prefers-reduced-motion:reduce)").matches||!Element.prototype.animate;}
+function shut(d){var cs=getComputedStyle(d);
+  return [{height:"0px",paddingTop:"0px",paddingBottom:"0px",marginBottom:"0px",opacity:0,transform:"translateY(-6px)"},
+          {height:d.offsetHeight+"px",paddingTop:cs.paddingTop,paddingBottom:cs.paddingBottom,marginBottom:cs.marginBottom,opacity:1,transform:"none"}];}
+function foldIn(d){if(still())return;d.style.overflow="hidden";
+  var a=d.animate(shut(d),{duration:320,easing:"cubic-bezier(.2,.7,.2,1)"});a.onfinish=a.oncancel=function(){d.style.overflow="";};}
+function foldAway(d){if(still()){d.remove();return;}
+  d.classList.add("closing");d.style.overflow="hidden";
+  var a=d.animate(shut(d).reverse(),{duration:240,easing:"cubic-bezier(.4,0,.6,1)",fill:"forwards"});
+  a.onfinish=function(){d.remove();};setTimeout(function(){if(d.isConnected)d.remove();},600);}
 /* ---------- phones: the map travels with the open stop ---------- */
 // Below 900px the map sits above the plan and scrolls out of sight, so an open stop carries the map in
 // its details and hands it back when it closes. The row you tapped stays where it was on screen.
 var STAGE=document.querySelector(".stage"),MAPHOME=document.querySelector(".mapcol");
 function placeMap(anchor,home){
-  var slot=!home&&!wide.matches&&state.view==="day"&&state.sel!=null?document.querySelector("#rows>li.open .detail-map"):null,to=slot||MAPHOME;
+  var slot=!home&&!wide.matches&&state.view==="day"&&state.sel!=null?document.querySelector("#rows li[data-i].open .detail-map"):null,to=slot||MAPHOME;
   if(STAGE.parentNode===to)return;
   var a=anchor&&anchor.isConnected?anchor:$("rows"),y0=a.getBoundingClientRect().top;
   to.appendChild(STAGE);MAPHOME.classList.toggle("away",!!slot);
@@ -674,6 +739,9 @@ function detail(s){
   if(s.facts&&s.facts.length)h+='<dl class="facts">'+s.facts.map(function(f){return "<div><dt>"+esc(L(f[0]))+"</dt><dd>"+tx(f[1])+"</dd></div>";}).join("")+"</dl>";
   var body=s.body||s.note;if(body)h+='<p class="body">'+tx(body)+"</p>";
   if(s.tips&&s.tips.length)h+='<ul class="tips">'+s.tips.map(function(t){return "<li>"+tx(t)+"</li>";}).join("")+"</ul>";
+  // places[id].story: [label, text] pairs of history and fun facts about the place
+  var sto=s.t==="stop"&&T.places[s.place]&&T.places[s.place].story;
+  if(sto&&sto.length)h+='<section class="story"><h5>'+esc(U("背景和小知识"))+'</h5><dl>'+sto.map(function(x){return "<div><dt>"+esc(L(x[0]))+"</dt><dd>"+tx(x[1])+"</dd></div>";}).join("")+"</dl></section>";
   var acts=[];
   if(s.t==="stop")acts.push('<a class="pill" target="_blank" rel="noopener" href="'+esc(gPlace(s.place))+'">'+ICON.maps+U("在 Google 地图打开")+"</a>");
   if(s.t==="move"&&(s.mode==="drive"||s.mode==="walk"||s.mode==="bike"||s.mode==="train"||s.mode==="bus")){var ends=[s.path[0],s.path[s.path.length-1]].filter(function(x){return typeof x==="string";});
@@ -1047,7 +1115,7 @@ function redrawMap(){
     Object.keys(groups).forEach(function(pl){var stops=groups[pl];
       addMarker(N[pl],stops.map(function(s){return s.num;}).join("·"),KCOL[stops[0].kind]||KCOL.visit,plain(stops[0].name||"[["+pl+"]]"),function(m){
         var cur=state.sel!=null?D.segs[state.sel]:null,idx=stops.indexOf(cur),next=stops[(idx+1)%stops.length];
-        select(next.i);var li=document.querySelector('#rows>li[data-i="'+next.i+'"]');if(li)li.scrollIntoView({block:"nearest",behavior:"smooth"});}).stops=stops;});
+        select(next.i);var li=document.querySelector('#rows li[data-i="'+next.i+'"]');if(li)li.scrollIntoView({block:"nearest",behavior:"smooth"});}).stops=stops;});
   }else{ // overview: where you sleep each night
     var stays={};T.days.forEach(function(X){if(X.stay)(stays[X.stay]=stays[X.stay]||[]).push(X);});
     Object.keys(stays).forEach(function(pl){var ds=stays[pl];

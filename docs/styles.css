@@ -235,6 +235,39 @@ li.open>.row{background:var(--surface);box-shadow:inset 0 0 0 1px var(--line);bo
 li.open>.row .chev{transform:rotate(180deg)}
 li.now>.row .t{color:var(--sun);font-weight:600}
 /* optional extras between stops (day.options): one quiet line, opened by hand */
+/* a walk through several stops: one row, opened into its stops and walks */
+.grp-row .num{background:var(--moss);color:#fff}
+.grp-row .num svg{width:18px;height:18px;fill:none;stroke:#fff;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.grp-row .chips{grid-column:3;display:flex;flex-wrap:wrap;align-items:center;gap:4px;margin-top:6px;font-size:12.5px;color:var(--muted)}
+.grp-row .chip{background:var(--surface-2);border:1px solid var(--line);border-radius:7px;padding:1px 7px;color:var(--ink)}
+.grp-row .chip.back{background:transparent;border-style:dashed;color:var(--muted)}
+.grp-row .ar{color:var(--muted)}
+.grp.open>.grp-row{background:var(--surface);box-shadow:inset 0 0 0 1px var(--line);border-radius:14px 14px 0 0}
+.grp.open>.grp-row .chev{transform:rotate(180deg)}
+.grp.now>.grp-row .t{color:var(--sun);font-weight:600}
+.grp-fold{display:grid;grid-template-rows:0fr;opacity:0}
+.grp.open>.grp-fold{grid-template-rows:1fr;opacity:1}
+.grp-in{min-height:0;overflow:hidden}
+.grp-box{background:var(--surface);border:1px solid var(--line);border-top:0;border-radius:0 0 14px 14px;margin:0 0 10px;padding:2px 6px 14px}
+.grp-list{list-style:none;margin:0;padding:0;position:relative}
+.grp-list::before{content:"";position:absolute;left:81px;top:14px;bottom:14px;border-left:2px dotted var(--line)}
+.grp-list .row{padding-block:6px}
+.grp-list .row:hover{background:var(--surface-2)}
+.grp-list .row .num{box-shadow:0 0 0 3px var(--surface);width:26px;height:26px;border-radius:8px;font-size:12px;margin-left:3px}
+.grp-list .row.move .num{width:26px;box-shadow:none;background:transparent}
+.grp-list .row .n{font-size:14.5px;padding-top:2px}
+.grp-list .row.move{padding-block:0}
+.grp-list .row.move .n{font-size:12.5px}
+.grp-list .row.move .chev{opacity:.5}
+.grp-list li.open>.row{background:var(--surface-2);box-shadow:inset 0 0 0 1px var(--line)}
+.grp-list .detail{background:var(--surface-2);padding-left:114px}
+.grp-acts{padding:10px 0 0 114px}
+/* history and fun facts about a place */
+.story{border-top:1px solid var(--line);padding-top:10px;max-width:68ch}
+.story h5{margin:0 0 6px;font-size:12px;letter-spacing:.05em;color:var(--muted);font-weight:600}
+.story dl{margin:0;display:grid;gap:8px}
+.story dt{font-size:11px;letter-spacing:.05em;color:var(--sun);font-weight:600}
+.story dd{margin:0;font-size:14px;line-height:1.6}
 .opts{padding:0 12px 4px 120px}
 .opt-toggle{display:inline-flex;align-items:center;gap:6px;border:0;background:transparent;padding:2px 0;font:inherit;font-size:12.5px;color:var(--muted);cursor:pointer}
 .opt-toggle:hover,.opts.open .opt-toggle{color:var(--ink)}
@@ -260,6 +293,7 @@ li.now>.row .t{color:var(--sun);font-weight:600}
 .draftbox p{color:var(--muted)}
 .draftbox p b{color:var(--ink);font-weight:600}
 
+.detail.closing{pointer-events:none}
 .detail{margin:0 0 10px;padding:4px 18px 16px 120px;background:var(--surface);border:1px solid var(--line);border-top:0;border-radius:0 0 14px 14px;display:grid;gap:12px}
 .facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:0}
 .facts div{min-width:0;border-left:2px solid var(--line);padding-left:10px}
@@ -775,13 +809,14 @@ body.lb-open{overflow:hidden}
   @keyframes grow{from{opacity:0;transform:scaleX(.6)}to{opacity:1;transform:none}}
 
   /* details open smoothly */
-  .detail{animation:open .28s cubic-bezier(.2,.7,.2,1);transform-origin:top}
   @keyframes open{from{opacity:0;transform:translateY(-6px) scaleY(.96)}to{opacity:1;transform:none}}
   .row .chev,.b-chev{transition:transform .25s cubic-bezier(.3,.8,.25,1)}
-  .detail.closing{animation:shut .2s cubic-bezier(.4,0,.6,1) forwards;pointer-events:none}
   @keyframes shut{to{opacity:0;transform:translateY(-6px) scaleY(.96)}}
   /* 可选: folds open and shut, the cards drifting in */
   .opt-fold{transition:grid-template-rows .34s cubic-bezier(.2,.7,.2,1),opacity .26s ease}
+  .grp-fold{transition:grid-template-rows .34s cubic-bezier(.2,.7,.2,1),opacity .26s ease}
+  .grp-box{transition:transform .34s cubic-bezier(.2,.7,.2,1)}
+  .grp:not(.open) .grp-box{transform:translateY(-8px)}
   .opt-ar{transition:transform .25s cubic-bezier(.3,.8,.25,1)}
   .opt-card,.opt-mv,.opt-or{transition:transform .34s cubic-bezier(.2,.7,.2,1)}
   .opts:not(.open) .opt-card,.opts:not(.open) .opt-mv,.opts:not(.open) .opt-or{transform:translateY(-8px)}
@@ -881,6 +916,10 @@ body.lb-open{overflow:hidden}
   .row .num{width:30px;height:30px}
   .detail{padding:4px 14px 14px}
   .opts{padding:0 6px 4px 90px}
+  .grp-list::before{left:57px}
+  .grp-list .detail{padding-left:14px}
+  .grp-acts{padding-left:8px}
+  .grp-box{padding-inline:0}
   .b-body{padding:4px 16px 16px}
   .booking>summary{padding:12px}
   .b-date{width:48px;height:48px}

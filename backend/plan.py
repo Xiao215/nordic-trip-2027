@@ -30,7 +30,8 @@ MAPS = {"/places", "/countries", "/kinds"}  # objects keyed by id rather than re
 # Chinese text the page doesn't look up in en.json (place and country names carry their own English)
 NO_EN = {"/places/{}/zh", "/countries/{}/zh"}
 # fields the page understands that the plan may not use yet: pattern -> {field: kinds}
-EXTRA = {"/bookings/[]": {"booked": {"bool"}}, "/days/[]": {"options": {"list"}}}
+EXTRA = {"/bookings/[]": {"booked": {"bool"}}, "/days/[]": {"options": {"list"}}, "/days/[]/segs/[]": {"group": {"str"}},
+         "/places/{}": {"story": {"list"}}}
 MODES = {"drive", "flight", "ferry", "train", "bus", "walk", "bike"}
 KEEP = 400  # snapshots kept for undo
 # field names in words, for the approval card
@@ -47,6 +48,7 @@ FIELD = {
     "local": ("当地名", "Local name"), "en": ("英文名", "English name"), "ll": ("坐标", "Coordinates"), "photos": ("照片", "Photos"),
     "options": ("可选", "Optional"), "after": ("放在哪站后面", "After stop"), "why": ("为什么没排", "Why not planned"),
     "in": ("怎么过去", "Getting there"), "out": ("怎么回来", "Getting back"),
+    "group": ("步行路线", "Walk"), "story": ("背景和小知识", "Background & fun facts"),
 }
 
 
