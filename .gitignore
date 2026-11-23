@@ -10,3 +10,5 @@ backend/expenses.json
 backend/expenses.tmp
 backend/drivers.json
 backend/drivers.tmp
+backend/options.json
+backend/options.tmp

@@ -140,6 +140,8 @@ function sendLabel(){send.setAttribute("aria-label",busy?Z("停止回答","Stop 
 // a question asked mid-answer waits its turn instead of cutting the answer off
 function enqueue(q){queue.push({q:q,el:note(Z("排队中：","Up next: ")+q)});}
 function next(){if(busy||!queue.length)return;var n=queue.shift();n.el.remove();ask(n.q);}
+// the name typed on the options board or picked as payer in the expense log, so the assistant knows who asks
+function myName(){try{return String(JSON.parse(localStorage.getItem("nt-me"))||"").slice(0,40);}catch(e){return "";}}
 function ask(q){
   q=q.trim();if(!q)return;
   openChat();
@@ -155,7 +157,7 @@ function ask(q){
 
   function finish(stopped){var m={role:"assistant",content:acc,ts:Date.now(),stopped:stopped||undefined};S.msgs.push(m);save();fillBot(el,m);}
   fetch(API+"/api/chat",{method:"POST",signal:ctrl&&ctrl.signal,headers:{"Content-Type":"application/json","X-Access-Code":S.code||""},
-    body:JSON.stringify({name:"",messages:history(),context:ctx})})
+    body:JSON.stringify({name:myName(),messages:history(),context:ctx})})
   .then(function(r){
     if(r.status===401){S.code=null;needCode=true;save();throw new Error(Z("这个服务器需要访问码。","This server needs the access code."));}
     if(!r.ok)return r.json().catch(function(){return {};}).then(function(j){throw new Error(j.detail||Z("行程服务器出错了（"+r.status+"）。","The trip server had a problem ("+r.status+")."));});
@@ -165,6 +167,7 @@ function ask(q){
       if(ev.type==="text"){if(!el){st.remove();el=botLine(null);}acc+=ev.text;el.querySelector(".m-content").innerHTML=md(acc);scroll();}
       else if(ev.type==="status"&&!acc){st.querySelector(".w").textContent=ev.text;}
       else if(ev.type==="error"){throw new Error(ev.message);}
+      else if(ev.type==="options"){document.dispatchEvent(new CustomEvent("trip:options"));} // it added to the options board
     }
     function pump(){return reader.read().then(function(res){
       buf+=dec.decode(res.value||new Uint8Array(),{stream:!res.done});

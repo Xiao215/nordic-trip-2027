@@ -127,7 +127,7 @@ def render_trip(t: dict) -> str:
             out.append(f"    Map: {_maps(places[s['place']]['ll'])}")
     out += ["", "## Bookings"]
     for b in t["bookings"]:
-        out.append(f"### {tx(b['what'])} (for {tx(b.get('for', ''))}; book: {tx(b.get('when', b.get('opens', '')))})")
+        out.append(f"### {tx(b['what'])} (id: {b['id']}; for {tx(b.get('for', ''))}; book: {tx(b.get('when', b.get('opens', '')))})")
         if b.get("cost"):
             out.append(f"Cost: {tx(b['cost'])}")
         if b.get("summary"):
@@ -161,7 +161,9 @@ SYSTEM_TEMPLATE = """你是「北欧之旅 2027」的行程助手。这是一趟
 
 先根据下面的行程回答。行程里没有的（天气、营业时间、路况和 F 路开放情况、价格、渡轮和航班时刻、门票），就上网查，并简短说明来源；冰岛路况以 road.is 和 safetravel.is 为准。行程和网上信息不一致时要指出来。不知道就说不知道，绝不编造时间、价格或电话。
 
-回答要短而实用：先用一两句话给出答案，确实有帮助时再加几条要点。时间用当地时间、24 小时制（冰岛 UTC+0，挪威、瑞典、丹麦夏令时 UTC+2）。有人问某地在哪，就附上 Google 地图链接。价格用当地货币（ISK、NOK、SEK、DKK）；如果 <context> 里有 currency（CAD、CNY 或 USD），在括号里附上大约的换算。有人想改行程时，说明改动会影响什么（时间、预订、还车地点等），并提醒网页只有在行程作者修改 trip.json 后才会更新。整个行程都还是初步的，欢迎帮忙出主意、调整，但不要说哪部分“已定”或“是草案”。
+回答要短而实用：先用一两句话给出答案，确实有帮助时再加几条要点。时间用当地时间、24 小时制（冰岛 UTC+0，挪威、瑞典、丹麦夏令时 UTC+2）。有人问某地在哪，就附上 Google 地图链接。价格用当地货币（ISK、NOK、SEK、DKK）；如果 <context> 里有 currency（CAD、CNY 或 USD），在括号里附上大约的换算。有人想改行程时，说明改动会影响什么（时间、预订、还车地点等），并提醒网页上的行程只有在行程作者修改 trip.json 后才会更新。
+
+网页上还有一块大家共用的「候选」板：每个预订（或大家自己开的话题）下面可以放几个候选（酒店、小屋、游船、餐厅……），大家投票、留言，最后选定一个。想知道大家挑了什么、投了谁，用 list_options 看。有人请你把候选加进去、存下来、列到板上时，先上网查到真实的页面，再用 add_options 加进对应的预订（用 trip_plan 里每个预订后面的 id）或话题；只是问有什么推荐时，先回答，不要自己加。加完告诉对方加了哪几个、加在哪里，大家可以在「候选」页投票。整个行程都还是初步的，欢迎帮忙出主意、调整，但不要说哪部分“已定”或“是草案”。
 
 签证、入境、TRV、ETIAS 这类问题要看对方用哪本护照、住在哪里：<context> 里有 passport 时，按 trip_plan 里对应那本护照的步骤回答；没有时先问一句，或者把中国护照和加拿大护照的情况分开说。
 
@@ -277,19 +279,24 @@ async def chat(body: ChatIn, x_access_code: str | None = Header(default=None)):
 
     lang_en = bool(body.context and body.context.get("lang") == "en")
     return StreamingResponse(
-        answer(merged, lang_en),
+        answer(merged, lang_en, body.name.strip()),
         media_type="text/event-stream",
         headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
     )
 
 
-async def answer(messages: list[dict], lang_en: bool = False):
+async def answer(messages: list[dict], lang_en: bool = False, asker: str = ""):
     extra = {}
     if FALLBACKS != "off":
         extra = {"betas": ["server-side-fallback-2026-07-01"], "fallbacks": FALLBACKS}
-    tools = [WEB_SEARCH]
+    # tool inputs here are short, so they stream as generated (and are validated before running); a local
+    # Anthropic-compatible server may not know the field, so it's left off there
+    own = [dict(t, eager_input_streaming=True) for t in OPTION_TOOLS] if not LOCAL_AI else OPTION_TOOLS
+    tools = [WEB_SEARCH, *own]
+    wrote = False
     try:
-        for _ in range(4):  # a long web search can pause the turn; resume it a few times at most
+        # a long web search can pause the turn, and each round of tool calls takes another request
+        for _ in range(8):
             try:
                 stream_cm = client.beta.messages.stream(
                     model=MODEL,
@@ -304,13 +311,21 @@ async def answer(messages: list[dict], lang_en: bool = False):
             except anthropic.BadRequestError as e:
                 # Some local servers don't offer web search; answer from the plan alone instead.
                 if tools and "tool" in str(e).lower():
-                    print("[chat] web search not available on this AI server; continuing without it", flush=True)
-                    tools = []
+                    if WEB_SEARCH in tools:
+                        print("[chat] web search not available on this AI server; continuing without it", flush=True)
+                        tools = [t for t in tools if t is not WEB_SEARCH]
+                    else:
+                        print("[chat] tools not available on this AI server; answering from the plan alone", flush=True)
+                        tools = []
                     continue
                 raise
             try:
+                fresh = True
                 async for event in stream:
                     if event.type == "text":
+                        if fresh and wrote:  # text after a tool call starts a new paragraph
+                            yield sse({"type": "text", "text": "\n\n"})
+                        fresh, wrote = False, True
                         yield sse({"type": "text", "text": event.text})
                     elif event.type == "content_block_start":
                         kind = event.content_block.type
@@ -318,7 +333,15 @@ async def answer(messages: list[dict], lang_en: bool = False):
                             yield sse({"type": "status", "text": "Searching the web" if lang_en else "正在上网查"})
                         elif kind == "web_search_tool_result":
                             yield sse({"type": "status", "text": "Reading results" if lang_en else "正在看搜索结果"})
+                        elif kind == "tool_use":
+                            look = event.content_block.name == "list_options"
+                            yield sse({"type": "status", "text": ("Reading the options board" if look else "Adding to the options board") if lang_en
+                                       else ("正在看候选板" if look else "正在加进候选板")})
                 final = await stream.get_final_message()
+            except ValueError:
+                # a tool call whose streamed input isn't JSON at all: nothing to answer, so ask again
+                print("[chat] unreadable tool input; asking again", flush=True)
+                continue
             finally:
                 await stream_cm.__aexit__(None, None, None)
 
@@ -326,6 +349,19 @@ async def answer(messages: list[dict], lang_en: bool = False):
             print(f"[chat] stop={final.stop_reason} in={u.input_tokens} cache_read={u.cache_read_input_tokens} out={u.output_tokens}", flush=True)
             if final.stop_reason == "pause_turn":
                 messages.append({"role": "assistant", "content": final.content})
+                continue
+            if final.stop_reason == "tool_use":
+                messages.append({"role": "assistant", "content": final.content})
+                results, changed = [], False
+                for b in final.content:
+                    if b.type != "tool_use":
+                        continue
+                    text, err, did = await run_option_tool(b.name, b.input if isinstance(b.input, dict) else {}, asker, lang_en)
+                    changed = changed or did
+                    results.append({"type": "tool_result", "tool_use_id": b.id, "content": text, **({"is_error": True} if err else {})})
+                if changed:
+                    yield sse({"type": "options"})
+                messages.append({"role": "user", "content": results})
                 continue
             if final.stop_reason == "refusal":
                 yield sse({"type": "error", "message": "助手没法回答这个问题，换个说法试试。"})
@@ -525,6 +561,372 @@ async def delete_driver(body: PersonIn, x_access_code: str | None = Header(defau
         data["assign"] = {k: v for k, v in data["assign"].items() if v != body.name}
         write_json(DRIVERS_FILE, data)
         return data
+
+
+# ---------- shared options board ----------
+# Hotels, cabins, tours: anyone with the code pastes a link under a booking from trip.json (its id) or under a
+# topic of their own, the group votes and comments, and one option per slot gets picked. Writes arrive as a
+# batch of small operations (the page queues them offline, ids are picked by the page so a retry is harmless),
+# and every write answers with the whole board.
+
+OPTIONS_FILE = Path(__file__).with_name("options.json")
+ID = r"^[A-Za-z0-9_-]{6,40}$"
+SLOT = re.compile(r"^[\w-]{1,60}$")
+_options_lock = asyncio.Lock()
+
+
+def read_options() -> dict:
+    try:
+        data = json.loads(OPTIONS_FILE.read_text())
+    except FileNotFoundError:
+        data = {}
+    return {"topics": data.get("topics", []), "items": data.get("items", []), "picked": data.get("picked", {})}
+
+
+def booking_ids() -> set[str]:
+    try:
+        return {b["id"] for b in json.loads(TRIP_FILE.read_text()).get("bookings", [])}
+    except (OSError, ValueError, KeyError):
+        return set()
+
+
+def now_ms() -> int:
+    return int(datetime.now(TZ).timestamp() * 1000)
+
+
+def clean(s: str | None, n: int) -> str:
+    return re.sub(r"\s+", " ", s or "").strip()[:n]
+
+
+def web_url(u: str | None) -> str:
+    u = (u or "").strip()
+    return u if re.match(r"^https?://[^\s/]+", u) and len(u) <= 1000 else ""
+
+
+class OptionOp(BaseModel):
+    op: str = Field(pattern="^(topic|untopic|add|edit|del|vote|comment|uncomment|pick)$")
+    id: str | None = Field(default=None, pattern=ID)
+    slot: str | None = Field(default=None, max_length=60)
+    title: str | None = Field(default=None, max_length=200)
+    url: str | None = Field(default=None, max_length=1000)
+    image: str | None = Field(default=None, max_length=1000)
+    site: str | None = Field(default=None, max_length=80)
+    price: str | None = Field(default=None, max_length=80)
+    note: str | None = Field(default=None, max_length=800)
+    by: str | None = Field(default=None, max_length=24)
+    v: int | None = Field(default=None, ge=-1, le=1)
+    cid: str | None = Field(default=None, pattern=ID)
+    text: str | None = Field(default=None, max_length=500)
+
+
+class OptionOpsIn(BaseModel):
+    ops: list[OptionOp] = Field(min_length=1, max_length=100)
+
+
+def apply_option(data: dict, o: OptionOp, bookings: set[str], via: str | None = None) -> None:
+    """Applies one change to the board; raises ValueError with a message for the person if it can't."""
+    items, topics = data["items"], data["topics"]
+    item = next((x for x in items if x["id"] == o.id), None) if o.id else None
+    by = clean(o.by, 24)
+    if o.op == "topic":
+        if not o.id or any(t["id"] == o.id for t in topics):
+            return
+        title = clean(o.title, 80)
+        if not title:
+            raise ValueError("话题要有个名字。")
+        if len(topics) >= 60:
+            raise ValueError("话题太多了，先删掉几个。")
+        topics.append({"id": o.id, "title": title, "by": by, "ts": now_ms()})
+    elif o.op == "untopic":
+        data["topics"] = [t for t in topics if t["id"] != o.id]
+        data["items"] = [x for x in items if x["slot"] != o.id]
+        data["picked"].pop(o.id, None)
+    elif o.op == "add":
+        if not o.id or item:
+            return  # already saved (the page retried after a dropped connection)
+        slot = o.slot or ""
+        if slot not in bookings and not any(t["id"] == slot for t in data["topics"]):
+            raise ValueError("这个候选要放在的预订或话题已经不在了。")
+        url, title = web_url(o.url), clean(o.title, 200)
+        if not title and not url:
+            raise ValueError("候选至少要有名字或链接。")
+        if len(items) >= 1500:
+            raise ValueError("候选太多了，先删掉一些。")
+        new = {"id": o.id, "slot": slot, "url": url, "title": title, "image": web_url(o.image), "site": clean(o.site, 80),
+               "price": clean(o.price, 80), "note": (o.note or "").strip()[:800], "by": by, "ts": now_ms(), "votes": {}, "comments": []}
+        if via:
+            new["via"] = via
+        items.append(new)
+    elif o.op == "pick" and not o.id:
+        data["picked"].pop(o.slot or "", None)
+    elif not item:
+        return  # deleted meanwhile on another phone: nothing left to change
+    elif o.op == "edit":
+        for k, n in (("title", 200), ("price", 80), ("site", 80)):
+            if getattr(o, k) is not None:
+                item[k] = clean(getattr(o, k), n)
+        if o.note is not None:
+            item["note"] = o.note.strip()[:800]
+        if o.url is not None:
+            item["url"] = web_url(o.url)
+        if o.image is not None:
+            item["image"] = web_url(o.image)
+        if not item["title"] and not item["url"]:
+            raise ValueError("候选至少要有名字或链接。")
+    elif o.op == "del":
+        data["items"] = [x for x in items if x["id"] != o.id]
+        if data["picked"].get(item["slot"]) == o.id:
+            del data["picked"][item["slot"]]
+    elif o.op == "vote":
+        if not by:
+            raise ValueError("先写上你是谁，再投票。")
+        if o.v:
+            item["votes"][by] = o.v
+        else:
+            item["votes"].pop(by, None)
+    elif o.op == "comment":
+        text = (o.text or "").strip()[:500]
+        if not by or not text or not o.cid:
+            raise ValueError("留言要写上你是谁和内容。")
+        if not any(c["id"] == o.cid for c in item["comments"]) and len(item["comments"]) < 200:
+            item["comments"].append({"id": o.cid, "by": by, "text": text, "ts": now_ms()})
+    elif o.op == "uncomment":
+        item["comments"] = [c for c in item["comments"] if c["id"] != o.cid]
+    elif o.op == "pick":
+        data["picked"][item["slot"]] = item["id"]
+
+
+@app.get("/api/options")
+async def options(x_access_code: str | None = Header(default=None)):
+    check_code(x_access_code)
+    return read_options()
+
+
+@app.post("/api/options")
+async def change_options(body: OptionOpsIn, x_access_code: str | None = Header(default=None)):
+    check_code(x_access_code)
+    bookings, errors = booking_ids(), []
+    async with _options_lock:
+        data = read_options()
+        for o in body.ops:
+            try:
+                apply_option(data, o, bookings)
+            except ValueError as e:
+                errors.append(str(e))
+        write_json(OPTIONS_FILE, data)
+    return {**data, "errors": errors}
+
+
+# ---------- link previews ----------
+# Pasting a link fills in the name, photo and price from the page's preview tags (the ones chat apps use).
+# The backend is reachable from the internet, so it only fetches public web addresses: never this machine
+# or the local network, and it rechecks every redirect.
+
+PREVIEW_UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Safari/605.1.15"
+_previews: dict[str, dict] = {}
+
+
+async def public_url(url: str) -> bool | None:
+    """True for a public web address, False for this machine or a private network, None if it doesn't resolve."""
+    import ipaddress
+    import socket
+    from urllib.parse import urlsplit
+
+    p = urlsplit(url)
+    if p.scheme not in ("http", "https") or not p.hostname or p.port not in (None, 80, 443):
+        return False
+    try:
+        infos = await asyncio.get_running_loop().getaddrinfo(p.hostname, p.port or (443 if p.scheme == "https" else 80), type=socket.SOCK_STREAM)
+    except OSError:
+        return None
+    return bool(infos) and all(ipaddress.ip_address(i[4][0]).is_global for i in infos)
+
+
+def _meta(html: str, *keys: str) -> str:
+    import html as H
+
+    for k in keys:
+        for pat in (rf'<meta[^>]+(?:property|name|itemprop)\s*=\s*["\']{re.escape(k)}["\'][^>]*?content\s*=\s*["\']([^"\']*)',
+                    rf'<meta[^>]+content\s*=\s*["\']([^"\']*)["\'][^>]*?(?:property|name|itemprop)\s*=\s*["\']{re.escape(k)}["\']'):
+            m = re.search(pat, html, re.I)
+            if m and m.group(1).strip():
+                return H.unescape(m.group(1)).strip()
+    return ""
+
+
+def parse_preview(html: str, url: str) -> dict:
+    import html as H
+    from urllib.parse import urljoin, urlsplit
+
+    title = _meta(html, "og:title", "twitter:title")
+    if not title:
+        m = re.search(r"<title[^>]*>(.*?)</title>", html, re.I | re.S)
+        title = H.unescape(m.group(1)).strip() if m else ""
+    image = _meta(html, "og:image:secure_url", "og:image", "twitter:image", "twitter:image:src")
+    price = _meta(html, "product:price:amount", "og:price:amount")
+    cur = _meta(html, "product:price:currency", "og:price:currency")
+    if not price:  # schema.org data, e.g. "priceRange": "€€" or an offer's price
+        m = re.search(r'"price"\s*:\s*"?([\d.,]+)"?[^{}]*?"priceCurrency"\s*:\s*"([A-Z]{3})"', html) or \
+            re.search(r'"priceCurrency"\s*:\s*"([A-Z]{3})"[^{}]*?"price"\s*:\s*"?([\d.,]+)', html)
+        if m:
+            a, b = m.groups()
+            price, cur = (a, b) if a[0].isdigit() else (b, a)
+    return {
+        "url": url,
+        "title": clean(title, 200),
+        "image": web_url(urljoin(url, image)) if image else "",
+        "site": clean(_meta(html, "og:site_name") or (urlsplit(url).hostname or "").removeprefix("www."), 80),
+        "price": clean(f"{price} {cur}".strip(), 80) if price else "",
+        "desc": clean(_meta(html, "og:description", "description", "twitter:description"), 300),
+    }
+
+
+async def link_preview(url: str, lang: str = "zh") -> dict:
+    try:  # the HTTP client that comes with the anthropic SDK: httpx2 from 1.x, httpx before
+        import httpx2 as httpx
+    except ImportError:
+        import httpx
+    from urllib.parse import urljoin
+
+    url = web_url(url)
+    if not url:
+        raise HTTPException(400, "这不是一个网址。")
+    if url in _previews:
+        return _previews[url]
+    out = {"url": url, "title": "", "image": "", "site": "", "price": "", "desc": ""}
+    headers = {"User-Agent": PREVIEW_UA, "Accept": "text/html,application/xhtml+xml",
+               "Accept-Language": "en-US,en;q=0.8" if lang == "en" else "zh-CN,zh;q=0.9,en;q=0.7"}
+    try:
+        async with httpx.AsyncClient(timeout=8, follow_redirects=False, headers=headers) as http:
+            here = url
+            for _ in range(5):
+                ok = await public_url(here)
+                if ok is None:
+                    break
+                if not ok:
+                    raise HTTPException(400, "只能预览公开的网页。")
+                async with http.stream("GET", here) as r:
+                    if r.is_redirect and r.headers.get("location"):
+                        here = urljoin(here, r.headers["location"])
+                        continue
+                    if r.status_code >= 400 or "html" not in r.headers.get("content-type", "html"):
+                        break
+                    buf = b""
+                    async for chunk in r.aiter_bytes():
+                        buf += chunk
+                        if len(buf) > 1_500_000 or (len(buf) > 400_000 and b"</head>" in buf):
+                            break
+                    html = buf.decode(r.encoding or "utf-8", "replace")
+                    hop = re.search(r'<meta[^>]+http-equiv\s*=\s*["\']?refresh["\']?[^>]+content\s*=\s*["\']\s*\d*\s*;\s*url\s*=\s*([^"\'>\s]+)', html, re.I)
+                    if hop and len(html) < 20000:  # a "redirecting..." page rather than the real one
+                        here = urljoin(here, hop.group(1))
+                        continue
+                    out = parse_preview(html, url)
+                    break
+    except httpx.HTTPError:
+        pass  # a site that blocks previews still gets saved, with its address as the name until someone types one
+    if not out["site"]:
+        out["site"] = re.sub(r"^https?://(www\.)?([^/:]+).*", r"\2", url)
+    if not out["title"]:  # sites that block previews (Booking.com) often still name the place in the link
+        slug = re.sub(r"(\.[a-z]{2}(-[a-z]{2})?)?\.html?$", "", url.split("?")[0].rstrip("/").rsplit("/", 1)[-1])
+        if re.search(r"[A-Za-z]{3}", slug) and "." not in slug:
+            out["title"] = clean(re.sub(r"[-_+]+", " ", slug), 200).title()
+    if out["image"].startswith("http://"):
+        out["image"] = "https://" + out["image"][7:]
+    if len(_previews) > 300:
+        _previews.clear()
+    _previews[url] = out
+    return out
+
+
+@app.get("/api/preview")
+async def preview(url: str, lang: str = "zh", x_access_code: str | None = Header(default=None)):
+    check_code(x_access_code)
+    return await link_preview(url, lang)
+
+
+# ---------- the assistant's tools for the options board ----------
+
+class ToolOption(BaseModel):
+    title: str = Field(min_length=1, max_length=200)
+    url: str = Field(default="", max_length=1000)
+    price: str = Field(default="", max_length=80)
+    note: str = Field(default="", max_length=800)
+
+
+class AddOptionsIn(BaseModel):
+    slot: str = Field(default="", max_length=60)
+    new_topic: str = Field(default="", max_length=80)
+    options: list[ToolOption] = Field(min_length=1, max_length=8)
+
+
+OPTION_TOOLS = [
+    {
+        "name": "list_options",
+        "description": "Read the group's shared options board: the topics, every option saved under each booking or topic, "
+                       "votes, comments and which option is picked. Use it before adding, or when asked what's been suggested.",
+        "input_schema": {"type": "object", "properties": {}, "additionalProperties": False},
+    },
+    {
+        "name": "add_options",
+        "description": "Save options (hotels, cabins, tours, restaurants...) to the shared options board so the group can vote. "
+                       "Only call this when the person asks to add, save or list options on the board, not when they only ask "
+                       "for ideas. Put them under a booking with its id from trip_plan (\"(id: ...)\" after each booking), or under "
+                       "an existing topic id from list_options, or pass new_topic to start a topic. Give each option its real "
+                       "page URL when you have one (it fills in the photo), a price as the site shows it, and a one-line note on "
+                       "why it fits. Never invent URLs or prices.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "slot": {"type": "string", "description": "A booking id from trip_plan or a topic id from list_options."},
+                "new_topic": {"type": "string", "description": "Instead of slot: the name of a new topic, e.g. 'Lofoten cabin'."},
+                "options": {"type": "array", "maxItems": 8, "items": {
+                    "type": "object",
+                    "properties": {"title": {"type": "string"}, "url": {"type": "string"}, "price": {"type": "string"}, "note": {"type": "string"}},
+                    "required": ["title"], "additionalProperties": False}},
+            },
+            "required": ["options"],
+            "additionalProperties": False,
+        },
+    },
+]
+
+
+def _new_id() -> str:
+    import secrets
+
+    return secrets.token_urlsafe(9).replace("-", "a").replace("_", "b")
+
+
+async def run_option_tool(name: str, raw: dict, asker: str, lang_en: bool) -> tuple[str, bool, bool]:
+    """Runs one of the assistant's tools: (result for the model, is_error, whether the board changed)."""
+    if name == "list_options":
+        data = read_options()
+        return json.dumps(data, ensure_ascii=False)[:30000], False, False
+    if name != "add_options":
+        return f"Unknown tool {name}.", True, False
+    try:
+        body = AddOptionsIn.model_validate(raw)
+    except ValueError as e:
+        return json.dumps({"INVALID_INPUT": str(e)[:500]}), True, False
+    previews = await asyncio.gather(*[link_preview(o.url, "en" if lang_en else "zh") if web_url(o.url) else asyncio.sleep(0)
+                                      for o in body.options], return_exceptions=True)
+    bookings, by = booking_ids(), clean(asker, 24) or "行程助手"
+    async with _options_lock:
+        data = read_options()
+        slot = body.slot
+        try:
+            if body.new_topic.strip():
+                slot = _new_id()
+                apply_option(data, OptionOp(op="topic", id=slot, title=body.new_topic, by=by), bookings)
+            for o, pv in zip(body.options, previews):
+                pv = pv if isinstance(pv, dict) else {}
+                apply_option(data, OptionOp(op="add", id=_new_id(), slot=slot, title=o.title, url=o.url, image=pv.get("image"),
+                                            site=pv.get("site"), price=o.price or pv.get("price"), note=o.note, by=by), bookings, via="chat")
+        except ValueError as e:
+            return json.dumps({"error": str(e), "booking_ids": sorted(bookings)}, ensure_ascii=False), True, False
+        write_json(OPTIONS_FILE, data)
+    return json.dumps({"saved": len(body.options), "slot": slot}), False, True
 
 
 # ---------- the site itself ----------

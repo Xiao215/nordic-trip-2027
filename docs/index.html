@@ -16,7 +16,7 @@
 <div class="app">
 
   <main class="content">
-    <!-- top bar: brand, the three views, currency and language -->
+    <!-- top bar: brand, the tabs, currency and language -->
     <div class="sticky" id="sticky">
       <nav class="topbar" aria-label="主导航" data-i18n-aria-label="主导航">
         <a class="brand" href="#all" aria-label="北欧之旅 2027">
@@ -27,6 +27,7 @@
           <button role="tab" class="seg-btn" data-view="all" aria-selected="true"><span data-i18n="总览" data-i18n-sm="Trip">总览</span> <small id="allSub"></small></button>
           <button role="tab" class="seg-btn" data-view="day" aria-selected="false"><span data-i18n="每日" data-i18n-sm="Day">每日</span> <small id="daySub"></small></button>
           <button role="tab" class="seg-btn" data-view="prep" aria-selected="false"><span data-i18n="准备" data-i18n-sm="Prep">准备</span> <small id="prepCount"></small></button>
+          <button role="tab" class="seg-btn" data-view="opts" aria-selected="false"><span data-i18n="候选" data-i18n-sm="Ideas">候选</span> <small id="optsSub"></small></button>
           <button role="tab" class="seg-btn" data-view="money" aria-selected="false"><span data-i18n="账本" data-i18n-sm="Money">账本</span> <small id="moneySub"></small></button>
         </div>
         <!-- phones: currency and language fold into this one button -->
@@ -96,6 +97,13 @@
         <p id="footnote"></p>
         <p id="sources"></p>
       </footer>
+    </section>
+
+    <section id="optsView" class="view" hidden>
+      <div class="tl-head"><h2 data-i18n="候选">候选</h2><span class="hint" data-i18n="看到好的就贴上来，大家投票、留言，再选定一个">看到好的就贴上来，大家投票、留言，再选定一个</span></div>
+      <div id="optsGate"></div>
+      <form class="opt-add" id="optAdd" autocomplete="off" hidden></form>
+      <div id="optBoard"></div>
     </section>
 
     <section id="moneyView" class="view" hidden>

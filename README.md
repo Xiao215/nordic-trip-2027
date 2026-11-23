@@ -4,9 +4,11 @@ Trip planner for Jul 4 – Aug 1, 2027 (Iceland → Norway → Stockholm → Vis
 
 A currency menu next to the language switch shows every price in the local currency as written (ISK, NOK, SEK, DKK, €) or converted to CAD, CNY or USD with the latest rates from [open.er-api.com](https://open.er-api.com) (cached for 12 hours, with a fallback in `trip.json` under `fx`). Hover a converted price to see the original.
 
-What's on it: an overview (route ribbon, 4-week calendar with how full each day is, driver rotation, route legs), one day at a time (forecast or July normals, sunrise and sunset, transport and outdoor totals, the day's pace, who drives, what to bring, the timeline), a Google map that shows whatever you open (on phones it opens inside the stop you tap), booking cards grouped into "do now", "opens later" and "booked" (days and calendar cells flag anything still unbooked), checklists, a shared expense log (账本), plus a floating chat assistant (Ctrl/⌘+K) that knows the plan, searches the web and answers in Chinese.
+What's on it: an overview (route ribbon, 4-week calendar with how full each day is, driver rotation, route legs), one day at a time (forecast or July normals, sunrise and sunset, transport and outdoor totals, the day's pace, who drives, what to bring, the timeline), a Google map that shows whatever you open (on phones it opens inside the stop you tap), booking cards grouped into "do now", "opens later" and "booked" (days and calendar cells flag anything still unbooked), a shared options board (候选) for choosing hotels and tours together, checklists, a shared expense log (账本), plus a floating chat assistant (Ctrl/⌘+K) that knows the plan, searches the web and answers in Chinese.
 
 The expense log (账本 tab) is one shared ledger for the group: add the people, then log each expense with who paid and who shares it, in any currency. It totals spending by category, shows each person's balance and the fewest transfers to settle up, in the currency picked in the top bar (CAD when that's "local"). It lives on the backend in `backend/expenses.json` (not committed; back it up) behind the same access code as the chat. Each device keeps the last copy it saw, so the log still reads with no signal, and anything added offline waits on that device and syncs once the backend answers again.
+
+The options board (候选 tab) is where the group chooses things together without editing `trip.json`. Paste a link (Booking.com, Airbnb, a hotel's own site, a boat tour) and the page fills in the name, photo, price and description from the link's preview tags. Sites that block previews, such as Booking.com, still get a name taken from the link. Put each option under a booking from `trip.json` or under a topic anyone can start ("Lofoten cabin"). Everyone writes their name once, then votes 👍/👎, comments, and marks one option as picked. The booking card on the prep tab shows how many options there are, or which one the group picked. The chat assistant can read the board and add options when asked ("find three cabins in Flåm under 2,000 NOK and add them"); those show who asked for them. The board lives on the backend in `backend/options.json` (not committed; back it up), behind the same access code as the chat. It reads and queues changes offline like the expense log. Link previews are fetched by the backend, which only fetches public web addresses, never your own machine or local network.
 
 Each day gets a pace, 轻松 / 适中 / 很满 (easy / moderate / full), shown as three bars on the calendar, the day strip and the day card. It's worked out from the plan: hours driving (buses, trains and ferries count about half), hours on foot, how long the day runs, and early starts or late finishes. The day card says why ("7 h driving · leave 05:30") and flags a run of full days, and the overview names the longest run. To override a day, add `"pace": 1`–`3` and an optional `"paceNote"` to it in `trip.json`.
 
@@ -24,11 +26,11 @@ docs/                 static site, served by GitHub Pages
   sw.js               offline copy (service worker)
   styles.css
   trip.json           THE PLAN: legs, days, places, bookings, checklists (page and AI both read this)
-  app.js              overview, day view, pace, what to bring, names switch, Google map, bookings + checklists, expense log, drivers
+  app.js              overview, day view, pace, what to bring, names switch, Google map, bookings + checklists, options board, expense log, drivers
   chat.js             trip assistant
   config.js           backend URL + Google Maps key
 backend/
-  server.py           FastAPI + Claude API, streams answers; stores the shared expense log and drivers
+  server.py           FastAPI + Claude API, streams answers; stores the shared expense log, drivers and options board, fetches link previews
   .env                secrets (not committed)
 scripts/
   build_routes.py     regenerates the drive lines in trip.json
