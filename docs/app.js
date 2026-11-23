@@ -371,6 +371,7 @@ document.querySelectorAll(".names button").forEach(function(b){b.addEventListene
 // redraw everything that shows text (after a language or currency change), keeping the open stop
 function rerender(lang){
   var sel=state.sel;applyStatic();renderCur();renderHeader();renderAll();renderStrip();markStrip();renderPrep();renderMoney();$("fitLabel").textContent=U(state.view==="day"?"全天":"全程");
+  slideInd(".seg",'.seg-btn[aria-selected="true"]',true);
   if(state.view==="day"){renderDay();if(sel!=null&&day()){state.sel=sel;paintOpen();}}
   if(lang){redrawMap();caption();document.dispatchEvent(new CustomEvent("trip:lang"));if(embed){var D=day();if(state.view==="day"&&D&&state.sel!=null)frame(D.segs[state.sel]);else fitView();}}}
 /* ---------- currency menu ---------- */
@@ -405,7 +406,7 @@ document.addEventListener("pointerdown",function(e){if(!$("curBox").contains(e.t
   if(!$("prefs").contains(e.target)&&!$("prefsBtn").contains(e.target))prefsOpen(false);});
 // phones: currency and language live in a small panel behind one button, so the bar fits on one line
 function prefsOpen(on){var p=$("prefs");if(on===p.classList.contains("open"))return;
-  p.classList.toggle("open",on);$("prefsBtn").setAttribute("aria-expanded",on);if(on)slideInd(".names",'[aria-checked="true"]');else curOpen(false);}
+  p.classList.toggle("open",on);$("prefsBtn").setAttribute("aria-expanded",on);if(on)slideInd(".names",'[aria-checked="true"]',true);else curOpen(false);}
 $("prefsBtn").addEventListener("click",function(){prefsOpen(!$("prefs").classList.contains("open"));});
 $("prefs").addEventListener("keydown",function(e){if(e.key==="Escape"&&!e.defaultPrevented){prefsOpen(false);$("prefsBtn").focus();}});
 
@@ -778,11 +779,21 @@ $("dayNav").addEventListener("click",function(e){var b=e.target.closest("[data-d
     if(Math.abs(dx)>70&&Math.abs(dy)<45)$(dx<0?"nextDay":"prevDay").click();},{passive:true});})();
 
 /* ---------- motion helpers ---------- */
-// the highlight pill under the selected tab (or language) slides to it
-function slideInd(box,sel){var c=document.querySelector(box),b=c&&c.querySelector(sel);if(!b)return;
-  var ind=c.querySelector(".ind");if(!ind){ind=document.createElement("span");ind.className="ind";ind.setAttribute("aria-hidden","true");c.prepend(ind);}
-  ind.style.width=b.offsetWidth+"px";ind.style.height=b.offsetHeight+"px";ind.style.transform="translate("+b.offsetLeft+"px,"+b.offsetTop+"px)";}
-window.addEventListener("resize",function(){slideInd(".seg",'.seg-btn[aria-selected="true"]');slideInd(".names",'[aria-checked="true"]');});
+// the highlight pill under the selected tab (or language) slides to it; snap=true resizes in place without lagging
+function slideInd(box,sel,snap){var c=document.querySelector(box),b=c&&c.querySelector(sel);if(!b||!b.offsetWidth)return;
+  var ind=c.querySelector(".ind");if(!ind){ind=document.createElement("span");ind.className="ind";ind.setAttribute("aria-hidden","true");c.prepend(ind);snap=true;}
+  var w=b.offsetWidth+"px",h=b.offsetHeight+"px",tr="translate("+b.offsetLeft+"px,"+b.offsetTop+"px)";
+  if(ind.style.width===w&&ind.style.height===h&&ind.style.transform===tr)return;
+  var now=snap&&!ind._mov;
+  if(now)ind.style.transition="none";
+  else{clearTimeout(ind._t);ind._mov=1;ind._t=setTimeout(function(){ind._mov=0;},360);}
+  ind.style.width=w;ind.style.height=h;ind.style.transform=tr;
+  if(now){void ind.offsetWidth;ind.style.transition="";}}
+function syncInds(){if(!T)return;slideInd(".seg",'.seg-btn[aria-selected="true"]',true);slideInd(".names",'[aria-checked="true"]',true);}
+window.addEventListener("resize",syncInds);
+if(window.ResizeObserver)(function(){var ro=new ResizeObserver(syncInds);
+  document.querySelectorAll(".seg,.seg-btn,.names,.names button").forEach(function(el){ro.observe(el);});})();
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(syncInds);
 // the sticky bar gets a soft shadow once the page scrolls under it
 (function(){var st=$("sticky"),on=null;function f(){var v=scrollY>8;if(v!==on){on=v;st.classList.toggle("stuck",v);}}addEventListener("scroll",f,{passive:true});f();})();
 // re-run a CSS entrance animation on an element
