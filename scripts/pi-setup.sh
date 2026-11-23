@@ -51,4 +51,8 @@ if not any(s["name"] == "nordic-trip" for s in d["services"]):
         f.write("\n")
     os.replace(p + ".tmp", p)
 PY
-echo "Running: $(curl -fsS http://127.0.0.1:8791/api/health || echo 'not answering yet')"
+curl -fsS -m 10 -X POST -H "X-Pi-Dash: 1" http://127.0.0.1:9000/api/reload >/dev/null || echo "pi-dash didn't reload; restart it to see nordic-trip" >&2
+
+for _ in $(seq 30); do curl -fsS -m 2 http://127.0.0.1:8791/api/health >/dev/null 2>&1 && break; sleep 1; done
+echo "Local:  $(curl -fsS -m 5 http://127.0.0.1:8791/api/health || echo 'not answering: journalctl --user -u nordic-trip')"
+echo "Public: $(curl -fsS -m 10 https://pi.tail3d8516.ts.net/nordic/api/health || echo 'not answering through Funnel')"
