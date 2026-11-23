@@ -63,7 +63,7 @@ var UIEN={
   "{d}（{w}）还没排，按目前的路线，这天可以怎么安排？":"{d} ({w}) isn't planned yet. Given the current route, what could we do that day?",
   "交通":"Transport","户外":"Outdoors","住宿":"Stay","日落":"Sunset"," · 约 {n} 公里":" · about {n} km",
   "在 Google 地图打开":"Open in Google Maps","导航":"Directions","问问这个":"Ask about this",
-  "北欧之旅 2027":"Nordic Trip 2027","这个网站只给一起旅行的朋友看。输入访问码，这台设备之后都不用再输。":"This site is just for the people on the trip. Enter the access code once and this device remembers it.","访问码":"Access code","进入":"Enter","连不上行程服务器，这台设备上也还没有存过行程。有网的时候再打开一次。":"Can't reach the trip server, and this device hasn't saved the plan yet. Open it again when you're online.","回到起点":"back to the start","{n} 站":"{n} stops","走路约 {t}":"about {t} on foot","约 {n} 米":"about {n} m","约 {n} 公里":"about {n} km","导航（整条步行路线）":"Directions (whole walk)","背景和小知识":"Background & fun facts","历史":"History","冷知识":"Fun fact","名字的来历":"The name","可选 · {n}":"Optional · {n}","或":"or","没排进行程：":"Not in the plan: ",
+  "北欧之旅 2027":"Nordic Trip 2027","访问码":"Access code","进入":"Enter","连不上行程服务器，这台设备上也还没有存过行程。有网的时候再打开一次。":"Can't reach the trip server, and this device hasn't saved the plan yet. Open it again when you're online.","回到起点":"back to the start","{n} 站":"{n} stops","走路约 {t}":"about {t} on foot","约 {n} 米":"about {n} m","约 {n} 公里":"about {n} km","导航（整条步行路线）":"Directions (whole walk)","背景和小知识":"Background & fun facts","历史":"History","冷知识":"Fun fact","名字的来历":"The name","可选 · {n}":"Optional · {n}","或":"or","没排进行程：":"Not in the plan: ",
   "{w} 这段{m}有什么要注意的？":"Anything to know about the {m} {w}?","多讲讲「{w}」，有什么要注意的？":"Tell me more about {w}. Anything to watch out for?",
   "晴":"Clear","晴间多云":"Partly cloudy","阴":"Overcast","雾":"Fog","毛毛雨":"Drizzle","雨":"Rain","雪":"Snow","阵雨":"Showers","阵雪":"Snow showers","雷雨":"Thunderstorms",
   " · 降水概率 {n}%":" · {n}% chance of rain","风速最高 {n} m/s":"Wind up to {n} m/s","7 月常年":"Typical July"," · 约 {n} 天有雨":" · ~{n} rainy days",
@@ -789,14 +789,16 @@ window.addEventListener("resize",function(){slideInd(".seg",'.seg-btn[aria-selec
 function replay(el,cls){if(!el)return;el.classList.remove(cls);void el.offsetWidth;el.classList.add(cls);}
 
 /* ---------- photos ---------- */
-// Up to three photos per place from Unsplash (places[id].photos: src = the photo's raw URL, w, h, author,
-// author_link, page, alt), each checked by eye against reference photos of the place. Unsplash serves any
-// width from the same URL; the credit links the photographer and Unsplash, as its API guidelines ask.
+// Up to three photos per place (places[id].photos: src, w, h, author, page, alt), each checked by eye against
+// the place. From Unsplash (author_link; any width from the same URL; the credit links the photographer and
+// Unsplash, as its API guidelines ask) or Wikimedia Commons (license; a 1280px thumbnail URL, other widths
+// snapped to the sizes Wikimedia serves; the credit links the file page with its author and license).
 // Scenic stops still waiting for photos show a grey "TBD" tile.
 var SCENIC={visit:1,hike:1,glacier:1,water:1,camp:1,city:1};
 var UTM="utm_source=nordic_trip_2027&utm_medium=referral";
 function photosOf(id){var p=T.places[id];return p&&p.photos||[];}
-function sized(src,w){if(src.indexOf("images.unsplash.com")<0)return src.replace(/\/(\d+)px-/,"/"+w+"px-");
+// Wikimedia serves fixed thumbnail widths only (photos from Commons are all at least 1920px wide)
+function sized(src,w){if(src.indexOf("images.unsplash.com")<0)return src.replace(/\/(\d+)px-/,"/"+(w<=500?500:w<=960?960:w<=1280?1280:1920)+"px-");
   var u=src.replace(/([?&])(w|q|fm|fit|auto)=[^&]*/g,"$1").replace(/&&+/g,"&").replace(/[?&]+$/,"");
   return u+(u.indexOf("?")<0?"?":"&")+"w="+w+"&q=80&fm=jpg&fit=max";}
 function img(ph,w,cls){return '<img class="'+(cls||"")+'" src="'+esc(sized(ph.src,w))+'" width="'+ph.w+'" height="'+ph.h+'" alt="'+esc(ph.alt||"")+'" loading="lazy" decoding="async" onload="this.classList.add(\'ok\')">';}
@@ -1457,7 +1459,6 @@ function lockOut(){try{localStorage.removeItem("nt-plan");}catch(e){}setAccessCo
 function showLock(msg){var box=$("lock");if(!box){box=document.createElement("div");box.id="lock";box.className="lock";document.body.appendChild(box);}
   document.documentElement.classList.add("locked");
   box.innerHTML='<form class="lock-card" id="lockForm"><span class="eyebrow">Nordic Trip 2027</span><h1>'+esc(U("北欧之旅 2027"))+'</h1>'+
-    '<p>'+esc(U("这个网站只给一起旅行的朋友看。输入访问码，这台设备之后都不用再输。"))+'</p>'+
     '<div class="lock-row"><input id="lockIn" type="password" autocomplete="current-password" placeholder="'+esc(U("访问码"))+'" aria-label="'+esc(U("访问码"))+'" required>'+
     '<button type="submit" class="pill primary">'+esc(U("进入"))+'</button></div><p class="lock-err" id="lockErr">'+esc(msg||"")+'</p></form>';
   var inp=$("lockIn");inp.focus();

@@ -211,6 +211,12 @@ Latency-sensitive: a quick question gets its answer right away.
 
 要上网查或读行程时，直接调用工具，不要先写“我来查一下”“I should check…”这类过程说明或自言自语；工具之间也不要写。给对方看的文字只写在最后的回答里，用对方用的语言。
 
+要上网查、要对比好几样东西、或者要动行程和账本的事，对方会在网页上等好一会儿，所以先让对方看到你打算怎么做：
+- 第一件事是调用 update_tasks，列出 2 到 5 步，每步十来个字，用对方的语言，比如“对比 7/5 和 7/6 的车程”“查 F208 七月开放情况”“回答”。第一步标 in_progress，其余 pending。在上网查、读行程这些之前做。
+- 做完一步、开始下一步时再调用一次：做完的标 done，下一步标 in_progress，每次发整份清单；计划变了就改清单。能和下一步的工具调用放在同一次回复里就放在一起。
+- 最后一步通常是“回答”：标成 in_progress 之后直接写回答，写完网页会自动勾上，不用再调用。
+- 不用工具、直接就能答的问题不要列清单。
+
 <trip_plan>
 {plan}
 </trip_plan>"""
@@ -346,18 +352,43 @@ async def chat(body: ChatIn, x_access_code: str | None = Header(default=None)):
     )
 
 
+INTERRUPTED = "This part of the response was interrupted before it finished."
+# Now and then a reply through the local bridge opens with a stray mode tag; it's held back and dropped.
+STRAY_TAG = "<thinking_mode>"
+STRAY = re.compile(r"^\s*<thinking_mode>[^<]{0,40}</thinking_mode>\s*")
+
+
+def unstray(hold: str) -> tuple[str | None, str]:
+    """For the start of a run of text: (text to send now, or None to keep holding; what is still held)."""
+    head = hold.lstrip()
+    if not (head.startswith(STRAY_TAG) or STRAY_TAG.startswith(head)):
+        return hold, ""
+    m = STRAY.match(hold)
+    if m:
+        return hold[m.end():], ""
+    return (hold, "") if len(hold) > 80 else (None, hold)
+
+
 async def answer(messages: list[dict], lang_en: bool = False, asker: str = ""):
-    extra = {}
+    betas, extra = [], {}
     if FALLBACKS != "off":
-        extra = {"betas": ["server-side-fallback-2026-07-01"], "fallbacks": FALLBACKS}
+        betas.append("server-side-fallback-2026-07-01")
+        extra["fallbacks"] = FALLBACKS
+    # The short notes the model writes between tool calls ("found it, now checking the ferry") come back as thinking
+    # blocks, empty unless asked for: "updates" returns those notes as text and keeps the reasoning itself hidden.
+    thinking = None
+    if not LOCAL_AI:
+        betas.append("thinking-display-updates-2026-08-18")
+        thinking = {"type": "adaptive", "display": "updates"}
     # tool inputs here are short, so they stream as generated (and are validated before running); a local
     # Anthropic-compatible server may not know the field, so it's left off there
-    own = [dict(t, eager_input_streaming=True) for t in PLAN_TOOLS + EXPENSE_TOOLS] if not LOCAL_AI else PLAN_TOOLS + EXPENSE_TOOLS
+    mine = [TASK_TOOL, *PLAN_TOOLS, *EXPENSE_TOOLS]
+    own = [dict(t, eager_input_streaming=True) for t in mine] if not LOCAL_AI else mine
     tools = [WEB_SEARCH, *own]
     wrote = False
     try:
         # a long web search can pause the turn, and each round of tool calls takes another request
-        for _ in range(12):
+        for rnd in range(12):
             try:
                 stream_cm = client.beta.messages.stream(
                     model=MODEL,
@@ -366,10 +397,18 @@ async def answer(messages: list[dict], lang_en: bool = False, asker: str = ""):
                     messages=messages,
                     tools=tools,
                     output_config={"effort": EFFORT},
+                    **({"thinking": thinking} if thinking else {}),
+                    **({"betas": betas} if betas else {}),
                     **extra,
                 )
                 stream = await stream_cm.__aenter__()
             except anthropic.BadRequestError as e:
+                # a model that doesn't offer progress notes (a refusal fallback, say): carry on without them
+                if thinking and ("display" in str(e) or "thinking" in str(e)):
+                    print(f"[chat] progress notes not available: {e.message}", flush=True)
+                    thinking = None
+                    betas = [b for b in betas if not b.startswith("thinking-display")]
+                    continue
                 # Some local servers don't offer web search; answer from the plan alone instead.
                 if tools and "tool" in str(e).lower():
                     if WEB_SEARCH in tools:
@@ -381,24 +420,45 @@ async def answer(messages: list[dict], lang_en: bool = False, asker: str = ""):
                     continue
                 raise
             try:
-                fresh = True
+                fresh, hold = True, ""
                 async for event in stream:
-                    if event.type == "text":
-                        if fresh and wrote:  # text after a tool call starts a new paragraph
-                            yield sse({"type": "text", "text": "\n\n"})
+                    if event.type == "content_block_delta" and event.delta.type == "thinking_delta":
+                        # a progress note; a reasoning block streams no text under "updates"
+                        if event.delta.thinking and event.delta.thinking != INTERRUPTED:
+                            yield sse({"type": "note", "id": f"{rnd}-{event.index}", "text": event.delta.thinking})
+                    elif event.type == "text":
+                        out = event.text
+                        if fresh:
+                            out, hold = unstray(hold + out)
+                            if not out:
+                                continue
+                            if wrote:  # text after a tool call starts a new paragraph
+                                yield sse({"type": "text", "text": "\n\n"})
                         fresh, wrote = False, True
-                        yield sse({"type": "text", "text": event.text})
+                        yield sse({"type": "text", "text": out})
                     # each tool call shows as a step: started, then labelled with what it looked at, then done
                     elif event.type == "content_block_start":
                         b = event.content_block
-                        if b.type in ("server_tool_use", "tool_use"):
+                        if b.type != "text" and hold.strip():  # a short run of text that never left the hold
+                            yield sse({"type": "text", "text": ("\n\n" if wrote else "") + hold})
+                            fresh, wrote, hold = False, True, ""
+                        if b.type == "tool_use" and b.name == TASK_TOOL["name"]:
+                            pass  # the checklist shows once its input is complete
+                        elif b.type in ("server_tool_use", "tool_use"):
                             yield sse({"type": "step", "id": b.id, "label": step_label(b.name, None, lang_en), "state": "running"})
-                        elif b.type == "web_search_tool_result":
+                        elif b.type in ("web_search_tool_result", "web_fetch_tool_result"):
                             yield sse({"type": "step", "id": b.tool_use_id, "state": "done"})
                     elif event.type == "content_block_stop":
                         b = getattr(event, "content_block", None)
-                        if b is not None and b.type in ("server_tool_use", "tool_use"):
+                        if b is not None and b.type == "tool_use" and b.name == TASK_TOOL["name"]:
+                            items = task_items(b.input)
+                            if items:
+                                yield sse({"type": "tasks", "items": items})
+                        elif b is not None and b.type in ("server_tool_use", "tool_use"):
                             yield sse({"type": "step", "id": b.id, "label": step_label(b.name, b.input if isinstance(b.input, dict) else {}, lang_en)})
+                if hold.strip():
+                    yield sse({"type": "text", "text": ("\n\n" if wrote else "") + hold})
+                    wrote = True
                 final = await stream.get_final_message()
             except ValueError:
                 # a tool call whose streamed input isn't JSON at all: nothing to answer, so ask again
@@ -417,6 +477,11 @@ async def answer(messages: list[dict], lang_en: bool = False, asker: str = ""):
                 results = []
                 for b in final.content:
                     if b.type != "tool_use":
+                        continue
+                    if b.name == TASK_TOOL["name"]:
+                        ok = task_items(b.input) is not None
+                        results.append({"type": "tool_result", "tool_use_id": b.id,
+                                        **({"content": "Shown."} if ok else {"content": "Each task needs text and a status of pending, in_progress or done; at most 8.", "is_error": True})})
                         continue
                     text, err, card = await run_plan_tool(b.name, b.input if isinstance(b.input, dict) else {}, asker, lang_en)
                     yield sse({"type": "step", "id": b.id, "state": "error" if err else "done"})
@@ -715,6 +780,36 @@ class UndoIn(BaseModel):
     also_later: bool = False
 
 
+TASK_TOOL = {
+    "name": "update_tasks",
+    "description": "Show the person a short checklist above your answer of the steps you're taking for this request, and "
+                   "keep it current. Send the whole list every time: each step's text (a few words, in the person's language) "
+                   "and its status. Call it first, before searching or reading anything, then again as you move to each next "
+                   "step. Nothing else happens: it only updates what the page shows.",
+    "input_schema": {
+        "type": "object",
+        "properties": {"tasks": {"type": "array", "maxItems": 8, "items": {
+            "type": "object",
+            "properties": {"text": {"type": "string"}, "status": {"type": "string", "enum": ["pending", "in_progress", "done"]}},
+            "required": ["text", "status"], "additionalProperties": False}}},
+        "required": ["tasks"], "additionalProperties": False,
+    },
+}
+
+
+def task_items(raw) -> list[dict] | None:
+    """The checklist update_tasks asked to show, or None when its input isn't one."""
+    items = raw.get("tasks") if isinstance(raw, dict) else None
+    if not isinstance(items, list) or not 1 <= len(items) <= 8:
+        return None
+    out = []
+    for t in items:
+        if not isinstance(t, dict) or not str(t.get("text", "")).strip() or t.get("status") not in ("pending", "in_progress", "done"):
+            return None
+        out.append({"text": str(t["text"]).strip()[:80], "status": t["status"]})
+    return out
+
+
 PLAN_TOOLS = [
     {
         "name": "read_plan",
@@ -905,6 +1000,9 @@ def step_label(name: str, inp: dict | None, lang_en: bool) -> str:
     if name == "web_search":
         q = str(inp.get("query", ""))
         return (f"Searched the web: {q}" if lang_en else f"上网查：{q}") if q else ("Searching the web" if lang_en else "上网查")
+    if name == "web_fetch":
+        site = re.sub(r"^https?://(www\.)?", "", str(inp.get("url", ""))).split("/")[0]
+        return (f"Read a page: {site}" if lang_en else f"读网页：{site}") if site else ("Reading a page" if lang_en else "读网页")
     if name == "read_plan":
         path = str(inp.get("path", "")) or ("outline" if lang_en else "概览")
         return f"Read the plan: {path}" if lang_en else f"读行程：{path}"

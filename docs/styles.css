@@ -548,6 +548,24 @@ li.now>.row .t{color:var(--sun);font-weight:600}
 .step-note{padding:7px 11px;border-top:1px solid var(--line);font-size:13px;line-height:1.55;color:var(--muted);overflow-wrap:anywhere}
 .step-note p{margin:0}.step-note p+p{margin-top:6px}
 
+/* the assistant's checklist for a request that takes several steps, ticked off as it goes */
+.tasks{border:1px solid var(--line);border-radius:12px;background:var(--surface);font-size:13px}
+.tasks-head{display:flex;justify-content:space-between;align-items:center;padding:7px 11px 4px;font-size:11.5px;font-weight:600;color:var(--muted)}
+.tasks-head .n{font-family:var(--f-mono);font-weight:500}
+.tasks ul{list-style:none;margin:0;padding:2px 11px 9px;display:grid;gap:6px}
+.tasks li{display:flex;align-items:flex-start;gap:8px;min-width:0;line-height:1.35;color:var(--ink)}
+.tasks li>span:last-child{min-width:0;overflow-wrap:anywhere}
+.tasks li>svg,.tasks li>.spin,.tasks li>.dot{margin-top:2px}
+.tasks li>svg{flex:none;width:14px;height:14px;fill:none;stroke:var(--moss);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.tasks li.done{color:var(--muted)}
+.tasks li.done>span:last-child{text-decoration:line-through;text-decoration-color:color-mix(in srgb,currentColor 45%,transparent)}
+.tasks li.in_progress{font-weight:600}
+.tasks .dot{flex:none;width:12px;height:12px;border-radius:50%;border:1.5px solid color-mix(in srgb,var(--muted) 55%,transparent)}
+/* its latest thought, in place of 思考中: two lines at most */
+.l-status.thought{align-items:flex-start}
+.l-status.thought .dots{margin-top:7px}
+.l-status.thought>span:last-child{font-size:12.5px;line-height:1.45;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;overflow-wrap:anywhere}
+
 /* a change waiting for someone's go-ahead */
 .ask-card{border:1px solid color-mix(in srgb,var(--sun) 45%,var(--line));border-radius:14px;background:var(--surface);overflow:hidden;box-shadow:0 0 0 3px var(--sun-soft)}
 .ask-card.settled{border-color:var(--line);box-shadow:none}

@@ -97,7 +97,9 @@ document.addEventListener("keydown",function(e){
 
 /* ---------- the conversation ----------
    A user message is {role, content}. An answer is {role:"assistant", content (its text), parts, ts}: parts in the order
-   they arrived, {t:"steps", items:[{id,label,state,ts}]}, {t:"text", text}, {t:"card", card}. */
+   they arrived, {t:"steps", items:[{id,label,state,ts}]}, {t:"text", text}, {t:"card", card}, {t:"note", id, text} (what the
+   assistant is thinking about between tool calls: shown as the live status line, dropped once the answer is in) and at most one {t:"tasks", items:[{text,status}]} (its checklist for a
+   request that takes several steps, updated in place). */
 log.addEventListener("scroll",function(){stick=log.scrollHeight-log.scrollTop-log.clientHeight<48;});
 function scroll(force){if(force||stick)log.scrollTop=log.scrollHeight;}
 function add(el){var e0=log.querySelector(".l-empty");if(e0)e0.remove();log.appendChild(el);return el;}
@@ -135,6 +137,12 @@ var WRITING=300;
 function isNote(parts,i){var p=parts[i];if(p.t!=="text")return false;for(var j=i+1;j<parts.length;j++)if(parts[j].t==="steps")return true;return false;}
 function answerText(m){var ps=m.parts;if(!ps)return m.content||"";
   return ps.filter(function(p,i){return p.t==="text"&&!isNote(ps,i);}).map(function(p){return p.text.trim();}).filter(Boolean).join("\n\n");}
+function tasksHtml(items,live){
+  var done=items.filter(function(t){return t.status==="done";}).length;
+  return '<div class="tasks"><div class="tasks-head"><span>'+Z("步骤","Steps")+'</span><span class="n">'+done+" / "+items.length+"</span></div><ul>"+
+    items.map(function(t){var st=t.status==="in_progress"&&!live?"pending":t.status;
+      return '<li class="'+st+'">'+(st==="done"?IC.check:st==="in_progress"?'<span class="spin"></span>':'<i class="dot"></i>')+"<span>"+esc(t.text)+"</span></li>";}).join("")+"</ul></div>";
+}
 function cardHtml(c){
   var undo=c.kind==="undo",cash=c.kind==="expense",st=c.state;
   var right=st==="waiting"?'<span class="wait"><span class="live-dot busy"></span>'+Z("等你确认","Waiting for you")+"</span>"
@@ -273,17 +281,23 @@ function tlRows(D,d,moved){
 }
 function paintBot(d,m,live){
   var parts=m.parts||[{t:"text",text:m.content||""}],h="",run=[],runAt=0,end=parts.length-1;
-  var tail=live&&parts[end]&&parts[end].t==="text"&&parts[end].text.trim(),writing=tail&&tail.length<WRITING?tail:"";
+  var tail=live&&parts[end]&&(parts[end].t==="text"||parts[end].t==="note")&&parts[end].text.trim(),
+    writing=tail&&(parts[end].t==="note"||tail.length<WRITING)?tail:"";
   function flush(){if(run.length)h+=procHtml(run,(m.ts||0)+"-"+runAt,live,writing&&run[run.length-1]===parts[end]?writing:"");run=[];}
   parts.forEach(function(p,i){
-    if(p.t==="steps"||(isNote(parts,i)&&p.text.trim())||(writing&&i===end)){if(!run.length)runAt=i;run.push(p);return;}
+    if(p.t==="steps"||(p.t==="note"&&p.text.trim())||(isNote(parts,i)&&p.text.trim())||(writing&&i===end)){if(!run.length)runAt=i;run.push(p);return;}
     if(p.t==="text"&&!p.text.trim())return; // a blank between notes and steps keeps them in one fold
     flush();
     if(p.t==="card")h+=cardHtml(p.card);
+    else if(p.t==="tasks")h+=tasksHtml(p.items,live);
+    else if(p.t==="note")return;
     else if(p.text)h+='<div class="m-content">'+md(p.text)+"</div>";});
   flush();
   var lastPart=parts[parts.length-1];
-  if(live&&(!lastPart||lastPart.t!=="text"||!lastPart.text)&&!(lastPart&&lastPart.t==="steps"&&lastPart.items.some(function(s){return s.state==="running";})))
+  // while it works and nothing else shows it: 思考中 (a thought or text being written streams in the fold's head instead)
+  var working=writing||parts.some(function(p){return p.t==="tasks"&&p.items.some(function(t){return t.status==="in_progress";});})||
+    (lastPart&&lastPart.t==="steps"&&lastPart.items.some(function(s){return s.state==="running";}));
+  if(live&&(!lastPart||lastPart.t!=="text"||!lastPart.text)&&!working)
     h+='<div class="l-status"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span>'+Z("思考中","Thinking")+"</span></div>";
   if(!live){h+='<div class="l-tools"><span>'+esc(clock(m.ts))+(m.stopped?Z(" · 中途停止"," · stopped early"):"")+'</span><button type="button" data-copy="1">'+Z("复制","Copy")+"</button></div>";}
   d.innerHTML=h;d._m=m;
@@ -442,9 +456,15 @@ function ask(q,imgs){
     var item=null;m.parts.forEach(function(x){if(x.t==="steps")x.items.forEach(function(s){if(s.id===ev.id)item=s;});});
     if(!item){if(!p||p.t!=="steps"){p={t:"steps",items:[]};m.parts.push(p);}item={id:ev.id,label:"",state:"running",ts:Date.now()};p.items.push(item);}
     if(ev.label)item.label=ev.label;if(ev.state)item.state=ev.state;}
-  function finish(stopped){
-    m.parts.forEach(function(p){if(p.t==="steps")p.items.forEach(function(s){if(s.state==="running")s.state=stopped?"error":"done";});});
-    m.parts=m.parts.filter(function(p){return p.t!=="text"||p.text.trim();});
+  function tasks(items){var p=m.parts.filter(function(x){return x.t==="tasks";})[0];
+    if(p)p.items=items;else m.parts.push({t:"tasks",items:items});}
+  function progress(ev){var p=m.parts.filter(function(x){return x.t==="note"&&x.id===ev.id;})[0];
+    if(!p){p={t:"note",id:ev.id,text:""};m.parts.push(p);}p.text+=ev.text;}
+  function finish(stopped,failed){
+    m.parts.forEach(function(p){if(p.t==="steps")p.items.forEach(function(s){if(s.state==="running")s.state=stopped?"error":"done";});
+      // a complete answer means the list is done: the assistant doesn't spend a round trip ticking the last steps
+      if(p.t==="tasks"&&!stopped&&!failed)p.items.forEach(function(t){t.status="done";});});
+    m.parts=m.parts.filter(function(p){return p.t!=="note"&&(p.t!=="text"||p.text.trim());});
     if(raf){cancelAnimationFrame(raf);raf=0;} // a repaint still queued from the stream would draw it as unfinished again
     m.ts=Date.now();m.stopped=stopped||undefined;cur=null;C.msgs.push(m);C.ts=Date.now();save();paintBot(el,m,false);}
   fetch(API+"/api/chat",{method:"POST",signal:ctrl&&ctrl.signal,headers:{"Content-Type":"application/json","X-Access-Code":S.code||""},
@@ -457,6 +477,8 @@ function ask(q,imgs){
       if(my!==gen)return;
       if(ev.type==="text"){textPart().text+=ev.text;m.content+=ev.text;}
       else if(ev.type==="step")step(ev);
+      else if(ev.type==="tasks"&&ev.items&&ev.items.length)tasks(ev.items);
+      else if(ev.type==="note"&&ev.text)progress(ev);
       else if(ev.type==="approval"){m.parts.push({t:"card",card:ev.card});}
       else if(ev.type==="error"){throw new Error(ev.message);}
       paint();
@@ -474,7 +496,7 @@ function ask(q,imgs){
     if(my!==gen)return; // its conversation was deleted
     if(e&&e.name==="AbortError"){if(m.parts.length)finish(true);else{cur=null;el.remove();uEl.remove();C.msgs.pop();save();if(here())note(Z("还没回答就停止了。","Stopped before an answer came back."));}return;}
     var msg=e&&e.message&&e.message!=="Failed to fetch"?e.message:Z("连不上行程服务器，可能离线了。","Can't reach the trip server. It may be offline.");
-    if(m.parts.length){finish();if(here())errLine(msg);}
+    if(m.parts.length){finish(false,true);if(here())errLine(msg);}
     else{cur=null;el.remove();C.msgs.pop();save();
       if(!here())return;
       if(needCode&&!S.code){uEl.remove();pending={q:q,imgs:imgs};showJoin();errLine(msg);}
