@@ -1032,3 +1032,14 @@ body.lb-open{overflow:hidden}
   .pace-row,.bring,.drv-row{padding:9px 14px 11px}
   .pace-sum .pace-how{display:none}
 }
+
+/* ---------- lock screen: no access code on this device yet ---------- */
+html.locked body>*:not(.lock){display:none!important}
+.lock{position:fixed;inset:0;display:grid;place-items:center;padding:20px;background:var(--bg);z-index:100}
+.lock-card{width:min(420px,100%);display:grid;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:28px 24px;box-shadow:var(--shadow)}
+.lock-card h1{margin:0;font-family:var(--f-display);font-size:28px}
+.lock-card p{margin:0;color:var(--muted);font-size:14px}
+.lock-row{display:flex;gap:8px}
+.lock-row input{flex:1;min-width:0;font:inherit;font-size:15px;padding:9px 12px;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink)}
+.lock-row input:focus{outline:2px solid var(--fjord);outline-offset:1px}
+.lock-err{min-height:1.2em;color:var(--sun)!important;font-size:13px!important}

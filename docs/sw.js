@@ -1,12 +1,12 @@
 /* Offline copy of the trip planner (registered by app.js).
-   The page, its code and trip.json come from the network when it answers within a few seconds, otherwise from
+   The page and its code come from the network when it answers within a few seconds, otherwise from
    the copy saved here, so the plan still opens with no signal (highlands, fjords, ferries) and weak signal
    doesn't leave a blank page. Photos and fonts are kept once seen, and the prep tab can fetch every photo ahead
    of time; a photo not saved at the size asked for falls back to any size that is. The forecast and exchange
    rates keep their last answer. The chat, the expense log and the drivers (/api/) and Google Maps always go to
    the network. Bump SHELL's version only when this file's caching changes, not for edits to the site. */
-var SHELL="nt-shell-v1",PHOTOS="nt-photos",FONTS="nt-fonts-v1",DATA="nt-data-v1",KEEP=[SHELL,PHOTOS,FONTS,DATA];
-var CORE=["./","index.html","styles.css","app.js","chat.js","config.js","trip.json","i18n/en.json"];
+var SHELL="nt-shell-v2",PHOTOS="nt-photos",FONTS="nt-fonts-v1",DATA="nt-data-v1",KEEP=[SHELL,PHOTOS,FONTS,DATA];
+var CORE=["./","index.html","styles.css","app.js","chat.js","config.js"];
 
 self.addEventListener("install",function(e){
   e.waitUntil(caches.open(SHELL).then(function(c){

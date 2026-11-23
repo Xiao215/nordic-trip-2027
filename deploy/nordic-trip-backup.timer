@@ -1,4 +1,4 @@
-# Every 15 minutes: back up the live plan to GitHub when it changed.
+# Every 15 minutes: commit the trip data on the Pi when it changed.
 [Unit]
 Description=Nordic Trip 2027: back up the live plan every 15 minutes
 

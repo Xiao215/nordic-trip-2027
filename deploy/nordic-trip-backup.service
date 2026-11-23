@@ -1,7 +1,7 @@
-# Commits plan changes made in the chat back to GitHub (scripts/pi-backup-plan.sh). Started by
+# Keeps a git history of the trip data on the Pi (scripts/pi-backup-plan.sh). Started by
 # nordic-trip-backup.timer; installed by scripts/pi-update.sh.
 [Unit]
-Description=Nordic Trip 2027: back up the live plan to GitHub
+Description=Nordic Trip 2027: back up the trip data on the Pi
 
 [Service]
 Type=oneshot

@@ -6,7 +6,7 @@
    The page is in Chinese or English (中文 / EN switch). Place names are written as [[place_id]] in
    trip.json: Chinese shows the Chinese name (hover for the local spelling), English shows the local
    spelling. The rest of the English text comes from i18n/en.json, keyed by the Chinese original, and
-   interface strings from UIEN below. All content comes from trip.json (the chat backend reads it too). */
+   interface strings from UIEN below. All content comes from the trip server with the access code (see "the live plan"). */
 var CFG=window.TRIP_CONFIG||{};
 var wide=window.matchMedia?matchMedia("(min-width: 901px)"):{matches:true};
 var KCOL={visit:"#1F4E6B",hike:"#3D7A4F",glacier:"#3F8FB5",water:"#2B7A8C",city:"#7A5C9E",food:"#C9711C",shop:"#C9711C",stay:"#5D6B73",camp:"#6B7F3A",start:"#5D6B73",move:"#5D6B73"};
@@ -20,7 +20,7 @@ var MODEEN={drive:"drive",flight:"flight",ferry:"ferry",train:"train",bus:"bus",
 // "zh", or "local" for the English page (place names in their local spelling); kept under the old key
 var NM=store("nt-names")==="local"||store("nt-names")==="en"?"local":"zh";
 function en(){return NM==="local";}
-var EN={}; // trip.json text in English, {"中文原文": "English"}, loaded from i18n/en.json
+var EN={}; // the plan's text in English, {"中文原文": "English"}, sent along with the plan
 function L(s){return en()&&s!=null&&EN[s]!=null?EN[s]:s;}
 var UIEN={
   "规划中":"Being planned","草案":"draft","现在":"NOW","下一站":"NEXT","：":": ","住 ":"Sleep: ",
@@ -63,7 +63,7 @@ var UIEN={
   "{d}（{w}）还没排，按目前的路线，这天可以怎么安排？":"{d} ({w}) isn't planned yet. Given the current route, what could we do that day?",
   "交通":"Transport","户外":"Outdoors","住宿":"Stay","日落":"Sunset"," · 约 {n} 公里":" · about {n} km",
   "在 Google 地图打开":"Open in Google Maps","导航":"Directions","问问这个":"Ask about this",
-  "回到起点":"back to the start","{n} 站":"{n} stops","走路约 {t}":"about {t} on foot","约 {n} 米":"about {n} m","约 {n} 公里":"about {n} km","导航（整条步行路线）":"Directions (whole walk)","背景和小知识":"Background & fun facts","历史":"History","冷知识":"Fun fact","名字的来历":"The name","可选 · {n}":"Optional · {n}","或":"or","没排进行程：":"Not in the plan: ",
+  "北欧之旅 2027":"Nordic Trip 2027","这个网站只给一起旅行的朋友看。输入访问码，这台设备之后都不用再输。":"This site is just for the people on the trip. Enter the access code once and this device remembers it.","访问码":"Access code","进入":"Enter","连不上行程服务器，这台设备上也还没有存过行程。有网的时候再打开一次。":"Can't reach the trip server, and this device hasn't saved the plan yet. Open it again when you're online.","回到起点":"back to the start","{n} 站":"{n} stops","走路约 {t}":"about {t} on foot","约 {n} 米":"about {n} m","约 {n} 公里":"about {n} km","导航（整条步行路线）":"Directions (whole walk)","背景和小知识":"Background & fun facts","历史":"History","冷知识":"Fun fact","名字的来历":"The name","可选 · {n}":"Optional · {n}","或":"or","没排进行程：":"Not in the plan: ",
   "{w} 这段{m}有什么要注意的？":"Anything to know about the {m} {w}?","多讲讲「{w}」，有什么要注意的？":"Tell me more about {w}. Anything to watch out for?",
   "晴":"Clear","晴间多云":"Partly cloudy","阴":"Overcast","雾":"Fog","毛毛雨":"Drizzle","雨":"Rain","雪":"Snow","阵雨":"Showers","阵雪":"Snow showers","雷雨":"Thunderstorms",
   " · 降水概率 {n}%":" · {n}% chance of rain","风速最高 {n} m/s":"Wind up to {n} m/s","7 月常年":"Typical July"," · 约 {n} 天有雨":" · ~{n} rainy days",
@@ -1409,24 +1409,31 @@ addEventListener("online",function(){paintOnline();if(T)loadDrivers(true);});
 if("serviceWorker" in navigator&&/^https?:$/.test(location.protocol))navigator.serviceWorker.register("sw.js").catch(function(e){console.warn("offline copy unavailable:",e);});
 
 /* ---------- the live plan ---------- */
-// The plan lives on the trip server, where the assistant can change it. The page starts from this device's last
-// copy (or the server, or the copy published with the site when neither is there), then checks for a newer
-// version every minute, when the page comes back into view, and right after the assistant changes it.
+// The plan lives only on the trip server (not in the public repo), behind the access code. The page starts from
+// this device's last copy, or from the server, and asks for the code once per device when it has neither; then it
+// checks for a newer version every minute, when the page comes back into view, and right after the assistant changes it.
 var PLAN={rev:null,last:null},planTimer=null;
+// the code is kept with the chat (nt-chat-v1), so typing it once unlocks the page, the chat, the log and the drivers
+function accessCode(){try{return (JSON.parse(localStorage.getItem("nt-chat-v1"))||{}).code||"";}catch(e){return "";}}
+function setAccessCode(c){if(window.tripAuth){window.tripAuth.setCode(c);return;}
+  try{var s=JSON.parse(localStorage.getItem("nt-chat-v1"))||{};s.code=c;localStorage.setItem("nt-chat-v1",JSON.stringify(s));}catch(e){}}
+var LOCALDEV=/^(localhost|127\.0\.0\.1)$/.test(location.hostname);
 function planApi(){var a=((window.TRIP_CONFIG||{}).apiBase||"").replace(/\/$/,""),o=new URLSearchParams(location.search).get("api");
   return o&&/^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(o)?o:a;}
 function fetchPlan(ms){var c=window.AbortController?new AbortController():null,t=c&&setTimeout(function(){c.abort();},ms||10000);
-  return fetch(planApi()+"/api/plan",{cache:"no-cache",signal:c&&c.signal}).then(function(r){clearTimeout(t);if(!r.ok)throw new Error(r.status);return r.json();})
+  return fetch(planApi()+"/api/plan",{cache:"no-cache",signal:c&&c.signal,headers:{"X-Access-Code":accessCode()}}).then(function(r){clearTimeout(t);
+      if(!r.ok){var e=new Error(r.status);e.code=r.status;throw e;}return r.json();})
     .then(function(p){if(!p||!p.trip||!p.rev)throw new Error("no plan");return p;});}
 function keepPlan(p){PLAN={rev:p.rev,last:p.last};try{localStorage.setItem("nt-plan",JSON.stringify({rev:p.rev,last:p.last,trip:p.trip,en:p.en}));}catch(e){}}
+// local testing only: a copy of the plan in docs/ (never committed; scripts/plan.sh pull fetches it)
 function publishedPlan(){
-  // English translations are optional: a missing or broken file just leaves those lines in Chinese
+  if(!LOCALDEV)return Promise.reject(new Error("offline"));
   return Promise.all([
     fetch("trip.json",{cache:"no-cache"}).then(function(r){if(!r.ok)throw new Error(r.status);return r.json();}),
     fetch("i18n/en.json",{cache:"no-cache"}).then(function(r){return r.ok?r.json():{};}).catch(function(){return {};})
   ]).then(function(x){return {trip:x[0],en:x[1]||{}};});}
 function checkPlan(){if(navigator.onLine===false)return;
-  fetch(planApi()+"/api/plan/rev",{cache:"no-store"}).then(function(r){return r.ok?r.json():null;})
+  fetch(planApi()+"/api/plan/rev",{cache:"no-store",headers:{"X-Access-Code":accessCode()}}).then(function(r){if(r.status===401){lockOut();return null;}return r.ok?r.json():null;})
     .then(function(j){if(j&&j.rev&&j.rev!==PLAN.rev)return fetchPlan().then(applyPlan);}).catch(function(){});}
 // a newer version: redraw everything from it, keeping the tab, the day and (if it's still there) the open stop
 function applyPlan(p){if(!p||p.rev===PLAN.rev)return;var quiet=!PLAN.rev;keepPlan(p);
@@ -1444,11 +1451,29 @@ document.addEventListener("visibilitychange",function(){if(document.visibilitySt
 addEventListener("online",function(){if(T)checkPlan();});
 document.addEventListener("trip:plan",function(){if(T)fetchPlan().then(applyPlan).catch(function(){});}); // the assistant just changed it
 
-/* ---------- start ---------- */
+// the code stopped working (changed on the server): forget the plan on this device and ask again
+function lockOut(){try{localStorage.removeItem("nt-plan");}catch(e){}setAccessCode(null);location.reload();}
+// the lock screen: the page has no plan of its own, so without the code there is nothing to show
+function showLock(msg){var box=$("lock");if(!box){box=document.createElement("div");box.id="lock";box.className="lock";document.body.appendChild(box);}
+  document.documentElement.classList.add("locked");
+  box.innerHTML='<form class="lock-card" id="lockForm"><span class="eyebrow">Nordic Trip 2027</span><h1>'+esc(U("北欧之旅 2027"))+'</h1>'+
+    '<p>'+esc(U("这个网站只给一起旅行的朋友看。输入访问码，这台设备之后都不用再输。"))+'</p>'+
+    '<div class="lock-row"><input id="lockIn" type="password" autocomplete="current-password" placeholder="'+esc(U("访问码"))+'" aria-label="'+esc(U("访问码"))+'" required>'+
+    '<button type="submit" class="pill primary">'+esc(U("进入"))+'</button></div><p class="lock-err" id="lockErr">'+esc(msg||"")+'</p></form>';
+  var inp=$("lockIn");inp.focus();
+  $("lockForm").addEventListener("submit",function(e){e.preventDefault();var code=inp.value.trim(),er=$("lockErr");if(!code)return;er.textContent=U("验证中…");
+    fetch(planApi()+"/api/check",{method:"POST",headers:{"X-Access-Code":code}}).then(function(r){
+      if(r.status===401){er.textContent=U("访问码不对。");inp.select();return;}if(!r.ok)throw new Error(r.status);
+      setAccessCode(code);return fetchPlan().then(function(p){keepPlan(p);box.remove();document.documentElement.classList.remove("locked");start(p);});})
+      .catch(function(){er.textContent=U("连不上行程服务器。");});});}
+function start(p){EN=p.en||{};if(p.rev)PLAN={rev:p.rev,last:p.last};boot(p.trip);watchPlan();}
 applyStatic();
 var kept=null;try{kept=JSON.parse(localStorage.getItem("nt-plan"));}catch(e){}
-(kept&&kept.trip?Promise.resolve(kept):fetchPlan(4000).then(function(p){keepPlan(p);return p;}).catch(function(e){console.warn("live plan unavailable, using the published copy:",e);return publishedPlan();}))
-  .then(function(p){EN=p.en||{};if(p.rev)PLAN={rev:p.rev,last:p.last};boot(p.trip);watchPlan();}).catch(function(e){
-    console.error(e);$("lede").textContent=U("行程没载入（{e}）。如果是直接从硬盘打开的 index.html，请改用本地服务器：python3 -m http.server",{e:e.message});
-  });
+if(kept&&kept.trip&&accessCode())start(kept);
+else if(!accessCode()&&!LOCALDEV)showLock();
+else fetchPlan(4000).then(function(p){keepPlan(p);return p;}).catch(function(e){
+    if(e.code===401){setAccessCode(null);showLock();return null;}
+    console.warn("live plan unavailable:",e);return publishedPlan();})
+  .then(function(p){if(p)start(p);}).catch(function(e){
+    console.error(e);$("lede").textContent=U("连不上行程服务器，这台设备上也还没有存过行程。有网的时候再打开一次。");});
 })();

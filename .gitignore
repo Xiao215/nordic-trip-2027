@@ -10,3 +10,6 @@ backend/expenses.json
 backend/expenses.tmp
 backend/drivers.json
 backend/drivers.tmp
+# the trip plan and its English live only on the Pi (scripts/plan.sh pull fetches a local copy)
+docs/trip.json
+docs/i18n/

@@ -18,35 +18,40 @@ Driver rotation (司机轮换, on the overview) is shared by the group: add who 
 
 The site works offline once it's been opened (`docs/sw.js`): the page, the plan, the last forecast and exchange rates come from the device when there's no signal, and an orange bar says so. Photos are kept once seen, and 准备 → 离线使用 (Prep → Offline use) downloads all of them ahead of time (about 35 MB). Google Maps and the chat still need a connection.
 
+**Private:** the site's code is public (GitHub Pages), but the plan, the expense log and the drivers live only on the Pi, behind the access code. The page has no data of its own: the first time a device opens it, it asks for the code, then remembers it (the same code unlocks the chat). Without it the page shows only the lock screen. Don't put booking references, passport numbers or payment details in the plan anyway: everyone with the code can read it.
+
 The forecast comes from [Open-Meteo](https://open-meteo.com/) (free, no key) and appears about 16 days before each day; until then the day shows typical July temperatures. Sunrise and sunset are calculated on the page.
 
 ```
-docs/                 static site, served by GitHub Pages
+docs/                 static site (code only, no trip data), served by GitHub Pages
   index.html          page shell, map column, assistant button and panel
   sw.js               offline copy (service worker)
   styles.css
-  trip.json           THE PLAN as last backed up from the Pi: legs, days, places, bookings, checklists
+  trip.json, i18n/    a local copy of the plan from scripts/plan.sh pull, for editing (gitignored, never committed)
   app.js              overview, day view, pace, what to bring, names switch, Google map, bookings + checklists, expense log, drivers, live plan updates
   chat.js             trip assistant: the panel, its steps and approval cards
   config.js           backend URL + Google Maps key
 backend/
   server.py           FastAPI + Claude API, streams answers; serves the live plan and the assistant's tools to change it; stores the expense log and drivers
-  plan.py             the live plan: checks, history, undo, taking a trip.json pushed to GitHub
+  plan.py             the live plan: checks, history, undo, replacing it with a version edited on a laptop
   .env                secrets (not committed)
 scripts/
   build_routes.py     regenerates the drive lines in trip.json
-deploy/                the backend's systemd unit on the Pi, and the 15-minute plan backup timer
+  plan.sh             pull the live plan from the Pi to edit it, push it back
+deploy/                the backend's systemd unit on the Pi, and the 15-minute backup timer
 scripts/pi-setup.sh   one-time setup on the Pi; scripts/pi-update.sh   what each deploy runs;
-scripts/pi-backup-plan.sh   commits the live plan back to docs/ when the chat changed it
+scripts/pi-backup-plan.sh   commits the Pi's data folder (plan, expenses, drivers) to a git history on the Pi
 ```
 
 ## Edit the plan
 
 Usually you just ask the chat assistant (see above). To edit the file by hand, or to change many things at once:
 
-1. Pull first (`git pull`), so you start from the latest backup of the live plan. Chat edits made in the last 15 minutes may not be backed up yet; to be sure, run `bash ~/services/nordic-trip/repo/scripts/pi-backup-plan.sh` on the Pi, then pull.
-2. Edit `docs/trip.json` (and `docs/i18n/en.json`), commit and push.
-3. When pi-dash deploys the push, the backend sees that the repo's plan changed and takes it as the live plan. The live version it replaces stays in the history, so asking the assistant to undo that change brings it back.
+The plan is never committed: it lives only on the Pi. With ssh access to the Pi:
+
+1. `scripts/plan.sh pull` copies the live plan into `docs/trip.json` and `docs/i18n/en.json` (both gitignored). Pull right before editing, so you have the chat's latest changes.
+2. Edit them (and run `scripts/build_routes.py`, `scripts/i18n_strings.py` as needed).
+3. `scripts/plan.sh push "what changed"` uploads it. The backend checks it (shape, place ids, English for every Chinese string, the assistant can read it) and refuses it with the reasons if not. The version it replaces stays in the history, so asking the assistant to undo that change brings it back. The upload goes from the Pi itself with the admin token in `data/admin.token`, which never leaves the Pi.
 
 The plan's format (`docs/trip.json`):
 
@@ -91,7 +96,7 @@ The backend runs on the Raspberry Pi (`ssh pi`), set up like the Pi's other serv
 - It's the user service `nordic-trip` on `127.0.0.1:8791`, public through Tailscale Funnel at `https://pi.tail3d8516.ts.net/nordic` (the address in `docs/config.js`).
 - The chat answers through cli-bridge on the Pi (`ANTHROPIC_BASE_URL=http://127.0.0.1:8787`), so it uses the Claude Code sign-in there, not an API key.
 - Everything lives in `~/services/nordic-trip`: `repo` (a checkout of `main`), `.venv`, `.env` (settings and secrets, from `backend/.env.example`) and `data` (the expense log, drivers, and `plan/`: the live plan, its change history and the versions kept for undo; back this folder up).
-- The user timer `nordic-trip-backup.timer` runs `scripts/pi-backup-plan.sh` every 15 minutes: when the chat changed the plan, it commits `docs/trip.json` and `docs/i18n/en.json` and pushes them, so GitHub has the history and GitHub Pages has a current fallback copy.
+- The user timer `nordic-trip-backup.timer` runs `scripts/pi-backup-plan.sh` every 15 minutes: when anything in `data` changed, it commits it to a git history in `data` itself (nothing goes to the public repo). Set `BACKUP_REMOTE` in `.env` to a private repo to also push it off the Pi.
 - **Deploys are automatic:** it's listed in `~/services/services.json`, so pi-dash checks GitHub every 5 minutes. When `main` has new commits, pi-dash pulls them, runs `scripts/pi-update.sh` (Python packages, systemd units, restart) and health-checks it. The page itself is on GitHub Pages and updates on push too.
 
 Useful commands on the Pi:

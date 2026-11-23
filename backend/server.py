@@ -194,7 +194,7 @@ SYSTEM_TEMPLATE = """你是「北欧之旅 2027」的行程助手。这是一趟
 - 大一点的改动（删掉或挪动景点、换住的地方、调整好几天的安排、改路线）提出之前，先用一两句话说清楚会影响什么（时间、预订、还车地点、开车时间）；有几种改法时先问对方选哪种。
 - 改哪里、改成什么拿不准时，先简短问一句，给出最可能的一两个选项。只是问建议时先回答，对方说要改再提。
 - 提出后用一两句话说你提议了什么；之后对话里会写明对方确认了还是没采用。有人要撤销时，用 plan_history 找到那次改动，再用 undo_plan_change（也会出确认卡片）。
-- 行程网页是公开的，也会备份到公开的 GitHub，所以绝不要把预订确认号、护照号、电话、住址、付款信息写进行程；有人发来这些，就提醒他们自己保存。
+- 行程网页要访问码才能看，但知道访问码的人都能看到，所以绝不要把预订确认号、护照号、电话、住址、付款信息写进行程；有人发来这些，就提醒他们自己保存。
 - 新加或改动的中文文字，要在 en 里给出英文（英文网页用），地名标记 [[id]] 原样保留。
 账本（大家共用的记账，网页上的“账本”页）你可以读、也可以记：
 - 问到花了多少、谁欠谁、谁付了什么，就用 read_expenses 读账本（里面有每人付了多少、该摊多少、怎么结清），按它的数字回答，不要自己估。货币用 <context> 里的 currency，没有就用 CAD。
@@ -624,8 +624,9 @@ async def delete_driver(body: PersonIn, x_access_code: str | None = Header(defau
 
 
 # ---------- the live plan ----------
-# The page loads the plan from here (falling back to its own copy offline), and the assistant changes it with the
-# tools below. Reading needs no access code: the plan is public anyway (GitHub Pages and the repo).
+# The page loads the plan from here (falling back to this device's last copy offline), and the assistant changes it
+# with the tools below. Reading needs the access code: the plan is only here, not on GitHub. A whole new version
+# (edited on a laptop) comes in through /api/plan/replace, with the admin token that only the Pi itself knows.
 
 _plan_lock = asyncio.Lock()
 _plan_gz: dict = {"rev": None, "body": b""}
@@ -636,12 +637,15 @@ def plan_meta() -> dict:
 
 
 @app.get("/api/plan/rev")
-async def plan_rev():
+async def plan_rev(x_access_code: str | None = Header(default=None)):
+    check_code(x_access_code)
     return Response(json.dumps(plan_meta(), ensure_ascii=False), media_type="application/json", headers={"Cache-Control": "no-store"})
 
 
 @app.get("/api/plan")
-async def plan(if_none_match: str | None = Header(default=None), accept_encoding: str | None = Header(default=None)):
+async def plan(if_none_match: str | None = Header(default=None), accept_encoding: str | None = Header(default=None),
+               x_access_code: str | None = Header(default=None)):
+    check_code(x_access_code)
     etag = f'"{PLAN.rev}"'
     if if_none_match == etag:
         return Response(status_code=304, headers={"ETag": etag})
@@ -652,6 +656,40 @@ async def plan(if_none_match: str | None = Header(default=None), accept_encoding
     if "gzip" in (accept_encoding or ""):
         return Response(_plan_gz["body"], media_type="application/json", headers={**headers, "Content-Encoding": "gzip"})
     return Response(_plan_gz["raw"], media_type="application/json", headers=headers)
+
+
+# The admin token: ADMIN_TOKEN in .env, or one made on first start in DATA/admin.token (readable only on the Pi).
+# scripts/plan.sh push reads it over ssh and calls /api/plan/replace from the Pi itself.
+def admin_token() -> str:
+    t = os.getenv("ADMIN_TOKEN", "").strip()
+    if t:
+        return t
+    f = DATA / "admin.token"
+    if not f.exists():
+        f.write_text(secrets.token_urlsafe(32))
+        f.chmod(0o600)
+    return f.read_text().strip()
+
+
+ADMIN_TOKEN = admin_token()
+
+
+class ReplaceIn(BaseModel):
+    trip: dict
+    en: dict
+    summary: str = Field(default="", max_length=200)
+
+
+@app.post("/api/plan/replace")
+async def replace_plan(body: ReplaceIn, x_admin_token: str | None = Header(default=None)):
+    if not x_admin_token or not hmac.compare_digest(x_admin_token.strip().encode(), ADMIN_TOKEN.encode()):
+        raise HTTPException(401, "admin token required")
+    async with _plan_lock:
+        try:
+            out = PLAN.replace(body.trip, body.en, "laptop", body.summary.strip(), validate=render_trip)
+        except PlanError as e:
+            raise HTTPException(422, str(e))
+    return out
 
 
 class PlanChange(BaseModel):

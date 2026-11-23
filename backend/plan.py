@@ -1,12 +1,13 @@
 """The live trip plan: the copy the page shows and the chat assistant can change.
 
-docs/trip.json and docs/i18n/en.json in the repo are where the plan starts and where it's backed up. The live copy
-sits in the data folder (data/plan/), so an edit made in the chat shows up on everyone's page at once, without a
-commit or a GitHub Pages rebuild. Every change keeps the version before it, so any change can be undone, and
-scripts/pi-backup-plan.sh commits the live copy back to docs/ when it has changed.
+The plan lives only in the data folder on the Pi (data/plan/trip.json and en.json), never in the public repo: the
+page fetches it with the access code. An edit made in the chat shows up on everyone's page at once. Every change keeps
+the version before it, so any change can be undone. A whole new version (edited on a laptop, see scripts/plan.sh)
+comes in through replace(), checked the same way and undoable too. scripts/pi-backup-plan.sh keeps a git history of
+the data folder on the Pi itself.
 
-When the repo's copy changes by itself (someone edited trip.json and pushed), the server takes that version when it
-starts, and keeps the live one it replaces in the history, so nothing is lost.
+On a fresh data folder the plan starts from docs/trip.json and docs/i18n/en.json if they exist (a local copy, never
+committed), and the server refuses to start without either.
 
 Edits are small operations on paths such as "bookings/odda-stay/cost" or "days/2027-07-19/segs/3/body": a segment
 picks a list item by its "id" or "date", or by its position. Before anything is saved the new plan is checked against
@@ -271,8 +272,8 @@ class Plan:
         (self.dir / "snapshots").mkdir(parents=True, exist_ok=True)
         self.trip_file, self.en_file = self.dir / "trip.json", self.dir / "en.json"
         self.repo_trip, self.repo_en = docs / "trip.json", docs / "i18n" / "en.json"
-        self.seed_file, self.log_file = self.dir / "seed.sha", self.dir / "history.jsonl"
-        self._sync_from_repo()
+        self.log_file = self.dir / "history.jsonl"
+        self._seed()
         self._load()
         self.shape = derive_shape(self.trip)
 
@@ -295,21 +296,13 @@ class Plan:
         self.trip, self.en = json.loads(t), json.loads(e)
         self.rev = self._hash(t, e)[:12]
 
-    def _sync_from_repo(self) -> None:
-        rt, re_ = self.repo_trip.read_bytes(), (self.repo_en.read_bytes() if self.repo_en.exists() else b"{}")
-        rh = self._hash(rt, re_)
-        seed = self.seed_file.read_text().strip() if self.seed_file.exists() else ""
-        if not self.trip_file.exists() or not self.en_file.exists():
-            self._write(rt, re_)
-            self._log({"id": self._id(), "ts": time.time(), "by": "", "kind": "start", "summary": "Started from the plan in the repo"})
-        elif rh != self._hash(*self._live_bytes()) and rh != seed:
-            # the repo's copy changed since the last sync: someone pushed a new trip.json
-            cid = self._id()
-            self._snapshot(cid)
-            self._write(rt, re_)
-            self._log({"id": cid, "ts": time.time(), "by": "GitHub", "kind": "repo",
-                       "summary": "Took the trip.json pushed to GitHub (the version it replaced can be restored with undo)"})
-        self.seed_file.write_text(rh)
+    def _seed(self) -> None:
+        if self.trip_file.exists() and self.en_file.exists():
+            return
+        if not self.repo_trip.exists():
+            raise SystemExit(f"No plan in {self.dir}: copy trip.json and en.json there (or into docs/ for a local run).")
+        self._write(self.repo_trip.read_bytes(), self.repo_en.read_bytes() if self.repo_en.exists() else b"{}")
+        self._log({"id": self._id(), "ts": time.time(), "by": "", "kind": "start", "summary": "Started from a local copy of the plan"})
 
     def _id(self) -> str:
         return f"{int(time.time()):x}{secrets.token_hex(2)}"
@@ -382,6 +375,27 @@ class Plan:
         if new == self.trip and new_en == self.en:
             raise PlanError("Nothing was changed: the plan already says this.")
         return new, new_en
+
+    def replace(self, trip: dict, en: dict, by: str, summary: str, validate=None) -> dict:
+        """A whole new version of the plan (edited elsewhere), checked like an edit; the old one stays in the history."""
+        if not isinstance(trip, dict) or not isinstance(en, dict):
+            raise PlanError("trip and en must both be objects")
+        errors = check(trip, self.shape)  # the same fields the page and the assistant know (plus EXTRA)
+        missing = sorted(s for s in zh_strings(trip) if s not in en)
+        if missing:
+            errors.append("English missing in en for: " + json.dumps(missing[:20], ensure_ascii=False))
+        if not errors and validate:
+            try:
+                validate(trip)
+            except Exception as e:
+                errors.append(f"the plan can't be read: {type(e).__name__}: {e}")
+        if errors:
+            raise PlanError("Nothing was changed:\n- " + "\n- ".join(errors[:25]))
+        if trip == self.trip and en == self.en:
+            raise PlanError("Nothing was changed: the live plan is already this version.")
+        out = self._commit(trip, en, {"by": by, "kind": "upload", "summary": summary or "Uploaded a new version of the plan"})
+        self.shape = derive_shape(self.trip)
+        return out
 
     def preview(self, changes: list[dict], lang_en: bool = False) -> list[dict]:
         """Each change as {op, path, before, after} in plain words, for the approval card."""
