@@ -74,10 +74,10 @@ var UIEN={
   "点一站看详情，地图会跳过去":"Tap a stop for details and to see it on the map","预订":"Bookings","前一天":"Previous day","后一天":"Next day",
   "视图":"View","选择日期":"Choose a day","语言":"Language","地图":"Map","行程地图":"Trip map","看全天 / 全程":"Show the whole day / trip",
   "在 Google 地图里打开当天路线":"Open the day's route in Google Maps","行程助手":"Trip assistant","输入访问码：":"Enter the access code:",
-  "访问码":"Access code","确定":"Enter","问问行程助手，或让它改行程…":"Ask about the trip, or ask for a change…","问行程助手":"Ask the trip assistant",
+  "访问码":"Access code","确定":"Enter","问问助手，或发张小票让它记账…":"Ask anything, or send a receipt to log it…","加图片（拍照或从相册选）":"Add a photo (camera or library)","加图片：小票、收据、截图":"Add a photo: a receipt, a bill, a screenshot","问行程助手":"Ask the trip assistant",
   "新对话":"New chat","清空对话，重新开始":"Clear this conversation and start over","关闭":"Close",
   "关闭（Esc）。关了回答也会继续。":"Close (Esc). Answers keep coming while it's closed.","问助手":"Ask","问行程助手（⌘K）":"Ask the trip assistant (⌘K)",
-  "随便问 · 改行程前会先等你确认":"Ask anything · changes wait for your approval","我是":"I'm","名字":"name","正在载入行程…":"Loading the plan…","按计划现在在这":"Here now (per plan)","Google 地图":"Google Map",
+  "随便问 · 改行程前会先等你确认":"Ask anything · changes wait for your approval","返回对话":"Back to the chat","历史对话":"Past chats","我是":"I'm","名字":"name","正在载入行程…":"Loading the plan…","按计划现在在这":"Here now (per plan)","Google 地图":"Google Map",
   "行程没载入（{e}）。如果是直接从硬盘打开的 index.html，请改用本地服务器：python3 -m http.server":"Couldn't load the plan ({e}). If you opened index.html from disk, serve the folder instead: python3 -m http.server",
   // pace
   "节奏":"Pace","轻松":"Easy","适中":"Moderate","很满":"Full","开车 {t}":"{t} driving","走路 {t}":"{t} on foot","在路上 {t}":"{t} in transit",
@@ -897,7 +897,7 @@ function embedPlace(ll,z){embedTo("https://maps.google.com/maps?q="+ll2(ll)+"&z=
 function embedRoute(stops){embedTo("https://maps.google.com/maps?saddr="+ll2(stops[0])+"&daddr="+stops.slice(1).map(ll2).join("+to:")+embedFit(stops)+embedTail());}
 function embedArea(q,z){embedTo("https://maps.google.com/maps?q="+encodeURIComponent(q)+"&z="+z+embedTail());}
 // Center and zoom that fit every stop in the frame, leaving room for the directions card (top) and caption (bottom).
-function embedFit(pts){var box=$("map"),w=box.clientWidth||400,h=box.clientHeight||500,T0=120,B0=50,S=40,
+function embedFit(pts){var box=$("map"),w=box.clientWidth||400,h=box.clientHeight||500,T0=Math.min(120,h*.3),B0=Math.min(50,h*.12),S=Math.min(40,w*.08),
     my=function(la){return Math.log(Math.tan(Math.PI/4+la*Math.PI/360));},
     la=pts.map(function(p){return p[0];}),lo=pts.map(function(p){return p[1];}),
     y1=my(Math.min.apply(0,la)),y2=my(Math.max.apply(0,la)),x1=Math.min.apply(0,lo),x2=Math.max.apply(0,lo),
@@ -952,11 +952,21 @@ function fitView(){
   if(state.view!=="day"){fitPts(allPts());return;}
   if(!D){var p=wxPlace(state.date);fitPts(p?[N[p]]:allPts(),7);return;}
   fitPts(dayPts(D),13);}
+// A stop shows on the day's whole route, centred on the stop, so you see where it sits in the day's driving
+// (the stop is in the middle of the map; the caption names it). A move shows itself.
+function around(pts,c){return pts.concat(pts.map(function(p){return [2*c[0]-p[0],2*c[1]-p[1]];}));}
+function stopOnRoute(s){var D=day();if(!D||s.t!=="stop"||!s.place)return null;
+  var r=embedDayRoute(D),at=LL(s.place),i=-1;r.forEach(function(p,k){if(i<0&&p[0]===at[0]&&p[1]===at[1])i=k;});
+  return r.length>1&&i>=0?{route:r,i:i,at:at}:null;}
 function frame(s){
-  if(embed){if(s.t==="move"){var ids=s.path.filter(function(x){return typeof x==="string";});
+  var on=stopOnRoute(s);caption();
+  if(embed){
+    if(on){embedTo("https://maps.google.com/maps?saddr="+ll2(on.route[0])+"&daddr="+on.route.slice(1).map(ll2).join("+to:")+embedFit(around(on.route,on.at))+embedTail());return;}
+    if(s.t==="move"){var ids=s.path.filter(function(x){return typeof x==="string";});
       if(s.mode==="drive"&&ids.length>1)embedRoute(ids.map(LL));else embedPlace(LL(ids[ids.length-1]),s.mode==="flight"?6:9);}
     else embedPlace(LL(s.place),s.zoom||14);return;}
   if(!map)return;
+  if(on){fitPts(around(dayPts(day()),on.at),14);return;}
   if(s.pts&&s.pts.length>1)fitPts(s.pts,s.t==="move"?13:15);else fitPts([LL(s.place)],s.zoom||14);}
 $("fitBtn").addEventListener("click",function(){if(state.view==="day"&&state.sel!=null){state.sel=null;paintOpen();markSel();}fitView();});
 
@@ -1064,6 +1074,8 @@ function flush(){if(flushing)return flushing;
     .then(function(){mState.status="ok";},offline).then(function(){flushing=null;renderMoney();});
   return flushing;}
 window.addEventListener("online",function(){if(OUT.length||state.view==="money")loadMoney();});
+// the assistant added an expense (someone approved its card): show it
+document.addEventListener("trip:money",function(){if(auth().code())loadMoney();});
 function addExpense(item){mState.err="";OUT.push({op:"add",item:item});store("nt-money-out",OUT);renderMoney();if(auth().code())flush();}
 function delExpense(id){mState.err="";var i=-1;OUT.forEach(function(o,k){if(o.op==="add"&&o.item.id===id)i=k;});
   if(i>=0)OUT.splice(i,1);else OUT.push({op:"del",id:id});store("nt-money-out",OUT);renderMoney();if(auth().code())flush();}

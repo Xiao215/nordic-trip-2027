@@ -13,6 +13,7 @@ import os
 import re
 import secrets
 import time
+import urllib.request
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -182,6 +183,13 @@ SYSTEM_TEMPLATE = """你是「北欧之旅 2027」的行程助手。这是一趟
 - 提出后用一两句话说你提议了什么；之后对话里会写明对方确认了还是没采用。有人要撤销时，用 plan_history 找到那次改动，再用 undo_plan_change（也会出确认卡片）。
 - 行程网页是公开的，也会备份到公开的 GitHub，所以绝不要把预订确认号、护照号、电话、住址、付款信息写进行程；有人发来这些，就提醒他们自己保存。
 - 新加或改动的中文文字，要在 en 里给出英文（英文网页用），地名标记 [[id]] 原样保留。
+账本（大家共用的记账，网页上的“账本”页）你可以读、也可以记：
+- 问到花了多少、谁欠谁、谁付了什么，就用 read_expenses 读账本（里面有每人付了多少、该摊多少、怎么结清），按它的数字回答，不要自己估。货币用 <context> 里的 currency，没有就用 CAD。
+- 有人让你记一笔账，或者发来小票、收据、账单的照片，就用 add_expense 提出记账：网页上会出现一张确认卡片，对方点“确认”才记进账本。先用 read_expenses 看成员名字（付款人和平摊的人必须是成员，名字要完全一致）和有没有记过同一笔。
+- 看照片时读出商家、日期、总金额（含税的实付总额，不是小计）和货币；冰岛小票上 kr 是 ISK，挪威是 NOK，瑞典是 SEK，丹麦是 DKK。类别从 food（吃饭）、groceries（超市）、fuel（油费）、transport（交通）、stay（住宿）、tickets（门票活动）、other 里选。what 写简短的商家或内容，比如“Bónus 超市”“N1 加油”。
+- 谁付的：对方说了就用；没说时默认是提问的人（<context> 里 Asked by），名字不是成员就先问。平摊：对方没说就默认所有成员平摊，并在回答里提一句。日期：小票上有就用小票上的，没有就用今天（行程当地日期）。
+- 照片看不清、金额或货币拿不准时，先问，不要猜。一张小票只记一笔，除非对方说要拆开。
+
 整个行程都还是初步的，欢迎帮忙出主意、调整，但不要说哪部分“已定”或“是草案”。
 
 签证、入境、TRV、ETIAS 这类问题要看对方用哪本护照、住在哪里：<context> 里有 passport 时，按 trip_plan 里对应那本护照的步骤回答；没有时先问一句，或者把中国护照和加拿大护照的情况分开说。
@@ -241,6 +249,21 @@ def daily_limit() -> None:
 class Msg(BaseModel):
     role: str = Field(pattern="^(user|assistant)$")
     content: str = Field(min_length=1, max_length=8000)
+    # photos attached to this turn (receipts…), as data: URLs the page has already shrunk; only the newest turn sends them
+    images: list[str] = Field(default_factory=list, max_length=4)
+
+
+IMAGE_URL = re.compile(r"^data:(image/(?:jpeg|png|webp|gif));base64,([A-Za-z0-9+/=]+)$")
+
+
+def image_blocks(urls: list[str]) -> list[dict]:
+    out = []
+    for u in urls:
+        m = IMAGE_URL.match(u)
+        if not m or len(u) > 6_000_000:
+            raise HTTPException(400, "图片格式不对或太大了。")
+        out.append({"type": "image", "source": {"type": "base64", "media_type": m.group(1), "data": m.group(2)}})
+    return out
 
 
 class ChatIn(BaseModel):
@@ -279,6 +302,7 @@ async def chat(body: ChatIn, x_access_code: str | None = Header(default=None)):
     for m in msgs:
         if merged and merged[-1]["role"] == m["role"]:
             merged[-1]["content"] += "\n\n" + m["content"]
+            merged[-1]["images"] += m["images"]
         else:
             merged.append(dict(m))
 
@@ -293,6 +317,11 @@ async def chat(body: ChatIn, x_access_code: str | None = Header(default=None)):
         if view:
             ctx.append("On the planner they're viewing: " + ", ".join(f"{k}={v}" for k, v in view.items()) + ".")
     merged[-1]["content"] = f"<context>{' '.join(ctx)}</context>\n\n{merged[-1]['content']}"
+    # photos go with the question they came with; older turns keep only their text
+    for i, m in enumerate(merged):
+        imgs = m.pop("images", [])
+        if imgs and i == len(merged) - 1 and m["role"] == "user":
+            m["content"] = [*image_blocks(imgs[:4]), {"type": "text", "text": m["content"]}]
 
     lang_en = bool(body.context and body.context.get("lang") == "en")
     return StreamingResponse(
@@ -308,7 +337,7 @@ async def answer(messages: list[dict], lang_en: bool = False, asker: str = ""):
         extra = {"betas": ["server-side-fallback-2026-07-01"], "fallbacks": FALLBACKS}
     # tool inputs here are short, so they stream as generated (and are validated before running); a local
     # Anthropic-compatible server may not know the field, so it's left off there
-    own = [dict(t, eager_input_streaming=True) for t in PLAN_TOOLS] if not LOCAL_AI else PLAN_TOOLS
+    own = [dict(t, eager_input_streaming=True) for t in PLAN_TOOLS + EXPENSE_TOOLS] if not LOCAL_AI else PLAN_TOOLS + EXPENSE_TOOLS
     tools = [WEB_SEARCH, *own]
     wrote = False
     try:
@@ -688,6 +717,130 @@ PLAN_TOOLS = [
                          "required": ["change_id"], "additionalProperties": False},
     },
 ]
+EXPENSE_TOOLS = [
+    {
+        "name": "read_expenses",
+        "description": "Read the group's shared expense log (the page's 账本 tab): the members, totals by category, what "
+                       "each person paid and owes, the fewest transfers to settle up, and the expenses themselves, newest "
+                       "first. Amounts are converted to `currency` at today's exchange rates for the totals; each expense "
+                       "also shows what was typed. Filter the list with person (paid by or shared by) or cat.",
+        "input_schema": {"type": "object", "properties": {
+            "currency": {"type": "string", "enum": ["CAD", "USD", "CNY", "EUR", "ISK", "NOK", "SEK", "DKK"]},
+            "person": {"type": "string"},
+            "cat": {"type": "string", "enum": ["food", "groceries", "fuel", "transport", "stay", "tickets", "other"]},
+            "limit": {"type": "integer", "minimum": 1, "maximum": 300, "description": "How many expenses to list (default 60)."},
+        }, "additionalProperties": False},
+    },
+    {
+        "name": "add_expense",
+        "description": "Propose adding one expense to the shared log, e.g. from a receipt photo. The person gets an "
+                       "approval card showing it; it's saved only when they approve. paidBy and every name in split must be "
+                       "members exactly as read_expenses lists them; split is who shares it equally (all members unless "
+                       "told otherwise). amount is the total actually paid, in the receipt's currency.",
+        "input_schema": {"type": "object", "properties": {
+            "what": {"type": "string", "description": "Short: the shop or what it was, e.g. \"Bónus 超市\"."},
+            "amount": {"type": "number"},
+            "currency": {"type": "string", "enum": ["ISK", "NOK", "SEK", "DKK", "EUR", "CAD", "USD", "CNY"]},
+            "cat": {"type": "string", "enum": ["food", "groceries", "fuel", "transport", "stay", "tickets", "other"]},
+            "date": {"type": "string", "description": "YYYY-MM-DD, from the receipt when it shows one."},
+            "paidBy": {"type": "string"},
+            "split": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+        }, "required": ["what", "amount", "currency", "cat", "date", "paidBy", "split"], "additionalProperties": False},
+    },
+]
+CAT_NAMES = {"food": ("吃饭", "Eating out"), "groceries": ("超市", "Groceries"), "fuel": ("油费", "Fuel"),
+             "transport": ("交通", "Transport"), "stay": ("住宿", "Lodging"), "tickets": ("门票活动", "Tickets"), "other": ("其他", "Other")}
+_fx: dict = {"t": 0.0, "rates": None}
+
+
+async def fx_rates() -> dict | None:
+    """Exchange rates against USD (the same source the page uses), fetched at most every 12 hours."""
+    if _fx["rates"] and time.time() - _fx["t"] < 12 * 3600:
+        return _fx["rates"]
+    def get() -> dict:
+        with urllib.request.urlopen("https://open.er-api.com/v6/latest/USD", timeout=6) as r:
+            return json.loads(r.read())
+    try:
+        j = await asyncio.to_thread(get)
+        if j.get("result") == "success":
+            _fx.update(t=time.time(), rates=j["rates"])
+    except (OSError, ValueError):
+        pass
+    return _fx["rates"]
+
+
+def fmt_amount(v: float, cur: str) -> str:
+    return f"{v:,.0f} {cur}" if cur == "ISK" or abs(v) >= 1000 else f"{v:,.2f} {cur}"
+
+
+async def expenses_text(raw: dict) -> str:
+    data = read_ledger()
+    sc = raw.get("currency") or "CAD"
+    rates = await fx_rates()
+    conv = (lambda v, c: v / rates[c] * rates[sc]) if rates and sc in rates else None
+    items = data["items"]
+    lines = [f"Members: {', '.join(data['people']) or '(none yet: people are added on the 账本 tab)'}",
+             f"{len(items)} expenses."]
+    if items and conv:
+        ppl = {p: [0.0, 0.0] for p in data["people"]}
+        total, cats = 0.0, {}
+        for x in items:
+            v = conv(x["amount"], x["currency"]) if x["currency"] in rates else 0.0
+            total += v
+            cats[x["cat"]] = cats.get(x["cat"], 0.0) + v
+            ppl.setdefault(x["paidBy"], [0.0, 0.0])[0] += v
+            for p in x["split"]:
+                ppl.setdefault(p, [0.0, 0.0])[1] += v / len(x["split"])
+        lines.append(f"Totals in {sc} at today's rates: {fmt_amount(total, sc)}; by category: "
+                     + ", ".join(f"{k} {fmt_amount(v, sc)}" for k, v in sorted(cats.items(), key=lambda kv: -kv[1])))
+        lines.append("Each person (paid / their share / net, + means others owe them): " + "; ".join(
+            f"{p} {fmt_amount(a, sc)} / {fmt_amount(b, sc)} / {'+' if a - b >= 0 else '-'}{fmt_amount(abs(a - b), sc)}" for p, (a, b) in ppl.items()))
+        # fewest transfers: the biggest debtor pays the biggest creditor, repeat (as the page does)
+        cr = sorted([[p, a - b] for p, (a, b) in ppl.items() if a - b > .01], key=lambda r: -r[1])
+        dr = sorted([[p, b - a] for p, (a, b) in ppl.items() if b - a > .01], key=lambda r: -r[1])
+        moves, i, j = [], 0, 0
+        while i < len(dr) and j < len(cr):
+            v = min(dr[i][1], cr[j][1])
+            if v >= .5:
+                moves.append(f"{dr[i][0]} → {cr[j][0]} {fmt_amount(v, sc)}")
+            dr[i][1] -= v
+            cr[j][1] -= v
+            i += dr[i][1] < .01
+            j += cr[j][1] < .01
+        lines.append("To settle up: " + ("; ".join(moves) or "everyone is square"))
+    elif items:
+        lines.append("(Exchange rates unavailable right now: totals per currency only.)")
+    who, cat = (raw.get("person") or "").strip(), raw.get("cat")
+    shown = [x for x in items if (not who or x["paidBy"] == who or who in x["split"]) and (not cat or x["cat"] == cat)]
+    shown = sorted(shown, key=lambda x: (x["date"], x.get("ts", 0)), reverse=True)[: int(raw.get("limit") or 60)]
+    if shown:
+        lines += ["", "Expenses, newest first (date · what · amount · category · paid by · shared by):"]
+        lines += [f"{x['date']} · {x['what']} · {fmt_amount(x['amount'], x['currency'])} · {x['cat']} · {x['paidBy']} · {', '.join(x['split'])}" for x in shown]
+    return "\n".join(lines)
+
+
+class ExpenseProposal(BaseModel):
+    what: str = Field(min_length=1, max_length=80)
+    amount: float = Field(gt=0, lt=1e9)
+    currency: str = Field(pattern="^(" + "|".join(CURRENCIES) + ")$")
+    cat: str = Field(pattern="^(" + "|".join(CATEGORIES) + ")$")
+    date: str = Field(pattern=r"^\d{4}-\d{2}-\d{2}$")
+    paidBy: str = Field(min_length=1, max_length=24)
+    split: list[str] = Field(min_length=1, max_length=20)
+
+
+def expense_card_rows(e: dict, lang_en: bool) -> list[dict]:
+    share = e["amount"] / len(e["split"])
+    L = (lambda zh, en: en if lang_en else zh)
+    return [{"op": "field", "path": "what", "where": L("内容", "What"), "before": "", "after": e["what"]},
+            {"op": "field", "path": "amount", "where": L("金额", "Amount"), "before": "", "after": fmt_amount(e["amount"], e["currency"])},
+            {"op": "field", "path": "cat", "where": L("类别", "Category"), "before": "", "after": CAT_NAMES[e["cat"]][1 if lang_en else 0]},
+            {"op": "field", "path": "date", "where": L("日期", "Date"), "before": "", "after": e["date"]},
+            {"op": "field", "path": "paidBy", "where": L("谁付的", "Paid by"), "before": "", "after": e["paidBy"]},
+            {"op": "field", "path": "split", "where": L("平摊", "Shared by"), "before": "",
+             "after": f"{', '.join(e['split'])}" + L(f"（每人 {fmt_amount(share, e['currency'])}）", f" ({fmt_amount(share, e['currency'])} each)")}]
+
+
 # Changes wait for a person: edit_plan and undo_plan_change check the change and turn it into a proposal, which the
 # chat shows as a card with Approve / Not now. Only the card's Approve applies it (POST /api/plan/proposals/<id>).
 # Proposals live in memory: after a restart (a deploy) an old card says to ask again.
@@ -706,6 +859,11 @@ def step_label(name: str, inp: dict | None, lang_en: bool) -> str:
         return f"Prepared a change: {inp.get('summary', '')}" if lang_en else f"准备改动：{inp.get('summary', '')}"
     if name == "plan_history":
         return "Read the change history" if lang_en else "看改动记录"
+    if name == "read_expenses":
+        return "Read the expense log" if lang_en else "读账本"
+    if name == "add_expense":
+        amt = f" · {inp.get('amount', '')} {inp.get('currency', '')}" if inp.get("amount") else ""
+        return (f"Prepared an expense: {inp.get('what', '')}{amt}" if lang_en else f"准备记账：{inp.get('what', '')}{amt}")
     if name == "undo_plan_change":
         return f"Prepared an undo: {inp.get('change_id', '')}" if lang_en else f"准备撤销：{inp.get('change_id', '')}"
     return name
@@ -748,6 +906,24 @@ async def run_plan_tool(name: str, raw: dict, asker: str, lang_en: bool) -> tupl
                             body.summary.strip(), PLAN.preview(changes, lang_en), by)
             print(f"[plan] proposal {card['id']} by {by or '?'}: {body.summary}", flush=True)
             return waiting.format(id=card["id"]), False, card
+        if name == "read_expenses":
+            return await expenses_text(raw), False, None
+        if name == "add_expense":
+            e = ExpenseProposal.model_validate(raw).model_dump()
+            e["what"], e["split"] = e["what"].strip(), list(dict.fromkeys(s.strip() for s in e["split"]))
+            data = read_ledger()
+            missing = [n for n in [e["paidBy"], *e["split"]] if n not in data["people"]]
+            if missing:
+                return (f"Not members of the log: {', '.join(missing)}. Members are: {', '.join(data['people']) or '(none)'}. "
+                        "Use their names exactly, or ask; new people are added on the 账本 tab."), True, None
+            same = [x for x in data["items"] if x["date"] == e["date"] and x["currency"] == e["currency"] and abs(x["amount"] - e["amount"]) < .01]
+            title = f"{e['what']} · {fmt_amount(e['amount'], e['currency'])}"
+            card = _propose("expense", e, ("Expense: " if lang_en else "记账：") + title, expense_card_rows(e, lang_en), by)
+            print(f"[money] proposal {card['id']} by {by or '?'}: {title}", flush=True)
+            note = (f" Note: the log already has {same[0]['what']} for the same amount on that day; mention it in case it's a duplicate." if same else "")
+            return ("Proposal {id} is waiting for approval: the page shows the person a card with this expense, with "
+                    "Approve and Not now. Nothing is saved until they approve it. In a sentence, say what you read and "
+                    "proposed, in the language they wrote in; don't ask them to type yes.").format(id=card["id"]) + note, False, card
         if name == "undo_plan_change":
             body = UndoIn.model_validate(raw)
             r, later, _ = PLAN.try_undo(body.change_id, body.also_later)
@@ -779,6 +955,18 @@ async def decide(pid: str, body: DecideIn, x_access_code: str | None = Header(de
         p.update(decided=time.time(), decided_by=who)
         if not body.approve:
             p["state"] = "declined"
+        elif p["kind"] == "expense":
+            async with _ledger_lock:
+                e, data = p["payload"], read_ledger()
+                missing = [n for n in [e["paidBy"], *e["split"]] if n not in data["people"]]
+                if missing:
+                    p.update(state="failed", error=f"{', '.join(missing)} 已经不在账本成员里了。")
+                else:
+                    iid = secrets.token_urlsafe(9)
+                    data["items"].append({"id": iid, **e, "ts": int(time.time() * 1000), **({"addedBy": who} if who else {})})
+                    write_ledger(data)
+                    p.update(state="applied", change_id=iid)
+                    print(f"[money] {iid} added from proposal {pid} (approved by {who or '?'})", flush=True)
         else:
             async with _plan_lock:
                 try:
