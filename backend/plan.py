@@ -451,25 +451,64 @@ class Plan:
                 break
         return " · ".join(x for x in out if x)
 
-    def words(self, v, lang_en: bool = False, n: int = 160) -> str:
-        """A value as short readable text: place names filled in, objects by their title."""
+    def days_preview(self, new: dict, new_en: dict, lang_en: bool = False, most: int = 6) -> list[dict]:
+        """The days whose schedule a change touches, as they read before and after it, for the approval card:
+        [{date, before, after}], each side {title, short, stay, segs} in words, or None for a day added or taken out."""
+        old = {d["date"]: d for d in self.trip.get("days", [])}
+        nxt = {d["date"]: d for d in new.get("days", [])}
+        out = []
+        for date in sorted(set(old) | set(nxt)):
+            a, b = old.get(date), nxt.get(date)
+            if a is not None and b is not None and a.get("segs") == b.get("segs") and a.get("stay") == b.get("stay"):
+                continue
+            out.append({"date": date, "before": self._day_words(a, self.trip, self.en, lang_en),
+                        "after": self._day_words(b, new, new_en, lang_en)})
+        return out[:most]
+
+    def _day_words(self, d: dict | None, trip: dict, en: dict, lang_en: bool) -> dict | None:
+        if d is None:
+            return None
+        W = lambda v, n=80: self.words(v, lang_en, n, trip, en)  # noqa: E731
+        segs = []
+        for s in d.get("segs", []):
+            x = {k: s[k] for k in ("start", "end", "mins", "kind", "mode") if s.get(k) is not None}
+            if s.get("t") == "move":
+                path = [p for p in s.get("path", []) if isinstance(p, str)]
+                ends = [path[0], path[-1]] if path else []
+                x.update(t="move", ends=ends, label=W(s.get("label") or " → ".join(f"[[{p}]]" for p in ends)))
+            else:
+                x.update(t="stop", place=s.get("place", ""), name=W(s.get("name") or f"[[{s.get('place', '')}]]"))
+            segs.append(x)
+        stay = d.get("stay")
+        return {"title": W(d.get("title", "")), "short": W(d.get("short", "")),
+                "stay": W(f"[[{stay}]]") if isinstance(stay, str) and stay else "", "segs": segs}
+
+    def words(self, v, lang_en: bool = False, n: int = 160, trip: dict | None = None, en: dict | None = None) -> str:
+        """A value as short readable text: place names filled in, objects by their title. trip and en: the version of
+        the plan to read place names and English from (the live one if not given)."""
+        trip, en = trip or self.trip, en if en is not None else self.en
         if v is None:
             return ""
         if isinstance(v, bool):
             return ("yes" if v else "no") if lang_en else ("是" if v else "否")
         if isinstance(v, dict):
+            if v.get("t") == "move":  # a schedule move: its label, else where it goes ("t" is only its type)
+                if isinstance(v.get("label"), str):
+                    return self.words(v["label"], lang_en, n, trip, en)
+                ends = [x for x in v.get("path", []) if isinstance(x, str)][::max(1, len(v.get("path", [])) - 1)][:2]
+                return " → ".join(self.words(f"[[{x}]]", lang_en, n, trip, en) for x in ends) or ("move" if lang_en else "移动")
+            if v.get("t") == "stop" and not v.get("name") and v.get("place"):
+                return self.words(f"[[{v['place']}]]", lang_en, n, trip, en)
             for k in ("title", "name", "what", "t", "zh", "label"):
                 if isinstance(v.get(k), str):
-                    return self.words(v[k], lang_en, n)
-            if v.get("t") == "move" and v.get("path"):
-                return " → ".join(self.words(f"[[{x}]]", lang_en) if isinstance(x, str) else "…" for x in v["path"])
+                    return self.words(v[k], lang_en, n, trip, en)
             return json.dumps(v, ensure_ascii=False)[:n]
         if isinstance(v, list):
-            return " · ".join(self.words(x, lang_en, 60) for x in v[:6])[:n]
+            return " · ".join(self.words(x, lang_en, 60, trip, en) for x in v[:6])[:n]
         if not isinstance(v, str):
             return str(v)
-        s = (self.en.get(v) or v) if lang_en else v
-        places, countries = self.trip["places"], self.trip["countries"]
+        s = (en.get(v) or v) if lang_en else v
+        places, countries = trip["places"], trip["countries"]
 
         def name(m):
             p = places.get(m.group(1)) or countries.get(m.group(1)) or {}

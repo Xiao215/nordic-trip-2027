@@ -108,14 +108,33 @@ function userLine(m){var w=document.createElement("div");w.className="l-me appea
   return add(w);}
 function botLine(m,live){var d=document.createElement("div");d.className="l-bot appear";add(d);paintBot(d,m,live);return d;}
 
-function stepsHtml(items,key,live){
-  var running=items.filter(function(s){return s.state==="running";}),n=items.length,last=running[running.length-1]||items[n-1];
-  var head=running.length?'<span class="spin"></span><span>'+esc(last.label||Z("正在处理","Working"))+"</span>"
-    :IC.search+"<span>"+Z("看了 <b>"+n+" 项</b>","Looked at <b>"+n+" thing"+(n>1?"s":"")+"</b>")+"</span>";
-  return '<details class="steps'+(running.length?" live":"")+'" data-steps="'+esc(key)+'"'+(openSteps[key]?" open":"")+"><summary>"+head+'<span class="chev">'+IC.chev+"</span></summary>"+
-    items.map(function(s){var st=s.state||"running";
-      return '<div class="step '+st+'">'+(st==="running"?'<span class="spin"></span>':st==="error"?IC.x:IC.check)+"<code>"+esc(s.label||"…")+'</code><span class="t">'+esc(clock(s.ts))+"</span></div>";}).join("")+"</details>";
+/* What the assistant did on the way to its answer: the tool calls (searches, parts of the plan it read) and any
+   text it wrote between them ("let me check the opening hours…"). That text is working notes, not the answer, so it
+   folds away with the steps, like a thinking block; text with no tool call after it is the answer and stays open.
+   While it works, the fold's head shows the step that's running. */
+function procHtml(run,key,live,writing){
+  var items=[],notes=0;run.forEach(function(p){if(p.t==="steps")items=items.concat(p.items);else notes++;});
+  var running=items.filter(function(s){return s.state==="running";}),n=items.length,last=running[running.length-1];
+  var head=writing?'<span class="spin"></span><span class="say">'+esc(latestLine(writing))+"</span>"
+    :running.length?'<span class="spin"></span><span>'+esc(last.label||Z("正在处理","Working"))+"</span>"
+    :IC.search+"<span>"+(n?Z("看了 <b>"+n+" 项</b>","Looked at <b>"+n+" thing"+(n>1?"s":"")+"</b>"):"")+(n&&notes?" · ":"")+(notes?Z("思考过程","Thought process"):"")+"</span>";
+  return '<details class="steps'+(running.length||writing?" live":"")+'" data-steps="'+esc(key)+'"'+(openSteps[key]?" open":"")+"><summary>"+head+'<span class="chev">'+IC.chev+"</span></summary>"+
+    run.map(function(p){
+      if(p.t!=="steps")return '<div class="step-note">'+md(p.text)+"</div>";
+      return p.items.map(function(s){var st=s.state||"running";
+        return '<div class="step '+st+'">'+(st==="running"?'<span class="spin"></span>':st==="error"?IC.x:IC.check)+"<code>"+esc(s.label||"…")+'</code><span class="t">'+esc(clock(s.ts))+"</span></div>";}).join("");}).join("")+"</details>";
 }
+// the sentence being written (or the last one), for the fold's one-line head
+function latestLine(s){var bits=s.replace(/\*\*|`|#/g,"").trim().split(/(?<=[。！？.!?])\s*|\n+/).filter(function(x){return x.trim();});
+  var l=bits.pop()||"";if(l.length<12&&bits.length)l=bits.pop()+" "+l;return l.trim();}
+// While a reply is coming in, its newest text might be a note on the way to a tool call or the start of the answer.
+// Until it's clearly the answer (the reply ends, or it runs past WRITING characters) it streams in the fold's head,
+// one line, the way a thinking block does, so notes never fill the screen for the moment before they fold away.
+var WRITING=300;
+// the answer's own text: what's left once the working notes before its last tool call are set aside
+function isNote(parts,i){var p=parts[i];if(p.t!=="text")return false;for(var j=i+1;j<parts.length;j++)if(parts[j].t==="steps")return true;return false;}
+function answerText(m){var ps=m.parts;if(!ps)return m.content||"";
+  return ps.filter(function(p,i){return p.t==="text"&&!isNote(ps,i);}).map(function(p){return p.text.trim();}).filter(Boolean).join("\n\n");}
 function cardHtml(c){
   var undo=c.kind==="undo",cash=c.kind==="expense",st=c.state;
   var right=st==="waiting"?'<span class="wait"><span class="live-dot busy"></span>'+Z("等你确认","Waiting for you")+"</span>"
@@ -124,35 +143,155 @@ function cardHtml(c){
     :st==="failed"?'<span class="wait bad">'+Z("没改成","Couldn't apply")+"</span>"
     :st==="sending"?'<span class="wait"><span class="spin"></span>'+Z("正在改…","Applying…")+"</span>"
     :'<span class="wait">'+Z("已失效","Expired")+"</span>";
-  var rows=(c.changes||[]).map(function(x){
+  var byDay=c.kind==="edit"&&c.days&&c.days.length;
+  var rows=(c.changes||[]).filter(function(x){return !byDay||!DAYPART.test(x.path||"");}).map(function(x){
     if(undo)return '<li><span class="where">'+IC.undo+esc(x.before)+"</span></li>";
     if(cash)return '<li class="kv"><span class="where">'+esc(x.where)+"</span><span>"+esc(x.after)+"</span></li>";
     var verb=x.op==="remove"?Z("删掉","Remove"):x.op==="insert"?Z("新加","Add"):x.before?Z("改","Change"):Z("加上","Set");
     return '<li><span class="where"><b>'+esc(verb)+"</b>"+esc(x.where||x.path)+"</span>"+
       (x.before&&x.op!=="insert"?'<span class="ba"><del>'+esc(x.before)+"</del>"+(x.op!=="remove"&&x.after?'<span class="arr">→</span><ins>'+esc(x.after)+"</ins>":"")+"</span>"
         :x.after?'<span class="ba"><ins>'+esc(x.after)+"</ins></span>":"")+"</li>";}).join("");
-  var foot=st==="waiting"?'<div class="ask-foot"><span class="grow">'+(cash?Z("确认后记进账本，大家都看得到；记错了可以在账本里删掉。","Once approved it goes in the shared log; delete it there if it's wrong."):Z("确认后大家的网页都会更新；之后说“撤销”就能改回去。","Once approved, everyone's page updates. Say “undo” to put it back."))+'</span>'+
+  var foot=st==="waiting"?'<div class="ask-foot"><span class="grow">'+(cash?Z("确认后记进账本，大家都看得到；记错了可以在账本里删掉。","Once approved it goes in the shared log; delete it there if it's wrong."):"")+'</span>'+
       '<button type="button" class="btn" data-decide="0">'+(cash?Z("不记","Don't add"):Z("先不改","Not now"))+'</button><button type="button" class="btn accent" data-decide="1">'+IC.check+(cash?Z("确认记账","Add it"):Z("确认修改","Approve"))+"</button></div>"
     :st==="failed"?'<p class="ask-err">'+esc(c.error||"")+"</p>":st==="expired"?'<p class="ask-err">'+esc(c.error||Z("这个提议已经失效了，请让助手再提一次。","This proposal has expired; ask the assistant again."))+"</p>":"";
   return '<div class="ask-card'+(st==="waiting"||st==="sending"?"":" settled")+'" data-card="'+esc(c.id)+'"><div class="ask-head"><h4>'+esc(c.title)+'</h4><span class="badge">'+(undo?IC.undo+Z("撤销","Undo"):cash?IC.cash+Z("记账","Expense"):IC.edit+Z("改行程","Plan change"))+"</span>"+right+"</div>"+
-    (rows?'<ul class="diff">'+rows+"</ul>":"")+foot+"</div>";
+    (byDay?daysHtml(c,rows):rows?'<ul class="diff">'+rows+"</ul>":"")+foot+"</div>";
+}
+
+/* ---------- a plan change, read as days ----------
+   An edit card comes with the days whose schedule it touches, before and after ({date, before, after}, each
+   {title, short, stay, segs}, place names already in words). The card says what that means first: how the days
+   start, end and how long the driving is, then per day what was added, taken out, moved to another day or
+   retimed. "See every change" opens each day as a timeline like the day page, the changes marked in place
+   and unchanged stretches folded; edits outside the schedule (titles, bookings…) are listed there too. */
+var DAYPART=/^\/?days\/[^/]+\/(segs|stay)(\/|$)/,openMore={};
+var KCOL={visit:"#1F4E6B",hike:"#3D7A4F",glacier:"#3F8FB5",water:"#2B7A8C",city:"#7A5C9E",food:"#C9711C",shop:"#C9711C",stay:"#5D6B73",camp:"#6B7F3A",start:"#5D6B73"};
+var MIC={drive:'<svg viewBox="0 0 20 20"><path d="M4 13V9.5L5.6 5h8.8L16 9.5V13M4 13h12M4 13v2M16 13v2"/></svg>',
+  walk:'<svg viewBox="0 0 20 20"><circle cx="11" cy="3.8" r="1.6"/><path d="M8 18l2-6 3 3v3M10 12l1-5-3 1.5L7 11M11 7l2 3 2.5 1"/></svg>',
+  other:'<svg viewBox="0 0 20 20"><path d="M4 10h11M11 6l4 4-4 4"/></svg>',
+  plus:'<svg viewBox="0 0 20 20"><path d="M10 5v10M5 10h10"/></svg>',minus:'<svg viewBox="0 0 20 20"><path d="M5 10h10"/></svg>',
+  home:'<svg viewBox="0 0 20 20"><path d="M3.5 16V8.5L10 4l6.5 4.5V16"/><path d="M8 16v-4.5h4V16"/></svg>'};
+function mdd(d){return (+d.slice(5,7))+"/"+(+d.slice(8,10));}
+function wkd(d){var w=new Date(d+"T12:00:00Z").getUTCDay();return isEn()?["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][w]:"周"+"日一二三四五六"[w];}
+function toMin(s){var m=/^(\d{1,2}):(\d\d)/.exec(s||"");return m?+m[1]*60+ +m[2]:null;}
+function segMins(s){if(s.mins)return s.mins;var a=toMin(s.start),b=toMin(s.end);if(a==null||b==null)return 0;return (b-a+1440)%1440;}
+function hmT(m){m=Math.round(Math.abs(m));var h=Math.floor(m/60),r=m%60;
+  return isEn()?((h?h+" h ":"")+(r?r+" min":"")).trim()||"0 min":((h?h+" 小时":"")+(r?(h?" ":"")+r+" 分":"")).trim()||"0 分";}
+function firstT(segs){for(var i=0;i<segs.length;i++)if(segs[i].start)return segs[i].start;return "";}
+function lastT(segs){for(var i=segs.length-1;i>=0;i--){var s=segs[i];if(s.end||s.start)return s.end||s.start;}return "";}
+function driveMins(segs){return segs.reduce(function(n,s){return n+(s.t==="move"&&s.mode!=="walk"?segMins(s):0);},0);}
+function segKey(s){return s.t==="move"?"m|"+(s.mode||"")+"|"+(s.ends||[]).join(">"):"s|"+(s.place||s.name);}
+// pairs each seg after the change with the same one before (same place, or same route for a move; the n-th with the n-th)
+function dayDiff(D){
+  var B=(D.before&&D.before.segs)||[],A=(D.after&&D.after.segs)||[],pool={},rows=[];
+  B.forEach(function(s,i){var k=segKey(s);(pool[k]=pool[k]||[]).push(i);});
+  var used={};
+  A.forEach(function(s){var k=segKey(s),q=pool[k],j=q&&q.length?q.shift():null,o=j==null?null:B[j];if(j!=null)used[j]=1;
+    var st=!o?"add":(o.start||"")!==(s.start||"")||(o.end||"")!==(s.end||"")||(s.mins||0)!==(o.mins||0)||(o.name||o.label)!==(s.name||s.label)||o.kind!==s.kind?"chg":"same";
+    rows.push({s:s,o:o,st:st,j:j});});
+  var gone=[];B.forEach(function(s,i){if(!used[i])gone.push({s:s,o:s,st:"del",j:i});});
+  return {rows:rows,gone:gone};
+}
+function impacts(days){
+  var out=[],dB=0,dA=0;
+  days.forEach(function(D){if(!D.before||!D.after)return;var B=D.before.segs,A=D.after.segs,md=mdd(D.date);
+    dB+=driveMins(B);dA+=driveMins(A);
+    var s0=toMin(firstT(B)),s1=toMin(firstT(A)),e0=toMin(lastT(B)),e1=toMin(lastT(A));
+    if(e0!=null&&e1!=null&&e0!==e1)out.push({p:0,label:Z(md+" 结束",md+" ends"),from:lastT(B),val:lastT(A),
+      note:e1<e0?Z("早 "+hmT(e0-e1),hmT(e0-e1)+" earlier"):Z("晚 "+hmT(e1-e0),hmT(e1-e0)+" later"),good:e1<e0});
+    if(s0!=null&&s1!=null&&s0!==s1)out.push({p:1,label:Z(md+" 出发",md+" starts"),from:firstT(B),val:firstT(A),
+      note:s1<s0?Z("早 "+hmT(s0-s1),hmT(s0-s1)+" earlier"):Z("晚 "+hmT(s1-s0),hmT(s1-s0)+" later"),good:s1>s0});});
+  if(Math.abs(dA-dB)>=5)out.push({p:2,label:Z("开车","Driving"),val:(dA>dB?"+":"−")+hmT(dA-dB),note:dA>dB?Z("多开","more driving"):Z("少开","less driving"),good:dA<dB});
+  return out.sort(function(a,b){return a.p-b.p;}).slice(0,3);
+}
+function tag(t,cls){return '<span class="cc-tag'+(cls?" "+cls:"")+'">'+esc(t)+"</span>";}
+function daysHtml(c,rows){
+  var days=c.days,diffs=days.map(dayDiff),moved={};
+  // a stop taken out of one day and added to another was moved there
+  diffs.forEach(function(d,i){d.gone.forEach(function(r){if(r.s.t!=="stop"||!r.s.place)return;
+    diffs.forEach(function(e,j){if(j!==i&&e.rows.some(function(x){return x.st==="add"&&x.s.place===r.s.place;}))moved[r.s.place]={from:days[i].date,to:days[j].date};});});});
+  var chips=impacts(days).map(function(x){return '<div class="cc-chip"><span>'+esc(x.label)+'</span><b>'+(x.from?'<s>'+esc(x.from)+"</s> ":"")+esc(x.val)+'</b><i class="'+(x.good?"good":"warn")+'">'+esc(x.note)+"</i></div>";}).join("");
+  var sum=days.map(function(D,i){return dayHead(D)+'<ul class="cc-sum">'+sumRows(D,diffs[i],moved)+"</ul>";}).join("");
+  var tl=days.map(function(D,i){return dayHead(D)+'<ol class="cc-tl">'+tlRows(D,diffs[i],moved)+"</ol>";}).join("");
+  var nOther=(rows.match(/<li/g)||[]).length;
+  return (chips?'<div class="cc-chips">'+chips+"</div>":"")+'<div class="cc-days">'+sum+"</div>"+
+    '<details class="cc-more" data-more="'+esc(c.id)+'"'+(openMore[c.id]?" open":"")+"><summary>"+IC.chev+"<span>"+Z("逐条看改动","See every change")+
+      (nOther?'<small>'+Z(" · 另有 "+nOther+" 处标题、说明等改动"," · plus "+nOther+" other edit"+(nOther>1?"s":""))+"</small>":"")+"</span></summary>"+
+      '<div class="cc-more-in">'+tl+(rows?'<h5 class="cc-h">'+Z("其他改动","Other edits")+'</h5><ul class="diff">'+rows+"</ul>":"")+"</div></details>";
+}
+function dayHead(D){var A=D.after||D.before||{},B=D.before||{},short=A.short||A.title||"";
+  return '<div class="cc-day"><b>'+esc(mdd(D.date)+" "+wkd(D.date))+"</b><span>"+(B.short&&D.after&&B.short!==A.short?"<s>"+esc(B.short)+"</s> ":"")+esc(short)+"</span>"+
+    (!D.before?tag(Z("新的一天","New day"),"add"):!D.after?tag(Z("这天拿掉","Day removed"),"del"):"")+"</div>";}
+function stopName(s){return s.name||s.place||"";}
+function movedTag(r,moved){var m=r.s.place&&moved[r.s.place];if(!m)return "";
+  return r.st==="del"?Z("挪到 "+mdd(m.to)+" →","Moved to "+mdd(m.to)+" →"):Z("← 从 "+mdd(m.from),"← from "+mdd(m.from));}
+function timeChg(o,s){return '<span class="cc-t"><s>'+esc(o.start||"")+"</s> "+esc(s.start||"")+"</span>";}
+function sumRows(D,d,moved){
+  if(!D.after)return '<li class="del"><span class="cc-ic">'+MIC.minus+"</span><span>"+Z("这一天的安排都拿掉了","This day's plan is taken out")+"</span></li>";
+  var h="",same=0,addPl={};
+  d.rows.forEach(function(r){if(r.st==="add"&&r.s.t==="stop")addPl[r.s.place]=1;});
+  d.gone.forEach(function(r){if(r.s.t!=="stop")return;var mv=movedTag(r,moved);
+    h+='<li class="del"><span class="cc-ic">'+MIC.minus+'</span><span class="cc-n"><s>'+esc(stopName(r.s))+"</s>"+(r.s.start?' <span class="cc-t">'+esc(r.s.start)+"</span>":"")+"</span>"+tag(mv||Z("拿掉","Removed"),"del")+"</li>";});
+  d.rows.forEach(function(r){var s=r.s,o=r.o;
+    if(r.st==="same"){if(s.t==="stop")same++;return;}
+    if(s.t==="move"){
+      // a new drive between stops that were already there: the route changed
+      if(r.st==="add"&&!(s.ends||[]).some(function(p){return addPl[p];}))
+        h+='<li class="chg"><span class="cc-ic">'+(MIC[s.mode]||MIC.other)+'</span><span class="cc-n">'+esc(s.label)+' <span class="cc-t">'+esc(hmT(segMins(s)))+"</span></span>"+tag(Z("新路线","New route"))+"</li>";
+      return;}
+    if(r.st==="add"){var mv=movedTag(r,moved);
+      h+='<li class="add"><span class="cc-ic">'+MIC.plus+'</span><span class="cc-n"><b>'+esc(stopName(s))+"</b>"+(s.start?' <span class="cc-t">'+esc(s.start+(s.end&&s.end!==s.start?"–"+s.end:""))+"</span>":"")+"</span>"+tag(mv||Z("新加","New"),"add")+"</li>";return;}
+    var renamed=stopName(o)!==stopName(s);
+    h+='<li class="chg"><span class="cc-ic">'+(s.kind==="start"||s.kind==="stay"?MIC.home:IC.edit)+'</span><span class="cc-n">'+(renamed?"<s>"+esc(stopName(o))+"</s> ":"")+esc(stopName(s))+"</span>"+
+      ((o.start||"")!==(s.start||"")?timeChg(o,s):"")+"</li>";});
+  if(D.before&&D.after&&D.before.stay!==D.after.stay)h+='<li class="chg"><span class="cc-ic">'+MIC.home+'</span><span class="cc-n">'+Z("住：","Sleep: ")+(D.before.stay?"<s>"+esc(D.before.stay)+"</s> ":"")+esc(D.after.stay||Z("（没有）","(none)"))+"</span></li>";
+  if(same)h+='<li class="same"><span class="cc-ic">'+IC.check+"</span><span>"+(h?Z("其余 "+same+" 站不变",same+" other stop"+(same>1?"s":"")+" unchanged"):Z(same+" 站都不变","All "+same+" stops unchanged"))+"</span></li>";
+  return h;
+}
+function tlRow(r,num,moved){var s=r.s,o=r.o||s,st=r.st,mv=movedTag(r,moved);
+  var t=st==="del"?"<s>"+esc(s.start||"")+"</s>":esc(s.start||"")+(st==="chg"&&(o.start||"")!==(s.start||"")?"<s>"+esc(o.start||"")+"</s>":"");
+  var badge=st==="add"?tag(mv||Z("新加","New"),"add"):st==="del"?tag(mv||Z("拿掉","Removed"),"del"):st==="chg"?tag(Z("改了","Changed")):"";
+  if(s.t==="move")return '<li class="mv '+st+'"><span class="t"></span><span class="num">'+(MIC[s.mode]||MIC.other)+'</span><span class="n">'+
+    (st==="del"?"<s>":"")+esc((segMins(s)?hmT(segMins(s))+" · ":"")+s.label)+(st==="del"?"</s>":"")+(st==="chg"&&segMins(o)!==segMins(s)?'<small>'+Z("原来 ","was ")+esc(hmT(segMins(o)))+"</small>":"")+"</span>"+badge+"</li>";
+  var name=stopName(s),was=st==="chg"&&stopName(o)!==name?stopName(o):"",d=s.start&&s.end&&s.start!==s.end?hmT(segMins(s)):s.mins?hmT(s.mins):"";
+  return '<li class="'+st+'"><span class="t">'+t+'</span><span class="num" style="--k:'+(KCOL[s.kind]||KCOL.visit)+'">'+(st==="del"?"":num)+'</span><span class="n">'+
+    (st==="del"?"<s>"+esc(name)+"</s>":"<b>"+esc(name)+"</b>")+((was||d)?"<small>"+esc([d,was?Z("原：","was: ")+was:""].filter(Boolean).join(" · "))+"</small>":"")+"</span>"+badge+"</li>";}
+function tlRows(D,d,moved){
+  // a removed stop goes back right after what came before it in the old schedule; unchanged stretches of three or more fold away
+  var list=d.rows.slice(),n=0;
+  d.gone.forEach(function(g){if(g.s.t!=="stop")return;var at=0;
+    for(var i=0;i<list.length;i++)if(list[i].j!=null&&list[i].j<g.j)at=i+1;
+    list.splice(at,0,g);});
+  var html=[],run=[];
+  function flush(){if(run.length>=3){var st=run.filter(function(x){return x.r.s.t==="stop";}).length,a=firstT(run.map(function(x){return x.r.s;})),b=lastT(run.map(function(x){return x.r.s;}));
+      html.push('<li class="fold"><details><summary><span class="t">'+esc(a&&b?a+"–"+b:"")+"</span><span>"+Z(st+" 站不变",st+" stop"+(st===1?"":"s")+" unchanged")+"</span>"+IC.chev+"</summary><ol>"+run.map(function(x){return x.h;}).join("")+"</ol></details></li>");}
+    else run.forEach(function(x){html.push(x.h);});run=[];}
+  list.forEach(function(r){var num=r.st!=="del"&&r.s.t==="stop"?++n:0,h=tlRow(r,num,moved);
+    if(r.st==="same")run.push({r:r,h:h});else{flush();html.push(h);}});
+  flush();
+  return html.join("")||'<li class="same"><span class="n">'+Z("这一天没有安排","Nothing planned this day")+"</span></li>";
 }
 function paintBot(d,m,live){
-  var parts=m.parts||[{t:"text",text:m.content||""}],h="";
+  var parts=m.parts||[{t:"text",text:m.content||""}],h="",run=[],runAt=0,end=parts.length-1;
+  var tail=live&&parts[end]&&parts[end].t==="text"&&parts[end].text.trim(),writing=tail&&tail.length<WRITING?tail:"";
+  function flush(){if(run.length)h+=procHtml(run,(m.ts||0)+"-"+runAt,live,writing&&run[run.length-1]===parts[end]?writing:"");run=[];}
   parts.forEach(function(p,i){
-    if(p.t==="steps")h+=stepsHtml(p.items,(m.ts||0)+"-"+i,live);
-    else if(p.t==="card")h+=cardHtml(p.card);
+    if(p.t==="steps"||(isNote(parts,i)&&p.text.trim())||(writing&&i===end)){if(!run.length)runAt=i;run.push(p);return;}
+    if(p.t==="text"&&!p.text.trim())return; // a blank between notes and steps keeps them in one fold
+    flush();
+    if(p.t==="card")h+=cardHtml(p.card);
     else if(p.text)h+='<div class="m-content">'+md(p.text)+"</div>";});
+  flush();
   var lastPart=parts[parts.length-1];
   if(live&&(!lastPart||lastPart.t!=="text"||!lastPart.text)&&!(lastPart&&lastPart.t==="steps"&&lastPart.items.some(function(s){return s.state==="running";})))
     h+='<div class="l-status"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span>'+Z("思考中","Thinking")+"</span></div>";
   if(!live){h+='<div class="l-tools"><span>'+esc(clock(m.ts))+(m.stopped?Z(" · 中途停止"," · stopped early"):"")+'</span><button type="button" data-copy="1">'+Z("复制","Copy")+"</button></div>";}
   d.innerHTML=h;d._m=m;
 }
-log.addEventListener("toggle",function(e){var k=e.target.dataset&&e.target.dataset.steps;if(k)openSteps[k]=e.target.open;},true);
+log.addEventListener("toggle",function(e){var ds=e.target.dataset||{};if(ds.steps)openSteps[ds.steps]=e.target.open;if(ds.more)openMore[ds.more]=e.target.open;},true);
 log.addEventListener("click",function(e){var t;
   if((t=e.target.closest("[data-copy]"))){var m=t.closest(".l-bot")._m;
-    (navigator.clipboard?navigator.clipboard.writeText(m.content):Promise.reject()).then(function(){t.textContent=Z("已复制","Copied");setTimeout(function(){t.textContent=Z("复制","Copy");},1500);}).catch(function(){});return;}
+    (navigator.clipboard?navigator.clipboard.writeText(answerText(m)):Promise.reject()).then(function(){t.textContent=Z("已复制","Copied");setTimeout(function(){t.textContent=Z("复制","Copy");},1500);}).catch(function(){});return;}
   if((t=e.target.closest("[data-decide]"))){decide(t.closest("[data-card]").dataset.card,t.dataset.decide==="1");return;}
   if((t=e.target.closest("[data-suggest]"))){ask(t.textContent);}
 });
@@ -306,6 +445,7 @@ function ask(q,imgs){
   function finish(stopped){
     m.parts.forEach(function(p){if(p.t==="steps")p.items.forEach(function(s){if(s.state==="running")s.state=stopped?"error":"done";});});
     m.parts=m.parts.filter(function(p){return p.t!=="text"||p.text.trim();});
+    if(raf){cancelAnimationFrame(raf);raf=0;} // a repaint still queued from the stream would draw it as unfinished again
     m.ts=Date.now();m.stopped=stopped||undefined;cur=null;C.msgs.push(m);C.ts=Date.now();save();paintBot(el,m,false);}
   fetch(API+"/api/chat",{method:"POST",signal:ctrl&&ctrl.signal,headers:{"Content-Type":"application/json","X-Access-Code":S.code||""},
     body:JSON.stringify({name:"",messages:withPhotos(history(C),q,imgs),context:ctx})})

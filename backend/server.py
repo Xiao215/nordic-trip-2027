@@ -207,7 +207,9 @@ SYSTEM_TEMPLATE = """你是「北欧之旅 2027」的行程助手。这是一趟
 
 签证、入境、TRV、ETIAS 这类问题要看对方用哪本护照、住在哪里：<context> 里有 passport 时，按 trip_plan 里对应那本护照的步骤回答；没有时先问一句，或者把中国护照和加拿大护照的情况分开说。
 
-Latency-sensitive; begin your visible answer immediately.
+Latency-sensitive: a quick question gets its answer right away.
+
+要上网查或读行程时，直接调用工具，不要先写“我来查一下”“I should check…”这类过程说明或自言自语；工具之间也不要写。给对方看的文字只写在最后的回答里，用对方用的语言。
 
 <trip_plan>
 {plan}
@@ -952,9 +954,10 @@ async def run_plan_tool(name: str, raw: dict, asker: str, lang_en: bool) -> tupl
         if name == "edit_plan":
             body = EditPlanIn.model_validate(raw)
             changes = [c.model_dump() for c in body.changes]
-            PLAN.try_edit(changes, body.en, validate=render_trip)  # refuse now what couldn't be applied later
+            new, new_en = PLAN.try_edit(changes, body.en, validate=render_trip)  # refuse now what couldn't be applied later
             card = _propose("edit", {"changes": changes, "en": body.en, "summary": body.summary.strip()},
                             body.summary.strip(), PLAN.preview(changes, lang_en), by)
+            card["days"] = PROPOSALS[card["id"]]["days"] = PLAN.days_preview(new, new_en, lang_en)
             print(f"[plan] proposal {card['id']} by {by or '?'}: {body.summary}", flush=True)
             return waiting.format(id=card["id"]), False, card
         if name == "read_expenses":
