@@ -114,7 +114,8 @@ var UIEN={
   "照片：已存 {a} / {b} 张":"Photos: {a} of {b} saved","下载全部照片（约 {m} MB）":"Download all photos (~{m} MB)","正在下载 {a} / {b}…":"Downloading {a} of {b}…",
   "{n} 张没下载成功，有信号时再点一次":"{n} didn't download; try again with a better connection",
   "地图和行程助手要联网。出发前在 Google 地图 app 里下载冰岛、挪威、瑞典、丹麦的离线地图。":"The map and the assistant need a connection. Before you go, download offline maps of Iceland, Norway, Sweden and Denmark in the Google Maps app.",
-  "离线中：行程和存好的照片都能看，地图、助手和同步要等有信号":"Offline: the plan and saved photos still work; the map, the assistant and syncing wait for signal"
+  "离线中：行程和存好的照片都能看，地图、助手和同步要等有信号":"Offline: the plan and saved photos still work; the map, the assistant and syncing wait for signal",
+  "徒步图":"Trail map","Google 路线":"Google route","切换到等高线徒步图":"Switch to topographic trail map","切回 Google 路线视图":"Switch back to Google route view"
 };
 /* ---------- currency ---------- */
 // Prices stay as written in trip.json (ISK, NOK, SEK, DKK, €, US$). With CAD, CNY or USD picked, every
@@ -263,6 +264,7 @@ function index(trip){
       // each drive's key for the driver rotation: date + where it starts and ends (#2 for a repeat that day)
       if(s.t==="move"&&s.mode==="drive"){var ids=s.path.filter(function(x){return typeof x==="string";}),k=D.date+"|"+(ids.length?ids[0]+">"+ids[ids.length-1]:i);
         dn[k]=(dn[k]||0)+1;s.dk=dn[k]>1?k+"#"+dn[k]:k;}});
+    (D.options||[]).forEach(function(o){o.pts=o.geom?decode(o.geom):null;});
     PACE[D.date]=pace(D);});
 }
 function boot(trip){
@@ -601,7 +603,7 @@ function renderRows(){
 }
 function segLi(s,cur,inGrp){
   var li=document.createElement("li");li.dataset.i=s.i;li.style.setProperty("--n",Math.min(s.i,14));if(cur&&cur.i===s.i)li.classList.add("now");
-  var b=document.createElement("button");b.className="row"+(s.t==="move"?" move":"");b.setAttribute("aria-expanded","false");
+  var b=document.createElement("div");b.className="row"+(s.t==="move"?" move":"");b.setAttribute("role","button");b.tabIndex=0;b.setAttribute("aria-expanded","false");
   if(s.t==="move"){var dm=dur(s),km=inGrp&&s.mode==="walk"?walkKm(s):0;
     b.innerHTML='<span class="t"></span><span class="num" title="'+esc(mode(s.mode))+'">'+(ICON[s.mode]||ICON.drive)+'</span><span class="n">'+
       (inGrp&&s.mode==="walk"?esc([cap(mode(s.mode))+(dm?" "+hm(dm):""),km?distTxt(km):""].filter(Boolean).join(" · "))+(s.label?" · "+tx(s.label):"")
@@ -610,7 +612,8 @@ function segLi(s,cur,inGrp){
   else{b.style.setProperty("--k",KCOL[s.kind]||KCOL.visit);
     var bits=[s.start&&s.end&&s.start!==s.end?hm(dur(s)):s.mins?hm(s.mins):"",L(T.kinds[s.kind])].filter(Boolean).join(" · ");
     b.innerHTML='<span class="t">'+(s.start?esc(s.start):"")+'</span><span class="num">'+s.num+'</span><span class="n">'+tx(s.name||"[["+s.place+"]]")+(cur&&cur.i===s.i?'<span class="now-tag">'+U("现在")+'</span>':"")+"</span>"+ICON.chev+'<span class="s">'+esc(bits)+"</span>";}
-  b.addEventListener("click",function(){if(state.sel===s.i){state.sel=null;paintOpen();markSel();fitView();}else select(s.i,true);});
+  b.addEventListener("click",function(){var sel=getSelection();if(sel&&!sel.isCollapsed&&b.contains(sel.anchorNode))return;if(state.sel===s.i){state.sel=null;paintOpen();markSel();fitView();}else select(s.i,true);});
+  b.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();b.click();}});
   li.appendChild(b);return li;}
 /* ---------- a walk through several stops, shown as one row ---------- */
 // Consecutive segs that share a "group" name (stops a short walk apart, and the walks between them) fold
@@ -638,7 +641,7 @@ function grpRow(run,cur){
   var loop=false;if(last.t==="move"){var e=last.path[last.path.length-1],b0=first.t==="move"?first.path[0]:first.place;
     if(e===b0)loop=true;else if(typeof e==="string"&&ends[ends.length-1]!==e)ends.push(e);}
   var chips=ends.map(function(p){return '<span class="chip">'+tx("[["+p+"]]")+"</span>";}).concat(loop?['<span class="chip back">'+esc(U("回到起点"))+"</span>"]:[]).join('<span class="ar">→</span>');
-  var b=document.createElement("button");b.className="row grp-row";b.setAttribute("aria-expanded",open);
+  var b=document.createElement("div");b.className="row grp-row";b.setAttribute("role","button");b.tabIndex=0;b.setAttribute("aria-expanded",open);
   b.innerHTML='<span class="t">'+esc(t0)+'</span><span class="num">'+ICON.walk+'</span><span class="n">'+tx(first.group)+(li.classList.contains("now")?'<span class="now-tag">'+U("现在")+"</span>":"")+"</span>"+ICON.chev+
     '<span class="s">'+esc(bits)+'</span><span class="chips">'+chips+"</span>";
   li.appendChild(b);
@@ -655,12 +658,13 @@ function grpRow(run,cur){
       return {meta:[md(dt)+" "+wk(dt),when,U("{n} 站",{n:st.length}),wm?U("走路约 {t}",{t:hm(wm)}):""].filter(Boolean).join(" · "),
         title:plain(first.group),sub:ends.map(function(p){return plain("[["+p+"]]");}).concat(loop?[U("回到起点")]:[]).join(" → ")};}));});
   var box=document.createElement("div");box.className="grp-box";box.appendChild(ul);box.appendChild(acts);inn.appendChild(box);fold.appendChild(inn);li.appendChild(fold);
-  b.addEventListener("click",function(){var on=!li.classList.contains("open");
+  b.addEventListener("click",function(){var sel=getSelection();if(sel&&!sel.isCollapsed&&b.contains(sel.anchorNode))return;var on=!li.classList.contains("open");
     if(on){closeGroups(li);closeOpts(null);if(state.sel!=null){state.sel=null;paintOpen();markSel();}}
     GOPEN[id]=on;
     if(!on&&run.some(function(x){return x.i===state.sel;})){state.sel=null;paintOpen();markSel();}
     li.classList.toggle("open",on);b.setAttribute("aria-expanded",on);fold.inert=!on;
     if(on)frameGroup(pts);else if(state.sel==null)fitView();});
+  b.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();b.click();}});
   return li;}
 function closeGroups(keep){document.querySelectorAll("#rows li.grp.open").forEach(function(el){if(el===keep)return;
   el.classList.remove("open");el.querySelector(".grp-row").setAttribute("aria-expanded","false");el.querySelector(".grp-fold").inert=true;
@@ -669,7 +673,7 @@ function closeOpts(keep){document.querySelectorAll("#rows li.opts.open").forEach
   el.classList.remove("open");el.querySelector(".opt-toggle").setAttribute("aria-expanded","false");el.querySelector(".opt-fold").inert=true;
   OPTOPEN[state.date+"|"+el.dataset.opt]=false;});}
 // opening a walk frames its stops on the map
-function frameGroup(ids){var ps=ids.map(LL);caption();
+function frameGroup(ids){hideHikeMap();var ps=ids.map(LL);caption();
   if(embed){if(ps.length>1)embedRoute(ps);else embedPlace(ps[0],15);return;}
   if(map)fitPts(ps,16);}
 /* ---------- optional extras between stops ---------- */
@@ -707,7 +711,9 @@ $("rows").addEventListener("click",function(e){
     if(on){closeOpts(li);closeGroups(null);if(state.sel!=null){state.sel=null;paintOpen();markSel();}}
     OPTOPEN[id]=on;
     li.classList.toggle("open",on);t.setAttribute("aria-expanded",on);li.querySelector(".opt-fold").inert=!on;
-    if(on){var list=optGroups(day())[li.dataset.opt]||[],ps=list.map(function(x){return x.place;}).filter(function(p){return p&&N[p];});if(ps.length)frameGroup(ps);}
+    if(on){var list=optGroups(day())[li.dataset.opt]||[],o0=list[0],ps=list.map(function(x){return x.place;}).filter(function(p){return p&&N[p];});
+      if(o0&&(o0.kind==="hike"||(o0.pts&&o0.pts.length>1))){$("mapCaption").textContent=plain(o0.name||"[["+o0.place+"]]");showHikeMap(o0.pts,o0.place&&N[o0.place],"opt:"+id);}
+      else if(ps.length)frameGroup(ps);}
     else if(state.sel==null)fitView();
     return;}
   var a=e.target.closest("[data-opt-ask]");
@@ -1109,7 +1115,7 @@ function embedDayRoute(D){if(D.route)return D.route.map(LL);var groups=[[]],vias
   for(var j=best.length-2;best.length>10&&j>0;j--)if(vias[best[j]])best.splice(j,1);
   return best.slice(0,10).map(LL);}
 function fitView(){
-  caption();redrawMap();var D=day();
+  hideHikeMap();caption();redrawMap();var D=day();
   if(embed){
     if(state.view!=="day"){var l=legOf(state.date)||T.legs[0],c=T.countries[l.c]||{};embedArea(c.en||"Iceland",c.zoom||5);return;}
     if(!D){var lw=wxPlace(state.date);if(lw)embedPlace(N[lw],7);else{var cc=T.countries[cOf(state.date)]||{};embedArea(cc.en||"Iceland",cc.zoom||5);}return;}
@@ -1125,6 +1131,9 @@ function stopOnRoute(s){var D=day();if(!D||s.t!=="stop"||!s.place)return null;
   var r=embedDayRoute(D),at=LL(s.place),i=-1;r.forEach(function(p,k){if(i<0&&p[0]===at[0]&&p[1]===at[1])i=k;});
   return r.length>1&&i>=0?{route:r,i:i,at:at}:null;}
 function frame(s){
+  if(s&&s.t==="stop"&&(s.kind==="hike"||(s.pts&&s.pts.length>1))){
+    caption();showHikeMap(s.pts,LL(s.place),"seg:"+state.date+":"+s.i);return;}
+  hideHikeMap();
   var on=stopOnRoute(s);caption();
   if(embed){
     if(on&&on.i>0){var r=on.route.slice(0,on.i+1);
@@ -1135,6 +1144,73 @@ function frame(s){
   if(!map)return;
   if(on){fitPts(around(dayPts(day()),on.at),14);return;}
   if(s.pts&&s.pts.length>1)fitPts(s.pts,s.t==="move"?13:15);else fitPts([LL(s.place)],s.zoom||14);}
+/* ---------- hike trail map (default Google satellite route + switchable topo trail map) ---------- */
+var tMap=null,tBase={},tRoutes=null,tLoadP=null,curHike=null,trailMode="route",gHikeLines=[];
+function clearGHike(){gHikeLines.forEach(function(l){l.setMap(null);});gHikeLines=[];}
+function hideHikeMap(){
+  curHike=null;clearGHike();
+  var box=$("trailMap"),btn=$("trailModeBtn");
+  if(box)box.hidden=true;if(btn)btn.hidden=true;}
+function syncTrailBtn(){
+  var btn=$("trailModeBtn"),lbl=$("trailModeLabel");if(!btn||!lbl)return;
+  var topo=trailMode==="topo";
+  btn.hidden=!curHike;btn.classList.toggle("on",topo);
+  lbl.textContent=U(topo?"Google 路线":"徒步图");
+  btn.title=U(topo?"切回 Google 路线视图":"切换到等高线徒步图");}
+function ensureLeaflet(){
+  if(window.L)return Promise.resolve(window.L);
+  if(tLoadP)return tLoadP;
+  tLoadP=new Promise(function(ok,err){
+    var css=document.createElement("link");css.rel="stylesheet";css.href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";document.head.appendChild(css);
+    var js=document.createElement("script");js.src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
+    js.onload=function(){ok(window.L);};js.onerror=err;document.head.appendChild(js);});
+  return tLoadP;}
+function paintHikeMap(reframe){
+  if(!curHike)return;syncTrailBtn();clearGHike();
+  var pts=curHike.pts,center=curHike.center,box=$("trailMap");
+  // When Google Maps JS API is active and user wants the default Google route view, draw directly on `map`
+  if(trailMode==="route"&&map&&pts&&pts.length>1){
+    box.hidden=true;
+    gHikeLines.push(new G.Polyline({map:map,path:pts.map(function(p){return {lat:p[0],lng:p[1]};}),strokeColor:"#38bdf8",strokeOpacity:.35,strokeWeight:10,clickable:false,zIndex:900}));
+    gHikeLines.push(new G.Polyline({map:map,path:pts.map(function(p){return {lat:p[0],lng:p[1]};}),strokeColor:"#38bdf8",strokeOpacity:1,strokeWeight:3.5,clickable:false,zIndex:901}));
+    if(reframe)fitPts(pts,15);
+    return;}
+  box.hidden=false;
+  ensureLeaflet().then(function(L){
+    if(!curHike)return;
+    if(!tMap){
+      tMap=L.map(box,{zoomControl:false,attributionControl:true});
+      L.control.zoom({position:"bottomright"}).addTo(tMap);
+      tBase.route=L.tileLayer("https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}",{maxZoom:19,attribution:"Map data &copy; Google"});
+      tBase.topo=L.layerGroup([
+        L.tileLayer("https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",{maxZoom:17,attribution:"&copy; OpenTopoMap &middot; OSM"}),
+        L.tileLayer("https://tile.waymarkedtrails.org/hiking/{z}/{x}/{y}.png",{maxZoom:17,opacity:.85,attribution:"Waymarked Trails"})
+      ]);
+      tRoutes=L.layerGroup().addTo(tMap);}
+    tMap.invalidateSize();
+    var want=trailMode==="topo"?tBase.topo:tBase.route,other=trailMode==="topo"?tBase.route:tBase.topo;
+    if(tMap.hasLayer(other))tMap.removeLayer(other);
+    if(!tMap.hasLayer(want))want.addTo(tMap);
+    tRoutes.clearLayers();
+    if(pts&&pts.length>1){
+      var topo=trailMode==="topo";
+      L.polyline(pts,{color:topo?"#ffffff":"#38bdf8",weight:topo?7:9,opacity:topo?.8:.35,lineCap:"round",lineJoin:"round"}).addTo(tRoutes);
+      L.polyline(pts,{color:topo?"#0284c7":"#38bdf8",weight:3.5,opacity:1,lineCap:"round",lineJoin:"round"}).addTo(tRoutes);
+      L.circleMarker(pts[0],{radius:6,color:"#0f172a",weight:2,fillColor:"#22c55e",fillOpacity:1}).addTo(tRoutes);
+      if(reframe)tMap.fitBounds(pts,{paddingTopLeft:[28,56],paddingBottomRight:[28,36],maxZoom:15});
+    }else if(center&&reframe){
+      L.circleMarker(center,{radius:7,color:"#0f172a",weight:2,fillColor:"#38bdf8",fillOpacity:1}).addTo(tRoutes);
+      tMap.setView(center,14);}
+  }).catch(function(){box.hidden=true;});}
+function showHikeMap(pts,center,key){
+  var changed=!curHike||curHike.key!==key;
+  if(changed)trailMode="route";
+  curHike={pts:pts,center:center,key:key};
+  paintHikeMap(changed);}
+$("trailModeBtn").addEventListener("click",function(){
+  if(!curHike)return;
+  trailMode=trailMode==="topo"?"route":"topo";
+  paintHikeMap(false);});
 // The map box follows the window (and moves into an open stop on phones). Once a resize settles, frame the same
 // view again for the new size: the embed was centred and zoomed for the old one.
 function refit(){reloadEmbed=true;var D=day();if(state.view==="day"&&D&&state.sel!=null)frame(D.segs[state.sel]);else fitView();}

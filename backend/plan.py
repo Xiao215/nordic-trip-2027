@@ -32,6 +32,7 @@ MAPS = {"/places", "/countries", "/kinds"}  # objects keyed by id rather than re
 NO_EN = {"/places/{}/zh", "/countries/{}/zh"}
 # fields the page understands that the plan may not use yet: pattern -> {field: kinds}
 EXTRA = {"/bookings/[]": {"booked": {"bool"}}, "/days/[]": {"options": {"list"}}, "/days/[]/segs/[]": {"group": {"str"}},
+         "/days/[]/options/[]": {"geom": {"str"}},
          "/places/{}": {"story": {"list"}}, "/places/{}/photos/[]": {"license": {"str"}}}
 # fields that may be left out even where every record so far has them: a photo from Wikimedia Commons has a
 # license and no author_link (that one is Unsplash's photographer page)
@@ -52,7 +53,7 @@ FIELD = {
     "local": ("当地名", "Local name"), "en": ("英文名", "English name"), "ll": ("坐标", "Coordinates"), "photos": ("照片", "Photos"), "license": ("授权", "License"),
     "options": ("可选", "Optional"), "after": ("放在哪站后面", "After stop"), "why": ("为什么没排", "Why not planned"),
     "in": ("怎么过去", "Getting there"), "out": ("怎么回来", "Getting back"),
-    "group": ("步行路线", "Walk"), "story": ("背景和小知识", "Background & fun facts"),
+    "group": ("步行路线", "Walk"), "story": ("背景和小知识", "Background & fun facts"), "geom": ("轨迹", "Geometry"),
 }
 
 

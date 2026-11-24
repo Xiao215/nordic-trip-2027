@@ -315,13 +315,11 @@ function paintBot(d,m,live){
     (lastPart&&lastPart.t==="steps"&&lastPart.items.some(function(s){return s.state==="running";}));
   if(live&&(!lastPart||lastPart.t!=="text"||!lastPart.text)&&!working)
     h+='<div class="l-status"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span>'+Z("思考中","Thinking")+"</span></div>";
-  if(!live){h+='<div class="l-tools"><span>'+esc(clock(m.ts))+(m.stopped?Z(" · 中途停止"," · stopped early"):"")+'</span><button type="button" data-copy="1">'+Z("复制","Copy")+"</button></div>";}
+  if(!live){h+='<div class="l-tools"><span>'+esc(clock(m.ts))+(m.stopped?Z(" · 中途停止"," · stopped early"):"")+"</span></div>";}
   d.innerHTML=h;d._m=m;
 }
 log.addEventListener("toggle",function(e){var ds=e.target.dataset||{};if(ds.steps)openSteps[ds.steps]=e.target.open;if(ds.more)openMore[ds.more]=e.target.open;},true);
 log.addEventListener("click",function(e){var t;
-  if((t=e.target.closest("[data-copy]"))){var m=t.closest(".l-bot")._m;
-    (navigator.clipboard?navigator.clipboard.writeText(answerText(m)):Promise.reject()).then(function(){t.textContent=Z("已复制","Copied");setTimeout(function(){t.textContent=Z("复制","Copy");},1500);}).catch(function(){});return;}
   if((t=e.target.closest("[data-decide]"))){decide(t.closest("[data-card]").dataset.card,t.dataset.decide==="1");return;}
   if((t=e.target.closest("[data-suggest]"))){ask(t.textContent);}
 });
