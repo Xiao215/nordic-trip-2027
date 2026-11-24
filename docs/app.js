@@ -63,8 +63,7 @@ var UIEN={
   "{d}（{w}）还没排，按目前的路线，这天可以怎么安排？":"{d} ({w}) isn't planned yet. Given the current route, what could we do that day?",
   "交通":"Transport","户外":"Outdoors","住宿":"Stay","日落":"Sunset"," · 约 {n} 公里":" · about {n} km",
   "在 Google 地图打开":"Open in Google Maps","导航":"Directions","问问这个":"Ask about this",
-  "北欧之旅 2027":"Nordic Trip 2027","访问码":"Access code","进入":"Enter","连不上行程服务器，这台设备上也还没有存过行程。有网的时候再打开一次。":"Can't reach the trip server, and this device hasn't saved the plan yet. Open it again when you're online.","回到起点":"back to the start","{n} 站":"{n} stops","走路约 {t}":"about {t} on foot","约 {n} 米":"about {n} m","约 {n} 公里":"about {n} km","导航（整条步行路线）":"Directions (whole walk)","背景和小知识":"Background & fun facts","历史":"History","冷知识":"Fun fact","名字的来历":"The name","可选 · {n}":"Optional · {n}","或":"or","没排进行程：":"Not in the plan: ",
-  "{w} 这段{m}有什么要注意的？":"Anything to know about the {m} {w}?","多讲讲「{w}」，有什么要注意的？":"Tell me more about {w}. Anything to watch out for?",
+  "北欧之旅 2027":"Nordic Trip 2027","访问码":"Access code","进入":"Enter","连不上行程服务器，这台设备上也还没有存过行程。有网的时候再打开一次。":"Can't reach the trip server, and this device hasn't saved the plan yet. Open it again when you're online.","回到起点":"back to the start","{n} 站":"{n} stops","走路约 {t}":"about {t} on foot","约 {n} 米":"about {n} m","约 {n} 公里":"about {n} km","导航（整条步行路线）":"Directions (whole walk)","背景和小知识":"Background & fun facts","历史":"History","冷知识":"Fun fact","名字的来历":"The name","可选":"Optional","可选 · {n}":"Optional · {n}","或":"or","没排进行程：":"Not in the plan: ",
   "晴":"Clear","晴间多云":"Partly cloudy","阴":"Overcast","雾":"Fog","毛毛雨":"Drizzle","雨":"Rain","雪":"Snow","阵雨":"Showers","阵雪":"Snow showers","雷雨":"Thunderstorms",
   " · 降水概率 {n}%":" · {n}% chance of rain","风速最高 {n} m/s":"Wind up to {n} m/s","7 月常年":"Typical July"," · 约 {n} 天有雨":" · ~{n} rainy days",
   "正在载入预报…":"Loading forecast…","出发前约 16 天出现预报":"Forecast appears ~16 days before","暂无预报":"No forecast",
@@ -670,12 +669,16 @@ function optMove(m){if(!m)return "";var bits=[];if(m.mins)bits.push(esc(hm(m.min
   return '<div class="opt-mv"><span class="opt-ic" title="'+esc(mode(m.mode))+'">'+(ICON[m.mode]||ICON.drive)+'</span><span>'+esc(mode(m.mode))+(bits.length?" "+bits.join(" · "):"")+'</span></div>';}
 function optCard(o,k){
   var when=o.start?(o.end&&o.end!==o.start?o.start+" – "+o.end:o.start):o.mins?hm(o.mins):"",kind=L(T.kinds[o.kind])||"",h="";
+  var phs=o.place?photosOf(o.place):[];
   h+='<div class="opt-card" style="--k:'+(KCOL[o.kind]||KCOL.visit)+'"><div class="opt-meta">'+esc([when,kind].filter(Boolean).join(" · "))+'</div>';
   h+='<h4>'+tx(o.name||"[["+o.place+"]]")+'</h4>';
+  if(phs.length)h+='<div class="d-photos n'+phs.length+'">'+phs.map(function(ph,j){return '<figure class="d-photo" data-opt-k="'+esc(k)+'" data-k="'+j+'">'+img(ph,j?600:1200)+(j?"":"<figcaption>"+credit(ph)+"</figcaption>")+"</figure>";}).join("")+"</div>";
   if(o.why)h+='<p class="opt-why">'+U("没排进行程：")+tx(o.why)+'</p>';
   if(o.body)h+='<p class="body">'+tx(o.body)+'</p>';
   if(o.facts&&o.facts.length)h+='<dl class="facts">'+o.facts.map(function(f){return "<div><dt>"+esc(L(f[0]))+"</dt><dd>"+tx(f[1])+"</dd></div>";}).join("")+"</dl>";
   if(o.tips&&o.tips.length)h+='<ul class="tips">'+o.tips.map(function(t){return "<li>"+tx(t)+"</li>";}).join("")+"</ul>";
+  var sto=o.place&&T.places[o.place]&&T.places[o.place].story;
+  if(sto&&sto.length)h+='<section class="story"><h5>'+esc(U("背景和小知识"))+'</h5><dl>'+sto.map(function(x){return "<div><dt>"+esc(L(x[0]))+"</dt><dd>"+tx(x[1])+"</dd></div>";}).join("")+"</dl></section>";
   h+='<div class="actions">'+(o.place&&N[o.place]?'<a class="pill" target="_blank" rel="noopener" href="'+esc(gPlace(o.place))+'">'+ICON.maps+U("在 Google 地图打开")+"</a>":"")+
      '<button class="pill ask" type="button" data-opt-ask="'+esc(k)+'">'+ICON.ask+U("问问这个")+"</button></div></div>";
   return optMove(o["in"])+h+optMove(o.out);}
@@ -690,7 +693,10 @@ $("rows").addEventListener("click",function(e){
     li.classList.toggle("open",on);t.setAttribute("aria-expanded",on);li.querySelector(".opt-fold").inert=!on;return;}
   var a=e.target.closest("[data-opt-ask]");
   if(a){var k=a.dataset.optAsk.split("#"),o=optGroups(day())[k[0]][+k[1]];
-    if(o&&window.tripChat)window.tripChat.ask(U("多讲讲「{w}」，有什么要注意的？",{w:plain(o.name||"[["+o.place+"]]")}));}});
+    if(o&&window.tripChat)window.tripChat.ask(U("多讲讲「{w}」，有什么要注意的？",{w:plain(o.name||"[["+o.place+"]]")}));return;}
+  var pf=e.target.closest(".d-photo[data-opt-k]");
+  if(pf&&!e.target.closest(".credit")){var k=pf.dataset.optK.split("#"),o=optGroups(day())[k[0]][+k[1]];
+    if(o&&o.place){var phs=photosOf(o.place);if(phs.length)openLb(phs.map(function(p){return {s:{place:o.place,name:o.name},ph:p};}),+pf.dataset.k||0);}}});
 function select(i,scroll){state.sel=i;paintOpen();var s=day().segs[i];
   markSel();frame(s);caption();
   if(scroll===false){var li=document.querySelector('#rows li[data-i="'+i+'"]');if(li)li.scrollIntoView({block:"center"});}}
