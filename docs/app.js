@@ -1177,20 +1177,19 @@ function paintHikeMap(reframe){
       ]);
       tRoutes=L.layerGroup().addTo(tMap);}
     tMap.invalidateSize();
-    var ptsToDraw=curHike.atUrl?null:pts;
-    if(ptsToDraw&&ptsToDraw.length>1){
-      if(reframe)tMap.fitBounds(ptsToDraw,{paddingTopLeft:[28,56],paddingBottomRight:[28,36],maxZoom:15});
+    if(pts&&pts.length>1){
+      if(reframe)tMap.fitBounds(pts,{paddingTopLeft:[28,56],paddingBottomRight:[28,36],maxZoom:15});
     }else if(center&&reframe){
       tMap.setView(center,14);}
     var want=trailMode==="topo"?tBase.topo:tBase.route,other=trailMode==="topo"?tBase.route:tBase.topo;
     if(tMap.hasLayer(other))tMap.removeLayer(other);
     if(!tMap.hasLayer(want))want.addTo(tMap);
     tRoutes.clearLayers();
-    if(ptsToDraw&&ptsToDraw.length>1){
+    if(pts&&pts.length>1){
       var topo=trailMode==="topo";
-      L.polyline(ptsToDraw,{color:topo?"#ffffff":"#38bdf8",weight:topo?7:9,opacity:topo?.8:.35,lineCap:"round",lineJoin:"round"}).addTo(tRoutes);
-      L.polyline(ptsToDraw,{color:topo?"#0284c7":"#38bdf8",weight:3.5,opacity:1,lineCap:"round",lineJoin:"round"}).addTo(tRoutes);
-      L.circleMarker(ptsToDraw[0],{radius:6,color:"#0f172a",weight:2,fillColor:"#22c55e",fillOpacity:1}).addTo(tRoutes);
+      L.polyline(pts,{color:topo?"#ffffff":"#38bdf8",weight:topo?7:9,opacity:topo?.8:.35,lineCap:"round",lineJoin:"round"}).addTo(tRoutes);
+      L.polyline(pts,{color:topo?"#0284c7":"#38bdf8",weight:3.5,opacity:1,lineCap:"round",lineJoin:"round"}).addTo(tRoutes);
+      L.circleMarker(pts[0],{radius:6,color:"#0f172a",weight:2,fillColor:"#22c55e",fillOpacity:1}).addTo(tRoutes);
     }else if(center){
       L.circleMarker(center,{radius:7,color:"#0f172a",weight:2,fillColor:"#22c55e",fillOpacity:1}).addTo(tRoutes);}
   }).catch(function(e){console.error("Hike map error:",e);box.hidden=true;});}
