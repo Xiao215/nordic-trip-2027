@@ -623,6 +623,8 @@ function walkKm(s){if(s.km)return s.km;var ps=(s.path||[]).map(function(x){retur
   for(var j=1;j<ps.length;j++)k+=hav(ps[j-1],ps[j]);return Math.round(k*1.25*10)/10;}
 function distTxt(km){return km<1?U("约 {n} 米",{n:Math.max(100,Math.round(km*10)*100)}):U("约 {n} 公里",{n:Math.round(km*10)/10});}
 function cap(t){return t.charAt(0).toUpperCase()+t.slice(1);}
+function inLang(l,fn){var was=NM;NM=l;try{return fn();}finally{NM=was;}}
+function quoteEvent(color,ref,fn){return {color:color,ref:ref,zh:inLang("zh",fn),en:inLang("local",fn)};}
 function grpStops(run){return run.filter(function(x){return x.t==="stop";});}
 function grpRow(run,cur){
   var li=document.createElement("li"),first=run[0],last=run[run.length-1],id=state.date+"|"+first.i,open=!!GOPEN[id]||run.some(function(x){return x.i===state.sel;});
@@ -647,13 +649,28 @@ function grpRow(run,cur){
   var acts=document.createElement("div");acts.className="actions grp-acts";
   acts.innerHTML=(pts.length>1?'<a class="pill" target="_blank" rel="noopener" href="'+esc(gRoute(pts.slice(0,10),"walking"))+'">'+ICON.dir+U("导航（整条步行路线）")+"</a>":"")+
     '<button class="pill ask" type="button">'+ICON.ask+U("问问这个")+"</button>";
-  acts.querySelector(".ask").addEventListener("click",function(){if(window.tripChat)window.tripChat.ask(U("多讲讲「{w}」，有什么要注意的？",{w:plain(first.group)}));});
+  acts.querySelector(".ask").addEventListener("click",function(){if(!window.tripChat)return;
+    var dt=state.date,when=t0?(t1&&t1!==t0?t0+" – "+t1:t0):"";
+    window.tripChat.quote(quoteEvent(KCOL.hike,dt+(when?" "+when:"")+" · WALK [group="+first.group+"]",function(){
+      return {meta:[md(dt)+" "+wk(dt),when,U("{n} 站",{n:st.length}),wm?U("走路约 {t}",{t:hm(wm)}):""].filter(Boolean).join(" · "),
+        title:plain(first.group),sub:ends.map(function(p){return plain("[["+p+"]]");}).concat(loop?[U("回到起点")]:[]).join(" → ")};}));});
   var box=document.createElement("div");box.className="grp-box";box.appendChild(ul);box.appendChild(acts);inn.appendChild(box);fold.appendChild(inn);li.appendChild(fold);
-  b.addEventListener("click",function(){var on=!li.classList.contains("open");GOPEN[id]=on;
+  b.addEventListener("click",function(){var on=!li.classList.contains("open");
+    if(on){closeGroups(li);closeOpts(null);if(state.sel!=null){state.sel=null;paintOpen();markSel();}}
+    GOPEN[id]=on;
     if(!on&&run.some(function(x){return x.i===state.sel;})){state.sel=null;paintOpen();markSel();}
     li.classList.toggle("open",on);b.setAttribute("aria-expanded",on);fold.inert=!on;
-    if(on&&state.sel==null)frameGroup(pts);else if(!on&&state.sel==null)fitView();});
+    if(on)frameGroup(pts);else if(state.sel==null)fitView();});
   return li;}
+function closeGroups(keep){document.querySelectorAll("#rows li.grp.open").forEach(function(el){if(el===keep)return;
+  el.classList.remove("open");el.querySelector(".grp-row").setAttribute("aria-expanded","false");el.querySelector(".grp-fold").inert=true;
+  GOPEN[state.date+"|"+el.dataset.g]=false;});}
+function closeOpts(keep){document.querySelectorAll("#rows li.opts.open").forEach(function(el){if(el===keep)return;
+  el.classList.remove("open");el.querySelector(".opt-toggle").setAttribute("aria-expanded","false");el.querySelector(".opt-fold").inert=true;
+  OPTOPEN[state.date+"|"+el.dataset.opt]=false;});}
+function hasAllTrails(x){
+  var t=(x.body||"")+" "+(x.facts||[]).map(function(f){return f[1]||"";}).join(" ")+" "+(x.tips||[]).join(" ");
+  return /alltrails\.com/i.test(t);}
 // opening a walk frames its stops on the map
 function frameGroup(ids){var ps=ids.map(LL);caption();
   if(embed){if(ps.length>1)embedRoute(ps);else embedPlace(ps[0],15);return;}
@@ -679,7 +696,7 @@ function optCard(o,k){
   if(o.tips&&o.tips.length)h+='<ul class="tips">'+o.tips.map(function(t){return "<li>"+tx(t)+"</li>";}).join("")+"</ul>";
   var sto=o.place&&T.places[o.place]&&T.places[o.place].story;
   if(sto&&sto.length)h+='<section class="story"><h5>'+esc(U("背景和小知识"))+'</h5><dl>'+sto.map(function(x){return "<div><dt>"+esc(L(x[0]))+"</dt><dd>"+tx(x[1])+"</dd></div>";}).join("")+"</dl></section>";
-  h+='<div class="actions">'+(o.place&&N[o.place]?'<a class="pill" target="_blank" rel="noopener" href="'+esc(gPlace(o.place))+'">'+ICON.maps+U("在 Google 地图打开")+"</a>":"")+
+  h+='<div class="actions">'+(o.place&&N[o.place]&&!hasAllTrails(o)?'<a class="pill" target="_blank" rel="noopener" href="'+esc(gPlace(o.place))+'">'+ICON.maps+U("在 Google 地图打开")+"</a>":"")+
      '<button class="pill ask" type="button" data-opt-ask="'+esc(k)+'">'+ICON.ask+U("问问这个")+"</button></div></div>";
   return optMove(o["in"])+h+optMove(o.out);}
 function optRow(list,key){
@@ -689,11 +706,20 @@ function optRow(list,key){
   return li;}
 $("rows").addEventListener("click",function(e){
   var t=e.target.closest(".opt-toggle");
-  if(t){var li=t.closest("li.opts"),id=state.date+"|"+li.dataset.opt,on=!OPTOPEN[id];OPTOPEN[id]=on;
-    li.classList.toggle("open",on);t.setAttribute("aria-expanded",on);li.querySelector(".opt-fold").inert=!on;return;}
+  if(t){var li=t.closest("li.opts"),id=state.date+"|"+li.dataset.opt,on=!OPTOPEN[id];
+    if(on){closeOpts(li);closeGroups(null);if(state.sel!=null){state.sel=null;paintOpen();markSel();}}
+    OPTOPEN[id]=on;
+    li.classList.toggle("open",on);t.setAttribute("aria-expanded",on);li.querySelector(".opt-fold").inert=!on;
+    if(on){var list=optGroups(day())[li.dataset.opt]||[],ps=list.map(function(x){return x.place;}).filter(function(p){return p&&N[p];});if(ps.length)frameGroup(ps);}
+    else if(state.sel==null)fitView();
+    return;}
   var a=e.target.closest("[data-opt-ask]");
-  if(a){var k=a.dataset.optAsk.split("#"),o=optGroups(day())[k[0]][+k[1]];
-    if(o&&window.tripChat)window.tripChat.ask(U("多讲讲「{w}」，有什么要注意的？",{w:plain(o.name||"[["+o.place+"]]")}));return;}
+  if(a){var k=a.dataset.optAsk.split("#"),o=optGroups(day())[k[0]][+k[1]],dt=state.date;
+    if(o&&window.tripChat)window.tripChat.quote(quoteEvent(KCOL[o.kind]||KCOL.visit,
+      dt+" · OPTIONAL"+(o.place?" [place="+o.place+(o.after?", after="+o.after:"")+"]":""),function(){
+        var when=o.start?(o.end&&o.end!==o.start?o.start+" – "+o.end:o.start):o.mins?hm(o.mins):"";
+        return {meta:[md(dt)+" "+wk(dt),U("可选"),when,L(T.kinds[o.kind])].filter(Boolean).join(" · "),
+          title:plain(o.name||"[["+o.place+"]]"),sub:plain(o.body||o.why||"").slice(0,200)};}));return;}
   var pf=e.target.closest(".d-photo[data-opt-k]");
   if(pf&&!e.target.closest(".credit")){var k=pf.dataset.optK.split("#"),o=optGroups(day())[k[0]][+k[1]];
     if(o&&o.place){var phs=photosOf(o.place);if(phs.length)openLb(phs.map(function(p){return {s:{place:o.place,name:o.name},ph:p};}),+pf.dataset.k||0);}}});
@@ -706,6 +732,7 @@ function paintOpen(){
     li.classList.toggle("open",on);li.querySelector(".row").setAttribute("aria-expanded",on);
     var d=li.querySelector(".detail:not(.closing)");if(on&&!d){d=detail(day().segs[i]);li.appendChild(d);added.push(d);}else if(!on&&d)foldAway(d);});
   var g=state.sel!=null&&document.querySelector('#rows li[data-i="'+state.sel+'"]'),gl=g&&g.closest("li.grp");
+  if(state.sel!=null){closeGroups(gl);closeOpts(null);}
   if(gl&&!gl.classList.contains("open")){gl.classList.add("open");gl.querySelector(".grp-row").setAttribute("aria-expanded",true);gl.querySelector(".grp-fold").inert=false;GOPEN[state.date+"|"+gl.dataset.g]=true;}
   placeMap(document.querySelector("#rows li[data-i].open")||from);
   added.forEach(foldIn);
@@ -750,7 +777,7 @@ function detail(s){
   var sto=s.t==="stop"&&T.places[s.place]&&T.places[s.place].story;
   if(sto&&sto.length)h+='<section class="story"><h5>'+esc(U("背景和小知识"))+'</h5><dl>'+sto.map(function(x){return "<div><dt>"+esc(L(x[0]))+"</dt><dd>"+tx(x[1])+"</dd></div>";}).join("")+"</dl></section>";
   var acts=[];
-  if(s.t==="stop")acts.push('<a class="pill" target="_blank" rel="noopener" href="'+esc(gPlace(s.place))+'">'+ICON.maps+U("在 Google 地图打开")+"</a>");
+  if(s.t==="stop"&&!hasAllTrails(s))acts.push('<a class="pill" target="_blank" rel="noopener" href="'+esc(gPlace(s.place))+'">'+ICON.maps+U("在 Google 地图打开")+"</a>");
   if(s.t==="move"&&(s.mode==="drive"||s.mode==="walk"||s.mode==="bike"||s.mode==="train"||s.mode==="bus")){var ends=[s.path[0],s.path[s.path.length-1]].filter(function(x){return typeof x==="string";});
     if(ends.length===2)acts.push('<a class="pill" target="_blank" rel="noopener" href="'+esc(gRoute(s.path.filter(function(x){return typeof x==="string";}),s.mode==="drive"?"driving":s.mode==="walk"?"walking":s.mode==="bike"?"bicycling":"transit"))+'">'+ICON.dir+U("导航")+"</a>");}
   acts.push('<button class="pill ask" type="button">'+ICON.ask+U("问问这个")+"</button>");
@@ -758,9 +785,19 @@ function detail(s){
   d.innerHTML=h;
   d.querySelectorAll(".d-photo[data-k]").forEach(function(fig){fig.addEventListener("click",function(e){if(e.target.closest(".credit"))return;
     var g=dayGallery(day()),ph=phs[+fig.dataset.k];if(!g.length)g=phs.map(function(p){return {s:s,ph:p};});openLb(g,galleryIndex(g,ph));});});
-  d.querySelector(".ask").addEventListener("click",function(){
-    var q=s.t==="move"?U("{w} 这段{m}有什么要注意的？",{w:moveLabel(s,true),m:mode(s.mode)}):U("多讲讲「{w}」，有什么要注意的？",{w:plain(s.name||"[["+s.place+"]]")});
-    if(window.tripChat)window.tripChat.ask(q);});
+  d.querySelector(".ask").addEventListener("click",function(){if(!window.tripChat)return;
+    var dt=state.date;
+    if(s.t==="move"){
+      window.tripChat.quote(quoteEvent(KCOL.move,dt+(when?" "+when:"")+" · "+s.mode.toUpperCase(),function(){
+        var w=when||(dur(s)?hm(dur(s)):"");
+        return {meta:[md(dt)+" "+wk(dt),w,cap(mode(s.mode)),s.km?distTxt(s.km):""].filter(Boolean).join(" · "),
+          title:moveLabel(s,true),sub:plain(s.note||s.body||"").slice(0,200)};}));
+    }else{
+      window.tripChat.quote(quoteEvent(KCOL[s.kind]||KCOL.visit,dt+(when?" "+when:"")+" · STOP "+(s.num||"")+" [place="+s.place+"]",function(){
+        var w=when||(s.mins?hm(s.mins):"");
+        return {meta:[md(dt)+" "+wk(dt),w,L(T.kinds[s.kind])].filter(Boolean).join(" · "),
+          title:plain(s.name||"[["+s.place+"]]"),sub:plain(s.body||"").slice(0,200)};}));
+    }});
   return d;
 }
 
