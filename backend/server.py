@@ -106,6 +106,14 @@ def render_trip(t: dict) -> str:
         if leg.get("body"):
             out.append(tx(leg["body"]))
         out += [f"- {tx(x)}" for x in leg.get("items", [])]
+    seen_story: set[str] = set()
+
+    def place_story(pid: str | None, indent: str = "    ") -> list[str]:
+        if not pid or pid in seen_story or pid not in places or not places[pid].get("story"):
+            return []
+        seen_story.add(pid)
+        return [f"{indent}{k} (places/{pid}/story): {tx(v)}" for k, v in places[pid]["story"]]
+
     out += ["", "## Day by day (dates without an entry here are still being planned)"]
     for d in t["days"]:
         dt = datetime.strptime(d["date"], "%Y-%m-%d")
@@ -128,13 +136,15 @@ def render_trip(t: dict) -> str:
                 out.append(line)
                 continue
             n += 1
-            out.append(f"- {when}STOP {n}. {tx(s.get('name') or '[[' + s['place'] + ']]')} [{t['kinds'].get(s['kind'], s['kind'])}]")
+            grp = f" [walk: {tx(s['group'])}]" if s.get("group") else ""
+            out.append(f"- {when}STOP {n}. {tx(s.get('name') or '[[' + s['place'] + ']]')} [{t['kinds'].get(s['kind'], s['kind'])}]{grp}")
             for k, v in s.get("facts", []):
                 out.append(f"    {k}: {tx(v)}")
             if s.get("body"):
                 out.append(f"    {tx(s['body'])}")
             for tip in s.get("tips", []):
                 out.append(f"    Tip: {tx(tip)}")
+            out += place_story(s["place"])
             out.append(f"    Map: {_maps(places[s['place']]['ll'])}")
         for o in d.get("options", []):
             when = o.get("start", "") + (f"–{o['end']}" if o.get("end") and o.get("end") != o.get("start") else "")
@@ -143,12 +153,22 @@ def render_trip(t: dict) -> str:
             if o.get("why"):
                 line += f". Why not planned: {tx(o['why'])}"
             out.append(line)
+            for k, v in o.get("facts", []):
+                out.append(f"    {k}: {tx(v)}")
             if o.get("body"):
                 out.append(f"    {tx(o['body'])}")
+            for tip in o.get("tips", []):
+                out.append(f"    Tip: {tx(tip)}")
+            out += place_story(o.get("place"))
             for side in ("in", "out"):
                 m = o.get(side)
                 if m:
                     out.append(f"    {'Getting there' if side == 'in' else 'Getting back'}: {m.get('mode', '')} {m.get('mins', '')} min" + (f". {tx(m['note'])}" if m.get("note") else ""))
+        out += place_story(d.get("stay"), "  ")
+    other_stories = [f"- {name(pid)} (places/{pid}/story): " + " / ".join(f"{k}: {tx(v)}" for k, v in p["story"])
+                     for pid, p in places.items() if pid not in seen_story and p.get("story")]
+    if other_stories:
+        out += ["", "## Other place notes"] + other_stories
     out += ["", "## Bookings"]
     for b in t["bookings"]:
         out.append(f"### {tx(b['what'])} (id: {b['id']}; for {tx(b.get('for', ''))}; book: {tx(b.get('when', b.get('opens', '')))})"
@@ -184,7 +204,7 @@ SYSTEM_TEMPLATE = """你是「北欧之旅 2027」的行程助手。这是一趟
 
 默认用简体中文回答。如果 <context> 里写着 lang=en（对方在看英文版网页），就用英文回答，地名直接写当地原名（Mývatn、Bergen、København），不要写中文。用中文回答时，地名第一次出现时写中文名，后面括号里写当地语言的原名（冰岛语、挪威语、瑞典语、丹麦语），例如：黄金瀑布 (Gullfoss)、卑尔根 (Bergen)。路牌和导航上都是原名，所以原名一定要拼对，包括 þ、ð、æ、ø、å、ö 这些字母。
 
-先根据下面的行程回答。行程里没有的（天气、营业时间、路况和 F 路开放情况、价格、渡轮和航班时刻、门票），就上网查，并简短说明来源；冰岛路况以 road.is 和 safetravel.is 为准。行程和网上信息不一致时要指出来。不知道就说不知道，绝不编造时间、价格或电话。
+先根据下面的行程回答。如果消息里有 <quoted_plan_item>，那是对方在网页上点“问问这个”引用的具体行程卡片（包含它的说明、提示、背景和小知识，以及对应的 JSON 路径如 days/…/segs/… 或 places/…/story）；对方说的“这个”“它”或省略了主语的话（比如“你可以补上”“改一下时间”）指的就是这一项，优先于 <context> 里的 looking_at。行程里没有的（天气、营业时间、路况和 F 路开放情况、价格、渡轮和航班时刻、门票），就上网查，并简短说明来源；冰岛路况以 road.is 和 safetravel.is 为准。行程和网上信息不一致时要指出来。不知道就说不知道，绝不编造时间、价格或电话。
 
 回答要短而实用：先用一两句话给出答案，确实有帮助时再加几条要点。时间用当地时间、24 小时制（冰岛 UTC+0，挪威、瑞典、丹麦夏令时 UTC+2）。有人问某地在哪，就附上 Google 地图链接。价格用当地货币（ISK、NOK、SEK、DKK）；如果 <context> 里有 currency（CAD、CNY 或 USD），在括号里附上大约的换算。有人想改行程时，说明改动会影响什么（时间、预订、还车地点等）。
 
@@ -353,20 +373,28 @@ async def chat(body: ChatIn, x_access_code: str | None = Header(default=None)):
 
 
 INTERRUPTED = "This part of the response was interrupted before it finished."
-# Now and then a reply through the local bridge opens with a stray mode tag; it's held back and dropped.
-STRAY_TAG = "<thinking_mode>"
-STRAY = re.compile(r"^\s*<thinking_mode>[^<]{0,40}</thinking_mode>\s*")
+# Now and then a reply through the local bridge opens with stray thinking control tags; hold them back and drop them.
+STRAY_ONE = re.compile(
+    r"^\s*(?:<(?:thinking_mode|max_thinking_length|thinking_effort)>[^<]{0,80}</(?:thinking_mode|max_thinking_length|thinking_effort)>"
+    r"|<thinking>[\s\S]{0,4000}?</thinking>)\s*"
+)
+STRAY_OPEN = ("<thinking_mode>", "<max_thinking_length>", "<thinking_effort>", "<thinking>")
 
 
 def unstray(hold: str) -> tuple[str | None, str]:
     """For the start of a run of text: (text to send now, or None to keep holding; what is still held)."""
+    while True:
+        m = STRAY_ONE.match(hold)
+        if not m:
+            break
+        hold = hold[m.end():]
     head = hold.lstrip()
-    if not (head.startswith(STRAY_TAG) or STRAY_TAG.startswith(head)):
-        return hold, ""
-    m = STRAY.match(hold)
-    if m:
-        return hold[m.end():], ""
-    return (hold, "") if len(hold) > 80 else (None, hold)
+    if not head:
+        return None, ""
+    if any(head.startswith(t) or t.startswith(head) for t in STRAY_OPEN):
+        limit = 4100 if head.startswith("<thinking>") else 120
+        return (hold, "") if len(hold) > limit else (None, hold)
+    return hold, ""
 
 
 async def answer(messages: list[dict], lang_en: bool = False, asker: str = ""):
@@ -423,8 +451,8 @@ async def answer(messages: list[dict], lang_en: bool = False, asker: str = ""):
                 fresh, hold = True, ""
                 async for event in stream:
                     if event.type == "content_block_delta" and event.delta.type == "thinking_delta":
-                        # a progress note; a reasoning block streams no text under "updates"
-                        if event.delta.thinking and event.delta.thinking != INTERRUPTED:
+                        # only under display="updates" is thinking_delta a short progress note; on cli-bridge it's raw reasoning
+                        if thinking and event.delta.thinking and event.delta.thinking != INTERRUPTED:
                             yield sse({"type": "note", "id": f"{rnd}-{event.index}", "text": event.delta.thinking})
                     elif event.type == "text":
                         out = event.text

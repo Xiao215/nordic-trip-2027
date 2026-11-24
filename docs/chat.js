@@ -98,17 +98,16 @@ document.addEventListener("keydown",function(e){
 
 /* ---------- the conversation ----------
    A user message is {role, content}. An answer is {role:"assistant", content (its text), parts, ts}: parts in the order
-   they arrived, {t:"steps", items:[{id,label,state,ts}]}, {t:"text", text}, {t:"card", card}, {t:"note", id, text} (what the
-   assistant is thinking about between tool calls: shown as the live status line, dropped once the answer is in) and at most one {t:"tasks", items:[{text,status}]} (its checklist for a
-   request that takes several steps, updated in place). */
+   they arrived, {t:"steps", items:[{id,label,state,ts}]}, {t:"text", text}, {t:"card", card} and at most one
+   {t:"tasks", items:[{text,status}]} (its checklist for a request that takes several steps, updated in place). */
 log.addEventListener("scroll",function(){stick=log.scrollHeight-log.scrollTop-log.clientHeight<48;});
 function scroll(force){if(force||stick)log.scrollTop=log.scrollHeight;}
 function add(el){var e0=log.querySelector(".l-empty");if(e0)e0.remove();log.appendChild(el);return el;}
 function quotePick(q){return (isEn()&&q.en)||q.zh||q;}
 function quoteBody(q){var p=quotePick(q);
   return (p.meta?"<small>"+esc(p.meta)+"</small>":"")+"<b>"+esc(p.title||"")+"</b>"+(p.sub?"<span>"+esc(p.sub)+"</span>":"");}
-function quoteLine(q){var p=quotePick(q);
-  return (isEn()?"[Quoted from the plan: ":"[引用行程：")+[q.ref||p.meta,p.title,p.sub].filter(Boolean).join(" — ")+"]";}
+function quoteLine(q){var p=quotePick(q),head=[q.ref||p.meta,p.title].filter(Boolean).join(" — "),body=(p.full||p.sub||"").trim();
+  return "<quoted_plan_item>\n"+head+(body?"\n"+body:"")+"\n</quoted_plan_item>";}
 function paintQuote(){
   var q=active().quote;quoteBox.hidden=!q;
   text.placeholder=q?Z("关于这一项，想问什么或怎么改…","Ask about this, or say what to change…"):Z("问问助手，或发张小票让它记账…","Ask anything, or send a receipt to log it…");
@@ -127,28 +126,19 @@ function userLine(m){var w=document.createElement("div");w.className="l-me appea
 function botLine(m,live){var d=document.createElement("div");d.className="l-bot appear";add(d);paintBot(d,m,live);return d;}
 
 /* What the assistant did on the way to its answer: the tool calls (searches, parts of the plan it read) and any
-   text it wrote between them ("let me check the opening hours…"). That text is working notes, not the answer, so it
-   folds away with the steps, like a thinking block; text with no tool call after it is the answer and stays open.
-   While it works, the fold's head shows the step that's running. */
-function procHtml(run,key,live,writing){
+   text it wrote before a tool call. That pre-tool text folds away with the steps once the tool call starts; text
+   with no tool call after it is the answer and streams directly. While a tool runs, the fold's head shows its label. */
+function procHtml(run,key){
   var items=[],notes=0;run.forEach(function(p){if(p.t==="steps")items=items.concat(p.items);else notes++;});
   var running=items.filter(function(s){return s.state==="running";}),n=items.length,last=running[running.length-1];
-  var head=writing?'<span class="spin"></span><span class="say">'+esc(latestLine(writing))+"</span>"
-    :running.length?'<span class="spin"></span><span>'+esc(last.label||Z("正在处理","Working"))+"</span>"
+  var head=running.length?'<span class="spin"></span><span>'+esc(last.label||Z("正在处理","Working"))+"</span>"
     :IC.search+"<span>"+(n?Z("看了 <b>"+n+" 项</b>","Looked at <b>"+n+" thing"+(n>1?"s":"")+"</b>"):"")+(n&&notes?" · ":"")+(notes?Z("思考过程","Thought process"):"")+"</span>";
-  return '<details class="steps'+(running.length||writing?" live":"")+'" data-steps="'+esc(key)+'"'+(openSteps[key]?" open":"")+"><summary>"+head+'<span class="chev">'+IC.chev+"</span></summary>"+
+  return '<details class="steps'+(running.length?" live":"")+'" data-steps="'+esc(key)+'"'+(openSteps[key]?" open":"")+"><summary>"+head+'<span class="chev">'+IC.chev+"</span></summary>"+
     run.map(function(p){
       if(p.t!=="steps")return '<div class="step-note">'+md(p.text)+"</div>";
       return p.items.map(function(s){var st=s.state||"running";
         return '<div class="step '+st+'">'+(st==="running"?'<span class="spin"></span>':st==="error"?IC.x:IC.check)+"<code>"+esc(s.label||"…")+'</code><span class="t">'+esc(clock(s.ts))+"</span></div>";}).join("");}).join("")+"</details>";
 }
-// the sentence being written (or the last one), for the fold's one-line head
-function latestLine(s){var bits=s.replace(/\*\*|`|#/g,"").trim().split(/(?<=[。！？.!?])\s*|\n+/).filter(function(x){return x.trim();});
-  var l=bits.pop()||"";if(l.length<12&&bits.length)l=bits.pop()+" "+l;return l.trim();}
-// While a reply is coming in, its newest text might be a note on the way to a tool call or the start of the answer.
-// Until it's clearly the answer (the reply ends, or it runs past WRITING characters) it streams in the fold's head,
-// one line, the way a thinking block does, so notes never fill the screen for the moment before they fold away.
-var WRITING=300;
 // the answer's own text: what's left once the working notes before its last tool call are set aside
 function isNote(parts,i){var p=parts[i];if(p.t!=="text")return false;for(var j=i+1;j<parts.length;j++)if(parts[j].t==="steps")return true;return false;}
 function answerText(m){var ps=m.parts;if(!ps)return m.content||"";
@@ -296,24 +286,21 @@ function tlRows(D,d,moved){
   return html.join("")||'<li class="same"><span class="n">'+Z("这一天没有安排","Nothing planned this day")+"</span></li>";
 }
 function paintBot(d,m,live){
-  var parts=m.parts||[{t:"text",text:m.content||""}],h="",run=[],runAt=0,end=parts.length-1;
-  var tail=live&&parts[end]&&(parts[end].t==="text"||parts[end].t==="note")&&parts[end].text.trim(),
-    writing=tail&&(parts[end].t==="note"||tail.length<WRITING)?tail:"";
-  function flush(){if(run.length)h+=procHtml(run,(m.ts||0)+"-"+runAt,live,writing&&run[run.length-1]===parts[end]?writing:"");run=[];}
+  var parts=m.parts||[{t:"text",text:m.content||""}],h="",run=[],runAt=0;
+  function flush(){if(run.length)h+=procHtml(run,(m.ts||0)+"-"+runAt);run=[];}
   parts.forEach(function(p,i){
-    if(p.t==="steps"||(p.t==="note"&&p.text.trim())||(isNote(parts,i)&&p.text.trim())||(writing&&i===end)){if(!run.length)runAt=i;run.push(p);return;}
+    if(p.t==="steps"||(isNote(parts,i)&&p.text.trim())){if(!run.length)runAt=i;run.push(p);return;}
     if(p.t==="text"&&!p.text.trim())return; // a blank between notes and steps keeps them in one fold
+    if(p.t==="note")return;
     flush();
     if(p.t==="card")h+=cardHtml(p.card);
     else if(p.t==="tasks")h+=tasksHtml(p.items,live);
-    else if(p.t==="note")return;
     else if(p.text)h+='<div class="m-content">'+md(p.text)+"</div>";});
   flush();
   var lastPart=parts[parts.length-1];
-  // while it works and nothing else shows it: 思考中 (a thought or text being written streams in the fold's head instead)
-  var working=writing||parts.some(function(p){return p.t==="tasks"&&p.items.some(function(t){return t.status==="in_progress";});})||
+  var working=parts.some(function(p){return p.t==="tasks"&&p.items.some(function(t){return t.status==="in_progress";});})||
     (lastPart&&lastPart.t==="steps"&&lastPart.items.some(function(s){return s.state==="running";}));
-  if(live&&(!lastPart||lastPart.t!=="text"||!lastPart.text)&&!working)
+  if(live&&(!lastPart||lastPart.t!=="text"||!lastPart.text.trim())&&!working)
     h+='<div class="l-status"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span>'+Z("思考中","Thinking")+"</span></div>";
   if(!live){h+='<div class="l-tools"><span>'+esc(clock(m.ts))+(m.stopped?Z(" · 中途停止"," · stopped early"):"")+"</span></div>";}
   d.innerHTML=h;d._m=m;
@@ -445,13 +432,13 @@ function history(C){
     if(m.thumbs&&m.thumbs.length)c+=(c?"\n":"")+"[附了 "+m.thumbs.length+" 张图片]";
     (m.parts||[]).forEach(function(p){if(p.t!=="card")return;var k=p.card,st=k.state;
       c+="\n\n["+(st==="applied"?"提议「"+k.title+"」：已确认，已经改好":st==="declined"?"提议「"+k.title+"」：对方没采用":st==="failed"?"提议「"+k.title+"」：确认了但没改成（"+(k.error||"")+"）":st==="expired"?"提议「"+k.title+"」：已失效，没有改":"提议「"+k.title+"」：还在等对方确认")+"]";});
-    return {role:m.role,content:c.trim()||"…"};});
+    return {role:m.role,content:c.trim().slice(0,7800)||"…"};});
   while(h.length&&h[0].role!=="user")h.shift();
   return h;
 }
 // the newest question carries its photos in full (older ones only say they had some)
 function withPhotos(h,q,imgs,qte){var last=h[h.length-1];
-  if(imgs.length&&last&&last.role==="user"){var body=q||Z("（见图片）","(see the photo)");last.content=qte?quoteLine(qte)+"\n"+body:body;last.images=imgs.map(function(i){return i.full;});}
+  if(imgs.length&&last&&last.role==="user"){var body=q||Z("（见图片）","(see the photo)");last.content=(qte?quoteLine(qte)+"\n"+body:body).slice(0,7800);last.images=imgs.map(function(i){return i.full;});}
   return h;}
 function setBusy(on){busy=on;fab.classList.toggle("busy",on);busyUI();setBadge(false);if(listing)paintList();}
 // the Stop button belongs to the conversation that's answering, not to whichever one is on screen

@@ -613,6 +613,18 @@ function distTxt(km){return km<1?U("约 {n} 米",{n:Math.max(100,Math.round(km*1
 function cap(t){return t.charAt(0).toUpperCase()+t.slice(1);}
 function inLang(l,fn){var was=NM;NM=l;try{return fn();}finally{NM=was;}}
 function quoteEvent(color,ref,fn){return {color:color,ref:ref,zh:inLang("zh",fn),en:inLang("local",fn)};}
+function itemLines(x){
+  var out=[],sto=x.place&&T.places[x.place]&&T.places[x.place].story;
+  if(x.why)out.push(U("没排进行程：")+plain(x.why));
+  if(x.body||x.note)out.push(plain(x.body||x.note));
+  (x.facts||[]).forEach(function(f){out.push(L(f[0])+": "+plain(f[1]));});
+  (x.tips||[]).forEach(function(t){out.push("• "+plain(t));});
+  ["in","out"].forEach(function(k){var m=x[k];if(!m)return;
+    var ids=(m.path||[]).filter(function(p){return typeof p==="string";});
+    out.push((k==="in"?(en()?"Getting there: ":"怎么过去："):(en()?"Getting back: ":"怎么回来："))+[mode(m.mode),m.mins?hm(m.mins):"",ids.length>1?plain("[["+ids[0]+"]] → [["+ids[ids.length-1]+"]]"):"",m.note?plain(m.note):""].filter(Boolean).join(" · "));});
+  (sto||[]).forEach(function(p){out.push(L(p[0])+" (places/"+x.place+"/story): "+plain(p[1]));});
+  return out.join("\n").slice(0,1800);
+}
 function grpStops(run){return run.filter(function(x){return x.t==="stop";});}
 function grpRow(run,cur){
   var li=document.createElement("li"),first=run[0],last=run[run.length-1],id=state.date+"|"+first.i,open=!!GOPEN[id]||run.some(function(x){return x.i===state.sel;});
@@ -639,9 +651,13 @@ function grpRow(run,cur){
     '<button class="pill ask" type="button">'+ICON.ask+U("问问这个")+"</button>";
   acts.querySelector(".ask").addEventListener("click",function(){if(!window.tripChat)return;
     var dt=state.date,when=t0?(t1&&t1!==t0?t0+" – "+t1:t0):"";
-    window.tripChat.quote(quoteEvent(KCOL.hike,dt+(when?" "+when:"")+" · WALK [group="+first.group+"]",function(){
+    window.tripChat.quote(quoteEvent(KCOL.hike,dt+(when?" "+when:"")+" · WALK [path=days/"+dt+"/segs/"+first.i+".."+last.i+", group="+first.group+"]",function(){
+      var route=ends.map(function(p){return plain("[["+p+"]]");}).concat(loop?[U("回到起点")]:[]).join(" → ");
+      var lines=[route].concat(run.map(function(x){
+        if(x.t==="move")return "- "+mode(x.mode)+(dur(x)?" "+hm(dur(x)):"")+" "+moveLabel(x,true)+(x.note?" ("+plain(x.note)+")":"");
+        var d=itemLines(x);return "- "+(x.start?x.start+" ":"")+plain(x.name||"[["+x.place+"]]")+(d?"\n  "+d.replace(/\n/g,"\n  "):"");}));
       return {meta:[md(dt)+" "+wk(dt),when,U("{n} 站",{n:st.length}),wm?U("走路约 {t}",{t:hm(wm)}):""].filter(Boolean).join(" · "),
-        title:plain(first.group),sub:ends.map(function(p){return plain("[["+p+"]]");}).concat(loop?[U("回到起点")]:[]).join(" → ")};}));});
+        title:plain(first.group),sub:route,full:lines.join("\n").slice(0,1800)};}));});
   var box=document.createElement("div");box.className="grp-box";box.appendChild(ul);box.appendChild(acts);inn.appendChild(box);fold.appendChild(inn);li.appendChild(fold);
   b.addEventListener("click",function(){var sel=getSelection();if(sel&&!sel.isCollapsed&&b.contains(sel.anchorNode))return;var on=!li.classList.contains("open");
     if(on){closeGroups(li);closeOpts(null);if(state.sel!=null){state.sel=null;paintOpen();markSel();}}
@@ -702,12 +718,12 @@ $("rows").addEventListener("click",function(e){
     else if(state.sel==null)fitView();
     return;}
   var a=e.target.closest("[data-opt-ask]");
-  if(a){var k=a.dataset.optAsk.split("#"),o=optGroups(day())[k[0]][+k[1]],dt=state.date;
+  if(a){var k=a.dataset.optAsk.split("#"),o=optGroups(day())[k[0]][+k[1]],dt=state.date,oi=(day().options||[]).indexOf(o);
     if(o&&window.tripChat)window.tripChat.quote(quoteEvent(KCOL[o.kind]||KCOL.visit,
-      dt+" · OPTIONAL"+(o.place?" [place="+o.place+(o.after?", after="+o.after:"")+"]":""),function(){
-        var when=o.start?(o.end&&o.end!==o.start?o.start+" – "+o.end:o.start):o.mins?hm(o.mins):"";
+      dt+" · OPTIONAL [path=days/"+dt+"/options/"+(oi>=0?oi:0)+(o.place?", place="+o.place:"")+(o.after?", after="+o.after:"")+"]",function(){
+        var when=o.start?(o.end&&o.end!==o.start?o.start+" – "+o.end:o.start):o.mins?hm(o.mins):"",sto=o.place&&T.places[o.place]&&T.places[o.place].story;
         return {meta:[md(dt)+" "+wk(dt),U("可选"),when,L(T.kinds[o.kind])].filter(Boolean).join(" · "),
-          title:plain(o.name||"[["+o.place+"]]"),sub:plain(o.body||o.why||"").slice(0,200)};}));return;}
+          title:plain(o.name||"[["+o.place+"]]"),sub:plain(o.body||o.why||(sto&&sto[0]&&sto[0][1])||"").slice(0,200),full:itemLines(o)};}));return;}
   var pf=e.target.closest(".d-photo[data-opt-k]");
   if(pf&&!e.target.closest(".credit")){var k=pf.dataset.optK.split("#"),o=optGroups(day())[k[0]][+k[1]];
     if(o&&o.place){var phs=photosOf(o.place);if(phs.length)openLb(phs.map(function(p){return {s:{place:o.place,name:o.name},ph:p};}),+pf.dataset.k||0);}}});
@@ -775,15 +791,15 @@ function detail(s){
   d.querySelector(".ask").addEventListener("click",function(){if(!window.tripChat)return;
     var dt=state.date;
     if(s.t==="move"){
-      window.tripChat.quote(quoteEvent(KCOL.move,dt+(when?" "+when:"")+" · "+s.mode.toUpperCase(),function(){
-        var w=when||(dur(s)?hm(dur(s)):"");
+      window.tripChat.quote(quoteEvent(KCOL.move,dt+(when?" "+when:"")+" · "+s.mode.toUpperCase()+" [path=days/"+dt+"/segs/"+s.i+"]",function(){
+        var w=when||(dur(s)?hm(dur(s)):""),txt=s.note||s.body||"";
         return {meta:[md(dt)+" "+wk(dt),w,cap(mode(s.mode)),s.km?distTxt(s.km):""].filter(Boolean).join(" · "),
-          title:moveLabel(s,true),sub:plain(s.note||s.body||"").slice(0,200)};}));
+          title:moveLabel(s,true),sub:plain(txt).slice(0,200),full:itemLines(s)};}));
     }else{
-      window.tripChat.quote(quoteEvent(KCOL[s.kind]||KCOL.visit,dt+(when?" "+when:"")+" · STOP "+(s.num||"")+" [place="+s.place+"]",function(){
+      window.tripChat.quote(quoteEvent(KCOL[s.kind]||KCOL.visit,dt+(when?" "+when:"")+" · STOP "+(s.num||"")+" [path=days/"+dt+"/segs/"+s.i+", place="+s.place+"]",function(){
         var w=when||(s.mins?hm(s.mins):"");
         return {meta:[md(dt)+" "+wk(dt),w,L(T.kinds[s.kind])].filter(Boolean).join(" · "),
-          title:plain(s.name||"[["+s.place+"]]"),sub:plain(s.body||"").slice(0,200)};}));
+          title:plain(s.name||"[["+s.place+"]]"),sub:plain(s.body||(sto&&sto[0]&&sto[0][1])||(s.tips&&s.tips[0])||"").slice(0,200),full:itemLines(s)};}));
     }});
   return d;
 }
