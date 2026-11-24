@@ -94,17 +94,6 @@ var UIEN={
   "零食、充电线和离线歌单":"Snacks, charging cable, offline playlist","晕船药":"Seasickness tablets","渡轮 {t}":"{t} on a ferry",
   "充电宝放随身行李":"Power bank in your carry-on","今天坐飞机":"Flying today","雨衣雨裤":"Rain jacket and trousers","降水概率 {n}%":"{n}% chance of rain",
   "保暖层":"Warm layers","最高 {n}°":"High of {n}°","防风外套":"Windproof layer","风大":"Windy",
-  // drivers
-  "司机轮换":"Driver rotation","谁开哪一段，大家共用一份":"Who drives each leg, shared by everyone","司机":"Driver","不指定":"Clear the driver",
-  "先在总览页加上能开车的人":"Add the drivers on the overview first","没排":"No driver","能开车的人":"Drivers","+ 加司机":"+ Add a driver","加一个司机":"Add a driver",
-  "加上持安省驾照、登记在租车合同上的人，再给每段车程排司机，下面会算每个人一共开多久。":"Add everyone with an Ontario licence who's on the rental agreement, then give each drive a driver. This adds up how long each person drives.",
-  "{n} 段 · 单日最多 {t}":"{n} drives · most in one day {t}","还有 {t} 没排司机":"{t} of driving has no driver yet","把没排的自动排上":"Fill in the rest",
-  "全部 {t} 车程都排好了":"All {t} of driving has a driver","按天看":"By day",
-  "司机安排存在行程服务器上，跟行程助手用同一个访问码。":"Driver assignments live on the trip server and use the same access code as the assistant.",
-  "连不上行程服务器。下面是这台设备上次看到的安排；改动会先存在这里，连上后自动同步。":"Can't reach the trip server. This is the plan as this device last saw it; changes wait here and sync once you're back online.",
-  "1 处改动等待同步":"1 change waiting to sync","{n} 处改动等待同步":"{n} changes waiting to sync",
-  "连不上行程服务器，联网后才能改司机名单。":"Can't reach the trip server. The driver list can be changed once you're online.",
-  "把 {p} 从司机里移除？已经排给 {p} 的车程会空出来。":"Remove {p} from the drivers? Their drives will have no driver.",
   "加一个":"Add one","删掉":"Delete",
   "大家已订":"Booked for everyone","行程里标记了已订，大家都能看到":"Marked booked in the plan, for everyone",
   "行程更新了":"The plan was updated","{p} 刚改了行程":"{p} just changed the plan",
@@ -258,12 +247,9 @@ function index(trip){
   T=trip;N={};GPID={};DATES=[];BYDATE={};PACE={};
   Object.keys(T.places).forEach(function(k){N[k]=T.places[k].ll;if(T.places[k].gid)GPID[k]=T.places[k].gid;});
   for(var d=T.dates.start;d<=T.dates.end;d=addDays(d,1))DATES.push(d);
-  T.days.forEach(function(D){BYDATE[D.date]=D;var n=0,dn={};
+  T.days.forEach(function(D){BYDATE[D.date]=D;var n=0;
     D.segs.forEach(function(s,i){s.i=i;if(s.t==="stop")s.num=++n;
-      s.pts=s.geom?decode(s.geom):(s.t==="move"?s.path.map(LL):null);
-      // each drive's key for the driver rotation: date + where it starts and ends (#2 for a repeat that day)
-      if(s.t==="move"&&s.mode==="drive"){var ids=s.path.filter(function(x){return typeof x==="string";}),k=D.date+"|"+(ids.length?ids[0]+">"+ids[ids.length-1]:i);
-        dn[k]=(dn[k]||0)+1;s.dk=dn[k]>1?k+"#"+dn[k]:k;}});
+      s.pts=s.geom?decode(s.geom):(s.t==="move"?s.path.map(LL):null);});
     (D.options||[]).forEach(function(o){o.pts=o.geom?decode(o.geom):null;});
     PACE[D.date]=pace(D);});
 }
@@ -277,7 +263,7 @@ function boot(trip){
   setView(view,date);
   loadMap();
   if(OUT.length&&auth().code())flush(); // expenses logged offline last time go out as soon as the page is back
-  loadDrivers(true);paintOnline();
+  paintOnline();
   setInterval(function(){if(state.view==="day"&&liveDate()===state.date)renderGlance();},60000);
   window.addEventListener("hashchange",function(){var h=decodeURIComponent(location.hash.slice(1));
     if(DATES.indexOf(h)>=0&&!(state.view==="day"&&state.date===h))setView("day",h);else if(VIEWS[h]&&state.view!==h)setView(h);});
@@ -328,7 +314,7 @@ function renderAll(){
       '<span class="cd-t">'+(D?tx(D.short||D.title):U("规划中"))+"</span>"+
       (stay?'<span class="cd-s">'+U("住 ")+esc(NM==="local"?stay.lo:stay.zh)+"</span>":(!D&&legOf(d)?'<span class="cd-s">'+esc(plain(legOf(d).short||legOf(d).title))+"</span>":""))+"</button>";});
   $("cal").innerHTML=h;
-  renderPaceSum();renderDrivers();
+  renderPaceSum();
   $("legs").innerHTML=T.legs.map(function(l,li){var n=daysBetween(l.from,l.to)+1,c=T.countries[l.c]||{},lp=legPhotos(l);
     return '<div class="leg" style="--c:'+esc(c.color||"#8A99A3")+'">'+('<div class="leg-imgs">'+lp.slice(0,4).map(function(x,k){return '<button type="button" class="leg-img" data-leg="'+li+'" data-k="'+k+'" aria-label="'+esc(plain(x.s.name||"[["+x.s.place+"]]"))+'">'+img(x.ph,600)+"</button>";}).join("")+(lp.length<4?new Array(5-lp.length).join('<span class="leg-img">'+tbd()+"</span>"):"")+"</div>")+'<div class="leg-h"><h3>'+tx(l.title)+'</h3><span class="when">'+cnDate(l.from)+" – "+cnDate(l.to)+" · "+U("{n} 天",{n:n})+"</span>"+(l.draft?'<span class="leg-tag">'+U("草案")+'</span>':"")+"</div>"+
       (l.body?"<p>"+tx(l.body)+"</p>":"")+(l.items&&l.items.length?"<ul>"+l.items.map(function(x){return "<li>"+tx(x)+"</li>";}).join("")+"</ul>":"")+"</div>";}).join("");
@@ -607,8 +593,7 @@ function segLi(s,cur,inGrp){
   if(s.t==="move"){var dm=dur(s),km=inGrp&&s.mode==="walk"?walkKm(s):0;
     b.innerHTML='<span class="t"></span><span class="num" title="'+esc(mode(s.mode))+'">'+(ICON[s.mode]||ICON.drive)+'</span><span class="n">'+
       (inGrp&&s.mode==="walk"?esc([cap(mode(s.mode))+(dm?" "+hm(dm):""),km?distTxt(km):""].filter(Boolean).join(" · "))+(s.label?" · "+tx(s.label):"")
-        :(dm?esc(hm(dm))+" · ":"")+moveLabel(s))+
-      (s.dk?'<span class="drv-tag" data-dk="'+esc(s.dk)+'">'+esc(driverOf(s.dk)||"")+"</span>":"")+"</span>"+ICON.chev;}
+        :(dm?esc(hm(dm))+" · ":"")+moveLabel(s))+"</span>"+ICON.chev;}
   else{b.style.setProperty("--k",KCOL[s.kind]||KCOL.visit);
     var bits=[s.start&&s.end&&s.start!==s.end?hm(dur(s)):s.mins?hm(s.mins):"",L(T.kinds[s.kind])].filter(Boolean).join(" · ");
     b.innerHTML='<span class="t">'+(s.start?esc(s.start):"")+'</span><span class="num">'+s.num+'</span><span class="n">'+tx(s.name||"[["+s.place+"]]")+(cur&&cur.i===s.i?'<span class="now-tag">'+U("现在")+'</span>':"")+"</span>"+ICON.chev+'<span class="s">'+esc(bits)+"</span>";}
@@ -772,7 +757,6 @@ function detail(s){
   else if(s.t==="stop"&&SCENIC[s.kind])h+='<div class="d-photos n1"><figure class="d-photo empty">'+tbd()+"</figure></div>";
   h+='<span class="kind" style="--k:'+(KCOL[kind]||KCOL.visit)+'">'+esc(s.t==="move"?mode(s.mode):L(T.kinds[kind])||"")+(when?" · "+esc(when):"")+(s.t==="move"&&s.km?U(" · 约 {n} 公里",{n:s.km}):"")+'</span>';
   h+='<div class="detail-map"></div>'; // phones only: the map moves in here (placeMap)
-  if(s.dk)h+='<div class="drv-pick" data-dk="'+esc(s.dk)+'">'+drvPick(s.dk)+"</div>";
   if(s.facts&&s.facts.length)h+='<dl class="facts">'+s.facts.map(function(f){return "<div><dt>"+esc(L(f[0]))+"</dt><dd>"+tx(f[1])+"</dd></div>";}).join("")+"</dl>";
   var body=s.body||s.note;if(body)h+='<p class="body">'+tx(body)+"</p>";
   if(s.tips&&s.tips.length)h+='<ul class="tips">'+s.tips.map(function(t){return "<li>"+tx(t)+"</li>";}).join("")+"</ul>";
@@ -813,10 +797,6 @@ function renderDayNav(){var i=DATES.indexOf(state.date),h="";
 $("glance").addEventListener("click",function(e){var b=e.target.closest("[data-booking]");if(b){openBooking(b.dataset.booking);return;}
   var br=e.target.closest("[data-bring]");if(br){var all=store("nt-bring")||{},mine=all[state.date]=all[state.date]||{},k=br.dataset.bring;
     if(mine[k])delete mine[k];else mine[k]=1;store("nt-bring",all);br.classList.toggle("got",!!mine[k]);br.setAttribute("aria-pressed",!!mine[k]);}});
-// picking a driver in an open drive
-$("rows").addEventListener("click",function(e){var o=e.target.closest("[data-drv]");
-  if(o){var k=o.closest("[data-dk]").dataset.dk,p=o.dataset.drv||null;setDriver(k,p&&p===driverOf(k)?null:p);return;}
-  if(e.target.closest("[data-go-drivers]"))goDrivers();});
 $("dayNav").addEventListener("click",function(e){var b=e.target.closest("[data-date]");if(b){setView("day",b.dataset.date);window.scrollTo({top:Math.min(scrollY,$("dayView").offsetTop-130),behavior:"smooth"});}});
 // swipe left / right on the day view (phones) changes the day
 (function(){var x0=null,y0=0;
@@ -1025,11 +1005,6 @@ function renderGlance(){
   if(D&&liveDate()===d){var t=nowIn(tzOf(d)).mins,cur=nowSeg(),nx=segs.filter(function(s){return s.t==="stop"&&s.start&&mins(s.start)>t;})[0];
     if(cur)h+='<div class="nownext"><span><b>'+U("现在")+'</b>'+(cur.t==="move"?esc(mode(cur.mode))+" "+moveLabel(cur):tx(cur.verb||cur.name||"[["+cur.place+"]]"))+'</span>'+
       (nx?'<span><b>'+U("下一站")+'</b>'+tx(nx.name||"[["+nx.place+"]]")+" "+esc(nx.start)+U("（{t}后）",{t:hm(mins(nx.start)-t)})+"</span>":"")+"</div>";}
-  // who drives today, when the drivers are set up
-  var dv=segs.filter(function(s){return s.dk;});
-  if(dv.length&&DRV.drivers.length){var by={},un=0;dv.forEach(function(s){var w=driverOf(s.dk);if(w)by[w]=(by[w]||0)+dur(s);else un+=dur(s);});
-    h+='<div class="drv-row"><b>'+U("司机")+"</b>"+Object.keys(by).map(function(w){return '<span class="drv-chip">'+esc(w)+" <small>"+esc(hmS(by[w]))+"</small></span>";}).join("")+
-      (un?'<span class="drv-chip un">'+U("没排")+" <small>"+esc(hmS(un))+"</small></span>":"")+"</div>";}
   // what to bring, ticked off on this device
   var br=bringList(d),got=(store("nt-bring")||{})[d]||{};
   if(br.length)h+='<div class="bring" title="'+esc(U("点一下表示已装好"))+'"><b>'+U("带上")+"</b>"+br.map(function(x){var on=!!got[x[0]];
@@ -1161,13 +1136,17 @@ function ensureLeaflet(){
   if(window.L)return Promise.resolve(window.L);
   if(tLoadP)return tLoadP;
   tLoadP=new Promise(function(ok,err){
-    var css=document.createElement("link");css.rel="stylesheet";css.href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";document.head.appendChild(css);
-    var js=document.createElement("script");js.src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
-    js.onload=function(){ok(window.L);};js.onerror=err;document.head.appendChild(js);});
+    var css=document.createElement("link");css.rel="stylesheet";css.href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css";document.head.appendChild(css);
+    var js=document.createElement("script");js.src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js";
+    js.onload=function(){ok(window.L);};
+    js.onerror=function(){
+      var js2=document.createElement("script");js2.src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
+      js2.onload=function(){ok(window.L);};js2.onerror=err;document.head.appendChild(js2);};
+    document.head.appendChild(js);});
   return tLoadP;}
 function paintHikeMap(reframe){
   if(!curHike)return;syncTrailBtn();clearGHike();
-  var pts=curHike.pts,center=curHike.center,box=$("trailMap");
+  var pts=curHike.pts,center=curHike.center,box=$("trailMap"),initPt=(pts&&pts[0])||center||[64,-19];
   // When Google Maps JS API is active and user wants the default Google route view, draw directly on `map`
   if(trailMode==="route"&&map&&pts&&pts.length>1){
     box.hidden=true;
@@ -1179,7 +1158,7 @@ function paintHikeMap(reframe){
   ensureLeaflet().then(function(L){
     if(!curHike)return;
     if(!tMap){
-      tMap=L.map(box,{zoomControl:false,attributionControl:true});
+      tMap=L.map(box,{center:initPt,zoom:13,zoomControl:false,attributionControl:true});
       L.control.zoom({position:"bottomright"}).addTo(tMap);
       tBase.route=L.tileLayer("https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}",{maxZoom:19,attribution:"Map data &copy; Google"});
       tBase.topo=L.layerGroup([
@@ -1188,6 +1167,10 @@ function paintHikeMap(reframe){
       ]);
       tRoutes=L.layerGroup().addTo(tMap);}
     tMap.invalidateSize();
+    if(pts&&pts.length>1){
+      if(reframe)tMap.fitBounds(pts,{paddingTopLeft:[28,56],paddingBottomRight:[28,36],maxZoom:15});
+    }else if(center&&reframe){
+      tMap.setView(center,14);}
     var want=trailMode==="topo"?tBase.topo:tBase.route,other=trailMode==="topo"?tBase.route:tBase.topo;
     if(tMap.hasLayer(other))tMap.removeLayer(other);
     if(!tMap.hasLayer(want))want.addTo(tMap);
@@ -1197,11 +1180,9 @@ function paintHikeMap(reframe){
       L.polyline(pts,{color:topo?"#ffffff":"#38bdf8",weight:topo?7:9,opacity:topo?.8:.35,lineCap:"round",lineJoin:"round"}).addTo(tRoutes);
       L.polyline(pts,{color:topo?"#0284c7":"#38bdf8",weight:3.5,opacity:1,lineCap:"round",lineJoin:"round"}).addTo(tRoutes);
       L.circleMarker(pts[0],{radius:6,color:"#0f172a",weight:2,fillColor:"#22c55e",fillOpacity:1}).addTo(tRoutes);
-      if(reframe)tMap.fitBounds(pts,{paddingTopLeft:[28,56],paddingBottomRight:[28,36],maxZoom:15});
-    }else if(center&&reframe){
-      L.circleMarker(center,{radius:7,color:"#0f172a",weight:2,fillColor:"#38bdf8",fillOpacity:1}).addTo(tRoutes);
-      tMap.setView(center,14);}
-  }).catch(function(){box.hidden=true;});}
+    }else if(center){
+      L.circleMarker(center,{radius:7,color:"#0f172a",weight:2,fillColor:"#38bdf8",fillOpacity:1}).addTo(tRoutes);}
+  }).catch(function(e){console.error("Hike map error:",e);box.hidden=true;});}
 function showHikeMap(pts,center,key){
   var changed=!curHike||curHike.key!==key;
   if(changed)trailMode="route";
@@ -1420,88 +1401,6 @@ $("moneyView").addEventListener("click",function(e){
   var d=e.target.closest("[data-del]");if(d){var x=mItems().filter(function(i){return i.id===d.dataset.del;})[0];if(x&&confirm(U("删掉「{w}」这一笔？",{w:x.what})))delExpense(x.id);return;}
   var u=e.target.closest("[data-unperson]");if(u&&confirm(U("把 {p} 移出账本？",{p:u.dataset.unperson})))personOp("/api/expenses/people/delete",u.dataset.unperson);});
 
-/* ---------- driver rotation ---------- */
-// Only some of us can drive, and some days have 7+ hours at the wheel, so each drive in the plan (s.dk, set in
-// boot) can be given to a driver. The drivers and who drives what are shared through the trip server
-// (backend/drivers.json, same access code as the chat). This device keeps the last copy it saw, and picks made
-// offline wait in an outbox ({key: name or null}) until the server answers again.
-var DRV=store("nt-drv")||{drivers:[],assign:{}},DOUT=store("nt-drv-out")||{},dState={status:"",err:""},dAt=0;
-function driverOf(k){var w=k in DOUT?DOUT[k]:DRV.assign[k];return w&&DRV.drivers.indexOf(w)>=0?w:null;}
-function gotDrivers(j){DRV={drivers:j.drivers||[],assign:j.assign||{}};store("nt-drv",DRV);}
-function loadDrivers(force){if(!auth().code()){dState.status="code";paintDrivers();return;}
-  if(!force&&Date.now()-dAt<60000)return;dAt=Date.now();
-  mApi("/api/drivers").then(function(j){gotDrivers(j);dState.status="ok";return flushDrivers();})
-    .catch(function(e){dState.status=e&&e.code===401?"code":"off";}).then(paintDrivers);}
-// sends every waiting pick in one go; a pick changed again meanwhile stays in the outbox for the next round
-function flushDrivers(){var batch=Object.assign({},DOUT),ks=Object.keys(batch);if(!ks.length)return Promise.resolve();
-  return mApi("/api/drivers/assign",{body:{assign:batch}}).then(function(j){
-    ks.forEach(function(k){if(DOUT[k]===batch[k])delete DOUT[k];});store("nt-drv-out",DOUT);gotDrivers(j);},function(e){
-    // the server said no (not a dropped connection): drop the batch and say why, or it would never clear
-    if(e.code&&e.code!==401&&e.code!==429&&e.code<500){DOUT={};store("nt-drv-out",DOUT);dState.err=e.message;return;}throw e;});}
-function pushDrivers(){paintDrivers();if(!auth().code())return;
-  flushDrivers().then(function(){dState.status="ok";},function(e){dState.status=e&&e.code===401?"code":"off";}).then(paintDrivers);}
-function setDriver(k,name){dState.err="";DOUT[k]=name;store("nt-drv-out",DOUT);pushDrivers();}
-// fills every drive with no driver: the same person keeps driving up to about 2.5 hours, then hands over to
-// whoever has driven least so far (today's hours count double, so one person doesn't take a whole long day)
-function autoDrivers(){var P=DRV.drivers,tot={};if(!P.length)return;dState.err="";
-  P.forEach(function(w){tot[w]=0;});
-  T.days.forEach(function(D){D.segs.forEach(function(s){var w=s.dk&&driverOf(s.dk);if(w)tot[w]+=dur(s);});});
-  T.days.forEach(function(D){var today={},cur=null,stint=0;
-    D.segs.forEach(function(s){if(!s.dk)return;var m=dur(s),w=driverOf(s.dk);
-      if(!w){if(cur&&stint+m<=150)w=cur;
-        else{var best=1e9;P.forEach(function(x){var sc=tot[x]+2*(today[x]||0)+(x===cur?1e5:0);if(sc<best){best=sc;w=x;}});}
-        DOUT[s.dk]=w;tot[w]+=m;}
-      if(w!==cur){cur=w;stint=0;}stint+=m;today[w]=(today[w]||0)+m;});});
-  store("nt-drv-out",DOUT);pushDrivers();}
-function drvPerson(path,name){dState.err="";
-  mApi(path,{body:{name:name}}).then(function(j){gotDrivers(j);dState.status="ok";},function(e){
-    dState.err=e.code?e.message:U("连不上行程服务器，联网后才能改司机名单。");}).then(function(){paintDrivers();if(path.indexOf("delete")<0&&$("drvPersonIn"))$("drvPersonIn").focus();});}
-function goDrivers(){setView("all");setTimeout(function(){$("drvHead").scrollIntoView({block:"start",behavior:"smooth"});},50);}
-// the picker inside an open drive
-function drvPick(k){var P=DRV.drivers,cur=driverOf(k);
-  if(!P.length)return '<span class="drv-lab">'+U("司机")+'</span><button type="button" class="drv-link" data-go-drivers="1">'+U("先在总览页加上能开车的人")+" →</button>";
-  return '<span class="drv-lab">'+U("司机")+"</span>"+P.map(function(w){return '<button type="button" class="drv-opt" data-drv="'+esc(w)+'" aria-pressed="'+(cur===w)+'">'+esc(w)+"</button>";}).join("")+
-    (cur?'<button type="button" class="drv-opt clear" data-drv="" aria-label="'+esc(U("不指定"))+'" title="'+esc(U("不指定"))+'">×</button>':"");}
-// everything that shows drivers, redrawn in place (an open drive stays open)
-function paintDrivers(){if(!T)return;renderDrivers();
-  document.querySelectorAll(".drv-tag").forEach(function(el){el.textContent=driverOf(el.dataset.dk)||"";});
-  document.querySelectorAll(".drv-pick").forEach(function(el){el.innerHTML=drvPick(el.dataset.dk);});
-  if(state.view==="day")renderGlance();}
-function drvTotals(){var t={},un=0,days=[];DRV.drivers.forEach(function(w){t[w]={m:0,n:0,top:0};});
-  T.days.forEach(function(D){var by={},u=0,all=0;
-    D.segs.forEach(function(s){if(!s.dk)return;var m=dur(s),w=driverOf(s.dk);all+=m;if(w){by[w]=(by[w]||0)+m;t[w].n++;}else u+=m;});
-    if(!all)return;Object.keys(by).forEach(function(w){t[w].m+=by[w];t[w].top=Math.max(t[w].top,by[w]);});un+=u;days.push({D:D,all:all,by:by,un:u});});
-  return {t:t,un:un,days:days};}
-function renderDrivers(){var box=$("drivers");if(!box||!T)return;var st=dState.status,P=DRV.drivers,h="";
-  if(st==="code"&&!P.length){box.innerHTML='<form class="mny-gate" id="drvCode"><p>'+U("司机安排存在行程服务器上，跟行程助手用同一个访问码。")+'</p><div class="mny-row"><input type="password" id="drvCodeIn" autocomplete="off" placeholder="'+esc(U("访问码"))+'" aria-label="'+esc(U("访问码"))+'"><button class="pill primary" type="submit">'+U("确定")+'</button></div><span class="mny-err" id="drvCodeErr" role="alert"></span></form>';return;}
-  if(st==="off")h+='<p class="mny-note warn">'+U("连不上行程服务器。下面是这台设备上次看到的安排；改动会先存在这里，连上后自动同步。")+"</p>";
-  var pend=Object.keys(DOUT).length;if(pend&&st!=="code")h+='<p class="mny-note">'+U(pend===1?"1 处改动等待同步":"{n} 处改动等待同步",{n:pend})+"</p>";
-  if(dState.err)h+='<p class="mny-note warn">'+esc(dState.err)+"</p>";
-  var X=drvTotals(),max=0,all=X.un,open=$("drvDays")&&$("drvDays").open;P.forEach(function(w){max=Math.max(max,X.t[w].m);all+=X.t[w].m;});
-  h+='<div class="mny-card"><div class="mny-people"><b>'+U("能开车的人")+"</b>"+P.map(function(w){
-    return '<span class="mny-chip">'+esc(w)+'<button type="button" data-undriver="'+esc(w)+'" aria-label="'+esc(U("移除 {p}",{p:w}))+'">×</button></span>';}).join("")+
-    '<form class="mny-addp" id="drvPerson"><input id="drvPersonIn" maxlength="24" list="drvSuggest" placeholder="'+esc(U("+ 加司机"))+'" aria-label="'+esc(U("加一个司机"))+'"></form>'+
-    '<datalist id="drvSuggest">'+MNY.people.filter(function(w){return P.indexOf(w)<0;}).map(function(w){return '<option value="'+esc(w)+'">';}).join("")+"</datalist></div>";
-  if(!P.length)h+='<p class="mny-empty">'+U("加上持安省驾照、登记在租车合同上的人，再给每段车程排司机，下面会算每个人一共开多久。")+"</p>";
-  else{
-    h+='<ul class="drv-tot">'+P.map(function(w){var x=X.t[w];
-      return '<li><b>'+esc(w)+'</b><span class="drv-bar"><span style="width:'+(max?x.m/max*100:0)+'%"></span></span><span class="drv-h">'+esc(hm(x.m))+"</span><small>"+U("{n} 段 · 单日最多 {t}",{n:x.n,t:hmS(x.top)})+"</small></li>";}).join("")+"</ul>";
-    h+='<div class="drv-foot">'+(X.un?'<span class="drv-un">'+U("还有 {t} 没排司机",{t:hm(X.un)})+'</span><button type="button" class="pill primary" id="drvAuto">'+U("把没排的自动排上")+"</button>":
-      "<span>"+U("全部 {t} 车程都排好了",{t:hm(all)})+"</span>")+"</div>";
-    h+='<details class="drv-days" id="drvDays"'+(open?" open":"")+"><summary>"+U("按天看")+"</summary><ul>"+X.days.map(function(x){
-      var who=Object.keys(x.by).map(function(w){return esc(w)+" "+hmS(x.by[w]);});if(x.un)who.push('<span class="drv-un">'+U("没排")+" "+hmS(x.un)+"</span>");
-      return '<li><button type="button" data-date="'+x.D.date+'" style="--c:'+colorOf(x.D.date)+'"><span class="drv-d">'+md(x.D.date)+" "+esc(plain(x.D.short||x.D.title))+'</span><span class="drv-w">'+who.join(" · ")+"</span><small>"+hmS(x.all)+"</small></button></li>";}).join("")+"</ul></details>";}
-  box.innerHTML=h+"</div>";}
-$("drivers").addEventListener("submit",function(e){e.preventDefault();
-  if(e.target.id==="drvPerson"){var v=$("drvPersonIn").value.trim();if(v)drvPerson("/api/drivers/people",v);}
-  else if(e.target.id==="drvCode"){var code=$("drvCodeIn").value.trim(),er=$("drvCodeErr"),A=auth();if(!code)return;er.textContent=U("验证中…");
-    fetch(A.api+"/api/check",{method:"POST",headers:{"X-Access-Code":code}}).then(function(r){
-      if(r.status===401){er.textContent=U("访问码不对。");return;}if(!r.ok)throw new Error();A.setCode(code);loadDrivers(true);})
-      .catch(function(){er.textContent=U("连不上行程服务器。");});}});
-$("drivers").addEventListener("click",function(e){
-  var u=e.target.closest("[data-undriver]");if(u){e.stopPropagation();if(confirm(U("把 {p} 从司机里移除？已经排给 {p} 的车程会空出来。",{p:u.dataset.undriver})))drvPerson("/api/drivers/people/delete",u.dataset.undriver);return;}
-  if(e.target.closest("#drvAuto"))autoDrivers();});
-
 /* ---------- offline ---------- */
 // sw.js keeps a copy of the page, the plan, the last forecast and rates, and every photo once seen. The prep tab
 // can fetch all the photos ahead of time (one 1200px copy each; the worker uses it for any other size offline).
@@ -1534,7 +1433,7 @@ function renderOffline(){var box=$("offline");if(!box||!T)return;
 $("offline").addEventListener("click",function(e){if(e.target.closest("#offGet"))getPhotos();});
 function paintOnline(){$("offlineBar").hidden=navigator.onLine!==false;}
 addEventListener("offline",paintOnline);
-addEventListener("online",function(){paintOnline();if(T)loadDrivers(true);});
+addEventListener("online",paintOnline);
 if("serviceWorker" in navigator&&/^https?:$/.test(location.protocol))navigator.serviceWorker.register("sw.js").catch(function(e){console.warn("offline copy unavailable:",e);});
 
 /* ---------- the live plan ---------- */
@@ -1542,7 +1441,7 @@ if("serviceWorker" in navigator&&/^https?:$/.test(location.protocol))navigator.s
 // this device's last copy, or from the server, and asks for the code once per device when it has neither; then it
 // checks for a newer version every minute, when the page comes back into view, and right after the assistant changes it.
 var PLAN={rev:null,last:null},planTimer=null;
-// the code is kept with the chat (nt-chat-v1), so typing it once unlocks the page, the chat, the log and the drivers
+// the code is kept with the chat (nt-chat-v1), so typing it once unlocks the page, the chat and the log
 function accessCode(){try{return (JSON.parse(localStorage.getItem("nt-chat-v1"))||{}).code||"";}catch(e){return "";}}
 function setAccessCode(c){if(window.tripAuth){window.tripAuth.setCode(c);return;}
   try{var s=JSON.parse(localStorage.getItem("nt-chat-v1"))||{};s.code=c;localStorage.setItem("nt-chat-v1",JSON.stringify(s));}catch(e){}}
