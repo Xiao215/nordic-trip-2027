@@ -67,8 +67,6 @@
       <div class="tl-head"><h2 data-i18n="四周日历">四周日历</h2><span class="hint" data-i18n="点任意一天看当天安排">点任意一天看当天安排</span></div>
       <div class="cal" id="cal"></div>
       <div class="pace-sum" id="paceSum"></div>
-      <div class="tl-head" id="drvHead"><h2 data-i18n="司机轮换">司机轮换</h2><span class="hint" data-i18n="谁开哪一段，大家共用一份">谁开哪一段，大家共用一份</span></div>
-      <div class="drivers" id="drivers"></div>
       <div class="tl-head"><h2 data-i18n="路线分段">路线分段</h2><span class="hint" id="legHint"></span></div>
       <div class="legs" id="legs"></div>
     </section>
@@ -112,8 +110,11 @@
       <div id="map" class="map" role="region" aria-label="行程地图" data-i18n-aria-label="行程地图"></div>
       <div id="trailMap" class="map trail-map" hidden></div>
       <div class="map-tools" role="toolbar" aria-label="地图">
+        <a class="tool on" id="allTrailsBtn" href="https://www.alltrails.com" target="_blank" rel="noopener" hidden>
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M8 4H4v12h12v-4M11 3h6v6M17 3l-8 8"/></svg><span>AllTrails</span>
+        </a>
         <button class="tool" id="trailModeBtn" type="button" hidden>
-          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M2.5 15.5l5-7 3.5 4.5 3-4 3.5 6.5z"/><circle cx="14.5" cy="5.5" r="1.6"/></svg><span id="trailModeLabel">徒步图</span>
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M2.5 15.5l5-7 3.5 4.5 3-4 3.5 6.5z"/><circle cx="14.5" cy="5.5" r="1.6"/></svg><span id="trailModeLabel">等高线图</span>
         </button>
         <button class="tool" id="fitBtn" title="看全天 / 全程" data-i18n-title="看全天 / 全程">
           <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 7V3h4M13 3h4v4M17 13v4h-4M7 17H3v-4"/></svg><span id="fitLabel">全程</span>

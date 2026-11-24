@@ -697,7 +697,7 @@ $("rows").addEventListener("click",function(e){
     OPTOPEN[id]=on;
     li.classList.toggle("open",on);t.setAttribute("aria-expanded",on);li.querySelector(".opt-fold").inert=!on;
     if(on){var list=optGroups(day())[li.dataset.opt]||[],o0=list[0],ps=list.map(function(x){return x.place;}).filter(function(p){return p&&N[p];});
-      if(o0&&(o0.kind==="hike"||(o0.pts&&o0.pts.length>1))){$("mapCaption").textContent=plain(o0.name||"[["+o0.place+"]]");showHikeMap(o0.pts,o0.place&&N[o0.place],"opt:"+id);}
+      if(o0&&(o0.kind==="hike"||(o0.pts&&o0.pts.length>1))){$("mapCaption").textContent=plain(o0.name||"[["+o0.place+"]]");showHikeMap(o0.pts,o0.place&&N[o0.place],"opt:"+id,allTrailsUrl(o0));}
       else if(ps.length)frameGroup(ps);}
     else if(state.sel==null)fitView();
     return;}
@@ -1105,9 +1105,14 @@ function around(pts,c){return pts.concat(pts.map(function(p){return [2*c[0]-p[0]
 function stopOnRoute(s){var D=day();if(!D||s.t!=="stop"||!s.place)return null;
   var r=embedDayRoute(D),at=LL(s.place),i=-1;r.forEach(function(p,k){if(i<0&&p[0]===at[0]&&p[1]===at[1])i=k;});
   return r.length>1&&i>=0?{route:r,i:i,at:at}:null;}
+function allTrailsUrl(x){
+  if(!x)return null;
+  var t=(x.body||"")+" "+(x.facts||[]).map(function(f){return f[1]||"";}).join(" ")+" "+(x.tips||[]).join(" ");
+  var m=t.match(/https?:\/\/(?:www\.)?alltrails\.com\/[^\s)"']+/i);
+  return m?m[0]:null;}
 function frame(s){
   if(s&&s.t==="stop"&&(s.kind==="hike"||(s.pts&&s.pts.length>1))){
-    caption();showHikeMap(s.pts,LL(s.place),"seg:"+state.date+":"+s.i);return;}
+    caption();showHikeMap(s.pts,LL(s.place),"seg:"+state.date+":"+s.i,allTrailsUrl(s));return;}
   hideHikeMap();
   var on=stopOnRoute(s);caption();
   if(embed){
@@ -1124,14 +1129,16 @@ var tMap=null,tBase={},tRoutes=null,tLoadP=null,curHike=null,trailMode="route",g
 function clearGHike(){gHikeLines.forEach(function(l){l.setMap(null);});gHikeLines=[];}
 function hideHikeMap(){
   curHike=null;clearGHike();
-  var box=$("trailMap"),btn=$("trailModeBtn");
-  if(box)box.hidden=true;if(btn)btn.hidden=true;}
+  var box=$("trailMap"),btn=$("trailModeBtn"),at=$("allTrailsBtn"),dr=$("dayRoute");
+  if(box)box.hidden=true;if(btn)btn.hidden=true;if(at)at.hidden=true;if(dr)dr.hidden=false;}
 function syncTrailBtn(){
-  var btn=$("trailModeBtn"),lbl=$("trailModeLabel");if(!btn||!lbl)return;
-  var topo=trailMode==="topo";
+  var btn=$("trailModeBtn"),lbl=$("trailModeLabel"),at=$("allTrailsBtn"),dr=$("dayRoute");if(!btn||!lbl)return;
+  var topo=trailMode==="topo",hasAT=!!(curHike&&curHike.atUrl);
   btn.hidden=!curHike;btn.classList.toggle("on",topo);
   lbl.textContent=U(topo?"卫星徒步图":"等高线图");
-  btn.title=U(topo?"切回卫星徒步图":"切换到等高线地形图");}
+  btn.title=U(topo?"切回卫星徒步图":"切换到等高线地形图");
+  if(at){at.hidden=!hasAT;if(hasAT)at.href=curHike.atUrl;}
+  if(dr)dr.hidden=hasAT;}
 function ensureLeaflet(){
   if(window.L)return Promise.resolve(window.L);
   if(tLoadP)return tLoadP;
@@ -1147,8 +1154,8 @@ function ensureLeaflet(){
 function paintHikeMap(reframe){
   if(!curHike)return;syncTrailBtn();clearGHike();
   var pts=curHike.pts,center=curHike.center,box=$("trailMap"),initPt=(pts&&pts[0])||center||[64,-19];
-  // When Google Maps JS API is active and user wants the default Google route view, draw directly on `map`
-  if(trailMode==="route"&&map&&pts&&pts.length>1){
+  // When Google Maps JS API is active and user wants the default Google route view (non-AllTrails), draw directly on `map`
+  if(trailMode==="route"&&map&&!curHike.atUrl&&pts&&pts.length>1){
     box.hidden=true;
     gHikeLines.push(new G.Polyline({map:map,path:pts.map(function(p){return {lat:p[0],lng:p[1]};}),strokeColor:"#38bdf8",strokeOpacity:.35,strokeWeight:10,clickable:false,zIndex:900}));
     gHikeLines.push(new G.Polyline({map:map,path:pts.map(function(p){return {lat:p[0],lng:p[1]};}),strokeColor:"#38bdf8",strokeOpacity:1,strokeWeight:3.5,clickable:false,zIndex:901}));
@@ -1170,26 +1177,27 @@ function paintHikeMap(reframe){
       ]);
       tRoutes=L.layerGroup().addTo(tMap);}
     tMap.invalidateSize();
-    if(pts&&pts.length>1){
-      if(reframe)tMap.fitBounds(pts,{paddingTopLeft:[28,56],paddingBottomRight:[28,36],maxZoom:15});
+    var ptsToDraw=curHike.atUrl?null:pts;
+    if(ptsToDraw&&ptsToDraw.length>1){
+      if(reframe)tMap.fitBounds(ptsToDraw,{paddingTopLeft:[28,56],paddingBottomRight:[28,36],maxZoom:15});
     }else if(center&&reframe){
       tMap.setView(center,14);}
     var want=trailMode==="topo"?tBase.topo:tBase.route,other=trailMode==="topo"?tBase.route:tBase.topo;
     if(tMap.hasLayer(other))tMap.removeLayer(other);
     if(!tMap.hasLayer(want))want.addTo(tMap);
     tRoutes.clearLayers();
-    if(pts&&pts.length>1){
+    if(ptsToDraw&&ptsToDraw.length>1){
       var topo=trailMode==="topo";
-      L.polyline(pts,{color:topo?"#ffffff":"#38bdf8",weight:topo?7:9,opacity:topo?.8:.35,lineCap:"round",lineJoin:"round"}).addTo(tRoutes);
-      L.polyline(pts,{color:topo?"#0284c7":"#38bdf8",weight:3.5,opacity:1,lineCap:"round",lineJoin:"round"}).addTo(tRoutes);
-      L.circleMarker(pts[0],{radius:6,color:"#0f172a",weight:2,fillColor:"#22c55e",fillOpacity:1}).addTo(tRoutes);
+      L.polyline(ptsToDraw,{color:topo?"#ffffff":"#38bdf8",weight:topo?7:9,opacity:topo?.8:.35,lineCap:"round",lineJoin:"round"}).addTo(tRoutes);
+      L.polyline(ptsToDraw,{color:topo?"#0284c7":"#38bdf8",weight:3.5,opacity:1,lineCap:"round",lineJoin:"round"}).addTo(tRoutes);
+      L.circleMarker(ptsToDraw[0],{radius:6,color:"#0f172a",weight:2,fillColor:"#22c55e",fillOpacity:1}).addTo(tRoutes);
     }else if(center){
-      L.circleMarker(center,{radius:7,color:"#0f172a",weight:2,fillColor:"#38bdf8",fillOpacity:1}).addTo(tRoutes);}
+      L.circleMarker(center,{radius:7,color:"#0f172a",weight:2,fillColor:"#22c55e",fillOpacity:1}).addTo(tRoutes);}
   }).catch(function(e){console.error("Hike map error:",e);box.hidden=true;});}
-function showHikeMap(pts,center,key){
+function showHikeMap(pts,center,key,atUrl){
   var changed=!curHike||curHike.key!==key;
   if(changed)trailMode="route";
-  curHike={pts:pts,center:center,key:key};
+  curHike={pts:pts,center:center,key:key,atUrl:atUrl||null};
   paintHikeMap(changed);}
 $("trailModeBtn").addEventListener("click",function(){
   if(!curHike)return;
