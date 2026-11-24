@@ -32,7 +32,8 @@ function save(){S.chats.forEach(function(c){if(c.msgs.length>60)c.msgs=c.msgs.sl
   keep(KEY,{code:S.code,at:S.at,chats:kept});}
 
 var $=function(id){return document.getElementById(id);};
-var chat=$("chat"),log=$("chatLog"),form=$("chatForm"),text=$("chatText"),join=$("chatJoin"),sub=$("chatSub"),badge=$("chatBadge"),send=$("chatSend"),fab=$("askBtn"),scrim=$("chatScrim");
+var chat=$("chat"),log=$("chatLog"),form=$("chatForm"),text=$("chatText"),join=$("chatJoin"),sub=$("chatSub"),badge=$("chatBadge"),send=$("chatSend"),fab=$("askBtn"),scrim=$("chatScrim"),quoteBox=$("chatQuote");
+if(!quoteBox){quoteBox=document.createElement("div");quoteBox.className="chat-quote";quoteBox.id="chatQuote";quoteBox.hidden=true;form.insertBefore(quoteBox,form.firstChild);}
 var cur=null,listing=false,busy=false,checked=false,needCode=false,pending=null,ctrl=null,queue=[],gen=0,stick=true,openSteps={};
 if(!/Mac|iPhone|iPad/.test(navigator.platform||navigator.userAgent))$("chatKbd").textContent="Ctrl K";
 
@@ -103,7 +104,22 @@ document.addEventListener("keydown",function(e){
 log.addEventListener("scroll",function(){stick=log.scrollHeight-log.scrollTop-log.clientHeight<48;});
 function scroll(force){if(force||stick)log.scrollTop=log.scrollHeight;}
 function add(el){var e0=log.querySelector(".l-empty");if(e0)e0.remove();log.appendChild(el);return el;}
+function quotePick(q){return (isEn()&&q.en)||q.zh||q;}
+function quoteBody(q){var p=quotePick(q);
+  return (p.meta?"<small>"+esc(p.meta)+"</small>":"")+"<b>"+esc(p.title||"")+"</b>"+(p.sub?"<span>"+esc(p.sub)+"</span>":"");}
+function quoteLine(q){var p=quotePick(q);
+  return (isEn()?"[Quoted from the plan: ":"[引用行程：")+[q.ref||p.meta,p.title,p.sub].filter(Boolean).join(" — ")+"]";}
+function paintQuote(){
+  var q=active().quote;quoteBox.hidden=!q;
+  text.placeholder=q?Z("关于这一项，想问什么或怎么改…","Ask about this, or say what to change…"):Z("问问助手，或发张小票让它记账…","Ask anything, or send a receipt to log it…");
+  if(!q){quoteBox.innerHTML="";return;}
+  quoteBox.innerHTML='<div class="cq-in"'+(q.color?' style="--k:'+esc(q.color)+'"':"")+'><div class="cq-txt">'+quoteBody(q)+
+    '</div><button type="button" class="cq-x" data-unquote="1" aria-label="'+Z("去掉引用","Remove quote")+'" title="'+Z("去掉引用","Remove quote")+'">'+IC.x+"</button></div>";
+}
+quoteBox.addEventListener("click",function(e){if(e.target.closest("[data-unquote]")){active().quote=null;save();render();if(isOpen())text.focus({preventScroll:true});}});
 function userLine(m){var w=document.createElement("div");w.className="l-me appear";
+  if(m.quote){var q=document.createElement("div");q.className="l-quote";if(m.quote.color)q.style.setProperty("--k",m.quote.color);
+    q.innerHTML=quoteBody(m.quote);w.appendChild(q);}
   if(m.thumbs&&m.thumbs.length){var g=document.createElement("div");g.className="l-pics";
     m.thumbs.forEach(function(t){var i=document.createElement("img");i.src=t;i.alt=Z("附的图片","Attached photo");g.appendChild(i);});w.appendChild(g);}
   if(m.content){var d=document.createElement("div");d.className="l-user";d.textContent=m.content;w.appendChild(d);}
@@ -318,17 +334,19 @@ function empty(){var e=document.createElement("div");e.className="l-empty";e.inn
     SUGGEST[isEn()?"en":"zh"].map(function(q){return '<button type="button" data-suggest="1">'+esc(q)+"</button>";}).join("");log.appendChild(e);}
 function render(){
   var C=active();log.innerHTML="";
-  if(!C.msgs.length)empty();
+  if(!C.msgs.length&&!C.quote)empty();
   C.msgs.forEach(function(m){if(m.role==="user")userLine(m);else botLine(m,false);});
   if(cur&&cur.C===C)add(cur.el); // its answer is still coming
   log.querySelectorAll(".appear").forEach(function(x){x.classList.remove("appear");});
-  busyUI();scroll(true);
+  paintQuote();busyUI();scroll(true);
 }
 function waitingIn(C){var n=0;C.msgs.forEach(function(m){(m.parts||[]).forEach(function(p){if(p.t==="card"&&p.card.state==="waiting")n++;});});return n;}
 function cardsWaiting(){return S.chats.reduce(function(n,C){return n+waitingIn(C);},0);}
 
 /* ---------- past conversations ---------- */
-function chatTitle(C){var u=C.msgs.filter(function(m){return m.role==="user";})[0];return u?(u.content.replace(/\s+/g," ").trim()||Z("📷 图片","📷 Photo")):Z("新对话","New chat");}
+function chatTitle(C){var u=C.msgs.filter(function(m){return m.role==="user";})[0];if(!u)return Z("新对话","New chat");
+  var t=u.content.replace(/\s+/g," ").trim(),qt=u.quote&&quotePick(u.quote).title;
+  return qt&&t?qt+" · "+t:qt||t||Z("📷 图片","📷 Photo");}
 function when(ts){var d=new Date(ts),now=new Date(),L=isEn()?"en-CA":"zh-CN";
   if(d.toDateString()===now.toDateString())return clock(ts);
   var y=new Date(now);y.setDate(now.getDate()-1);if(d.toDateString()===y.toDateString())return Z("昨天 ","Yesterday ")+clock(ts);
@@ -370,7 +388,7 @@ function health(){
 }
 showStatus();render();health();setBadge(false);
 // the page switched language: redraw the status, the button and (unless an answer is streaming) the transcript
-document.addEventListener("trip:lang",function(){showStatus();headTitle();if(listing)paintList();if(!busy)render();setBadge(badge.classList.contains("new")&&!cardsWaiting());sendLabel();});
+document.addEventListener("trip:lang",function(){showStatus();headTitle();if(listing)paintList();if(!busy)render();else paintQuote();setBadge(badge.classList.contains("new")&&!cardsWaiting());sendLabel();});
 
 /* ---------- approving a change ---------- */
 // a card can be pressed while its answer is still streaming (cur), before that answer is saved
@@ -396,6 +414,16 @@ function decide(id,approve){
 function newChat(){
   queue.forEach(function(n){n.el.remove();});queue=[];pending=null;openSteps={};
   var C=active();if(C.msgs.length||(cur&&cur.C===C)){C={id:uid(),msgs:[],ts:Date.now()};S.chats.unshift(C);S.at=C.id;}
+  else C.quote=null;
+  save();render();showList(false);openChat();
+}
+// 问问这个 on a stop, walk, drive or optional item: always starts a fresh chat quoting that item, without assuming a question
+function startQuote(q){
+  if(!q)return;
+  queue.forEach(function(n){n.el.remove();});queue=[];pending=null;openSteps={};
+  var C=active();if(C.msgs.length||(cur&&cur.C===C)){C={id:uid(),msgs:[],ts:Date.now()};S.chats.unshift(C);S.at=C.id;}
+  C.quote=q;C.ts=Date.now();
+  text.value="";pics=[];paintPics();grow();
   save();render();showList(false);openChat();
 }
 
@@ -406,15 +434,16 @@ join.addEventListener("submit",function(e){
     if(r.status===401){err.textContent=Z("访问码不对。","That code didn't work.");return;}
     if(!r.ok)throw new Error();
     S.code=code;save();err.textContent="";join.hidden=true;
-    if(pending){var w=pending;pending=null;ask(w.q,w.imgs);}else text.focus();
+    if(pending){var w=pending;pending=null;ask(w.q,w.imgs,w.qte);}else text.focus();
   }).catch(function(){err.textContent=Z("连不上服务器。","Can't reach the server.");});
 });
 
 /* ---------- ask ---------- */
 // what the assistant reads back: the text of each turn, plus what became of the changes it proposed
 function history(C){
-  var h=C.msgs.filter(function(m){return m.content||(m.thumbs&&m.thumbs.length)||(m.parts&&m.parts.length);}).slice(-HISTORY).map(function(m){
+  var h=C.msgs.filter(function(m){return m.content||m.quote||(m.thumbs&&m.thumbs.length)||(m.parts&&m.parts.length);}).slice(-HISTORY).map(function(m){
     var c=m.content||"";
+    if(m.quote)c=quoteLine(m.quote)+(c?"\n"+c:"");
     if(m.thumbs&&m.thumbs.length)c+=(c?"\n":"")+"[附了 "+m.thumbs.length+" 张图片]";
     (m.parts||[]).forEach(function(p){if(p.t!=="card")return;var k=p.card,st=k.state;
       c+="\n\n["+(st==="applied"?"提议「"+k.title+"」：已确认，已经改好":st==="declined"?"提议「"+k.title+"」：对方没采用":st==="failed"?"提议「"+k.title+"」：确认了但没改成（"+(k.error||"")+"）":st==="expired"?"提议「"+k.title+"」：已失效，没有改":"提议「"+k.title+"」：还在等对方确认")+"]";});
@@ -423,8 +452,8 @@ function history(C){
   return h;
 }
 // the newest question carries its photos in full (older ones only say they had some)
-function withPhotos(h,q,imgs){var last=h[h.length-1];
-  if(imgs.length&&last&&last.role==="user"){last.content=q||Z("（见图片）","(see the photo)");last.images=imgs.map(function(i){return i.full;});}
+function withPhotos(h,q,imgs,qte){var last=h[h.length-1];
+  if(imgs.length&&last&&last.role==="user"){var body=q||Z("（见图片）","(see the photo)");last.content=qte?quoteLine(qte)+"\n"+body:body;last.images=imgs.map(function(i){return i.full;});}
   return h;}
 function setBusy(on){busy=on;fab.classList.toggle("busy",on);busyUI();setBadge(false);if(listing)paintList();}
 // the Stop button belongs to the conversation that's answering, not to whichever one is on screen
@@ -432,18 +461,20 @@ function busyUI(){chat.classList.toggle("busy",busyHere());sendLabel();}
 function busyHere(){return busy&&!!cur&&cur.C===active();}
 function sendLabel(){var b=busyHere();send.setAttribute("aria-label",b?Z("停止回答","Stop answering"):Z("发送","Send"));send.title=b?Z("停止","Stop"):Z("发送","Send");}
 // a question asked mid-answer waits its turn instead of cutting the answer off
-function enqueue(q,imgs){queue.push({q:q,imgs:imgs,el:note(Z("排队中：","Up next: ")+(q||Z("图片","photo")))});}
-function next(){if(busy||!queue.length)return;var n=queue.shift();n.el.remove();ask(n.q,n.imgs);}
+function enqueue(q,imgs,qte){queue.push({q:q,imgs:imgs,qte:qte,el:note(Z("排队中：","Up next: ")+(q||Z("图片","photo")))});}
+function next(){if(busy||!queue.length)return;var n=queue.shift();n.el.remove();ask(n.q,n.imgs,n.qte);}
 // imgs: photos to send with this question, [{full, thumb}] (data: URLs); only the thumbnails are kept in the history
-function ask(q,imgs){
+function ask(q,imgs,qte){
   q=(q||"").trim();imgs=imgs||[];if(!q&&!imgs.length)return;
   openChat(false);
   if(q==="/clear"||q==="/new"){newChat();return;}
   if(listing)showList(false);
-  if(busy){enqueue(q,imgs);return;}
-  if(needCode&&!S.code){pending={q:q,imgs:imgs};showJoin();$("joinCode").focus();return;}
-  var C=active(),my=gen;stick=true;
-  var um={role:"user",content:q,ts:Date.now()};if(imgs.length)um.thumbs=imgs.map(function(i){return i.thumb;});
+  var C=active();
+  if(qte===undefined){qte=C.quote||null;if(C.quote){C.quote=null;save();paintQuote();}}
+  if(busy){enqueue(q,imgs,qte);return;}
+  if(needCode&&!S.code){pending={q:q,imgs:imgs,qte:qte};showJoin();$("joinCode").focus();return;}
+  var my=gen;stick=true;
+  var um={role:"user",content:q,ts:Date.now()};if(qte)um.quote=qte;if(imgs.length)um.thumbs=imgs.map(function(i){return i.thumb;});
   C.msgs.push(um);C.ts=Date.now();save();
   var uEl=userLine(um);
   var m={role:"assistant",content:"",parts:[],ts:Date.now()},el=botLine(m,true),ctx=null;cur={m:m,el:el,C:C};setBusy(true);scroll(true);
@@ -468,7 +499,7 @@ function ask(q,imgs){
     if(raf){cancelAnimationFrame(raf);raf=0;} // a repaint still queued from the stream would draw it as unfinished again
     m.ts=Date.now();m.stopped=stopped||undefined;cur=null;C.msgs.push(m);C.ts=Date.now();save();paintBot(el,m,false);}
   fetch(API+"/api/chat",{method:"POST",signal:ctrl&&ctrl.signal,headers:{"Content-Type":"application/json","X-Access-Code":S.code||""},
-    body:JSON.stringify({name:"",messages:withPhotos(history(C),q,imgs),context:ctx})})
+    body:JSON.stringify({name:"",messages:withPhotos(history(C),q,imgs,qte),context:ctx})})
   .then(function(r){
     if(r.status===401){S.code=null;needCode=true;save();throw new Error(Z("这个服务器需要访问码。","This server needs the access code."));}
     if(!r.ok)return r.json().catch(function(){return {};}).then(function(j){throw new Error(j.detail||Z("行程服务器出错了（"+r.status+"）。","The trip server had a problem ("+r.status+")."));});
@@ -494,13 +525,13 @@ function ask(q,imgs){
   .then(function(){if(my!==gen)return;if(!m.content&&!m.parts.some(function(p){return p.t==="card";}))throw new Error(Z("没有收到回答。","No answer came back."));finish();})
   .catch(function(e){
     if(my!==gen)return; // its conversation was deleted
-    if(e&&e.name==="AbortError"){if(m.parts.length)finish(true);else{cur=null;el.remove();uEl.remove();C.msgs.pop();save();if(here())note(Z("还没回答就停止了。","Stopped before an answer came back."));}return;}
+    if(e&&e.name==="AbortError"){if(m.parts.length)finish(true);else{cur=null;el.remove();uEl.remove();C.msgs.pop();if(qte&&!C.msgs.length&&!C.quote)C.quote=qte;save();if(here()){paintQuote();note(Z("还没回答就停止了。","Stopped before an answer came back."));}}return;}
     var msg=e&&e.message&&e.message!=="Failed to fetch"?e.message:Z("连不上行程服务器，可能离线了。","Can't reach the trip server. It may be offline.");
     if(m.parts.length){finish(false,true);if(here())errLine(msg);}
     else{cur=null;el.remove();C.msgs.pop();save();
       if(!here())return;
-      if(needCode&&!S.code){uEl.remove();pending={q:q,imgs:imgs};showJoin();errLine(msg);}
-      else errLine(msg,function(){uEl.remove();ask(q,imgs);});}
+      if(needCode&&!S.code){uEl.remove();pending={q:q,imgs:imgs,qte:qte};showJoin();errLine(msg);}
+      else errLine(msg,function(){uEl.remove();ask(q,imgs,qte);});}
   })
   .then(function(){if(my!==gen)return;ctrl=null;setBusy(false);setBadge(true);scroll();next();});
 }
@@ -546,7 +577,7 @@ function paintPics(){var box=$("chatPics");box.hidden=!pics.length;
 $("chatPics").addEventListener("click",function(e){var b=e.target.closest("[data-unpic]");if(b){pics.splice(+b.dataset.unpic,1);paintPics();grow();}});
 text.addEventListener("input",grow);
 
-window.tripChat={ask:function(q){ask(q);},open:function(){openChat();}};
+window.tripChat={ask:function(q){var C=active();if(C.quote&&!C.msgs.length){C.quote=null;save();paintQuote();}ask(q,null,null);},quote:startQuote,open:function(){openChat();}};
 // the expense log talks to the same server with the same access code (typed once, in either place)
 window.tripAuth={api:API,code:function(){return S.code||"";},
   setCode:function(c){S.code=c||null;save();if(c){join.hidden=true;}else{needCode=true;showJoin();}}};
