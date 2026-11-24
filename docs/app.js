@@ -104,7 +104,7 @@ var UIEN={
   "{n} 张没下载成功，有信号时再点一次":"{n} didn't download; try again with a better connection",
   "地图和行程助手要联网。出发前在 Google 地图 app 里下载冰岛、挪威、瑞典、丹麦的离线地图。":"The map and the assistant need a connection. Before you go, download offline maps of Iceland, Norway, Sweden and Denmark in the Google Maps app.",
   "离线中：行程和存好的照片都能看，地图、助手和同步要等有信号":"Offline: the plan and saved photos still work; the map, the assistant and syncing wait for signal",
-  "徒步图":"Trail map","Google 路线":"Google route","切换到等高线徒步图":"Switch to topographic trail map","切回 Google 路线视图":"Switch back to Google route view"
+  "等高线图":"Topo map","卫星徒步图":"Satellite trails","切换到等高线地形图":"Switch to topographic contour map","切回卫星徒步图":"Switch back to satellite trail view"
 };
 /* ---------- currency ---------- */
 // Prices stay as written in trip.json (ISK, NOK, SEK, DKK, €, US$). With CAD, CNY or USD picked, every
@@ -1130,8 +1130,8 @@ function syncTrailBtn(){
   var btn=$("trailModeBtn"),lbl=$("trailModeLabel");if(!btn||!lbl)return;
   var topo=trailMode==="topo";
   btn.hidden=!curHike;btn.classList.toggle("on",topo);
-  lbl.textContent=U(topo?"Google 路线":"徒步图");
-  btn.title=U(topo?"切回 Google 路线视图":"切换到等高线徒步图");}
+  lbl.textContent=U(topo?"卫星徒步图":"等高线图");
+  btn.title=U(topo?"切回卫星徒步图":"切换到等高线地形图");}
 function ensureLeaflet(){
   if(window.L)return Promise.resolve(window.L);
   if(tLoadP)return tLoadP;
@@ -1160,7 +1160,10 @@ function paintHikeMap(reframe){
     if(!tMap){
       tMap=L.map(box,{center:initPt,zoom:13,zoomControl:false,attributionControl:true});
       L.control.zoom({position:"bottomright"}).addTo(tMap);
-      tBase.route=L.tileLayer("https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}",{maxZoom:19,attribution:"Map data &copy; Google"});
+      tBase.route=L.layerGroup([
+        L.tileLayer("https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}",{maxZoom:19,attribution:"Map data &copy; Google"}),
+        L.tileLayer("https://tile.waymarkedtrails.org/hiking/{z}/{x}/{y}.png",{maxZoom:17,opacity:.8,attribution:"Waymarked Trails"})
+      ]);
       tBase.topo=L.layerGroup([
         L.tileLayer("https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",{maxZoom:17,attribution:"&copy; OpenTopoMap &middot; OSM"}),
         L.tileLayer("https://tile.waymarkedtrails.org/hiking/{z}/{x}/{y}.png",{maxZoom:17,opacity:.85,attribution:"Waymarked Trails"})
