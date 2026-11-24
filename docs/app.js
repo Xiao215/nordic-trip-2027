@@ -668,9 +668,6 @@ function closeGroups(keep){document.querySelectorAll("#rows li.grp.open").forEac
 function closeOpts(keep){document.querySelectorAll("#rows li.opts.open").forEach(function(el){if(el===keep)return;
   el.classList.remove("open");el.querySelector(".opt-toggle").setAttribute("aria-expanded","false");el.querySelector(".opt-fold").inert=true;
   OPTOPEN[state.date+"|"+el.dataset.opt]=false;});}
-function hasAllTrails(x){
-  var t=(x.body||"")+" "+(x.facts||[]).map(function(f){return f[1]||"";}).join(" ")+" "+(x.tips||[]).join(" ");
-  return /alltrails\.com/i.test(t);}
 // opening a walk frames its stops on the map
 function frameGroup(ids){var ps=ids.map(LL);caption();
   if(embed){if(ps.length>1)embedRoute(ps);else embedPlace(ps[0],15);return;}
@@ -696,7 +693,7 @@ function optCard(o,k){
   if(o.tips&&o.tips.length)h+='<ul class="tips">'+o.tips.map(function(t){return "<li>"+tx(t)+"</li>";}).join("")+"</ul>";
   var sto=o.place&&T.places[o.place]&&T.places[o.place].story;
   if(sto&&sto.length)h+='<section class="story"><h5>'+esc(U("背景和小知识"))+'</h5><dl>'+sto.map(function(x){return "<div><dt>"+esc(L(x[0]))+"</dt><dd>"+tx(x[1])+"</dd></div>";}).join("")+"</dl></section>";
-  h+='<div class="actions">'+(o.place&&N[o.place]&&!hasAllTrails(o)?'<a class="pill" target="_blank" rel="noopener" href="'+esc(gPlace(o.place))+'">'+ICON.maps+U("在 Google 地图打开")+"</a>":"")+
+  h+='<div class="actions">'+(o.place&&N[o.place]?'<a class="pill" target="_blank" rel="noopener" href="'+esc(gPlace(o.place))+'">'+ICON.maps+U("在 Google 地图打开")+"</a>":"")+
      '<button class="pill ask" type="button" data-opt-ask="'+esc(k)+'">'+ICON.ask+U("问问这个")+"</button></div></div>";
   return optMove(o["in"])+h+optMove(o.out);}
 function optRow(list,key){
@@ -777,7 +774,7 @@ function detail(s){
   var sto=s.t==="stop"&&T.places[s.place]&&T.places[s.place].story;
   if(sto&&sto.length)h+='<section class="story"><h5>'+esc(U("背景和小知识"))+'</h5><dl>'+sto.map(function(x){return "<div><dt>"+esc(L(x[0]))+"</dt><dd>"+tx(x[1])+"</dd></div>";}).join("")+"</dl></section>";
   var acts=[];
-  if(s.t==="stop"&&!hasAllTrails(s))acts.push('<a class="pill" target="_blank" rel="noopener" href="'+esc(gPlace(s.place))+'">'+ICON.maps+U("在 Google 地图打开")+"</a>");
+  if(s.t==="stop")acts.push('<a class="pill" target="_blank" rel="noopener" href="'+esc(gPlace(s.place))+'">'+ICON.maps+U("在 Google 地图打开")+"</a>");
   if(s.t==="move"&&(s.mode==="drive"||s.mode==="walk"||s.mode==="bike"||s.mode==="train"||s.mode==="bus")){var ends=[s.path[0],s.path[s.path.length-1]].filter(function(x){return typeof x==="string";});
     if(ends.length===2)acts.push('<a class="pill" target="_blank" rel="noopener" href="'+esc(gRoute(s.path.filter(function(x){return typeof x==="string";}),s.mode==="drive"?"driving":s.mode==="walk"?"walking":s.mode==="bike"?"bicycling":"transit"))+'">'+ICON.dir+U("导航")+"</a>");}
   acts.push('<button class="pill ask" type="button">'+ICON.ask+U("问问这个")+"</button>");
