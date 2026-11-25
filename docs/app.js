@@ -463,7 +463,9 @@ function renderPrep(){
     h+='<svg class="b-chev" viewBox="0 0 20 20"><path d="M5 8l5 5 5-5"/></svg></summary><div class="b-body">';
     if(b.summary)h+='<p>'+tx(b.summary)+"</p>";
     if(b.select&&b.select.length)h+='<ol class="select">'+b.select.map(function(x){return '<li><small>'+esc(L(x[0]))+'</small><b>'+tx(x[1])+'</b></li>';}).join("")+"</ol>";
-    if(b.key&&b.key.length)h+='<dl class="keyfacts">'+b.key.map(function(f){return "<div><dt>"+esc(L(f[0]))+"</dt><dd>"+tx(f[1])+"</dd></div>";}).join("")+"</dl>";
+    var bFl=[],bRest=[];(b.key||[]).forEach(function(f){var fl=parseFlightFact(f);if(fl)bFl.push(fl);else bRest.push(f);});
+    if(bFl.length)h+=flightCards(bFl);
+    if(bRest.length)h+='<dl class="keyfacts">'+bRest.map(function(f){return "<div><dt>"+esc(L(f[0]))+"</dt><dd>"+tx(f[1])+"</dd></div>";}).join("")+"</dl>";
     if(b.tip)h+='<p class="b-tip">'+tx(b.tip)+"</p>";
     var acts=[],link=(b.links||[])[0];
     if(link)acts.push('<a class="pill primary" target="_blank" rel="noopener" href="'+esc(link[1])+'">'+ICON.dir+U("打开 ")+esc(L(link[0]))+"</a>");
@@ -592,10 +594,11 @@ function renderRows(){
 function segLi(s,cur,inGrp){
   var li=document.createElement("li");li.dataset.i=s.i;li.style.setProperty("--n",Math.min(s.i,14));if(cur&&cur.i===s.i)li.classList.add("now");
   var b=document.createElement("div");b.className="row"+(s.t==="move"?" move":"");b.setAttribute("role","button");b.tabIndex=0;b.setAttribute("aria-expanded","false");
-  if(s.t==="move"){var dm=dur(s),km=inGrp&&s.mode==="walk"?walkKm(s):0;
-    b.innerHTML='<span class="t"></span><span class="num" title="'+esc(mode(s.mode))+'">'+(ICON[s.mode]||ICON.drive)+'</span><span class="n">'+
+  if(s.t==="move"){var dm=dur(s),km=inGrp&&s.mode==="walk"?walkKm(s):0,alCodes=s.mode==="flight"?detectAirlines(s.note||""):[];
+    var alTag=alCodes.length?'<span class="mv-al">'+alCodes.map(function(c){return airlineBadge(c,"","mv-logo");}).join("")+esc(alCodes.map(function(c){return AIRLINES[c].name;}).join("/"))+"</span> · ":"";
+    b.innerHTML='<span class="t">'+(s.mode==="flight"&&s.start?esc(s.start):"")+'</span><span class="num" title="'+esc(mode(s.mode))+'">'+(ICON[s.mode]||ICON.drive)+'</span><span class="n">'+
       (inGrp&&s.mode==="walk"?esc([cap(mode(s.mode))+(dm?" "+hm(dm):""),km?distTxt(km):""].filter(Boolean).join(" · "))+(s.label?" · "+tx(s.label):"")
-        :(dm?esc(hm(dm))+" · ":"")+moveLabel(s))+"</span>"+ICON.chev;}
+        :alTag+(dm?esc(hm(dm))+" · ":"")+moveLabel(s))+"</span>"+ICON.chev;}
   else{b.style.setProperty("--k",KCOL[s.kind]||KCOL.visit);
     var bits=[s.start&&s.end&&s.start!==s.end?hm(dur(s)):s.mins?hm(s.mins):"",L(T.kinds[s.kind])].filter(Boolean).join(" · ");
     b.innerHTML='<span class="t">'+(s.start?esc(s.start):"")+'</span><span class="num">'+s.num+'</span><span class="n">'+tx(s.name||"[["+s.place+"]]")+(cur&&cur.i===s.i?'<span class="now-tag">'+U("现在")+'</span>':"")+"</span>"+ICON.chev+'<span class="s">'+esc(bits)+"</span>";}
@@ -774,22 +777,28 @@ var AIRLINES={
   FI:{name:"Icelandair",color:"#00468B",logo:"img/airlines/FI.png"},
   BA:{name:"British Airways",color:"#C8102E",logo:"img/airlines/BA.png"},
   SK:{name:"SAS",color:"#00205B",logo:"img/airlines/SK.png"},
-  DY:{name:"Norwegian",color:"#D81939",logo:"img/airlines/DY.png"},
+  DY:{name:"Norwegian",color:"#D81939",logo:"img/airlines/DY.png",full:true},
   AC:{name:"Air Canada",color:"#D80621",logo:"img/airlines/AC.png"}
 };
+function airlineBadge(code,alt,cls){
+  var al=AIRLINES[code];
+  if(!al||!al.logo)return '<span class="'+(cls||"fl-logo")+'"><svg viewBox="0 0 36 36" aria-hidden="true"><rect width="36" height="36" rx="9" fill="#1F4E6B"/><path d="M26 17l-7-1-3-6h-2l1.5 6-5 .5-1.5-2.5H8l1 4-1 4h1l1.5-2.5 5 .5L14 27h2l3-6 7-1c1 0 1.5-.7 1.5-1.5S27 17 26 17z" fill="#fff"/></svg></span>';
+  return '<span class="'+(cls||"fl-logo")+' img'+(al.full?" full":"")+'"><img src="'+al.logo+'" alt="'+esc(alt||al.name)+'" loading="lazy"></span>';
+}
 function flightCards(list){
   if(!list||!list.length)return "";
   return '<div class="fl-grid'+(list.length>1?" multi":"")+'">'+list.map(function(f){
-    var al=AIRLINES[f.code]||{name:f.airline||"Flight",color:"var(--ice)"};
-    var brand=f.airline||al.name;
-    var logoHtml=al.logo?'<img src="'+al.logo+'" alt="'+esc(brand)+'" loading="lazy">':'<svg viewBox="0 0 36 36" aria-hidden="true"><rect width="36" height="36" rx="9" fill="#1F4E6B"/><path d="M26 17l-7-1-3-6h-2l1.5 6-5 .5-1.5-2.5H8l1 4-1 4h1l1.5-2.5 5 .5L14 27h2l3-6 7-1c1 0 1.5-.7 1.5-1.5S27 17 26 17z" fill="#fff"/></svg>';
+    var codes=(f.codes&&f.codes.length)?f.codes:(f.code?[f.code]:[]);
+    var al=AIRLINES[codes[0]]||{name:f.airline||"Flight",color:"var(--ice)"};
+    var brand=f.airline||(codes.length?codes.map(function(c){return (AIRLINES[c]||{}).name||c;}).join(" / "):al.name);
+    var logos=codes.length?codes.map(function(c){return airlineBadge(c,brand);}).join(""):airlineBadge("",brand);
     var badges=[];
     if(f.direct!==false)badges.push('<span class="fl-badge ok">'+esc(U("直飞"))+'</span>');
     if(f.price)badges.push('<span class="fl-badge price">'+esc(f.price)+'</span>');
     var midMeta=[f.dur,f.tz].filter(Boolean).join(" · ");
     return '<div class="fl-card" style="--al:'+al.color+'">'+
       '<div class="fl-top">'+
-        '<div class="fl-brand"><span class="fl-logo'+(al.logo?" img":"")+'">'+logoHtml+'</span>'+
+        '<div class="fl-brand"><span class="fl-logos">'+logos+'</span>'+
           '<div class="fl-bt"><span class="fl-aname">'+esc(brand)+'</span>'+(f.tag?'<span class="fl-tag">'+esc(L(f.tag))+'</span>':'')+'</div>'+
         '</div>'+
         '<div class="fl-badges">'+badges.join("")+'</div>'+
@@ -813,37 +822,51 @@ function flightCards(list){
     '</div>';
   }).join("")+'</div>';
 }
-// Parse structured flight cards from s.flights, flight-formatted s.facts, or mode==="flight" moves
+// Parse structured flight cards from s.flights, flight-formatted s.facts, mode==="flight" moves, or adjacent airport check-in stops
 var IATA_CITY={YYZ:"多伦多",KEF:"凯夫拉维克",LHR:"伦敦",UK:"英国",OSL:"奥斯陆",BGO:"卑尔根",ARN:"斯德哥尔摩",CPH:"哥本哈根"};
-function detectAirline(str){
-  if(/icelandair|冰岛航空/i.test(str))return {code:"FI",name:"Icelandair"};
-  if(/british\s*airways|英航/i.test(str))return {code:"BA",name:"British Airways"};
-  if(/\bsas\b|斯堪的纳维亚/i.test(str))return {code:"SK",name:"SAS"};
-  if(/norwegian|挪威航空/i.test(str))return {code:"DY",name:"Norwegian"};
-  if(/air\s*canada|加航/i.test(str))return {code:"AC",name:"Air Canada"};
-  return {code:"",name:""};
+function detectAirlines(str){
+  var out=[];
+  if(/icelandair|冰岛航空/i.test(str))out.push("FI");
+  if(/british\s*airways|英航/i.test(str))out.push("BA");
+  if(/\bsas\b|斯堪的纳维亚/i.test(str))out.push("SK");
+  if(/norwegian|挪威航空/i.test(str))out.push("DY");
+  if(/air\s*canada|加航/i.test(str))out.push("AC");
+  return out;
 }
 function parseFlightFact(f){
   var val=String(f[1]||""),m=val.match(/(?:^|\s)(?:(\d+\/\d+)\s+)?(\d{1,2}:\d{2})\s+([A-Z]{2,3})\s*(?:→|->)\s*(?:(\d+\/\d+)\s+)?(\d{1,2}:\d{2})\s+([A-Z]{2,3})/);
   if(!m)return null;
-  var al=detectAirline(val),d1=m[1]||"",d2=m[4]||"";
+  var codes=detectAirlines(val),d1=m[1]||"",d2=m[4]||"";
   var nextDay=!!(d1&&d2&&d1!==d2);
-  var pm=val.match(/(?:USD|\$|CAD|NOK|SEK)\s*\d[\d,]*/i);
+  var pm=val.match(/(?:~?\$|USD\s*|CAD\s*|NOK\s*|SEK\s*)\d[\d,]*/i);
   var dm=val.match(/(\d+\s*h(?:\s*\d+\s*m(?:in)?)?)/i);
   var tm=val.match(/([+-]\d+\s*h)/i);
-  return {code:al.code,airline:al.name||val.split(/\s+/)[0],tag:f[0],from:m[3],fromCity:IATA_CITY[m[3]]||"",to:m[6],toCity:IATA_CITY[m[6]]||"",
+  var aname=codes.length?codes.map(function(c){return AIRLINES[c].name;}).join(" / "):val.split(/\s+/)[0];
+  return {codes:codes,code:codes[0]||"",airline:aname,tag:f[0],from:m[3],fromCity:IATA_CITY[m[3]]||"",to:m[6],toCity:IATA_CITY[m[6]]||"",
     dep:m[2],arr:m[5],dateDep:d1,dateArr:d2,nextDay:nextDay,dur:dm?dm[1].replace(/min/i,"m"):"",tz:tm?tm[1]:"",price:pm?pm[0]:"",direct:/直飞|nonstop|direct/i.test(val)};
+}
+function flightFromMove(s,dt){
+  if(!s||s.t!=="move"||s.mode!=="flight"||!s.path||s.path.length<2)return null;
+  var note=s.note||"",codes=detectAirlines(note),p0=String(s.path[0]).toUpperCase(),p1=String(s.path[s.path.length-1]).toUpperCase();
+  var dur=s.mins?(Math.floor(s.mins/60)+"h"+(s.mins%60?" "+(s.mins%60)+"m":"")):"";
+  var tm=note.match(/([+-]\s*\d+\s*h)/i),pm=note.match(/(?:~?\$|USD\s*)\d[\d,]*/i);
+  var mdStr=dt?(+dt.slice(5,7))+"/"+(+dt.slice(8,10)):"";
+  var aname=codes.length?codes.map(function(c){return AIRLINES[c].name;}).join(" / "):"Flight";
+  var tag=/待定|以出票为准/.test(note)?"参考时刻":"";
+  return {codes:codes,code:codes[0]||"",airline:aname,tag:tag,from:p0,fromCity:IATA_CITY[p0]||"",to:p1,toCity:IATA_CITY[p1]||"",
+    dep:s.start||"",arr:s.end||"",dateDep:mdStr,dateArr:mdStr,dur:dur,tz:tm?tm[1].replace(/\s+/g,""):"",price:pm?pm[0]:"",direct:/直飞|nonstop|direct/i.test(note)};
 }
 function extractFlights(s){
   if(s.flights&&s.flights.length)return {flights:s.flights,facts:s.facts||[]};
   var flights=[],rest=[];
   (s.facts||[]).forEach(function(f){var fl=parseFlightFact(f);if(fl)flights.push(fl);else rest.push(f);});
-  if(!flights.length&&s.t==="move"&&s.mode==="flight"&&s.path&&s.path.length>=2){
-    var note=s.note||"",al=detectAirline(note),p0=String(s.path[0]).toUpperCase(),p1=String(s.path[s.path.length-1]).toUpperCase();
-    var dur=s.mins?(Math.floor(s.mins/60)+"h"+(s.mins%60?" "+(s.mins%60)+"m":"")):"";
-    var tm=note.match(/([+-]\s*\d+\s*h)/i),pm=note.match(/(?:~?\$|USD\s*)\d[\d,]*/i);
-    flights.push({code:al.code,airline:al.name||"Flight",tag:"",from:p0,fromCity:IATA_CITY[p0]||"",to:p1,toCity:IATA_CITY[p1]||"",
-      dep:s.start||"",arr:s.end||"",dur:dur,tz:tm?tm[1].replace(/\s+/g,""):"",price:pm?pm[0]:"",direct:/直飞|nonstop|direct/i.test(note)});
+  if(!flights.length&&s.t==="move"&&s.mode==="flight"){var fm=flightFromMove(s,state.date);if(fm)flights.push(fm);}
+  // Airport check-in or arrival stop right next to a flight move also shows that flight's boarding-pass card
+  if(!flights.length&&s.t==="stop"&&day()&&s.i!=null){
+    var segs=day().segs,nx=segs[s.i+1],pv=segs[s.i-1];
+    var adj=(nx&&nx.t==="move"&&nx.mode==="flight"&&nx.path&&nx.path[0]===s.place)?nx:
+            (pv&&pv.t==="move"&&pv.mode==="flight"&&pv.path&&pv.path[pv.path.length-1]===s.place)?pv:null;
+    var af=flightFromMove(adj,state.date);if(af)flights.push(af);
   }
   return {flights:flights,facts:rest};
 }
