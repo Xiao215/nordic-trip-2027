@@ -97,36 +97,52 @@ function sheetOff(){
 }
 window.addEventListener("popstate",function(){if(pushed){pushed=false;closeChat();}});
 // the keyboard shrinks what's visible without (on iOS) resizing the page: keep the sheet in the visible part
+var kbH=0; // the keyboard's height, once seen, so the sheet can move together with it next time
+function setSheet(h,top){layer.style.setProperty("--vvh",h+"px");layer.style.setProperty("--vvt",(top||0)+"px");}
 function fit(){if(!held||!vv)return;
-  layer.style.setProperty("--vvh",vv.height+"px");layer.style.setProperty("--vvt",vv.offsetTop+"px");
-  chat.classList.toggle("kb",vv.height<window.innerHeight-120);
-  if(stick)scroll();}
+  var up=vv.height<window.innerHeight-120;if(up)kbH=window.innerHeight-vv.height;
+  setSheet(vv.height,vv.offsetTop);chat.classList.toggle("kb",up);follow();}
 if(vv){vv.addEventListener("resize",fit);vv.addEventListener("scroll",fit);}
+// iOS can report the keyboard's new size only once it has finished moving: start the sheet (its height animates,
+// see .drawer) as the keyboard starts, so the two move together instead of the conversation jumping afterwards
+text.addEventListener("focus",function(){if(held&&kbH&&!chat.classList.contains("kb")){setSheet(window.innerHeight-kbH);chat.classList.add("kb");follow();}});
+text.addEventListener("blur",function(){if(held&&chat.classList.contains("kb")){setSheet(window.innerHeight);chat.classList.remove("kb");follow();}});
+// while the height animates, a conversation that was at its newest message stays there
+var followTill=0;
+function follow(){var idle=!followTill;followTill=Date.now()+450;if(!idle)return;
+  (function f(){if(stick)log.scrollTop=log.scrollHeight;if(Date.now()<followTill)requestAnimationFrame(f);else followTill=0;})();}
 phone.addEventListener&&phone.addEventListener("change",function(){if(!isOpen())return;if(phone.matches)sheetOn();else sheetOff();});
 // tapping send (or stop) keeps the keyboard up
 send.addEventListener("mousedown",function(e){e.preventDefault();});
 
-// drag down to close
+/* Touch: drag the top bar down (or a conversation already at its start) to put the sheet away; drag the
+   conversation down with the keyboard up to put the keyboard away, as in Messages, while it scrolls on.
+   Every listener is passive, so scrolling never waits for this script: the top bar takes no native scrolling
+   (touch-action:none), and a list at its start has no overscroll (.at-top), so moving the sheet by hand
+   doesn't fight the browser's own bounce. */
 var drag=null,head=chat.querySelector(".drawer-head");
+function atTop(box){box.classList.toggle("at-top",box.scrollTop<=0);}
+[log,$("chatList")].forEach(function(b){b.addEventListener("scroll",function(){atTop(b);},{passive:true});});
 chat.addEventListener("touchstart",function(e){
-  if(!phone.matches||e.touches.length!==1)return;
+  drag=null;if(!phone.matches||e.touches.length!==1)return;
   var t=e.target,box=t.closest(".chat-log,.chat-list"),onHead=head.contains(t);
-  if(!onHead&&!(box&&box.scrollTop<=0))return;
-  drag={y:e.touches[0].clientY,x:e.touches[0].clientX,t:Date.now(),dy:0,on:false,head:onHead};
+  if(!onHead&&!box)return;
+  if(box)atTop(box);
+  drag={y:e.touches[0].clientY,x:e.touches[0].clientX,t:Date.now(),dy:0,on:false,head:onHead,top:!!box&&box.scrollTop<=0,kb:document.activeElement===text};
 },{passive:true});
 chat.addEventListener("touchmove",function(e){
-  if(!drag)return;var dy=e.touches[0].clientY-drag.y,dx=e.touches[0].clientX-drag.x;
+  if(!drag)return;var p=e.touches[0],dy=p.clientY-drag.y,dx=p.clientX-drag.x;
   if(!drag.on){
     if(Math.abs(dy)<8&&Math.abs(dx)<8)return;
     // only a downward, mostly vertical pull; anything else is an ordinary scroll or tap
     if(dy<=0||Math.abs(dx)>Math.abs(dy)){drag=null;return;}
-    // with the keyboard up, pulling the conversation down just puts the keyboard away
-    if(!drag.head&&document.activeElement===text){text.blur();drag=null;return;}
-    drag.on=true;drag.y=e.touches[0].clientY;drag.t=Date.now();dy=0;chat.classList.add("dragging");scrim.style.transition="none";
+    if(!drag.head&&drag.kb){text.blur();drag=null;return;}
+    if(!drag.head&&!drag.top){drag=null;return;}
+    drag.on=true;drag.y=p.clientY;drag.t=Date.now();dy=0;chat.classList.add("dragging");scrim.style.transition="none";
   }
-  e.preventDefault();drag.dy=Math.max(0,dy);
+  drag.dy=Math.max(0,dy);
   chat.style.transform="translateY("+drag.dy+"px)";scrim.style.opacity=String(Math.max(0,1-drag.dy/(chat.offsetHeight||600)));
-},{passive:false});
+},{passive:true});
 function dragEnd(){
   if(!drag)return;var d=drag;drag=null;if(!d.on)return;
   chat.classList.remove("dragging");chat.style.transform="";scrim.style.opacity="";scrim.style.transition="";

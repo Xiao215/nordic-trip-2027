@@ -767,7 +767,11 @@ html.chat-held body{position:fixed;left:0;right:0;width:100%}
   .drawer{top:var(--vvt,0px);bottom:auto;height:var(--vvh,100%);width:100%;border-left:0;box-shadow:none;transform:translateY(105%)}
   .drawer::after{content:"";position:absolute;left:0;right:0;top:100%;height:100vh;background:var(--surface);pointer-events:none}
   .drawer[data-open="true"]{transform:none}
+  /* the height follows the keyboard: same duration and feel as iOS's own keyboard animation */
+  .drawer{transition:transform .32s cubic-bezier(.2,.8,.2,1),height .3s cubic-bezier(.38,.7,.125,1),visibility 0s .32s}
+  .drawer[data-open="true"]{transition:transform .32s cubic-bezier(.2,.8,.2,1),height .3s cubic-bezier(.38,.7,.125,1)}
   .drawer.dragging{transition:none}
+  .chat-log.at-top,.chat-list.at-top{overscroll-behavior-y:none} /* a pull at the start moves the sheet, not a bounce */
   .drawer-head{position:relative;touch-action:none;padding-top:calc(20px + env(safe-area-inset-top))}
   .drawer-head::before{content:"";position:absolute;top:calc(7px + env(safe-area-inset-top));left:50%;width:40px;height:5px;margin-left:-20px;border-radius:3px;background:color-mix(in srgb,var(--muted) 45%,transparent)}
   .chat-log,.drawer.listing .chat-list{overscroll-behavior:contain}
