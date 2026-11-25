@@ -762,8 +762,10 @@ li.now>.row .t{color:var(--sun);font-weight:600}
 html.chat-held,html.chat-held body{overflow:hidden;overscroll-behavior:none}
 html.chat-held body{position:fixed;left:0;right:0;width:100%}
 @media (max-width:900px){
-  .chat-layer{top:var(--vvt,0px);bottom:auto;height:var(--vvh,100%)}
-  .drawer{width:100%;border-left:0;box-shadow:none;transform:translateY(105%)}
+  /* the sheet takes the part of the screen the keyboard leaves visible; iOS's keyboard is see-through, so the
+     sheet's background carries on down behind it instead of the page showing through */
+  .drawer{top:var(--vvt,0px);bottom:auto;height:var(--vvh,100%);width:100%;border-left:0;box-shadow:none;transform:translateY(105%)}
+  .drawer::after{content:"";position:absolute;left:0;right:0;top:100%;height:100vh;background:var(--surface);pointer-events:none}
   .drawer[data-open="true"]{transform:none}
   .drawer.dragging{transition:none}
   .drawer-head{position:relative;touch-action:none;padding-top:calc(20px + env(safe-area-inset-top))}
