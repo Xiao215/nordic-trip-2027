@@ -5,7 +5,7 @@
    of time; a photo not saved at the size asked for falls back to any size that is. The forecast and exchange
    rates keep their last answer. The chat and the expense log (/api/) and Google Maps always go to
    the network. Bump SHELL's version only when this file's caching changes, not for edits to the site. */
-var SHELL="nt-shell-v4",PHOTOS="nt-photos",FONTS="nt-fonts-v1",DATA="nt-data-v1",KEEP=[SHELL,PHOTOS,FONTS,DATA];
+var SHELL="nt-shell-v5",PHOTOS="nt-photos",FONTS="nt-fonts-v1",DATA="nt-data-v1",KEEP=[SHELL,PHOTOS,FONTS,DATA];
 var CORE=["./","index.html","styles.css","app.js","chat.js","config.js"];
 
 self.addEventListener("install",function(e){

@@ -71,7 +71,7 @@ var UIEN={
   "（{t}后）":" (in {t})",
   "北欧之旅":"Nordic Trip","照片：":"Photo: ","摄影：":"Photo: ","照片待定":"Photo TBD","照片":"Photo","关闭":"Close","上一张":"Previous","下一张":"Next","主导航":"Main navigation","路线":"Route","货币":"Currency","当地货币":"Local","当地":"Local","价格换算":"Currency","按原价显示，不换算":"As written, no conversion","汇率更新于 {d} · 约数":"Rates from {d} · approximate","汇率为约数":"Rates are approximate",
   "总览":"Overview","每日":"Daily","准备":"Prep","四周日历":"4-week calendar","点任意一天看当天安排":"Tap a day to see its plan","路线分段":"Route legs",
-  "注意须知":"Heads-up","预订":"Bookings","前一天":"Previous day","后一天":"Next day",
+  "注意须知":"Heads-up","预订":"Bookings","前一天":"Previous day","后一天":"Next day","直飞":"Nonstop",
   "视图":"View","选择日期":"Choose a day","语言":"Language","地图":"Map","行程地图":"Trip map","看全天 / 全程":"Show the whole day / trip",
   "在 Google 地图里打开当天路线":"Open the day's route in Google Maps","行程助手":"Trip assistant","输入访问码：":"Enter the access code:",
   "访问码":"Access code","确定":"Enter","问问助手，或发张小票让它记账…":"Ask anything, or send a receipt to log it…","加图片（拍照或从相册选）":"Add a photo (camera or library)","加图片：小票、收据、截图":"Add a photo: a receipt, a bill, a screenshot","问行程助手":"Ask the trip assistant",
@@ -693,7 +693,7 @@ function optCard(o,k){
   var phs=o.place?photosOf(o.place):[];
   h+='<div class="opt-card" style="--k:'+(KCOL[o.kind]||KCOL.visit)+'"><div class="opt-meta">'+esc([when,kind].filter(Boolean).join(" · "))+'</div>';
   h+='<h4>'+tx(o.name||"[["+o.place+"]]")+'</h4>';
-  if(phs.length)h+='<div class="d-photos n'+phs.length+'">'+phs.map(function(ph,j){return '<figure class="d-photo" data-opt-k="'+esc(k)+'" data-k="'+j+'">'+img(ph,j?600:1200)+(j?"":"<figcaption>"+credit(ph)+"</figcaption>")+"</figure>";}).join("")+"</div>";
+  if(phs.length)h+=photoGrid(phs,k);
   if(o.why)h+='<p class="opt-why">'+U("没排进行程：")+tx(o.why)+'</p>';
   if(o.body)h+='<p class="body">'+tx(o.body)+'</p>';
   if(o.facts&&o.facts.length)h+='<dl class="facts">'+o.facts.map(function(f){return "<div><dt>"+esc(L(f[0]))+"</dt><dd>"+tx(f[1])+"</dd></div>";}).join("")+"</dl>";
@@ -769,15 +769,94 @@ function placeMap(anchor,home){
   to.appendChild(STAGE);MAPHOME.classList.toggle("away",!!slot);
   var dy=a.getBoundingClientRect().top-y0;if(dy&&a.offsetParent)scrollBy(0,dy);}
 if(wide.addEventListener)wide.addEventListener("change",function(){placeMap();});
+// Inline airline marks + boarding-pass cards for flight segments and airport meetups
+var AIRLINES={
+  FI:{name:"Icelandair",color:"#00468B",svg:'<svg viewBox="0 0 36 36" aria-hidden="true"><rect width="36" height="36" rx="9" fill="#00356B"/><path d="M9 28L20.5 7H27L16.5 28H9Z" fill="#0073CF"/><path d="M16.5 28L27 7H29.5L21 28H16.5Z" fill="#FDB913"/><path d="M9 28L13.5 20H19.5L15 28H9Z" fill="#fff" opacity=".9"/></svg>'},
+  BA:{name:"British Airways",color:"#C8102E",svg:'<svg viewBox="0 0 36 36" aria-hidden="true"><rect width="36" height="36" rx="9" fill="#075AAA"/><path d="M6 15.5C11 11.5 21 11.5 30 14.5C24 14.5 16 15.5 8 20.5L6 15.5Z" fill="#EB2226"/><path d="M7 22.5C14 19 22 18.5 30 19.5C23 22 15 24 8 25.5L7 22.5Z" fill="#fff" opacity=".95"/></svg>'},
+  SK:{name:"SAS",color:"#00205B",svg:'<svg viewBox="0 0 36 36" aria-hidden="true"><rect width="36" height="36" rx="9" fill="#00205B"/><text x="18" y="23" text-anchor="middle" fill="#fff" font-family="system-ui,sans-serif" font-weight="800" font-style="italic" font-size="13.5" letter-spacing=".5">SAS</text></svg>'},
+  DY:{name:"Norwegian",color:"#D81939",svg:'<svg viewBox="0 0 36 36" aria-hidden="true"><rect width="36" height="36" rx="9" fill="#D81939"/><path d="M6 25C13 22 22 22 30 24V29H6V25Z" fill="#fff"/><path d="M6 27.5H30V30H6V27.5Z" fill="#002F6C"/></svg>'},
+  AC:{name:"Air Canada",color:"#D80621",svg:'<svg viewBox="0 0 36 36" aria-hidden="true"><rect width="36" height="36" rx="9" fill="#D80621"/><path d="M18 7L20 13L24 11.5L22.5 15.5L27 16L23.5 19.5L25 22L20 21.5V26.5H16V21.5L11 22L12.5 19.5L9 16L13.5 15.5L12 11.5L16 13L18 7Z" fill="#fff"/></svg>'}
+};
+function flightCards(list){
+  if(!list||!list.length)return "";
+  return '<div class="fl-grid'+(list.length>1?" multi":"")+'">'+list.map(function(f){
+    var al=AIRLINES[f.code]||{name:f.airline||"Flight",color:"var(--ice)",svg:'<svg viewBox="0 0 36 36" aria-hidden="true"><rect width="36" height="36" rx="9" fill="#1F4E6B"/><path d="M26 17l-7-1-3-6h-2l1.5 6-5 .5-1.5-2.5H8l1 4-1 4h1l1.5-2.5 5 .5L14 27h2l3-6 7-1c1 0 1.5-.7 1.5-1.5S27 17 26 17z" fill="#fff"/></svg>'};
+    var brand=f.airline||al.name;
+    var badges=[];
+    if(f.direct!==false)badges.push('<span class="fl-badge ok">'+esc(U("直飞"))+'</span>');
+    if(f.price)badges.push('<span class="fl-badge price">'+esc(f.price)+'</span>');
+    var midMeta=[f.dur,f.tz].filter(Boolean).join(" · ");
+    return '<div class="fl-card" style="--al:'+al.color+'">'+
+      '<div class="fl-top">'+
+        '<div class="fl-brand"><span class="fl-logo">'+al.svg+'</span>'+
+          '<div class="fl-bt"><span class="fl-aname">'+esc(brand)+'</span>'+(f.tag?'<span class="fl-tag">'+esc(L(f.tag))+'</span>':'')+'</div>'+
+        '</div>'+
+        '<div class="fl-badges">'+badges.join("")+'</div>'+
+      '</div>'+
+      '<div class="fl-route">'+
+        '<div class="fl-end">'+
+          '<div class="fl-time">'+esc(f.dep)+'</div>'+
+          '<div class="fl-iata">'+esc(f.from)+'</div>'+
+          '<div class="fl-city">'+esc([f.fromCity?L(f.fromCity):"",f.dateDep||""].filter(Boolean).join(" · "))+'</div>'+
+        '</div>'+
+        '<div class="fl-mid">'+
+          (midMeta?'<div class="fl-dur">'+esc(midMeta)+'</div>':'')+
+          '<div class="fl-track"><span class="fl-dot"></span><span class="fl-line"></span><svg class="fl-plane" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg><span class="fl-line"></span><span class="fl-dot"></span></div>'+
+        '</div>'+
+        '<div class="fl-end right">'+
+          '<div class="fl-time">'+esc(f.arr)+(f.nextDay?'<sup>+1</sup>':'')+'</div>'+
+          '<div class="fl-iata">'+esc(f.to)+'</div>'+
+          '<div class="fl-city">'+esc([f.toCity?L(f.toCity):"",f.dateArr||""].filter(Boolean).join(" · "))+'</div>'+
+        '</div>'+
+      '</div>'+
+    '</div>';
+  }).join("")+'</div>';
+}
+// Parse structured flight cards from s.flights, flight-formatted s.facts, or mode==="flight" moves
+var IATA_CITY={YYZ:"多伦多",KEF:"凯夫拉维克",LHR:"伦敦",UK:"英国",OSL:"奥斯陆",BGO:"卑尔根",ARN:"斯德哥尔摩",CPH:"哥本哈根"};
+function detectAirline(str){
+  if(/icelandair|冰岛航空/i.test(str))return {code:"FI",name:"Icelandair"};
+  if(/british\s*airways|英航/i.test(str))return {code:"BA",name:"British Airways"};
+  if(/\bsas\b|斯堪的纳维亚/i.test(str))return {code:"SK",name:"SAS"};
+  if(/norwegian|挪威航空/i.test(str))return {code:"DY",name:"Norwegian"};
+  if(/air\s*canada|加航/i.test(str))return {code:"AC",name:"Air Canada"};
+  return {code:"",name:""};
+}
+function parseFlightFact(f){
+  var val=String(f[1]||""),m=val.match(/(?:^|\s)(?:(\d+\/\d+)\s+)?(\d{1,2}:\d{2})\s+([A-Z]{2,3})\s*(?:→|->)\s*(?:(\d+\/\d+)\s+)?(\d{1,2}:\d{2})\s+([A-Z]{2,3})/);
+  if(!m)return null;
+  var al=detectAirline(val),d1=m[1]||"",d2=m[4]||"";
+  var nextDay=!!(d1&&d2&&d1!==d2);
+  var pm=val.match(/(?:USD|\$|CAD|NOK|SEK)\s*\d[\d,]*/i);
+  var dm=val.match(/(\d+\s*h(?:\s*\d+\s*m(?:in)?)?)/i);
+  var tm=val.match(/([+-]\d+\s*h)/i);
+  return {code:al.code,airline:al.name||val.split(/\s+/)[0],tag:f[0],from:m[3],fromCity:IATA_CITY[m[3]]||"",to:m[6],toCity:IATA_CITY[m[6]]||"",
+    dep:m[2],arr:m[5],dateDep:d1,dateArr:d2,nextDay:nextDay,dur:dm?dm[1].replace(/min/i,"m"):"",tz:tm?tm[1]:"",price:pm?pm[0]:"",direct:/直飞|nonstop|direct/i.test(val)};
+}
+function extractFlights(s){
+  if(s.flights&&s.flights.length)return {flights:s.flights,facts:s.facts||[]};
+  var flights=[],rest=[];
+  (s.facts||[]).forEach(function(f){var fl=parseFlightFact(f);if(fl)flights.push(fl);else rest.push(f);});
+  if(!flights.length&&s.t==="move"&&s.mode==="flight"&&s.path&&s.path.length>=2){
+    var note=s.note||"",al=detectAirline(note),p0=String(s.path[0]).toUpperCase(),p1=String(s.path[s.path.length-1]).toUpperCase();
+    var dur=s.mins?(Math.floor(s.mins/60)+"h"+(s.mins%60?" "+(s.mins%60)+"m":"")):"";
+    var tm=note.match(/([+-]\s*\d+\s*h)/i),pm=note.match(/(?:~?\$|USD\s*)\d[\d,]*/i);
+    flights.push({code:al.code,airline:al.name||"Flight",tag:"",from:p0,fromCity:IATA_CITY[p0]||"",to:p1,toCity:IATA_CITY[p1]||"",
+      dep:s.start||"",arr:s.end||"",dur:dur,tz:tm?tm[1].replace(/\s+/g,""):"",price:pm?pm[0]:"",direct:/直飞|nonstop|direct/i.test(note)});
+  }
+  return {flights:flights,facts:rest};
+}
 function detail(s){
   var d=document.createElement("div");d.className="detail";var kind=s.t==="move"?"move":s.kind;
   var when=s.start?(s.end&&s.end!==s.start?s.start+" – "+s.end:s.start):"";
   var phs=s.t==="stop"?photosOf(s.place):[],h="";
-  if(phs.length)h+='<div class="d-photos n'+phs.length+'">'+phs.map(function(ph,k){return '<figure class="d-photo" data-k="'+k+'">'+img(ph,k?600:1200)+(k?"":"<figcaption>"+credit(ph)+"</figcaption>")+"</figure>";}).join("")+"</div>";
+  if(phs.length)h+=photoGrid(phs);
   else if(s.t==="stop"&&SCENIC[s.kind])h+='<div class="d-photos n1"><figure class="d-photo empty">'+tbd()+"</figure></div>";
   h+='<span class="kind" style="--k:'+(KCOL[kind]||KCOL.visit)+'">'+esc(s.t==="move"?mode(s.mode):L(T.kinds[kind])||"")+(when?" · "+esc(when):"")+(s.t==="move"&&s.km?U(" · 约 {n} 公里",{n:s.km}):"")+'</span>';
   h+='<div class="detail-map"></div>'; // phones only: the map moves in here (placeMap)
-  if(s.facts&&s.facts.length)h+='<dl class="facts">'+s.facts.map(function(f){return "<div><dt>"+esc(L(f[0]))+"</dt><dd>"+tx(f[1])+"</dd></div>";}).join("")+"</dl>";
+  var fl=extractFlights(s);
+  if(fl.flights.length)h+=flightCards(fl.flights);
+  if(fl.facts.length)h+='<dl class="facts">'+fl.facts.map(function(f){return "<div><dt>"+esc(L(f[0]))+"</dt><dd>"+tx(f[1])+"</dd></div>";}).join("")+"</dl>";
   var body=s.body||s.note;if(body)h+='<p class="body">'+tx(body)+"</p>";
   if(s.tips&&s.tips.length)h+='<ul class="tips">'+s.tips.map(function(t){return "<li>"+tx(t)+"</li>";}).join("")+"</ul>";
   // places[id].story: [label, text] pairs of history and fun facts about the place
@@ -859,6 +938,13 @@ function sized(src,w){if(src.indexOf("images.unsplash.com")<0)return src.replace
   var u=src.replace(/([?&])(w|q|fm|fit|auto)=[^&]*/g,"$1").replace(/&&+/g,"&").replace(/[?&]+$/,"");
   return u+(u.indexOf("?")<0?"?":"&")+"w="+w+"&q=80&fm=jpg&fit=max";}
 function img(ph,w,cls){return '<img class="'+(cls||"")+'" src="'+esc(sized(ph.src,w))+'" width="'+ph.w+'" height="'+ph.h+'" alt="'+esc(ph.alt||"")+'" loading="lazy" decoding="async" onload="this.classList.add(\'ok\')">';}
+function photoGrid(phs,optK){
+  var oa=optK!=null?' data-opt-k="'+esc(optK)+'"':"";
+  var cnt=phs.length>1?'<span class="d-photo-cnt">'+(en()?phs.length+" photos":phs.length+" 张")+"</span>":"";
+  return '<div class="d-photos n'+phs.length+'">'+phs.map(function(ph,k){
+    return '<figure class="d-photo"'+oa+' data-k="'+k+'">'+img(ph,k?600:1200)+(k?"":cnt+"<figcaption>"+credit(ph)+"</figcaption>")+"</figure>";
+  }).join("")+"</div>";
+}
 function utm(u){return u+(u.indexOf("?")<0?"?":"&")+UTM;}
 function credit(ph){
   if(ph.author_link)return '<span class="credit">'+esc(U("摄影："))+'<a href="'+esc(utm(ph.author_link))+'" target="_blank" rel="noopener">'+esc(ph.author)+'</a> / <a href="'+esc(utm("https://unsplash.com/"))+'" target="_blank" rel="noopener">Unsplash</a></span>';
@@ -1106,9 +1192,10 @@ function embedDayRoute(D){if(D.route)return D.route.map(LL);var groups=[[]],vias
     if(s.t==="move"){add(g,s.path[0]);if(s.mode==="drive")s.path.slice(1,-1).forEach(function(x){add(g,x,1);});add(g,s.path[s.path.length-1]);}else add(g,s.place);});
   function add(g,x,via){if(typeof x==="string"&&g[g.length-1]!==x){g.push(x);if(via)vias[x]=1;}}
   var best=groups.reduce(function(a,g){return g.length>a.length?g:a;},[]);
-  // Google takes ten points at most: drop waypoints before stops
+  // Google takes ten points at most: drop waypoints before stops, and always keep start + end
   for(var j=best.length-2;best.length>10&&j>0;j--)if(vias[best[j]])best.splice(j,1);
-  return best.slice(0,10).map(LL);}
+  if(best.length>10){var keep=[best[0]],n=best.length-1;for(var k=1;k<9;k++)keep.push(best[Math.round(k*n/9)]);keep.push(best[n]);best=keep;}
+  return best.map(LL);}
 function fitView(){
   hideHikeMap();caption();redrawMap();var D=day();
   if(embed){

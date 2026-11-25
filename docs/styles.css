@@ -306,6 +306,35 @@ li.now>.row .t{color:var(--sun);font-weight:600}
 .facts div{min-width:0;border-left:2px solid var(--line);padding-left:10px}
 .facts dt{font-size:11px;letter-spacing:.05em;color:var(--muted)}
 .facts dd{margin:0;font-weight:500;font-size:13.5px;line-height:1.5}
+/* boarding-pass style flight cards */
+.fl-grid{display:grid;gap:10px;max-width:680px}
+.fl-grid.multi{grid-template-columns:repeat(auto-fit,minmax(270px,1fr))}
+.fl-card{position:relative;overflow:hidden;border-radius:14px;border:1px solid var(--line);background:linear-gradient(135deg,color-mix(in srgb,var(--al) 9%,var(--surface-2)),var(--surface-2) 55%);padding:13px 15px 14px 18px;display:grid;gap:12px}
+.fl-card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--al)}
+.fl-top{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.fl-brand{display:flex;align-items:center;gap:9px;min-width:0}
+.fl-logo{width:30px;height:30px;flex:0 0 30px;border-radius:8px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.22)}
+.fl-logo svg{width:100%;height:100%}
+.fl-bt{display:flex;flex-direction:column;line-height:1.25;min-width:0}
+.fl-aname{font-size:13.5px;font-weight:700;color:var(--ink)}
+.fl-tag{font-size:11.5px;color:var(--muted)}
+.fl-badges{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.fl-badge{font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;line-height:1.4;white-space:nowrap}
+.fl-badge.ok{background:var(--moss-soft);color:var(--moss)}
+.fl-badge.price{background:var(--fjord-soft);color:var(--fjord);font-family:var(--f-mono)}
+.fl-route{display:grid;grid-template-columns:minmax(0,auto) minmax(72px,1fr) minmax(0,auto);align-items:center;gap:10px}
+.fl-end{display:flex;flex-direction:column;gap:1px}
+.fl-end.right{text-align:right;align-items:flex-end}
+.fl-time{font-family:var(--f-mono);font-size:19px;font-weight:700;line-height:1.15;color:var(--ink);font-variant-numeric:tabular-nums}
+.fl-time sup{font-size:10.5px;font-weight:700;color:var(--sun);margin-left:2px;vertical-align:top}
+.fl-iata{font-family:var(--f-mono);font-size:13px;font-weight:700;letter-spacing:.06em;color:var(--fjord)}
+.fl-city{font-size:11.5px;color:var(--muted);white-space:nowrap}
+.fl-mid{display:flex;flex-direction:column;align-items:center;gap:5px;padding-bottom:14px}
+.fl-dur{font-family:var(--f-mono);font-size:11px;color:var(--muted);white-space:nowrap}
+.fl-track{width:100%;display:flex;align-items:center;gap:4px}
+.fl-dot{width:5px;height:5px;border-radius:50%;background:var(--muted);opacity:.65;flex:0 0 5px}
+.fl-line{flex:1;height:0;border-top:1.5px dashed color-mix(in srgb,var(--muted) 55%,transparent)}
+.fl-plane{width:15px;height:15px;fill:var(--fjord);transform:rotate(90deg);flex:0 0 15px}
 .detail .body{font-size:14.5px;max-width:68ch}
 /* phones: the map moves into the open stop (app.js placeMap); on wide screens it stays in its column */
 .detail-map{display:none}
@@ -794,17 +823,25 @@ a.credit:hover,.credit a:hover{color:#fff;text-decoration:underline;text-decorat
 .ht span{position:absolute;left:4px;top:4px;min-width:18px;height:18px;padding:0 4px;border-radius:6px;background:rgba(5,12,18,.65);color:#fff;font:600 10.5px/18px var(--f-mono)}
 .ht:hover{transform:translateY(-2px);box-shadow:0 0 0 2px var(--fjord)}
 .ht.on{box-shadow:0 0 0 2px var(--sun)}
-.d-photos{display:grid;gap:6px;margin:4px 0 0;height:clamp(180px,24vw,270px)}
-.d-photos.n2{grid-template-columns:2fr 1fr}
-.d-photos.n3{grid-template-columns:2fr 1fr;grid-template-rows:1fr 1fr}
-.d-photos.n3 .d-photo:first-child{grid-row:span 2}
-.d-photos.n4{grid-template-columns:2fr 1fr;grid-template-rows:1fr 1fr 1fr}
-.d-photos.n4 .d-photo:first-child{grid-row:span 3}
-.d-photo{position:relative;margin:0;border-radius:12px;overflow:hidden;background:var(--surface-2);cursor:zoom-in;min-height:0}
-.d-photo.empty{cursor:default}
-.d-photo img{width:100%;height:100%;object-fit:cover;display:block;transition:opacity .45s ease,transform .4s ease}
-.d-photo:hover img{transform:scale(1.03)}
-.d-photo figcaption{position:absolute;left:0;right:0;bottom:0;padding:18px 10px 6px;background:linear-gradient(to top,rgba(5,12,18,.6),transparent);text-align:right}
+.d-photos{display:grid;grid-template-columns:repeat(2,1fr);gap:4px;margin:6px 0 2px;border-radius:14px;overflow:hidden;background:var(--surface-2);box-shadow:0 0 0 1px var(--line)}
+.d-photos.n1{grid-template-columns:1fr}
+.d-photos.n1 .d-photo{aspect-ratio:16/9;max-height:320px}
+.d-photos.n2{grid-template-columns:1fr 1fr}
+.d-photos.n2 .d-photo{aspect-ratio:4/3;max-height:240px}
+.d-photos.n3{grid-template-columns:1fr 1fr}
+.d-photos.n3 .d-photo:first-child{grid-column:1/-1;aspect-ratio:16/9;max-height:260px}
+.d-photos.n3 .d-photo:not(:first-child){aspect-ratio:16/10;max-height:150px}
+.d-photos.n4{grid-template-columns:repeat(3,1fr)}
+.d-photos.n4 .d-photo:first-child{grid-column:1/-1;aspect-ratio:16/9;max-height:260px}
+.d-photos.n4 .d-photo:not(:first-child){aspect-ratio:3/2;max-height:135px}
+.d-photo{position:relative;margin:0;border-radius:2px;overflow:hidden;background:var(--surface-2);cursor:zoom-in;min-height:0;aspect-ratio:3/2}
+.d-photo.empty{cursor:default;aspect-ratio:16/9;max-height:200px}
+.d-photo img{width:100%;height:100%;object-fit:cover;display:block;transition:opacity .45s ease,transform .45s cubic-bezier(.22,1,.36,1),filter .25s ease}
+.d-photo:hover img{transform:scale(1.04);filter:brightness(1.04)}
+.d-photo figcaption{position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:flex-end;padding:20px 10px 7px;background:linear-gradient(to top,rgba(5,12,18,.62),transparent);pointer-events:none}
+.d-photo figcaption .credit{pointer-events:auto;max-width:min(72%,260px);font-size:10.5px;opacity:.76;transition:opacity .2s}
+.d-photo:hover figcaption .credit{opacity:1}
+.d-photo-cnt{position:absolute;top:9px;right:9px;display:inline-flex;align-items:center;gap:4px;padding:4px 9px;border-radius:999px;background:rgba(6,13,20,.62);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.14);color:rgba(255,255,255,.92);font:600 11px/1.1 var(--f-mono);letter-spacing:.02em;pointer-events:none}
 .cd-img{display:block;height:44px;margin:-7px -8px 4px;border-radius:8px 8px 0 0;overflow:hidden;background:color-mix(in srgb,var(--c) 18%,var(--surface-2))}
 .cd-img:empty{display:none}
 .cd-img img{width:100%;height:100%;object-fit:cover;display:block;transition:opacity .45s ease,transform .4s ease}
