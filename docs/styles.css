@@ -313,8 +313,9 @@ li.now>.row .t{color:var(--sun);font-weight:600}
 .fl-card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--al)}
 .fl-top{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
 .fl-brand{display:flex;align-items:center;gap:9px;min-width:0}
-.fl-logo{width:30px;height:30px;flex:0 0 30px;border-radius:8px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.22)}
-.fl-logo svg{width:100%;height:100%}
+.fl-logo{width:32px;height:32px;flex:0 0 32px;border-radius:8px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.22);display:grid;place-items:center}
+.fl-logo.img{background:#fff;padding:3px}
+.fl-logo svg,.fl-logo img{width:100%;height:100%;object-fit:contain;display:block}
 .fl-bt{display:flex;flex-direction:column;line-height:1.25;min-width:0}
 .fl-aname{font-size:13.5px;font-weight:700;color:var(--ink)}
 .fl-tag{font-size:11.5px;color:var(--muted)}

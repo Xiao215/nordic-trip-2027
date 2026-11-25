@@ -769,26 +769,27 @@ function placeMap(anchor,home){
   to.appendChild(STAGE);MAPHOME.classList.toggle("away",!!slot);
   var dy=a.getBoundingClientRect().top-y0;if(dy&&a.offsetParent)scrollBy(0,dy);}
 if(wide.addEventListener)wide.addEventListener("change",function(){placeMap();});
-// Inline airline marks + boarding-pass cards for flight segments and airport meetups
+// Official airline logos (docs/img/airlines/*.png) + boarding-pass cards for flight segments and airport meetups
 var AIRLINES={
-  FI:{name:"Icelandair",color:"#00468B",svg:'<svg viewBox="0 0 36 36" aria-hidden="true"><rect width="36" height="36" rx="9" fill="#00356B"/><path d="M9 28L20.5 7H27L16.5 28H9Z" fill="#0073CF"/><path d="M16.5 28L27 7H29.5L21 28H16.5Z" fill="#FDB913"/><path d="M9 28L13.5 20H19.5L15 28H9Z" fill="#fff" opacity=".9"/></svg>'},
-  BA:{name:"British Airways",color:"#C8102E",svg:'<svg viewBox="0 0 36 36" aria-hidden="true"><rect width="36" height="36" rx="9" fill="#075AAA"/><path d="M6 15.5C11 11.5 21 11.5 30 14.5C24 14.5 16 15.5 8 20.5L6 15.5Z" fill="#EB2226"/><path d="M7 22.5C14 19 22 18.5 30 19.5C23 22 15 24 8 25.5L7 22.5Z" fill="#fff" opacity=".95"/></svg>'},
-  SK:{name:"SAS",color:"#00205B",svg:'<svg viewBox="0 0 36 36" aria-hidden="true"><rect width="36" height="36" rx="9" fill="#00205B"/><text x="18" y="23" text-anchor="middle" fill="#fff" font-family="system-ui,sans-serif" font-weight="800" font-style="italic" font-size="13.5" letter-spacing=".5">SAS</text></svg>'},
-  DY:{name:"Norwegian",color:"#D81939",svg:'<svg viewBox="0 0 36 36" aria-hidden="true"><rect width="36" height="36" rx="9" fill="#D81939"/><path d="M6 25C13 22 22 22 30 24V29H6V25Z" fill="#fff"/><path d="M6 27.5H30V30H6V27.5Z" fill="#002F6C"/></svg>'},
-  AC:{name:"Air Canada",color:"#D80621",svg:'<svg viewBox="0 0 36 36" aria-hidden="true"><rect width="36" height="36" rx="9" fill="#D80621"/><path d="M18 7L20 13L24 11.5L22.5 15.5L27 16L23.5 19.5L25 22L20 21.5V26.5H16V21.5L11 22L12.5 19.5L9 16L13.5 15.5L12 11.5L16 13L18 7Z" fill="#fff"/></svg>'}
+  FI:{name:"Icelandair",color:"#00468B",logo:"img/airlines/FI.png"},
+  BA:{name:"British Airways",color:"#C8102E",logo:"img/airlines/BA.png"},
+  SK:{name:"SAS",color:"#00205B",logo:"img/airlines/SK.png"},
+  DY:{name:"Norwegian",color:"#D81939",logo:"img/airlines/DY.png"},
+  AC:{name:"Air Canada",color:"#D80621",logo:"img/airlines/AC.png"}
 };
 function flightCards(list){
   if(!list||!list.length)return "";
   return '<div class="fl-grid'+(list.length>1?" multi":"")+'">'+list.map(function(f){
-    var al=AIRLINES[f.code]||{name:f.airline||"Flight",color:"var(--ice)",svg:'<svg viewBox="0 0 36 36" aria-hidden="true"><rect width="36" height="36" rx="9" fill="#1F4E6B"/><path d="M26 17l-7-1-3-6h-2l1.5 6-5 .5-1.5-2.5H8l1 4-1 4h1l1.5-2.5 5 .5L14 27h2l3-6 7-1c1 0 1.5-.7 1.5-1.5S27 17 26 17z" fill="#fff"/></svg>'};
+    var al=AIRLINES[f.code]||{name:f.airline||"Flight",color:"var(--ice)"};
     var brand=f.airline||al.name;
+    var logoHtml=al.logo?'<img src="'+al.logo+'" alt="'+esc(brand)+'" loading="lazy">':'<svg viewBox="0 0 36 36" aria-hidden="true"><rect width="36" height="36" rx="9" fill="#1F4E6B"/><path d="M26 17l-7-1-3-6h-2l1.5 6-5 .5-1.5-2.5H8l1 4-1 4h1l1.5-2.5 5 .5L14 27h2l3-6 7-1c1 0 1.5-.7 1.5-1.5S27 17 26 17z" fill="#fff"/></svg>';
     var badges=[];
     if(f.direct!==false)badges.push('<span class="fl-badge ok">'+esc(U("直飞"))+'</span>');
     if(f.price)badges.push('<span class="fl-badge price">'+esc(f.price)+'</span>');
     var midMeta=[f.dur,f.tz].filter(Boolean).join(" · ");
     return '<div class="fl-card" style="--al:'+al.color+'">'+
       '<div class="fl-top">'+
-        '<div class="fl-brand"><span class="fl-logo">'+al.svg+'</span>'+
+        '<div class="fl-brand"><span class="fl-logo'+(al.logo?" img":"")+'">'+logoHtml+'</span>'+
           '<div class="fl-bt"><span class="fl-aname">'+esc(brand)+'</span>'+(f.tag?'<span class="fl-tag">'+esc(L(f.tag))+'</span>':'')+'</div>'+
         '</div>'+
         '<div class="fl-badges">'+badges.join("")+'</div>'+
