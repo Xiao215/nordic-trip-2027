@@ -108,21 +108,23 @@
     <div class="stage">
       <div id="map" class="map" role="region" aria-label="行程地图" data-i18n-aria-label="行程地图"></div>
       <div id="trailMap" class="map trail-map" hidden></div>
-      <div class="map-tools" role="toolbar" aria-label="地图">
-        <a class="tool on" id="allTrailsBtn" href="https://www.alltrails.com" target="_blank" rel="noopener" hidden>
-          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M8 4H4v12h12v-4M11 3h6v6M17 3l-8 8"/></svg><span>AllTrails</span>
-        </a>
-        <button class="tool" id="trailModeBtn" type="button" hidden>
-          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M2.5 15.5l5-7 3.5 4.5 3-4 3.5 6.5z"/><circle cx="14.5" cy="5.5" r="1.6"/></svg><span id="trailModeLabel">等高线图</span>
-        </button>
-        <button class="tool" id="fitBtn" title="看全天 / 全程" data-i18n-title="看全天 / 全程">
-          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 7V3h4M13 3h4v4M17 13v4h-4M7 17H3v-4"/></svg><span id="fitLabel">全程</span>
-        </button>
-        <a class="tool" id="dayRoute" href="https://www.google.com/maps" target="_blank" rel="noopener" title="在 Google 地图里打开当天路线" data-i18n-title="在 Google 地图里打开当天路线">
-          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M8 4H4v12h12v-4M11 3h6v6M17 3l-8 8"/></svg><span data-i18n="导航">导航</span>
-        </a>
+      <div class="map-hud">
+        <div class="map-caption" id="mapCaption"></div>
+        <div class="map-tools" role="toolbar" aria-label="地图">
+          <a class="tool on" id="allTrailsBtn" href="https://www.alltrails.com" target="_blank" rel="noopener" hidden>
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M8 4H4v12h12v-4M11 3h6v6M17 3l-8 8"/></svg><span>AllTrails</span>
+          </a>
+          <button class="tool" id="trailModeBtn" type="button" hidden>
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M2.5 15.5l5-7 3.5 4.5 3-4 3.5 6.5z"/><circle cx="14.5" cy="5.5" r="1.6"/></svg><span id="trailModeLabel">等高线图</span>
+          </button>
+          <button class="tool" id="fitBtn" title="看全天 / 全程" data-i18n-title="看全天 / 全程">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 7V3h4M13 3h4v4M17 13v4h-4M7 17H3v-4"/></svg><span id="fitLabel">全程</span>
+          </button>
+          <a class="tool" id="dayRoute" href="https://www.google.com/maps" target="_blank" rel="noopener" title="在 Google 地图里打开当天路线" data-i18n-title="在 Google 地图里打开当天路线">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M8 4H4v12h12v-4M11 3h6v6M17 3l-8 8"/></svg><span data-i18n="导航">导航</span>
+          </a>
+        </div>
       </div>
-      <div class="map-caption" id="mapCaption"></div>
     </div>
   </aside>
 </div>

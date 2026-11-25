@@ -43,8 +43,18 @@ def load_osm_graph(bbox):
     min_lon, min_lat, max_lon, max_lat = bbox
     url = f"https://api.openstreetmap.org/api/0.6/map.json?bbox={min_lon:.5f},{min_lat:.5f},{max_lon:.5f},{max_lat:.5f}"
     req = urllib.request.Request(url, headers=UA)
-    with urllib.request.urlopen(req, timeout=20) as r:
-        data = json.load(r)
+    last_err = None
+    for attempt in range(3):
+        try:
+            with urllib.request.urlopen(req, timeout=25) as r:
+                data = json.load(r)
+            break
+        except Exception as e:
+            last_err = e
+            if attempt < 2:
+                time.sleep(2 * (attempt + 1))
+    else:
+        raise last_err
     nodes = {}
     for el in data["elements"]:
         if el["type"] == "node":
@@ -156,28 +166,67 @@ TRAILS = {
     ("2027-07-09", "opt:hengifoss"): [
         (65.0736, -14.8805), (65.0836, -14.8831), (65.0942, -14.8888), (65.0736, -14.8805)
     ],
+    # Day 7 (7/10): Stuðlagil East Bank (from Klaustursel parking) & Dettifoss West + Selfoss loop
+    ("2027-07-10", "studlagil"): [
+        (65.17532, -15.27062), (65.17389, -15.27288), (65.16351, -15.30584), (65.17532, -15.27062)
+    ],
+    ("2027-07-10", "dettifoss"): [
+        (65.81151, -16.40016), (65.81564, -16.38764), (65.80594, -16.38633), (65.81151, -16.40016)
+    ],
+    # Day 8 (7/11): Mývatn hikes (Leirhnjúkur, Hverfjall, optional Dimmuborgir & Skútustaðagígar)
+    ("2027-07-11", "leirhnjukur"): [
+        (65.71319, -16.77411), (65.71845, -16.79087), (65.72223, -16.79513),
+        (65.72161, -16.78860), (65.71319, -16.77411)
+    ],
+    ("2027-07-11", "hverfjall"): [
+        (65.61273, -16.87749), (65.60793, -16.86470), (65.60164, -16.88078), (65.61273, -16.87749)
+    ],
+    ("2027-07-11", "opt:dimmuborgir"): [
+        (65.59159, -16.91329), (65.59058, -16.90898), (65.58571, -16.90247),
+        (65.59036, -16.90415), (65.59159, -16.91329)
+    ],
+    ("2027-07-11", "opt:skutustadagigar"): [
+        (65.56758, -17.03563), (65.56870, -17.03327), (65.57080, -17.03147),
+        (65.57137, -17.03329), (65.57039, -17.03584), (65.56758, -17.03563)
+    ],
+    # Day 10 (7/13): Snæfellsnes Peninsula hikes
+    ("2027-07-13", "saxholl"): [
+        (64.85118, -23.92427), (64.85190, -23.92716), (64.85149, -23.92711), (64.85118, -23.92427)
+    ],
+    ("2027-07-13", "djupalonssandur"): [
+        (64.75351, -23.89555), (64.75346, -23.89868), (64.75379, -23.91544), (64.75351, -23.89555)
+    ],
+    ("2027-07-13", "arnarstapi"): [
+        (64.76565, -23.62714), (64.76533, -23.62193), (64.75885, -23.63282),
+        (64.75177, -23.64551), (64.76565, -23.62714)
+    ],
+    ("2027-07-13", "raudfeldsgja"): [
+        (64.79824, -23.63756), (64.79912, -23.64785), (64.79824, -23.63756)
+    ],
 }
 
 
 def main():
+    import sys
+    force = "--force" in sys.argv
     trip = json.loads(TRIP.read_text(encoding="utf-8"))
     for day in trip["days"]:
         d = day["date"]
         for s in day.get("segs", []):
             if s.get("t") == "stop" and s.get("kind") == "hike":
                 key = (d, s["place"])
-                if key not in TRAILS:
+                if key not in TRAILS or (s.get("geom") and not force):
                     continue
                 pts, km = route_trail(TRAILS[key])
                 s["geom"] = encode(pts)
-                print(f"{d} hike {s['place']:<18} -> {len(pts):3d} pts, {km:5.2f} km")
+                print(f"{d} hike {s['place']:<18} -> {len(pts):3d} pts, {km:5.2f} km", flush=True)
                 time.sleep(0.3)
         for o in day.get("options", []):
             key = (d, f"opt:{o.get('place')}")
-            if key in TRAILS:
+            if key in TRAILS and (not o.get("geom") or force):
                 pts, km = route_trail(TRAILS[key])
                 o["geom"] = encode(pts)
-                print(f"{d} opt  {o['place']:<18} -> {len(pts):3d} pts, {km:5.2f} km")
+                print(f"{d} opt  {o['place']:<18} -> {len(pts):3d} pts, {km:5.2f} km", flush=True)
                 time.sleep(0.3)
 
     TRIP.write_text(json.dumps(trip, indent=2, ensure_ascii=False), encoding="utf-8")
