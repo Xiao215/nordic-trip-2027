@@ -781,7 +781,8 @@ MAP_TOOL = {
                    "stop is a place id from the plan (the [[id]] markers; read_plan with an empty path lists them), or a "
                    "name Google can find with the town and country (\"Bónus Vík, Iceland\"), or \"lat,lng\". The card "
                    "appears where you call it, so call it before writing the answer it goes with. Say the distance and "
-                   "time in your answer; the card only shows the map.",
+                   "time in your answer; the card only shows the map, plus a pop-up with photos for stops that are plan "
+                   "places (so prefer the plan's place id when there is one).",
     "input_schema": {
         "type": "object",
         "properties": {
@@ -817,7 +818,8 @@ def map_card(raw, lang_en: bool) -> tuple[dict | None, str]:
         if p and isinstance(p.get("ll"), list) and len(p["ll"]) == 2:
             zh, local = p.get("zh"), p.get("local") or p.get("en")
             name = (local or zh) if lang_en else (zh or local)
-            stop = {"name": name or pid, "ll": [round(float(p["ll"][0]), 5), round(float(p["ll"][1]), 5)]}
+            # place: the page shows its photos and the days it's on in a pop-up on the card
+            stop = {"name": name or pid, "place": pid, "ll": [round(float(p["ll"][0]), 5), round(float(p["ll"][1]), 5)]}
             if not lang_en and local and local != name:
                 stop["sub"] = local
             if p.get("gid"):

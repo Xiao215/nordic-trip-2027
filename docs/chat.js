@@ -96,6 +96,11 @@ function sheetOff(){
   if(pushed){pushed=false;window.history.back();}
 }
 window.addEventListener("popstate",function(){if(pushed){pushed=false;closeChat();}});
+// closes the chat, then runs fn: on a phone only once the history step back is done, or that step would undo
+// whatever fn changes in the address (a day of the plan) and put the page back where it was
+function closeThen(fn){if(!pushed){closeChat();fn();return;}var done=false;
+  function go(){if(done)return;done=true;window.removeEventListener("popstate",go);fn();}
+  window.addEventListener("popstate",go);closeChat();setTimeout(go,500);}
 // the keyboard shrinks what's visible without (on iOS) resizing the page: keep the sheet in the visible part
 var kbH=0; // the keyboard's height, once seen, so the sheet can move together with it next time
 function setSheet(h,top){layer.style.setProperty("--vvh",h+"px");layer.style.setProperty("--vvt",(top||0)+"px");}
@@ -257,7 +262,9 @@ var MODEIC={driving:'<svg viewBox="0 0 20 20"><path d="M4 13.5V10l1.6-4.2A1.5 1.
   walking:'<svg viewBox="0 0 20 20"><circle cx="10.5" cy="3.8" r="1.6"/><path d="M8 17l1.8-5.2L12 13.5V17M9.8 11.8l.8-4.3-2.8 1.3-1 2.6M10.6 7.5l1.6 2.2 2.3.8"/></svg>',
   transit:'<svg viewBox="0 0 20 20"><rect x="5" y="3" width="10" height="11" rx="2.5"/><path d="M5 9h10M7.5 17l1-3M12.5 17l-1-3"/><circle cx="7.8" cy="11.5" r=".4"/><circle cx="12.2" cy="11.5" r=".4"/></svg>',
   bicycling:'<svg viewBox="0 0 20 20"><circle cx="5" cy="13" r="3"/><circle cx="15" cy="13" r="3"/><path d="M5 13l3-6h5l2 6M8 7l2.5 6H15M7 5h2.5"/></svg>',
-  pin:'<svg viewBox="0 0 20 20"><path d="M10 17.5s5.5-5 5.5-9.3A5.5 5.5 0 0 0 4.5 8.2c0 4.3 5.5 9.3 5.5 9.3z"/><circle cx="10" cy="8.2" r="2"/></svg>'};
+  pin:'<svg viewBox="0 0 20 20"><path d="M10 17.5s5.5-5 5.5-9.3A5.5 5.5 0 0 0 4.5 8.2c0 4.3 5.5 9.3 5.5 9.3z"/><circle cx="10" cy="8.2" r="2"/></svg>',
+  dir:'<svg viewBox="0 0 20 20"><path d="M10 2.5l7.5 7.5-7.5 7.5L2.5 10z"/><path d="M8 12.5V10.5a1.5 1.5 0 0 1 1.5-1.5H13M11.5 7.2L13.3 9l-1.8 1.8"/></svg>',
+  cal:'<svg viewBox="0 0 20 20"><rect x="3.5" y="4.5" width="13" height="12" rx="2"/><path d="M3.5 8.5h13M7 3v3M13 3v3"/></svg>'};
 function mapPt(s){return s.ll?s.ll[0]+","+s.ll[1]:s.q||s.name;}
 function mapLink(M){var st=M.stops,pts=st.map(mapPt);
   if(st.length===1)return "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(pts[0])+(st[0].gid?"&query_place_id="+encodeURIComponent(st[0].gid):"");
@@ -275,15 +282,51 @@ function mapFit(st){if(!st.every(function(s){return s.ll;}))return "";
     fx=(w-2*P)/(256*Math.max((x2-x1)/360,1e-6)),fy=(h-2*P)/(256*Math.max((y2-y1)/(2*Math.PI),1e-6)),
     z=Math.max(3,Math.min(15,Math.floor(Math.log(Math.min(fx,fy))/Math.LN2)));
   return "&ll="+(Math.atan(Math.sinh((y1+y2)/2))*180/Math.PI).toFixed(4)+","+((x1+x2)/2).toFixed(4)+"&z="+z;}
+/* A stop that is a place in the plan gets a pop-up over the bottom of the map, the way Google shows a place: its
+   name, what kind of stop it is, Directions / Open in Google Maps / the day it's on in the plan, and its photos
+   (tap one for the full-screen viewer). A one-place card opens with it; on a route, tapping a stop opens its own. */
+function placeOf(s){try{return window.tripApp&&window.tripApp.place?window.tripApp.place(s):null;}catch(e){return null;}}
+function popHtml(s,i,p,fixed){
+  var dir="https://www.google.com/maps/dir/?api=1&destination="+encodeURIComponent(mapPt(s))+(s.gid?"&destination_place_id="+encodeURIComponent(s.gid):"");
+  var meta=[p.kind,p.local].filter(Boolean).join(" · "),n=Math.min(p.photos.length,3);
+  return '<div class="mc-pop"'+(fixed?"":" hidden")+' data-mc-pop="'+i+'">'+
+    '<div class="mp-head"><div class="mp-t"><h5>'+esc(p.name)+"</h5>"+(meta?"<p>"+MODEIC.pin+esc(meta)+"</p>":"")+"</div>"+
+      (fixed?"":'<button type="button" class="mp-x" data-mc-close aria-label="'+esc(Z("关闭","Close"))+'">'+IC.x+"</button>")+"</div>"+
+    '<div class="mp-acts"><a class="mp-chip" href="'+esc(dir)+'" target="_blank" rel="noopener">'+MODEIC.dir+esc(Z("路线","Directions"))+"</a>"+
+      '<a class="mp-chip" href="'+esc(mapLink({stops:[s]}))+'" target="_blank" rel="noopener">'+MODEIC.pin+esc(Z("在 Google 地图打开","Open in Google Maps"))+"</a>"+
+      (p.days.length?'<button type="button" class="mp-chip" data-mc-go="'+esc(p.id)+'" data-date="'+esc(p.days[0].date)+'">'+MODEIC.cal+esc(Z("行程里 · ","In the plan · ")+p.days.map(function(d){return d.label;}).join(", "))+"</button>":"")+"</div>"+
+    (n?'<div class="mp-photos n'+n+'">'+p.photos.slice(0,3).map(function(h,k){
+      return '<figure class="mp-ph" role="button" tabindex="0" data-mc-photo="'+esc(p.id)+'" data-k="'+k+'" aria-label="'+esc(Z("看大图","View photo"))+'">'+h+(k?"":"<figcaption>"+p.credit+"</figcaption>")+"</figure>";}).join("")+"</div>":"")+
+    "</div>";}
 function mapHtml(M,live){
   var one=M.stops.length===1,md=MODES[M.mode]||MODES.driving,href=esc(mapLink(M));
-  var stops=M.stops.map(function(s,i){return '<li><span class="mc-n">'+(one?MODEIC.pin:String.fromCharCode(65+i))+"</span><span><b>"+esc(s.name)+"</b>"+(s.sub?"<small>"+esc(s.sub)+"</small>":"")+"</span></li>";}).join("");
-  return '<div class="map-card"><div class="mc-head">'+(one?MODEIC.pin:MODEIC[M.mode]||MODEIC.driving)+"<h4>"+esc(M.title)+"</h4>"+(one?"":'<span class="badge">'+esc(Z(md[0],md[1]))+"</span>")+"</div>"+
+  // while the answer streams each repaint would reload the photos, so the pop-ups wait for it to finish
+  var P=M.stops.map(function(s){return live?null:placeOf(s);}),solo=one&&P[0];
+  var stops=M.stops.map(function(s,i){var p=P[i],name=p?p.name:s.name,sub=p?p.local:s.sub;
+    var h='<span class="mc-n">'+(one?MODEIC.pin:String.fromCharCode(65+i))+'</span><span class="mc-nm"><b>'+esc(name)+"</b>"+(sub?"<small>"+esc(sub)+"</small>":"")+"</span>";
+    return "<li>"+(p?'<button type="button" class="mc-stop" data-mc-stop="'+i+'" aria-expanded="false">'+h+(p.thumb?'<span class="mc-thumb">'+p.thumb+"</span>":"")+"</button>":h)+"</li>";}).join("");
+  return '<div class="map-card'+(solo?" solo":"")+'"><div class="mc-head">'+(one?MODEIC.pin:MODEIC[M.mode]||MODEIC.driving)+"<h4>"+esc(M.title)+"</h4>"+(one?"":'<span class="badge">'+esc(Z(md[0],md[1]))+"</span>")+"</div>"+
     '<a class="mc-frame" href="'+href+'" target="_blank" rel="noopener" aria-label="'+esc(Z("在 Google 地图里打开","Open in Google Maps"))+'">'+
       (live?'<span class="mc-wait">'+MODEIC.pin+"</span>":'<iframe src="'+esc(mapEmbed(M))+'" loading="lazy" tabindex="-1" aria-hidden="true" referrerpolicy="no-referrer-when-downgrade"></iframe><span class="mc-attr">'+esc(Z("地图数据 © Google","Map data © Google"))+"</span>")+"</a>"+
-    '<ol class="mc-stops'+(one?" one":"")+'">'+stops+"</ol>"+
-    '<div class="mc-foot"><a class="btn accent" href="'+href+'" target="_blank" rel="noopener">'+MODEIC.pin+esc(one?Z("在 Google 地图里打开","Open in Google Maps"):Z("用 Google 地图导航","Directions in Google Maps"))+"</a></div></div>";
+    (solo?popHtml(M.stops[0],0,solo,true):
+      P.map(function(p,i){return p?popHtml(M.stops[i],i,p,false):"";}).join("")+
+      '<ol class="mc-stops'+(one?" one":"")+'">'+stops+"</ol>"+
+      '<div class="mc-foot"><a class="btn accent" href="'+href+'" target="_blank" rel="noopener">'+MODEIC.pin+esc(one?Z("在 Google 地图里打开","Open in Google Maps"):Z("用 Google 地图导航","Directions in Google Maps"))+"</a></div>")+
+    "</div>";
 }
+// on a route, a stop opens its pop-up (and closes the one that was open); tapping it again or × closes it
+function togglePop(card,i){
+  card.querySelectorAll("[data-mc-pop]").forEach(function(p){p.hidden=p.dataset.mcPop!==String(i)||!p.hidden;});
+  card.querySelectorAll("[data-mc-stop]").forEach(function(b){var p=card.querySelector('[data-mc-pop="'+b.dataset.mcStop+'"]');b.setAttribute("aria-expanded",p&&!p.hidden?"true":"false");});}
+function mapClick(e){var t;
+  if((t=e.target.closest("[data-mc-stop]"))){togglePop(t.closest(".map-card"),t.dataset.mcStop);return true;}
+  if((t=e.target.closest("[data-mc-close]"))){togglePop(t.closest(".map-card"),-1);return true;}
+  if((t=e.target.closest("[data-mc-photo]"))&&!e.target.closest(".credit")){if(window.tripApp&&window.tripApp.photos)window.tripApp.photos(t.dataset.mcPhoto,+t.dataset.k);return true;}
+  if((t=e.target.closest("[data-mc-go]"))){if(!window.tripApp||!window.tripApp.goTo)return true;
+    var id=t.dataset.mcGo,date=t.dataset.date,go=function(){window.tripApp.goTo(id,date);};
+    if(phone.matches)closeThen(go);else go(); // on a phone the chat covers the plan
+    return true;}
+  return false;}
 
 /* ---------- a plan change, read as days ----------
    An edit card comes with the days whose schedule it touches, before and after ({date, before, after}, each
@@ -422,8 +465,10 @@ function paintBot(d,m,live){
 log.addEventListener("toggle",function(e){var ds=e.target.dataset||{};if(ds.steps)openSteps[ds.steps]=e.target.open;if(ds.more)openMore[ds.more]=e.target.open;},true);
 log.addEventListener("click",function(e){var t;
   if((t=e.target.closest("[data-decide]"))){decide(t.closest("[data-card]").dataset.card,t.dataset.decide==="1");return;}
-  if((t=e.target.closest("[data-suggest]"))){ask(t.textContent);}
+  if((t=e.target.closest("[data-suggest]"))){ask(t.textContent);return;}
+  mapClick(e);
 });
+log.addEventListener("keydown",function(e){if((e.key==="Enter"||e.key===" ")&&e.target.matches&&e.target.matches("[data-mc-photo]")){e.preventDefault();mapClick(e);}});
 function errLine(msg,retry){var d=document.createElement("div");d.className="l-err appear";d.textContent=msg;
   if(retry){var b=document.createElement("button");b.type="button";b.className="cli-link";b.textContent=Z("重试","Try again");b.onclick=function(){d.remove();retry();};d.appendChild(b);}
   add(d);scroll(true);}

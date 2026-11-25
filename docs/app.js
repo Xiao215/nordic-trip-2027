@@ -268,7 +268,10 @@ function boot(trip){
   window.addEventListener("hashchange",function(){var h=decodeURIComponent(location.hash.slice(1));
     if(DATES.indexOf(h)>=0&&!(state.view==="day"&&state.date===h))setView("day",h);else if(VIEWS[h]&&state.view!==h)setView(h);});
   window.tripApp={context:function(){var c=viewContext(),pp=passportText();if(pp)c.passport=pp;return c;},
-    lang:function(){return en()?"en":"zh";}};
+    lang:function(){return en()?"en":"zh";},
+    place:mapPlace,
+    photos:function(id,k){var phs=photosOf(id);if(phs.length)openLb(phs.map(function(ph){return {s:{place:id},ph:ph};}),k||0);},
+    goTo:goToPlace};
   function viewContext(){var D=day(),s=D&&state.sel!=null?D.segs[state.sel]:null;
     var lang=en()?"en":"zh",curTxt=curContext();
     if(state.view==="prep")return {lang:lang,currency:curTxt,day:"Prep tab",looking_at:"visas, bookings and checklists"};
@@ -973,6 +976,28 @@ function utm(u){return u+(u.indexOf("?")<0?"?":"&")+UTM;}
 function credit(ph){
   if(ph.author_link)return '<span class="credit">'+esc(U("摄影："))+'<a href="'+esc(utm(ph.author_link))+'" target="_blank" rel="noopener">'+esc(ph.author)+'</a> / <a href="'+esc(utm("https://unsplash.com/"))+'" target="_blank" rel="noopener">Unsplash</a></span>';
   return '<a class="credit" href="'+esc(ph.page)+'" target="_blank" rel="noopener">'+esc(U("照片："))+esc(ph.author||"")+(ph.license?" · "+esc(ph.license):"")+"</a>";}
+/* a plan place in the assistant's map cards (chat.js): the place a stop stands for (its id, else the same
+   coordinates, else the same name; among places sharing a spot, one with photos), and what the card's pop-up
+   shows: its name, what kind of stop it is, the days it's on and its photos */
+function placeOf(s){if(!s||!T)return null;if(s.place&&T.places[s.place])return s.place;var hits=[];
+  if(s.ll&&s.ll.length===2)Object.keys(N).forEach(function(id){var p=N[id];if(p&&Math.abs(p[0]-s.ll[0])<2e-4&&Math.abs(p[1]-s.ll[1])<2e-4)hits.push(id);});
+  if(!hits.length&&s.name){var k=String(s.name).trim().toLowerCase();
+    Object.keys(T.places).forEach(function(id){var p=T.places[id];if([p.zh,p.local,p.en].some(function(n){return n&&String(n).trim().toLowerCase()===k;}))hits.push(id);});}
+  return hits.filter(function(id){return photosOf(id).length;})[0]||hits[0]||null;}
+function placeVisits(id){var out=[];
+  T.days.forEach(function(D){D.segs.forEach(function(s,i){if(s.t==="stop"&&s.place===id&&!out.some(function(v){return v.date===D.date;}))out.push({date:D.date,i:i,kind:s.kind});});});
+  return out;}
+function mapPlace(s){var id=placeOf(s);if(!id)return null;var v=placeVisits(id),phs=photosOf(id),n=names(id);
+  if(!phs.length&&!v.length)return null;
+  // what the place is (景点, 徒步, 冰川…); sleeping, eating or shopping there says little about the place itself
+  var kind=v.map(function(x){return x.kind;}).filter(function(k){return k&&T.kinds[k]&&!/^(stay|start|food|shop)$/.test(k);})[0];
+  return {id:id,name:pn(id,true),local:NM!=="local"&&n.lo!==n.zh?n.lo:"",kind:kind?L(T.kinds[kind]):"",
+    days:v.map(function(x){return {date:x.date,label:md(x.date)};}),
+    photos:phs.map(function(ph,k){return img(ph,k?500:960);}),thumb:phs.length?img(phs[0],500):"",credit:phs.length?credit(phs[0]):""};}
+// "in the plan" on a pop-up: that day, with the stop open
+function goToPlace(id,date){if(DATES.indexOf(date)<0)return;setView("day",date);
+  var D=day(),i=-1;if(D)D.segs.forEach(function(s,k){if(i<0&&s.t==="stop"&&s.place===id)i=k;});
+  if(i>=0)select(i,false);}
 function tbd(cls){return '<span class="tbd'+(cls?" "+cls:"")+'"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M4 17l5-5 4 4 3-3 4 4"/></svg><span>'+esc(U("照片待定"))+"</span></span>";}
 // one entry per scenic stop of the day (photo = its first one, or none yet)
 function dayStops(D){var seen={},out=[];if(!D)return out;
@@ -1013,7 +1038,7 @@ function stepLb(d){LB.i=(LB.i+d+LB.list.length)%LB.list.length;showLb();}
 $("lbClose").addEventListener("click",closeLb);$("lbPrev").addEventListener("click",function(){stepLb(-1);});$("lbNext").addEventListener("click",function(){stepLb(1);});
 $("lb").addEventListener("click",function(e){if(e.target===this||e.target.classList.contains("lb-fig"))closeLb();});
 document.addEventListener("keydown",function(e){if($("lb").hidden)return;
-  if(e.key==="Escape"){e.preventDefault();closeLb();}else if(e.key==="ArrowLeft"){e.preventDefault();e.stopImmediatePropagation();stepLb(-1);}else if(e.key==="ArrowRight"){e.preventDefault();e.stopImmediatePropagation();stepLb(1);}},true);
+  if(e.key==="Escape"){e.preventDefault();e.stopImmediatePropagation();closeLb();/* the photo closes, not the chat under it */}else if(e.key==="ArrowLeft"){e.preventDefault();e.stopImmediatePropagation();stepLb(-1);}else if(e.key==="ArrowRight"){e.preventDefault();e.stopImmediatePropagation();stepLb(1);}},true);
 (function(){var x0=null;$("lb").addEventListener("touchstart",function(e){x0=e.touches[0].clientX;},{passive:true});
   $("lb").addEventListener("touchend",function(e){if(x0==null)return;var dx=e.changedTouches[0].clientX-x0;x0=null;if(Math.abs(dx)>50)stepLb(dx<0?1:-1);},{passive:true});})();
 
