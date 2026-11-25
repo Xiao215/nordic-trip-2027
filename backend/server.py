@@ -206,7 +206,7 @@ SYSTEM_TEMPLATE = """你是「北欧之旅 2027」的行程助手。这是一趟
 
 先根据下面的行程回答。如果消息里有 <quoted_plan_item>，那是对方在网页上点“问问这个”引用的具体行程卡片（包含它的说明、提示、背景和小知识，以及对应的 JSON 路径如 days/…/segs/… 或 places/…/story）；对方说的“这个”“它”或省略了主语的话（比如“你可以补上”“改一下时间”）指的就是这一项，优先于 <context> 里的 looking_at。行程里没有的（天气、营业时间、路况和 F 路开放情况、价格、渡轮和航班时刻、门票），就上网查，并简短说明来源；冰岛路况以 road.is 和 safetravel.is 为准。行程和网上信息不一致时要指出来。不知道就说不知道，绝不编造时间、价格或电话。
 
-回答要短而实用：先用一两句话给出答案，确实有帮助时再加几条要点。时间用当地时间、24 小时制（冰岛 UTC+0，挪威、瑞典、丹麦夏令时 UTC+2）。有人问某地在哪，就附上 Google 地图链接。价格用当地货币（ISK、NOK、SEK、DKK）；如果 <context> 里有 currency（CAD、CNY 或 USD），在括号里附上大约的换算。有人想改行程时，说明改动会影响什么（时间、预订、还车地点等）。
+回答要短而实用：先用一两句话给出答案，确实有帮助时再加几条要点。时间用当地时间、24 小时制（冰岛 UTC+0，挪威、瑞典、丹麦夏令时 UTC+2）。问到怎么去、路线、开车或徒步、某地在哪时，用 show_map 在回答里放一张地图卡片（地图加上“在 Google 地图里打开”的按钮），行程里的地方写它的 id 或名字；不用再另外贴地图链接。价格用当地货币（ISK、NOK、SEK、DKK）；如果 <context> 里有 currency（CAD、CNY 或 USD），在括号里附上大约的换算。有人想改行程时，说明改动会影响什么（时间、预订、还车地点等）。
 
 网页上的行程你可以改：你用 edit_plan 提出改动，网页上会出现一张确认卡片，列出每处改动的前后对比，对方点“确认”才会真正改，大家的网页随即更新。大家会跟你说得很随意，比如“我们订好 Odda 的住宿了”、“第 12 天下午改成去看冰川”、“这家酒店不错 https://…，一晚 1,890 NOK，加到弗洛姆的住宿里”。
 - 改之前先用 read_plan 读出要改的那部分原样的 JSON，再用 edit_plan 提出改动，沿用原来的字段和写法。一件事的改动放在一次 edit_plan 里。
@@ -410,7 +410,7 @@ async def answer(messages: list[dict], lang_en: bool = False, asker: str = ""):
         thinking = {"type": "adaptive", "display": "updates"}
     # tool inputs here are short, so they stream as generated (and are validated before running); a local
     # Anthropic-compatible server may not know the field, so it's left off there
-    mine = [TASK_TOOL, *PLAN_TOOLS, *EXPENSE_TOOLS]
+    mine = [TASK_TOOL, MAP_TOOL, *PLAN_TOOLS, *EXPENSE_TOOLS]
     own = [dict(t, eager_input_streaming=True) for t in mine] if not LOCAL_AI else mine
     tools = [WEB_SEARCH, *own]
     wrote = False
@@ -470,8 +470,8 @@ async def answer(messages: list[dict], lang_en: bool = False, asker: str = ""):
                         if b.type != "text" and hold.strip():  # a short run of text that never left the hold
                             yield sse({"type": "text", "text": ("\n\n" if wrote else "") + hold})
                             fresh, wrote, hold = False, True, ""
-                        if b.type == "tool_use" and b.name == TASK_TOOL["name"]:
-                            pass  # the checklist shows once its input is complete
+                        if b.type == "tool_use" and b.name in (TASK_TOOL["name"], MAP_TOOL["name"]):
+                            pass  # the checklist (or the map) shows once its input is complete
                         elif b.type in ("server_tool_use", "tool_use"):
                             yield sse({"type": "step", "id": b.id, "label": step_label(b.name, None, lang_en), "state": "running"})
                         elif b.type in ("web_search_tool_result", "web_fetch_tool_result"):
@@ -482,7 +482,7 @@ async def answer(messages: list[dict], lang_en: bool = False, asker: str = ""):
                             items = task_items(b.input)
                             if items:
                                 yield sse({"type": "tasks", "items": items})
-                        elif b is not None and b.type in ("server_tool_use", "tool_use"):
+                        elif b is not None and b.type in ("server_tool_use", "tool_use") and b.name != MAP_TOOL["name"]:
                             yield sse({"type": "step", "id": b.id, "label": step_label(b.name, b.input if isinstance(b.input, dict) else {}, lang_en)})
                 if hold.strip():
                     yield sse({"type": "text", "text": ("\n\n" if wrote else "") + hold})
@@ -510,6 +510,12 @@ async def answer(messages: list[dict], lang_en: bool = False, asker: str = ""):
                         ok = task_items(b.input) is not None
                         results.append({"type": "tool_result", "tool_use_id": b.id,
                                         **({"content": "Shown."} if ok else {"content": "Each task needs text and a status of pending, in_progress or done; at most 8.", "is_error": True})})
+                        continue
+                    if b.name == MAP_TOOL["name"]:
+                        mc, text = map_card(b.input, lang_en)
+                        if mc:
+                            yield sse({"type": "map", "map": mc})
+                        results.append({"type": "tool_result", "tool_use_id": b.id, "content": text, **({} if mc else {"is_error": True})})
                         continue
                     text, err, card = await run_plan_tool(b.name, b.input if isinstance(b.input, dict) else {}, asker, lang_en)
                     yield sse({"type": "step", "id": b.id, "state": "error" if err else "done"})
@@ -765,6 +771,71 @@ def task_items(raw) -> list[dict] | None:
             return None
         out.append({"text": str(t["text"]).strip()[:80], "status": t["status"]})
     return out
+
+
+MAP_TOOL = {
+    "name": "show_map",
+    "description": "Put a map card in your answer: a Google map of a route through 2 to 10 stops in order (or of one "
+                   "place), with a button that opens it in Google Maps for navigation. Use it whenever the answer is about "
+                   "getting somewhere: a route, a drive, a walk or hike, how to get from A to B, or where a place is. Each "
+                   "stop is a place id from the plan (the [[id]] markers; read_plan with an empty path lists them), or a "
+                   "name Google can find with the town and country (\"Bónus Vík, Iceland\"), or \"lat,lng\". The card "
+                   "appears where you call it, so call it before writing the answer it goes with. Say the distance and "
+                   "time in your answer; the card only shows the map.",
+    "input_schema": {
+        "type": "object",
+        "properties": {
+            "title": {"type": "string", "description": "A few words in the person's language, e.g. 雷克雅未克 → 维克 自驾."},
+            "stops": {"type": "array", "minItems": 1, "maxItems": 10, "items": {"type": "string"}},
+            "mode": {"type": "string", "enum": ["driving", "walking", "transit", "bicycling"]},
+        },
+        "required": ["stops"], "additionalProperties": False,
+    },
+}
+LATLNG = re.compile(r"\s*(-?\d{1,2}(?:\.\d+)?)\s*,\s*(-?\d{1,3}(?:\.\d+)?)\s*")
+
+
+def map_card(raw, lang_en: bool) -> tuple[dict | None, str]:
+    """The map card show_map asked for, with plan places put on their coordinates, and what to tell the model."""
+    stops = raw.get("stops") if isinstance(raw, dict) else None
+    if not isinstance(stops, list) or not 1 <= len(stops) <= 10 or not all(isinstance(x, str) and x.strip() for x in stops):
+        return None, "stops needs 1 to 10 places (plan place ids, names with town and country, or \"lat,lng\")."
+    places = PLAN.trip.get("places", {})
+    by_name = {}
+    for pid, p in places.items():
+        for k in ("zh", "local", "en"):
+            if p.get(k):
+                by_name.setdefault(str(p[k]).strip().lower(), pid)
+    out, guessed = [], []
+    for x in stops:
+        key = x.strip()[:120]
+        key = PLACE.fullmatch(key).group(1) if PLACE.fullmatch(key) else key
+        # the plan as the model reads it writes a place as "中文名 (Local / English)": any of those finds it
+        names = [key, re.sub(r"\s*[(（].*$", "", key), key.split(",")[0], *re.split(r"\s*/\s*", (re.search(r"[(（](.*?)[)）]", key) or [None, ""])[1])]
+        pid = key if key in places else next((by_name[n.strip().lower()] for n in names if n.strip().lower() in by_name), None)
+        p = places.get(pid) if pid else None
+        if p and isinstance(p.get("ll"), list) and len(p["ll"]) == 2:
+            zh, local = p.get("zh"), p.get("local") or p.get("en")
+            name = (local or zh) if lang_en else (zh or local)
+            stop = {"name": name or pid, "ll": [round(float(p["ll"][0]), 5), round(float(p["ll"][1]), 5)]}
+            if not lang_en and local and local != name:
+                stop["sub"] = local
+            if p.get("gid"):
+                stop["gid"] = p["gid"]
+        elif m := LATLNG.fullmatch(key):
+            stop = {"name": key, "ll": [float(m.group(1)), float(m.group(2))]}
+        else:
+            stop = {"name": key, "q": key}
+            guessed.append(key)
+        out.append(stop)
+    mode = raw.get("mode") if raw.get("mode") in ("driving", "walking", "transit", "bicycling") else "driving"
+    title = str(raw.get("title") or "").strip()[:80] or " → ".join(s["name"] for s in out)
+    card = {"title": title, "mode": mode, "stops": out}
+    text = f"Shown: a map card of {' → '.join(s['name'] for s in out)} ({mode}) with a button to open it in Google Maps."
+    if guessed:
+        text += (" Not in the plan, so Google looks these up by name: " + "; ".join(guessed) +
+                 ". If a name could match the wrong place, call show_map again with the town and country added.")
+    return card, text
 
 
 PLAN_TOOLS = [

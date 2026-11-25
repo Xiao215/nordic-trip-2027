@@ -46,9 +46,11 @@ code{font-family:var(--f-mono);font-size:.84em;background:var(--fjord-soft);padd
 .app{display:grid;grid-template-columns:minmax(0,1fr) var(--map-w);gap:var(--gap);padding:var(--gap);max-width:2600px;margin:0 auto}
 .content{min-width:0;padding:16px clamp(8px,3vw,40px) 90px}
 .mapcol{position:sticky;top:var(--gap);height:calc(100vh - var(--gap)*2);height:calc(100dvh - var(--gap)*2)}
-.stage{position:relative;height:100%;border-radius:var(--r);overflow:hidden;background:var(--surface-2);border:1px solid var(--line);box-shadow:var(--shadow)}
+/* isolate: the map's own layers (its toolbar is z-index 410) stay inside it, under the chat and the photo viewer */
+.stage{isolation:isolate;position:relative;height:100%;border-radius:var(--r);overflow:hidden;background:var(--surface-2);border:1px solid var(--line);box-shadow:var(--shadow)}
 .map{position:absolute;inset:0}
-.map iframe{display:block;width:100%;height:100%;border:0}
+/* 16px past the bottom crops Google's footer (键盘快捷键 · 地图数据 · 条款); .map-attr keeps the credit */
+.map iframe{display:block;width:100%;height:calc(100% + 16px);border:0}
 .trail-map{z-index:1;background:var(--surface-2)}
 .trail-map[hidden]{display:none!important}
 .map-hud{position:absolute;top:12px;left:12px;right:12px;display:flex;align-items:center;gap:8px;z-index:410;pointer-events:none}
@@ -695,6 +697,27 @@ li.now>.row .t{color:var(--sun);font-weight:600}
 .cc-tl li.fold summary .t{padding:0;display:block}
 .cc-tl li.fold ol{padding-top:2px}
 .ask-card.settled .cc-days,.ask-card.settled .cc-chips{opacity:.8}
+/* a map card in an answer: the map (a link to Google Maps), the stops in order, a button to navigate */
+.map-card{border:1px solid var(--line);border-radius:14px;background:var(--surface);overflow:hidden}
+.mc-head{display:flex;align-items:center;gap:8px;padding:10px 13px 9px}
+.mc-head>svg{flex:none;width:18px;height:18px;fill:none;stroke:var(--fjord);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.mc-head h4{flex:1 1 auto;min-width:0;margin:0;font-size:14.5px;line-height:1.35}
+.mc-frame{position:relative;display:block;height:180px;overflow:hidden;background:var(--surface-2);border-block:1px solid var(--line)}
+/* the iframe runs 16px past the bottom to crop Google's footer (键盘快捷键 · 地图数据 · 条款); .mc-attr keeps the credit */
+.mc-frame iframe{display:block;width:100%;height:calc(100% + 16px);border:0;pointer-events:none}
+.mc-attr,.map-attr{position:absolute;right:0;bottom:0;padding:1px 6px;border-top-left-radius:6px;background:rgba(255,255,255,.75);color:#444;font-size:10px;line-height:14px;pointer-events:none}
+.mc-wait{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted)}
+.mc-wait svg{width:28px;height:28px;fill:none;stroke:currentColor;stroke-width:1.6;opacity:.5;animation:blink 1.4s ease-in-out infinite}
+.mc-stops{list-style:none;margin:0;padding:10px 13px 2px;display:grid;gap:6px;position:relative}
+.mc-stops:not(.one)::before{content:"";position:absolute;left:23px;top:20px;bottom:14px;border-left:2px dotted color-mix(in srgb,var(--fjord) 45%,var(--line))}
+.mc-stops li{position:relative;display:flex;align-items:center;gap:10px;min-width:0;font-size:13.5px}
+.mc-stops li>span:last-child{min-width:0;display:flex;flex-wrap:wrap;align-items:baseline;gap:0 6px}
+.mc-stops small{font-size:12px;color:var(--muted)}
+.mc-n{flex:none;display:grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--fjord);color:var(--surface);font:600 11.5px var(--f-mono)}
+.mc-n svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2}
+.mc-foot{display:flex;justify-content:flex-end;padding:10px 13px 12px}
+.mc-foot .btn{text-decoration:none}
+@media (prefers-reduced-motion:reduce){.mc-wait svg{animation:none}}
 .btn{display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 14px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);font:600 13px var(--f-body);cursor:pointer}
 .btn:hover{border-color:var(--fjord)}
 .btn.accent{background:var(--fjord);border-color:var(--fjord);color:var(--surface)}
@@ -734,6 +757,20 @@ li.now>.row .t{color:var(--sun);font-weight:600}
 .drawer.busy:not(.typed) .send{background:var(--ink)}
 .drawer.busy:not(.typed) .send .i-send{display:none}
 .drawer.busy:not(.typed) .send .i-stop{display:block}
+/* phones: a full-screen sheet from the bottom (see chat.js). The page underneath is held in place while it's open;
+   the layer follows the part of the screen the keyboard leaves visible; the grip on top says it can be pulled down. */
+html.chat-held,html.chat-held body{overflow:hidden;overscroll-behavior:none}
+html.chat-held body{position:fixed;left:0;right:0;width:100%}
+@media (max-width:900px){
+  .chat-layer{top:var(--vvt,0px);bottom:auto;height:var(--vvh,100%)}
+  .drawer{width:100%;border-left:0;box-shadow:none;transform:translateY(105%)}
+  .drawer[data-open="true"]{transform:none}
+  .drawer.dragging{transition:none}
+  .drawer-head{position:relative;touch-action:none;padding-top:calc(20px + env(safe-area-inset-top))}
+  .drawer-head::before{content:"";position:absolute;top:calc(7px + env(safe-area-inset-top));left:50%;width:40px;height:5px;margin-left:-20px;border-radius:3px;background:color-mix(in srgb,var(--muted) 45%,transparent)}
+  .chat-log,.drawer.listing .chat-list{overscroll-behavior:contain}
+  .drawer.kb .composer,.drawer.kb.listing .chat-list{padding-bottom:10px} /* the keyboard already covers the home-bar inset */
+}
 @media (prefers-reduced-motion:reduce){.dots i,.spin,.live-dot.busy,.ask-btn.busy .spark{animation:none}.dots i{opacity:.6}.drawer,.drawer[data-open="true"],.chat-scrim{transition:none}}
 
 /* ---------- shared expense log ---------- */
@@ -1154,3 +1191,5 @@ html.locked body>*:not(.lock){display:none!important}
 .lock-row input{flex:1;min-width:0;font:inherit;font-size:15px;padding:9px 12px;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink)}
 .lock-row input:focus{outline:2px solid var(--fjord);outline-offset:1px}
 .lock-err{min-height:1.2em;color:var(--sun)!important;font-size:13px!important}
+/* phones: under 16px, iOS zooms the whole page in when a box gets focus (last in the file so it wins) */
+@media (max-width:900px){.composer textarea,.chat-join input,.lock-row input,.mny-card input,.mny-card select,.mny-add input,.mny-add select,.mny-gate input{font-size:16px}}

@@ -72,9 +72,68 @@ function clock(ts){return ts?new Date(ts).toLocaleTimeString(isEn()?"en-CA":"zh-
 /* ---------- open / close (closing never interrupts an answer) ---------- */
 function isOpen(){return chat.dataset.open==="true";}
 function openChat(focus){if(!isOpen()){chat.dataset.open="true";chat.setAttribute("aria-hidden","false");scrim.classList.add("open");fab.setAttribute("aria-expanded","true");
-    setBadge();scroll(true);if(!checked)health();}
-  if(focus!==false&&matchMedia("(hover:hover)").matches)setTimeout(function(){text.focus({preventScroll:true});},60);}
-function closeChat(){if(!isOpen())return;chat.dataset.open="false";chat.setAttribute("aria-hidden","true");scrim.classList.remove("open");fab.setAttribute("aria-expanded","false");text.blur();setBadge();}
+    if(phone.matches)sheetOn();setBadge();scroll(true);if(!checked)health();}
+  // straight away, not after a delay: iOS only raises the keyboard for a focus inside the tap itself
+  if(focus!==false)typeHere();}
+function closeChat(){if(!isOpen())return;chat.dataset.open="false";chat.setAttribute("aria-hidden","true");scrim.classList.remove("open");fab.setAttribute("aria-expanded","false");text.blur();
+  sheetOff();setBadge();}
+function typeHere(){if(isOpen()&&!listing)(join.hidden?text:$("joinCode")).focus({preventScroll:true});}
+
+/* ---------- phones: the assistant is a full-screen sheet ----------
+   The page underneath is held still (only the conversation scrolls), the sheet follows the part of the screen the
+   keyboard leaves free, dragging it down by its top bar (or pulling down on a conversation already at its start)
+   puts it away, and the phone's back gesture closes it instead of leaving the site. */
+var phone=matchMedia("(max-width:900px)"),layer=chat.parentNode,vv=window.visualViewport,heldY=0,held=false,pushed=false;
+function sheetOn(){
+  // the history entry first: it keeps the page's scroll position, which back (or closing) brings back
+  if(!pushed){pushed=true;window.history.pushState({chat:1},"");}
+  if(!held){held=true;heldY=window.scrollY;document.body.style.top=-heldY+"px";document.documentElement.classList.add("chat-held");}
+  fit();
+}
+function sheetOff(){
+  if(held){held=false;document.documentElement.classList.remove("chat-held");document.body.style.top="";window.scrollTo({top:heldY,behavior:"instant"});}
+  layer.style.removeProperty("--vvh");layer.style.removeProperty("--vvt");chat.classList.remove("kb");
+  if(pushed){pushed=false;window.history.back();}
+}
+window.addEventListener("popstate",function(){if(pushed){pushed=false;closeChat();}});
+// the keyboard shrinks what's visible without (on iOS) resizing the page: keep the sheet in the visible part
+function fit(){if(!held||!vv)return;
+  layer.style.setProperty("--vvh",vv.height+"px");layer.style.setProperty("--vvt",vv.offsetTop+"px");
+  chat.classList.toggle("kb",vv.height<window.innerHeight-120);
+  if(stick)scroll();}
+if(vv){vv.addEventListener("resize",fit);vv.addEventListener("scroll",fit);}
+phone.addEventListener&&phone.addEventListener("change",function(){if(!isOpen())return;if(phone.matches)sheetOn();else sheetOff();});
+// tapping send (or stop) keeps the keyboard up
+send.addEventListener("mousedown",function(e){e.preventDefault();});
+
+// drag down to close
+var drag=null,head=chat.querySelector(".drawer-head");
+chat.addEventListener("touchstart",function(e){
+  if(!phone.matches||e.touches.length!==1)return;
+  var t=e.target,box=t.closest(".chat-log,.chat-list"),onHead=head.contains(t);
+  if(!onHead&&!(box&&box.scrollTop<=0))return;
+  drag={y:e.touches[0].clientY,x:e.touches[0].clientX,t:Date.now(),dy:0,on:false,head:onHead};
+},{passive:true});
+chat.addEventListener("touchmove",function(e){
+  if(!drag)return;var dy=e.touches[0].clientY-drag.y,dx=e.touches[0].clientX-drag.x;
+  if(!drag.on){
+    if(Math.abs(dy)<8&&Math.abs(dx)<8)return;
+    // only a downward, mostly vertical pull; anything else is an ordinary scroll or tap
+    if(dy<=0||Math.abs(dx)>Math.abs(dy)){drag=null;return;}
+    // with the keyboard up, pulling the conversation down just puts the keyboard away
+    if(!drag.head&&document.activeElement===text){text.blur();drag=null;return;}
+    drag.on=true;drag.y=e.touches[0].clientY;drag.t=Date.now();dy=0;chat.classList.add("dragging");scrim.style.transition="none";
+  }
+  e.preventDefault();drag.dy=Math.max(0,dy);
+  chat.style.transform="translateY("+drag.dy+"px)";scrim.style.opacity=String(Math.max(0,1-drag.dy/(chat.offsetHeight||600)));
+},{passive:false});
+function dragEnd(){
+  if(!drag)return;var d=drag;drag=null;if(!d.on)return;
+  chat.classList.remove("dragging");chat.style.transform="";scrim.style.opacity="";scrim.style.transition="";
+  var fast=d.dy/Math.max(1,Date.now()-d.t)>.6;
+  if(d.dy>Math.min(140,chat.offsetHeight*.22)||(fast&&d.dy>40))closeChat();
+}
+chat.addEventListener("touchend",dragEnd);chat.addEventListener("touchcancel",dragEnd);
 // the 问助手 button says when an answer is still coming, has arrived while closed, or a change waits for approval
 function setBadge(fresh){
   var waiting=cardsWaiting();
@@ -170,6 +229,44 @@ function cardHtml(c){
     :st==="failed"?'<p class="ask-err">'+esc(c.error||"")+"</p>":st==="expired"?'<p class="ask-err">'+esc(c.error||Z("这个提议已经失效了，请让助手再提一次。","This proposal has expired; ask the assistant again."))+"</p>":"";
   return '<div class="ask-card'+(st==="waiting"||st==="sending"?"":" settled")+'" data-card="'+esc(c.id)+'"><div class="ask-head"><h4>'+esc(c.title)+'</h4><span class="badge">'+(undo?IC.undo+Z("撤销","Undo"):cash?IC.cash+Z("记账","Expense"):IC.edit+Z("改行程","Plan change"))+"</span>"+right+"</div>"+
     (byDay?daysHtml(c,rows):rows?'<ul class="diff">'+rows+"</ul>":"")+foot+"</div>";
+}
+
+/* ---------- a map card (the assistant's show_map) ----------
+   {title, mode, stops:[{name, sub?, ll?:[lat,lng], q?, gid?}]}: plan places come with their coordinates, anything
+   else is a name Google looks up. Google's keyless embed draws the route; the whole map is a link that opens Google
+   Maps (the app, on a phone) ready to navigate, so a finger scrolling the conversation never gets caught in the map.
+   While the answer is still streaming the frame waits: each repaint would reload it. */
+var MODES={driving:["驾车","Drive","d"],walking:["步行","Walk","w"],transit:["公共交通","Transit","r"],bicycling:["骑行","Bike","b"]};
+var MODEIC={driving:'<svg viewBox="0 0 20 20"><path d="M4 13.5V10l1.6-4.2A1.5 1.5 0 0 1 7 4.8h6a1.5 1.5 0 0 1 1.4 1L16 10v3.5"/><path d="M3.5 10h13v3.5h-13zM5.5 13.5v1.7M14.5 13.5v1.7"/></svg>',
+  walking:'<svg viewBox="0 0 20 20"><circle cx="10.5" cy="3.8" r="1.6"/><path d="M8 17l1.8-5.2L12 13.5V17M9.8 11.8l.8-4.3-2.8 1.3-1 2.6M10.6 7.5l1.6 2.2 2.3.8"/></svg>',
+  transit:'<svg viewBox="0 0 20 20"><rect x="5" y="3" width="10" height="11" rx="2.5"/><path d="M5 9h10M7.5 17l1-3M12.5 17l-1-3"/><circle cx="7.8" cy="11.5" r=".4"/><circle cx="12.2" cy="11.5" r=".4"/></svg>',
+  bicycling:'<svg viewBox="0 0 20 20"><circle cx="5" cy="13" r="3"/><circle cx="15" cy="13" r="3"/><path d="M5 13l3-6h5l2 6M8 7l2.5 6H15M7 5h2.5"/></svg>',
+  pin:'<svg viewBox="0 0 20 20"><path d="M10 17.5s5.5-5 5.5-9.3A5.5 5.5 0 0 0 4.5 8.2c0 4.3 5.5 9.3 5.5 9.3z"/><circle cx="10" cy="8.2" r="2"/></svg>'};
+function mapPt(s){return s.ll?s.ll[0]+","+s.ll[1]:s.q||s.name;}
+function mapLink(M){var st=M.stops,pts=st.map(mapPt);
+  if(st.length===1)return "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(pts[0])+(st[0].gid?"&query_place_id="+encodeURIComponent(st[0].gid):"");
+  return "https://www.google.com/maps/dir/?api=1&travelmode="+(MODES[M.mode]?M.mode:"driving")+"&origin="+encodeURIComponent(pts[0])+"&destination="+encodeURIComponent(pts[pts.length-1])+
+    (pts.length>2?"&waypoints="+encodeURIComponent(pts.slice(1,-1).join("|")):"");}
+function mapEmbed(M){var st=M.stops,pts=st.map(mapPt),tail="&hl="+(isEn()?"en":"zh-CN")+"&output=embed";
+  if(st.length===1)return "https://maps.google.com/maps?q="+encodeURIComponent(pts[0])+"&z="+(st[0].ll?12:11)+tail;
+  var f=(MODES[M.mode]||MODES.driving)[2];
+  return "https://maps.google.com/maps?saddr="+encodeURIComponent(pts[0])+"&daddr="+pts.slice(1).map(encodeURIComponent).join("+to:")+(f!=="d"?"&dirflg="+f:"")+mapFit(st)+tail;}
+// the embed frames a route as if the map were square: with every stop's coordinates, centre and zoom it for the card
+function mapFit(st){if(!st.every(function(s){return s.ll;}))return "";
+  var w=Math.max(240,(log.clientWidth||380)-40),h=180,P=36,my=function(la){return Math.log(Math.tan(Math.PI/4+la*Math.PI/360));},
+    la=st.map(function(s){return s.ll[0];}),lo=st.map(function(s){return s.ll[1];}),
+    y1=my(Math.min.apply(0,la)),y2=my(Math.max.apply(0,la)),x1=Math.min.apply(0,lo),x2=Math.max.apply(0,lo),
+    fx=(w-2*P)/(256*Math.max((x2-x1)/360,1e-6)),fy=(h-2*P)/(256*Math.max((y2-y1)/(2*Math.PI),1e-6)),
+    z=Math.max(3,Math.min(15,Math.floor(Math.log(Math.min(fx,fy))/Math.LN2)));
+  return "&ll="+(Math.atan(Math.sinh((y1+y2)/2))*180/Math.PI).toFixed(4)+","+((x1+x2)/2).toFixed(4)+"&z="+z;}
+function mapHtml(M,live){
+  var one=M.stops.length===1,md=MODES[M.mode]||MODES.driving,href=esc(mapLink(M));
+  var stops=M.stops.map(function(s,i){return '<li><span class="mc-n">'+(one?MODEIC.pin:String.fromCharCode(65+i))+"</span><span><b>"+esc(s.name)+"</b>"+(s.sub?"<small>"+esc(s.sub)+"</small>":"")+"</span></li>";}).join("");
+  return '<div class="map-card"><div class="mc-head">'+(one?MODEIC.pin:MODEIC[M.mode]||MODEIC.driving)+"<h4>"+esc(M.title)+"</h4>"+(one?"":'<span class="badge">'+esc(Z(md[0],md[1]))+"</span>")+"</div>"+
+    '<a class="mc-frame" href="'+href+'" target="_blank" rel="noopener" aria-label="'+esc(Z("在 Google 地图里打开","Open in Google Maps"))+'">'+
+      (live?'<span class="mc-wait">'+MODEIC.pin+"</span>":'<iframe src="'+esc(mapEmbed(M))+'" loading="lazy" tabindex="-1" aria-hidden="true" referrerpolicy="no-referrer-when-downgrade"></iframe><span class="mc-attr">'+esc(Z("地图数据 © Google","Map data © Google"))+"</span>")+"</a>"+
+    '<ol class="mc-stops'+(one?" one":"")+'">'+stops+"</ol>"+
+    '<div class="mc-foot"><a class="btn accent" href="'+href+'" target="_blank" rel="noopener">'+MODEIC.pin+esc(one?Z("在 Google 地图里打开","Open in Google Maps"):Z("用 Google 地图导航","Directions in Google Maps"))+"</a></div></div>";
 }
 
 /* ---------- a plan change, read as days ----------
@@ -294,6 +391,7 @@ function paintBot(d,m,live){
     if(p.t==="note")return;
     flush();
     if(p.t==="card")h+=cardHtml(p.card);
+    else if(p.t==="map")h+=mapHtml(p.map,live);
     else if(p.t==="tasks")h+=tasksHtml(p.items,live);
     else if(p.text)h+='<div class="m-content">'+md(p.text)+"</div>";});
   flush();
@@ -337,7 +435,7 @@ function when(ts){var d=new Date(ts),now=new Date(),L=isEn()?"en-CA":"zh-CN";
   var y=new Date(now);y.setDate(now.getDate()-1);if(d.toDateString()===y.toDateString())return Z("昨天 ","Yesterday ")+clock(ts);
   return d.toLocaleDateString(L,{month:"short",day:"numeric"});}
 function showList(on){listing=on;chat.classList.toggle("listing",on);headTitle();
-  if(on){paintList();var f=$("chatList").querySelector("[data-go]");if(f&&matchMedia("(hover:hover)").matches)f.focus({preventScroll:true});}else{scroll(true);}}
+  if(on){if(phone.matches)text.blur();paintList();var f=$("chatList").querySelector("[data-go]");if(f&&matchMedia("(hover:hover)").matches)f.focus({preventScroll:true});}else{scroll(true);typeHere();}}
 function headTitle(){$("chatTitle").textContent=listing?Z("历史对话","Past chats"):Z("行程助手","Trip assistant");}
 function paintList(){
   var list=S.chats.filter(function(c){return c.msgs.length||(cur&&cur.C===c);}).sort(function(a,b){return b.ts-a.ts;});
@@ -430,7 +528,7 @@ function history(C){
     var c=m.content||"";
     if(m.quote)c=quoteLine(m.quote)+(c?"\n"+c:"");
     if(m.thumbs&&m.thumbs.length)c+=(c?"\n":"")+"[附了 "+m.thumbs.length+" 张图片]";
-    (m.parts||[]).forEach(function(p){if(p.t!=="card")return;var k=p.card,st=k.state;
+    (m.parts||[]).forEach(function(p){if(p.t==="map")c+="\n\n[地图卡片："+p.map.stops.map(function(s){return s.name;}).join(" → ")+"]";if(p.t!=="card")return;var k=p.card,st=k.state;
       c+="\n\n["+(st==="applied"?"提议「"+k.title+"」：已确认，已经改好":st==="declined"?"提议「"+k.title+"」：对方没采用":st==="failed"?"提议「"+k.title+"」：确认了但没改成（"+(k.error||"")+"）":st==="expired"?"提议「"+k.title+"」：已失效，没有改":"提议「"+k.title+"」：还在等对方确认")+"]";});
     return {role:m.role,content:c.trim().slice(0,7800)||"…"};});
   while(h.length&&h[0].role!=="user")h.shift();
@@ -496,6 +594,7 @@ function ask(q,imgs,qte){
       else if(ev.type==="tasks"&&ev.items&&ev.items.length)tasks(ev.items);
       else if(ev.type==="note"&&ev.text)progress(ev);
       else if(ev.type==="approval"){m.parts.push({t:"card",card:ev.card});}
+      else if(ev.type==="map"&&ev.map&&ev.map.stops){m.parts.push({t:"map",map:ev.map});}
       else if(ev.type==="error"){throw new Error(ev.message);}
       paint();
     }
@@ -507,7 +606,7 @@ function ask(q,imgs,qte){
     });}
     return pump();
   })
-  .then(function(){if(my!==gen)return;if(!m.content&&!m.parts.some(function(p){return p.t==="card";}))throw new Error(Z("没有收到回答。","No answer came back."));finish();})
+  .then(function(){if(my!==gen)return;if(!m.content&&!m.parts.some(function(p){return p.t==="card"||p.t==="map";}))throw new Error(Z("没有收到回答。","No answer came back."));finish();})
   .catch(function(e){
     if(my!==gen)return; // its conversation was deleted
     if(e&&e.name==="AbortError"){if(m.parts.length)finish(true);else{cur=null;el.remove();uEl.remove();C.msgs.pop();if(qte&&!C.msgs.length&&!C.quote)C.quote=qte;save();if(here()){paintQuote();note(Z("还没回答就停止了。","Stopped before an answer came back."));}}return;}
@@ -525,7 +624,7 @@ form.addEventListener("submit",function(e){e.preventDefault();
   var q=text.value,imgs=pics.filter(function(p){return p.full;});
   if(busy&&!q.trim()&&!imgs.length){if(ctrl&&busyHere())ctrl.abort();return;} // the send button doubles as Stop
   if(pics.some(function(p){return !p.full;}))return; // a photo is still being shrunk
-  if(!q.trim()&&!imgs.length)return;text.value="";pics=[];paintPics();grow();ask(q,imgs);});
+  if(!q.trim()&&!imgs.length)return;text.value="";pics=[];paintPics();grow();ask(q,imgs);typeHere();});
 text.addEventListener("keydown",function(e){if(e.key==="Enter"&&!e.shiftKey&&!e.isComposing){e.preventDefault();if(text.value.trim()||pics.length)form.requestSubmit();}});
 function grow(){text.style.height="auto";text.style.height=Math.min(text.scrollHeight,150)+"px";chat.classList.toggle("typed",!!text.value.trim()||pics.length>0);}
 

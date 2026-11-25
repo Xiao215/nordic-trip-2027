@@ -1158,6 +1158,7 @@ function useEmbed(){
   if(embed)return;map=null;you=null;markers=[];lines=[];
   var box=$("map");box.innerHTML="";
   embed=document.createElement("iframe");embed.title=U("Google 地图");embed.setAttribute("allowfullscreen","");box.appendChild(embed);
+  var at=document.createElement("span");at.className="map-attr";at.textContent="© Google";box.appendChild(at);
   var D=day();if(state.view==="day"&&D&&state.sel!=null)frame(D.segs[state.sel]);else fitView();
 }
 // reload=true after a resize: Google's embed doesn't re-centre itself when its frame changes size
