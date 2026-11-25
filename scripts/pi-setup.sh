@@ -3,7 +3,7 @@
 #   ~/services/nordic-trip/repo    checkout of main; pi-dash pulls it and runs scripts/pi-update.sh on new commits
 #   ~/services/nordic-trip/.venv   Python packages
 #   ~/services/nordic-trip/.env    settings and secrets (from backend/.env.example; never in git)
-#   ~/services/nordic-trip/data    the group's expense log, drivers and options board: back this up
+#   ~/services/nordic-trip/data    the group's expense log and live plan: back this up
 # It runs as the user service nordic-trip on 127.0.0.1:8791, answers through cli-bridge (127.0.0.1:8787),
 # and is public through Tailscale Funnel at https://pi.tail3d8516.ts.net/nordic (docs/config.js points there).
 # Run on the Pi (safe to run again):  bash <(curl -fsSL https://raw.githubusercontent.com/Xiao215/nordic-trip-2027/main/scripts/pi-setup.sh)
@@ -38,7 +38,7 @@ if not any(s["name"] == "nordic-trip" for s in d["services"]):
     d["services"].append({
         "name": "nordic-trip",
         "kind": "systemd-user",
-        "description": "Nordic Trip 2027 backend: trip chat, shared expense log, drivers and options board (public at /nordic)",
+        "description": "Nordic Trip 2027 backend: trip chat, shared expense log and live plan (public at /nordic)",
         "dir": "~/services/nordic-trip",
         "repo": "repo",
         "unit": "nordic-trip.service",

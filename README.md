@@ -4,7 +4,7 @@ Trip planner for Jul 4 – Aug 1, 2027 (Iceland → Norway → Stockholm → Vis
 
 A currency menu next to the language switch shows every price in the local currency as written (ISK, NOK, SEK, DKK, €) or converted to CAD, CNY or USD with the latest rates from [open.er-api.com](https://open.er-api.com) (cached for 12 hours, with a fallback in `trip.json` under `fx`). Hover a converted price to see the original.
 
-What's on it: an overview (route ribbon, 4-week calendar with how full each day is, driver rotation, route legs), one day at a time (forecast or July normals, sunrise and sunset, transport and outdoor totals, the day's pace, who drives, what to bring, the timeline), a Google map that shows whatever you open (on phones it opens inside the stop you tap), booking cards grouped into "do now", "opens later" and "booked" (days and calendar cells flag anything still unbooked), checklists, a shared expense log (账本), plus a floating chat assistant (Ctrl/⌘+K) that knows the plan, searches the web and answers in Chinese.
+What's on it: an overview (route ribbon, 4-week calendar with how full each day is, route legs), one day at a time (forecast or July normals, sunrise and sunset, transport and outdoor totals, the day's pace, what to bring, the timeline), a Google map that shows whatever you open (on phones it opens inside the stop you tap), booking cards grouped into "do now", "opens later" and "booked" (days and calendar cells flag anything still unbooked), checklists, a shared expense log (账本), plus a floating chat assistant (Ctrl/⌘+K) that knows the plan, searches the web and answers in Chinese.
 
 The expense log (账本 tab) is one shared ledger for the group: add the people, then log each expense with who paid and who shares it, in any currency. It totals spending by category, shows each person's balance and the fewest transfers to settle up, in the currency picked in the top bar (CAD when that's "local"). It lives on the backend in `expenses.json` in the Pi's data folder (back it up) behind the same access code as the chat. Each device keeps the last copy it saw, so the log still reads with no signal, and anything added offline waits on that device and syncs once the backend answers again. The assistant can read it too ("who owes whom?", "how much have we spent on fuel?"), and it can log expenses: tell it ("I paid 2,400 ISK for gas, split four ways") or attach a photo of a receipt with the 📷 button in the chat (it offers the camera or the photo library; pasting or dropping an image works too). It reads the shop, total, currency and date, and proposes the expense as a card; it goes in the log only when someone presses 确认记账. Photos are shrunk on the phone before they're sent, only go to the AI with that one question, and only a small thumbnail stays in the conversation.
 
@@ -14,11 +14,9 @@ Each day gets a pace, 轻松 / 适中 / 很满 (easy / moderate / full), shown a
 
 The day card also lists what to bring (带上), worked out from the day: passport on flight or border days, licence and a physical card when a new rental car starts, boots and snacks for long walks, swimsuit for hot pools, a waterproof for waterfalls, gloves and sunglasses for glacier walks, camping gear, seasickness tablets for long ferries, and rain or warm layers once the forecast says so. Add your own with `"bring": ["..."]` on a day. Tapping an item ticks it off on that device.
 
-Driver rotation (司机轮换, on the overview) is shared by the group: add who can drive, then pick a driver in each drive on the day view, or let 把没排的自动排上 (fill in the rest) hand over every ~2.5 hours to whoever has driven least. It shows each driver's total and longest day. It lives on the backend in `drivers.json` in the Pi's data folder, behind the same access code; drives are keyed by date and start/end place, so renaming a drive's places in `trip.json` drops its driver. Picks made offline wait on the device and sync later.
-
 The site works offline once it's been opened (`docs/sw.js`): the page, the plan, the last forecast and exchange rates come from the device when there's no signal, and an orange bar says so. Photos are kept once seen, and 准备 → 离线使用 (Prep → Offline use) downloads all of them ahead of time (about 35 MB). Google Maps and the chat still need a connection.
 
-**Private:** the site's code is public (GitHub Pages), but the plan, the expense log and the drivers live only on the Pi, behind the access code. The page has no data of its own: the first time a device opens it, it asks for the code, then remembers it (the same code unlocks the chat). Without it the page shows only the lock screen. Don't put booking references, passport numbers or payment details in the plan anyway: everyone with the code can read it.
+**Private:** the site's code is public (GitHub Pages), but the plan and the expense log live only on the Pi, behind the access code. The page has no data of its own: the first time a device opens it, it asks for the code, then remembers it (the same code unlocks the chat). Without it the page shows only the lock screen. Don't put booking references, passport numbers or payment details in the plan anyway: everyone with the code can read it.
 
 The forecast comes from [Open-Meteo](https://open-meteo.com/) (free, no key) and appears about 16 days before each day; until then the day shows typical July temperatures. Sunrise and sunset are calculated on the page.
 
@@ -28,11 +26,11 @@ docs/                 static site (code only, no trip data), served by GitHub Pa
   sw.js               offline copy (service worker)
   styles.css
   trip.json, i18n/    a local copy of the plan from scripts/plan.sh pull, for editing (gitignored, never committed)
-  app.js              overview, day view, pace, what to bring, names switch, Google map, bookings + checklists, expense log, drivers, live plan updates
+  app.js              overview, day view, pace, what to bring, names switch, Google map, bookings + checklists, expense log, live plan updates
   chat.js             trip assistant: the panel, its steps and approval cards
   config.js           backend URL + Google Maps key
 backend/
-  server.py           FastAPI + Claude API, streams answers; serves the live plan and the assistant's tools to change it; stores the expense log and drivers
+  server.py           FastAPI + Claude API, streams answers; serves the live plan and the assistant's tools to change it; stores the expense log
   plan.py             the live plan: checks, history, undo, replacing it with a version edited on a laptop
   .env                secrets (not committed)
 scripts/
@@ -40,7 +38,7 @@ scripts/
   plan.sh             pull the live plan from the Pi to edit it, push it back
 deploy/                the backend's systemd unit on the Pi, and the 15-minute backup timer
 scripts/pi-setup.sh   one-time setup on the Pi; scripts/pi-update.sh   what each deploy runs;
-scripts/pi-backup-plan.sh   commits the Pi's data folder (plan, expenses, drivers) to a git history on the Pi
+scripts/pi-backup-plan.sh   commits the Pi's data folder (plan, expenses) to a git history on the Pi
 ```
 
 ## Edit the plan
@@ -95,7 +93,7 @@ The backend runs on the Raspberry Pi (`ssh pi`), set up like the Pi's other serv
 
 - It's the user service `nordic-trip` on `127.0.0.1:8791`, public through Tailscale Funnel at `https://pi.tail3d8516.ts.net/nordic` (the address in `docs/config.js`).
 - The chat answers through cli-bridge on the Pi (`ANTHROPIC_BASE_URL=http://127.0.0.1:8787`), so it uses the Claude Code sign-in there, not an API key.
-- Everything lives in `~/services/nordic-trip`: `repo` (a checkout of `main`), `.venv`, `.env` (settings and secrets, from `backend/.env.example`) and `data` (the expense log, drivers, and `plan/`: the live plan, its change history and the versions kept for undo; back this folder up).
+- Everything lives in `~/services/nordic-trip`: `repo` (a checkout of `main`), `.venv`, `.env` (settings and secrets, from `backend/.env.example`) and `data` (the expense log and `plan/`: the live plan, its change history and the versions kept for undo; back this folder up).
 - The user timer `nordic-trip-backup.timer` runs `scripts/pi-backup-plan.sh` every 15 minutes: when anything in `data` changed, it commits it to a git history in `data` itself (nothing goes to the public repo). Set `BACKUP_REMOTE` in `.env` to a private repo to also push it off the Pi.
 - **Deploys are automatic:** it's listed in `~/services/services.json`, so pi-dash checks GitHub every 5 minutes. When `main` has new commits, pi-dash pulls them, runs `scripts/pi-update.sh` (Python packages, systemd units, restart) and health-checks it. The page itself is on GitHub Pages and updates on push too.
 

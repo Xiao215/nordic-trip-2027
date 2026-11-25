@@ -129,39 +129,32 @@ TRAILS = {
     ("2027-07-04", "oxararfoss"): [
         (64.2554, -21.1297), (64.2610, -21.1235), (64.2659, -21.1173)
     ],
-    # Day 2: Laugahraun Lava Loop (clockwise from Landmannalaugar camp)
-    ("2027-07-05", "landmannalaugar"): [
-        (63.9909, -19.0605), (63.9873, -19.0736), (63.9852, -19.0815),
-        (63.9896, -19.0760), (63.9918, -19.0650), (63.9909, -19.0605)
-    ],
-    # Day 2 Option: Suðurnámur Ridge Loop
-    ("2027-07-05", "opt:sudurnamur"): [
-        (63.9909, -19.0605), (63.9942, -19.0715), (63.9965, -19.0920),
-        (63.9895, -19.1040), (63.9898, -19.0770), (63.9909, -19.0605)
-    ],
-    # Day 3: Bláhnúkur + Brennisteinsalda Combined Loop (counter-clockwise)
-    ("2027-07-06", "blahnukur"): [
+    # Day 2: Bláhnúkur + Brennisteinsalda Combined Loop (counter-clockwise)
+    ("2027-07-05", "blahnukur"): [
         (63.9909, -19.0605), (63.9855, -19.0618), (63.9768, -19.0692),
         (63.9786, -19.0835), (63.9809, -19.0955), (63.9852, -19.0815),
         (63.9896, -19.0760), (63.9909, -19.0605)
     ],
-    # Day 4: Skógafoss + Waterfall Way (first ~1.5 km upstream & back)
-    ("2027-07-07", "skogafoss"): [
+    # Day 3: Skógafoss + Waterfall Way (first ~1.5 km upstream & back)
+    ("2027-07-06", "skogafoss"): [
         (63.5313, -19.5113), (63.5325, -19.5097), (63.5415, -19.5025), (63.5313, -19.5113)
     ],
-    # Day 4 Option: Kvernufoss Gorge Walk (out & back from Skógar Museum)
-    ("2027-07-07", "opt:kvernufoss"): [
+    # Day 3 Option: Kvernufoss Gorge Walk (out & back from Skógar Museum)
+    ("2027-07-06", "opt:kvernufoss"): [
         (63.5262, -19.4883), (63.5290, -19.4804), (63.5262, -19.4883)
     ],
-    # Day 5: Fjaðrárgljúfur Rim Walk, Svartifoss, Múlagljúfur
-    ("2027-07-08", "fjadrargljufur"): [
+    # Day 4: Fjaðrárgljúfur Rim Walk, Svartifoss + Sjónarnípa Loop, Múlagljúfur
+    ("2027-07-07", "fjadrargljufur"): [
         (63.7712, -18.1718), (63.7785, -18.1628), (63.7712, -18.1718)
     ],
-    ("2027-07-08", "svartifoss"): [
-        (64.0158, -16.9665), (64.0275, -16.9753), (64.0158, -16.9665)
+    ("2027-07-07", "svartifoss"): [
+        (64.0158, -16.9665), (64.0275, -16.9753), (64.03044, -16.93679), (64.0158, -16.9665)
     ],
-    ("2027-07-08", "mulagljufur"): [
+    ("2027-07-07", "mulagljufur"): [
         (63.9910, -16.4309), (63.98846, -16.46577), (63.9910, -16.4309)
+    ],
+    ("2027-07-09", "opt:hengifoss"): [
+        (65.0736, -14.8805), (65.0836, -14.8831), (65.0942, -14.8888), (65.0736, -14.8805)
     ],
 }
 

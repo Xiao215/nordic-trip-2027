@@ -71,7 +71,7 @@ var UIEN={
   "（{t}后）":" (in {t})",
   "北欧之旅":"Nordic Trip","照片：":"Photo: ","摄影：":"Photo: ","照片待定":"Photo TBD","照片":"Photo","关闭":"Close","上一张":"Previous","下一张":"Next","主导航":"Main navigation","路线":"Route","货币":"Currency","当地货币":"Local","当地":"Local","价格换算":"Currency","按原价显示，不换算":"As written, no conversion","汇率更新于 {d} · 约数":"Rates from {d} · approximate","汇率为约数":"Rates are approximate",
   "总览":"Overview","每日":"Daily","准备":"Prep","四周日历":"4-week calendar","点任意一天看当天安排":"Tap a day to see its plan","路线分段":"Route legs",
-  "点一站看详情，地图会跳过去":"Tap a stop for details and to see it on the map","预订":"Bookings","前一天":"Previous day","后一天":"Next day",
+  "注意须知":"Heads-up","预订":"Bookings","前一天":"Previous day","后一天":"Next day",
   "视图":"View","选择日期":"Choose a day","语言":"Language","地图":"Map","行程地图":"Trip map","看全天 / 全程":"Show the whole day / trip",
   "在 Google 地图里打开当天路线":"Open the day's route in Google Maps","行程助手":"Trip assistant","输入访问码：":"Enter the access code:",
   "访问码":"Access code","确定":"Enter","问问助手，或发张小票让它记账…":"Ask anything, or send a receipt to log it…","加图片（拍照或从相册选）":"Add a photo (camera or library)","加图片：小票、收据、截图":"Add a photo: a receipt, a bill, a screenshot","问行程助手":"Ask the trip assistant",
@@ -561,7 +561,9 @@ function renderDay(){
   var D=day(),d=state.date;
   var lg=legOf(d);
   $("dayTitle").innerHTML=cnDate(d)+" "+wk(d)+" · "+(D?tx(D.title):U("规划中"))+(D&&lg&&lg.draft?' <span class="leg-tag">'+U("草案")+'</span>':"");
-  $("daySubtitle").innerHTML=D&&D.sub?tx(D.sub):"";
+  var dtips=$("dayTips");
+  if(D&&D.tips&&D.tips.length){dtips.hidden=false;dtips.innerHTML='<div class="day-tips-h">'+esc(U("注意须知"))+'</div><ul class="tips">'+D.tips.map(function(t){return "<li>"+tx(t)+"</li>";}).join("")+"</ul>";}
+  else{dtips.hidden=true;dtips.innerHTML="";}
   var rt=D?(D.route||embedDayRoute(D)):null;
   $("dayRoute").href=rt&&rt.length>1?gRoute(rt,D.routeMode):"https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(((T.countries[cOf(d)]||{}).en)||"Iceland");
   renderHero();renderGlance();renderRows();renderDayNav();
@@ -578,14 +580,14 @@ function renderDay(){
 function renderRows(){
   var D=day(),ol=$("rows");placeMap(null,true);ol.innerHTML="";if(!D)return;
   var cur=liveDate()===state.date?nowSeg():null,opts=optGroups(D),optDone={},segs=D.segs;
-  function after(s,to){if(s.t==="stop"&&opts[s.place]&&!optDone[s.place]){optDone[s.place]=1;to.appendChild(optRow(opts[s.place],s.place));}}
+  function after(s,to){if(s.t==="stop"&&opts[s.place]&&!optDone[s.place]){optDone[s.place]=1;opts[s.place].forEach(function(o,j){to.appendChild(optRow(o,s.place+"#"+j));});}}
   for(var i=0;i<segs.length;i++){var s=segs[i];
     if(s.group){var run=[s];while(i+1<segs.length&&segs[i+1].group===s.group)run.push(segs[++i]);
       if(run.some(function(x){return x.t==="stop";})){var g=grpRow(run,cur);ol.appendChild(g);run.forEach(function(x){after(x,ol);});continue;}
       i-=run.length-1;}
     ol.appendChild(segLi(s,cur));after(s,ol);}
   // options whose stop isn't in the day (or that name none) go at the end
-  Object.keys(opts).forEach(function(k){if(!optDone[k])ol.appendChild(optRow(opts[k],k));});
+  Object.keys(opts).forEach(function(k){if(!optDone[k])opts[k].forEach(function(o,j){ol.appendChild(optRow(o,k+"#"+j));});});
 }
 function segLi(s,cur,inGrp){
   var li=document.createElement("li");li.dataset.i=s.i;li.style.setProperty("--n",Math.min(s.i,14));if(cur&&cur.i===s.i)li.classList.add("now");
@@ -701,10 +703,12 @@ function optCard(o,k){
   h+='<div class="actions">'+(o.place&&N[o.place]?'<a class="pill" target="_blank" rel="noopener" href="'+esc(gPlace(o.place))+'">'+ICON.maps+U("在 Google 地图打开")+"</a>":"")+
      '<button class="pill ask" type="button" data-opt-ask="'+esc(k)+'">'+ICON.ask+U("问问这个")+"</button></div></div>";
   return optMove(o["in"])+h+optMove(o.out);}
-function optRow(list,key){
-  var li=document.createElement("li"),id=state.date+"|"+key,open=!!OPTOPEN[id];li.className="opts"+(open?" open":"");li.dataset.opt=key;
-  li.innerHTML='<button type="button" class="opt-toggle" aria-expanded="'+open+'"><span class="opt-ar">›</span>'+esc(U("可选 · {n}",{n:list.length}))+'</button>'+
-    '<div class="opt-fold"'+(open?"":" inert")+'><div class="opt-in"><div class="opt-list">'+list.map(function(o,j){return optCard(o,key+"#"+j);}).join('<div class="opt-or">'+esc(U("或"))+'</div>')+'</div></div></div>';
+function optByKey(k){var p=k.split("#");return (optGroups(day())[p[0]]||[])[+p[1]];}
+function optRow(o,k){
+  var li=document.createElement("li"),id=state.date+"|"+k,open=!!OPTOPEN[id];li.className="opts"+(open?" open":"");li.dataset.opt=k;
+  var label=plain(o.name||"[["+o.place+"]]");
+  li.innerHTML='<button type="button" class="opt-toggle" aria-expanded="'+open+'"><span class="opt-ar">›</span>'+esc(U("可选"))+' · '+esc(label)+'</button>'+
+    '<div class="opt-fold"'+(open?"":" inert")+'><div class="opt-in"><div class="opt-list">'+optCard(o,k)+'</div></div></div>';
   return li;}
 $("rows").addEventListener("click",function(e){
   var t=e.target.closest(".opt-toggle");
@@ -712,9 +716,9 @@ $("rows").addEventListener("click",function(e){
     if(on){closeOpts(li);closeGroups(null);if(state.sel!=null){state.sel=null;paintOpen();markSel();}}
     OPTOPEN[id]=on;
     li.classList.toggle("open",on);t.setAttribute("aria-expanded",on);li.querySelector(".opt-fold").inert=!on;
-    if(on){var list=optGroups(day())[li.dataset.opt]||[],o0=list[0],ps=list.map(function(x){return x.place;}).filter(function(p){return p&&N[p];});
-      if(o0&&(o0.kind==="hike"||(o0.pts&&o0.pts.length>1))){$("mapCaption").textContent=plain(o0.name||"[["+o0.place+"]]");showHikeMap(o0.pts,o0.place&&N[o0.place],"opt:"+id,allTrailsUrl(o0));}
-      else if(ps.length)frameGroup(ps);}
+    if(on){var o=optByKey(li.dataset.opt);
+      if(o&&(o.kind==="hike"||(o.pts&&o.pts.length>1))){$("mapCaption").textContent=plain(o.name||"[["+o.place+"]]");showHikeMap(o.pts,o.place&&N[o.place],"opt:"+id,allTrailsUrl(o));}
+      else if(o&&o.place&&N[o.place])frameGroup([o.place]);}
     else if(state.sel==null)fitView();
     return;}
   var a=e.target.closest("[data-opt-ask]");

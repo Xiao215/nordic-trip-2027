@@ -32,7 +32,7 @@ from plan import Plan, PlanError
 load_dotenv(Path(__file__).with_name(".env"), override=True)  # .env wins over the shell (on the Pi there is none: systemd passes it)
 
 DOCS = Path(__file__).resolve().parent.parent / "docs"
-# The group's shared data (expense log, drivers, the live plan). On the Pi it lives outside the git checkout
+# The group's shared data (expense log, the live plan). On the Pi it lives outside the git checkout
 # (~/services/nordic-trip/data) so deploys never touch it; locally it defaults to this folder.
 DATA = Path(os.getenv("DATA_DIR") or Path(__file__).parent).expanduser()
 DATA.mkdir(parents=True, exist_ok=True)
@@ -644,77 +644,6 @@ async def delete_expense(item_id: str, x_access_code: str | None = Header(defaul
         data = read_ledger()
         data["items"] = [x for x in data["items"] if x["id"] != item_id]
         write_ledger(data)
-        return data
-
-
-# ---------- driver rotation ----------
-# Who can drive and who drives each leg, keyed by the page as "date|from>to" (see app.js boot). Picks arrive in
-# batches (the page queues them offline), and every write answers with the whole list.
-
-DRIVERS_FILE = DATA / "drivers.json"
-DRIVE_KEY = re.compile(r"^\d{4}-\d{2}-\d{2}\|[\w>.#-]{1,120}$")
-_drivers_lock = asyncio.Lock()
-
-
-def read_drivers() -> dict:
-    try:
-        data = json.loads(DRIVERS_FILE.read_text())
-    except FileNotFoundError:
-        data = {}
-    return {"drivers": data.get("drivers", []), "assign": data.get("assign", {})}
-
-
-class AssignIn(BaseModel):
-    assign: dict[str, str | None] = Field(max_length=300)
-
-
-@app.get("/api/drivers")
-async def drivers(x_access_code: str | None = Header(default=None)):
-    check_code(x_access_code)
-    return read_drivers()
-
-
-@app.post("/api/drivers/assign")
-async def assign_drivers(body: AssignIn, x_access_code: str | None = Header(default=None)):
-    check_code(x_access_code)
-    async with _drivers_lock:
-        data = read_drivers()
-        for key, name in body.assign.items():
-            if not DRIVE_KEY.match(key):
-                raise HTTPException(400, "车程编号不对。")
-            if name is None:
-                data["assign"].pop(key, None)
-            elif name in data["drivers"]:
-                data["assign"][key] = name
-            # a driver removed meanwhile on another phone: leave that drive as it is
-        write_json(DRIVERS_FILE, data)
-        return data
-
-
-@app.post("/api/drivers/people")
-async def add_driver(body: PersonIn, x_access_code: str | None = Header(default=None)):
-    check_code(x_access_code)
-    name = body.name.strip()
-    if not name:
-        raise HTTPException(400, "名字不能是空的。")
-    async with _drivers_lock:
-        data = read_drivers()
-        if name not in data["drivers"]:
-            if len(data["drivers"]) >= 10:
-                raise HTTPException(400, "最多 10 个司机。")
-            data["drivers"].append(name)
-            write_json(DRIVERS_FILE, data)
-        return data
-
-
-@app.post("/api/drivers/people/delete")
-async def delete_driver(body: PersonIn, x_access_code: str | None = Header(default=None)):
-    check_code(x_access_code)
-    async with _drivers_lock:
-        data = read_drivers()
-        data["drivers"] = [p for p in data["drivers"] if p != body.name]
-        data["assign"] = {k: v for k, v in data["assign"].items() if v != body.name}
-        write_json(DRIVERS_FILE, data)
         return data
 
 

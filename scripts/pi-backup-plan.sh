@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Keeps a git history of the trip's data on the Pi (~/services/nordic-trip/data: the live plan, the expense log,
-# the drivers), committed every 15 minutes by nordic-trip-backup.timer when something changed. Nothing goes to the
+# Keeps a git history of the trip's data on the Pi (~/services/nordic-trip/data: the live plan and the expense log),
+# committed every 15 minutes by nordic-trip-backup.timer when something changed. Nothing goes to the
 # public repo. If BACKUP_REMOTE is set in ~/services/nordic-trip/.env (a PRIVATE git repo), it's pushed there too.
 set -euo pipefail
 S=~/services/nordic-trip
