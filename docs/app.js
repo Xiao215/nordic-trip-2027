@@ -688,7 +688,7 @@ function closeOpts(keep){document.querySelectorAll("#rows li.opts.open").forEach
 // opening a walk frames its stops on the map
 function frameGroup(ids){hideHikeMap();var ps=ids.map(LL);caption();
   if(embed){if(ps.length>1)embedRoute(ps);else embedPlace(ps[0],15);return;}
-  if(map)fitPts(ps,16);}
+  if(map||lMap)fitPts(ps,16);}
 /* ---------- optional extras between stops ---------- */
 // day.options: things left out of the plan, kept for when there's time. They hang after the stop they
 // name ("after": a place id) as one quiet "可选 · N" line and only show in full when someone opens it.
@@ -777,6 +777,7 @@ function placeMap(anchor,home){
   if(STAGE.parentNode===to)return;
   var a=anchor&&anchor.isConnected?anchor:$("rows"),y0=a.getBoundingClientRect().top;
   to.appendChild(STAGE);MAPHOME.classList.toggle("away",!!slot);
+  if(lMap)setTimeout(function(){lMap.invalidateSize();},50);
   var dy=a.getBoundingClientRect().top-y0;if(dy&&a.offsetParent)scrollBy(0,dy);}
 if(wide.addEventListener)wide.addEventListener("change",function(){placeMap();});
 // Official airline logos (docs/img/airlines/*.png) + boarding-pass cards for flight segments and airport meetups
@@ -1176,22 +1177,36 @@ function renderGlance(){
 }
 
 /* ---------- map ---------- */
-var G=null,map=null,Marker=null,lines=[],markers=[],you=null,embed=null;
+var G=null,map=null,Marker=null,lines=[],markers=[],you=null,embed=null,lMap=null,lLayer=null;
 function caption(){var D=day(),s=state.view==="day"&&D&&state.sel!=null?D.segs[state.sel]:null;
   if(s)setCaption(s.t==="move"?moveLabel(s,true):s.num+". "+plain(s.name||"[["+s.place+"]]"),s.t==="move"&&dur(s)?mode(s.mode)+" "+hmS(dur(s)):"");
   else if(state.view==="day")setCaption(U("{d}：全天",{d:md(state.date)+" "+(D?plain(D.short||D.title):U("规划中"))}),D&&driveOf(D)?U("开车 {t}",{t:hmS(driveOf(D))}):"");
   else setCaption(U("全程路线"));}
-// The caption carries the time on the road after the name, kept whole when a long name is cut short: Google's
-// keyless map draws its own time bubble only at some zooms (a long day framed small loses it), so it's written here.
+// The caption carries the time on the road after the name, kept whole when a long name is cut short: the map draws
+// routes without times (Leaflet draws none; Google's keyless embed only at some zooms), so it's written here.
 function setCaption(label,t){var c=$("mapCaption"),old=c.textContent;
   c.innerHTML='<span class="cap-l">'+esc(label)+"</span>"+(t?'<span class="cap-t">'+esc(t)+"</span>":"");
   if(c.textContent!==old)setTimeout(function(){replay(c,"pop");});}
 function driveOf(D){return D.segs.reduce(function(a,s){return a+(s.t==="move"&&s.mode==="drive"?dur(s):0);},0);}
 
-// A bad or missing key drops back to Google's keyless embed (one place or one route at a time).
-window.gm_authFailure=function(){console.warn("Google Maps rejected googleMapsKey in config.js; using the basic embed instead.");useEmbed();};
+// Without a Google Maps JS API key, render the full interactive route map on Leaflet + Google Hybrid Satellite
+// using our stored summer OSRM polylines (so winter mountain-pass closures never break Google's iframe directions).
+window.gm_authFailure=function(){console.warn("Google Maps rejected googleMapsKey in config.js; using Leaflet satellite map instead.");useLeaflet();};
+function useLeaflet(){
+  if(lMap||embed)return;map=null;you=null;markers=[];lines=[];
+  ensureLeaflet().then(function(L){
+    if(lMap||map)return;
+    var box=$("map");box.innerHTML="";
+    lMap=L.map(box,{center:[62,5],zoom:4,zoomControl:false,attributionControl:true});
+    L.control.zoom({position:"bottomright"}).addTo(lMap);
+    L.tileLayer("https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}",{maxZoom:19,attribution:"Map data &copy; Google"}).addTo(lMap);
+    lLayer=L.layerGroup().addTo(lMap);
+    drawnFor=null;redrawMap();
+    var D=day();if(state.view==="day"&&D&&state.sel!=null)frame(D.segs[state.sel]);else fitView();
+  }).catch(function(e){console.warn(e);useEmbed();});
+}
 function useEmbed(){
-  if(embed)return;map=null;you=null;markers=[];lines=[];
+  if(embed)return;map=null;lMap=null;you=null;markers=[];lines=[];
   var box=$("map");box.innerHTML="";
   embed=document.createElement("iframe");embed.title=U("Google 地图");embed.setAttribute("allowfullscreen","");box.appendChild(embed);
   var at=document.createElement("span");at.className="map-attr";at.textContent="© Google";box.appendChild(at);
@@ -1218,12 +1233,12 @@ function embedFit(pts){var box=$("map"),w=box.clientWidth||400,h=box.clientHeigh
 
 function loadMap(){
   caption();
-  if(!CFG.googleMapsKey){useEmbed();return;}
+  if(!CFG.googleMapsKey){useLeaflet();return;}
   var params={v:"weekly",key:CFG.googleMapsKey,language:"zh-CN"};
   // Google's dynamic library loader (inline bootstrap from the Maps JS docs).
-  (function(g){var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=function(){return h||(h=new Promise(function(f,n){a=m.createElement("script");e.set("libraries",Array.from(r)+"");for(k in g)e.set(k.replace(/[A-Z]/g,function(t){return "_"+t[0].toLowerCase();}),g[k]);e.set("callback",c+".maps."+q);a.src="https://maps."+c+"apis.com/maps/api/js?"+e;d[q]=f;a.onerror=function(){h=n(Error(p+" could not load."));};m.head.append(a);}));};d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=function(f){var rest=Array.prototype.slice.call(arguments,1);return r.add(f)&&u().then(function(){return d[l].apply(d,[f].concat(rest));});};})(params);
+  (function(g){var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b[c].maps||(b[c].maps={}),r=new Set,e=new URLSearchParams,u=function(){return h||(h=new Promise(function(f,n){a=m.createElement("script");e.set("libraries",Array.from(r)+"");for(k in g)e.set(k.replace(/[A-Z]/g,function(t){return "_"+t[0].toLowerCase();}),g[k]);e.set("callback",c+".maps."+q);a.src="https://maps."+c+"apis.com/maps/api/js?"+e;d[q]=f;a.onerror=function(){h=n(Error(p+" could not load."));};m.head.append(a);}));};d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=function(f){var rest=Array.from(arguments).slice(1);return r.add(f)&&u().then(function(){return d[l].apply(d,[f].concat(rest));});};})(params);
   Promise.all([google.maps.importLibrary("maps"),google.maps.importLibrary("marker"),google.maps.importLibrary("core")]).then(function(libs){
-    if(embed)return;
+    if(embed||lMap)return;
     G=google.maps;Marker=libs[1].AdvancedMarkerElement;
     map=new libs[0].Map($("map"),{
       center:{lat:62,lng:5},zoom:4,mapId:CFG.googleMapId||"DEMO_MAP_ID",mapTypeId:"hybrid",
@@ -1233,11 +1248,15 @@ function loadMap(){
     });
     redrawMap();
     var D=day();if(state.view==="day"&&D&&state.sel!=null)frame(D.segs[state.sel]);else fitView();
-  }).catch(function(e){console.warn(e);useEmbed();});
+  }).catch(function(e){console.warn(e);useLeaflet();});
 }
 
 function bounds(pts){var b=new G.LatLngBounds();pts.forEach(function(p){b.extend({lat:p[0],lng:p[1]});});return b;}
-function fitPts(pts,maxZoom){if(!map||!pts.length)return;
+function fitPts(pts,maxZoom){
+  if(lMap){if(!pts.length)return;lMap.invalidateSize();
+    if(pts.length===1){lMap.setView(pts[0],maxZoom||13);return;}
+    lMap.fitBounds(pts,{paddingTopLeft:[30,60],paddingBottomRight:[30,50],maxZoom:maxZoom||16});return;}
+  if(!map||!pts.length)return;
   if(pts.length===1){map.panTo({lat:pts[0][0],lng:pts[0][1]});map.setZoom(maxZoom||13);return;}
   map.fitBounds(bounds(pts),{top:60,right:30,bottom:50,left:30});
   if(maxZoom)G.event.addListenerOnce(map,"idle",function(){if(map.getZoom()>maxZoom)map.setZoom(maxZoom);});}
@@ -1287,7 +1306,12 @@ function optRoute(o){var D=day(),m=(o["in"]||{}).mode||"drive",at=o.after&&N[o.a
   var pts=(i>=0?r.slice(0,i+1):[at]).concat([N[o.place]]);
   return {pts:pts.slice(-10),walk:m==="walk"};}
 function frameOpt(o){var r=optRoute(o);if(!r){frameGroup([o.place]);}
-  else{hideHikeMap();if(embed)embedRoute(r.pts,r.walk);else if(map)fitPts(r.pts,14);}
+  else{hideHikeMap();if(embed)embedRoute(r.pts,r.walk);else if(map||lMap)fitPts(r.pts,14);}
+  // on the Leaflet map the day's routes are drawn already; the optional gets a marker of its own until something else opens
+  if(lMap&&window.L){var el=document.createElement("div");el.className="mk sel";el.style.setProperty("--k","#C9711C");
+    var b=document.createElement("span");b.className="mk-badge";b.textContent="+";var nm=document.createElement("span");nm.className="mk-name";nm.textContent=plain(o.name||"[["+o.place+"]]");
+    el.append(b,nm);var w=document.createElement("div");w.appendChild(el);
+    optMark=window.L.marker(N[o.place],{icon:window.L.divIcon({className:"l-mk",html:w,iconSize:[0,0],iconAnchor:[0,0]}),zIndexOffset:1000,interactive:false}).addTo(lMap);}
   var m=o["in"]||{};setCaption(U("可选")+" · "+plain(o.name||"[["+o.place+"]]"),m.mins&&m.mode?mode(m.mode)+" "+hmS(m.mins):"");}
 function frame(s){
   if(s&&s.t==="stop"&&(s.kind==="hike"||(s.pts&&s.pts.length>1))){
@@ -1300,14 +1324,15 @@ function frame(s){
     if(s.t==="move"){var ids=s.path.filter(function(x){return typeof x==="string";});
       if(s.mode==="drive"&&ids.length>1)embedRoute(ids.map(LL));else embedPlace(LL(ids[ids.length-1]),s.mode==="flight"?6:9);}
     else embedPlace(LL(s.place),s.zoom||14);return;}
-  if(!map)return;
+  if(!map&&!lMap)return;
   if(on){fitPts(around(dayPts(day()),on.at),14);return;}
   if(s.pts&&s.pts.length>1)fitPts(s.pts,s.t==="move"?13:15);else fitPts([LL(s.place)],s.zoom||14);}
 /* ---------- hike trail map (default Google satellite route + switchable topo trail map) ---------- */
 var tMap=null,tBase={},tRoutes=null,tLoadP=null,curHike=null,trailMode="route",gHikeLines=[];
 function clearGHike(){gHikeLines.forEach(function(l){l.setMap(null);});gHikeLines=[];}
+var optMark=null;
 function hideHikeMap(){
-  curHike=null;clearGHike();
+  curHike=null;clearGHike();if(optMark){optMark.remove();optMark=null;}
   var box=$("trailMap"),btn=$("trailModeBtn"),at=$("allTrailsBtn"),dr=$("dayRoute");
   if(box)box.hidden=true;if(btn)btn.hidden=true;if(at)at.hidden=true;if(dr)dr.hidden=false;}
 function syncTrailBtn(){
@@ -1401,17 +1426,24 @@ function gc(a,b,n){var r=Math.PI/180,la1=a[0]*r,lo1=a[1]*r,la2=b[0]*r,lo2=b[1]*r
 function line(pts,opts){var l=new G.Polyline(Object.assign({map:map,path:pts.map(function(p){return {lat:p[0],lng:p[1]};})},opts));lines.push(l);return l;}
 function moveLine(s,col,strong,pick){
   var pts=s.mode==="flight"?gc(s.pts[0],s.pts[s.pts.length-1],48):s.pts;
+  if(lMap){var L=window.L;
+    if(s.mode==="flight"||s.mode==="ferry"){var lf=L.polyline(pts,{color:col,weight:strong?3:2,opacity:strong?.95:.5,dashArray:s.mode==="flight"?"6,8":"4,7",lineCap:"round"}).addTo(lLayer);if(pick)lf.on("click",pick);return;}
+    if(strong)L.polyline(pts,{color:"#ffffff",weight:7.5,opacity:.9,interactive:false,lineCap:"round",lineJoin:"round"}).addTo(lLayer);
+    var lr=L.polyline(pts,{color:col,weight:strong?4.2:2.5,opacity:strong?1:.5,interactive:!!pick,lineCap:"round",lineJoin:"round"}).addTo(lLayer);if(pick)lr.on("click",pick);return;}
   if(s.mode==="flight"||s.mode==="ferry"){var l=line(pts,{strokeOpacity:0,icons:[{icon:{path:"M 0,-1 0,1",strokeOpacity:strong?1:.45,strokeColor:col,strokeWeight:strong?3:2,scale:3},offset:"0",repeat:s.mode==="flight"?"12px":"9px"}]});if(pick)l.addListener("click",pick);return;}
   if(strong)line(pts,{strokeColor:"#ffffff",strokeOpacity:.9,strokeWeight:8,clickable:false});
   var l2=line(pts,{strokeColor:col,strokeOpacity:strong?1:.45,strokeWeight:strong?4.5:2.5,clickable:!!pick});if(pick)l2.addListener("click",pick);}
 function redrawMap(){
-  if(!map)return;var key=state.view==="day"?state.date+NM:"all"+NM;if(drawnFor===key)return;drawnFor=key;
-  lines.forEach(function(l){l.setMap(null);});lines=[];markers.forEach(function(m){m.map=null;});markers=[];
+  if(!map&&!lMap)return;var key=state.view==="day"?state.date+NM:"all"+NM;if(drawnFor===key)return;drawnFor=key;
+  if(lMap){lLayer.clearLayers();markers=[];you=null;}
+  else{lines.forEach(function(l){l.setMap(null);});lines=[];markers.forEach(function(m){m.map=null;});markers=[];}
   var D=state.view==="day"?day():null;
   T.days.forEach(function(X){var col=(T.countries[X.c]||{}).color||"#5D6B73",mine=D===X;
     X.segs.forEach(function(s){if(s.t!=="move"||!s.pts||s.pts.length<2)return;
       moveLine(s,mine?"#C9711C":col,mine||!D,mine?function(){select(s.i);}:function(){setView("day",X.date);});});
-    if(mine)X.segs.forEach(function(s){if(s.t==="stop"&&s.pts&&s.pts.length>1)line(s.pts,{strokeOpacity:0,icons:[{icon:{path:G.SymbolPath.CIRCLE,scale:2.6,fillColor:"#3D7A4F",fillOpacity:1,strokeColor:"#fff",strokeWeight:1},offset:"0",repeat:"10px"}]}).addListener("click",function(){select(s.i);});});});
+    if(mine)X.segs.forEach(function(s){if(s.t==="stop"&&s.pts&&s.pts.length>1){
+      if(lMap)window.L.polyline(s.pts,{color:"#3D7A4F",weight:3.5,opacity:.95,dashArray:"2,7",lineCap:"round"}).addTo(lLayer).on("click",function(){select(s.i);});
+      else line(s.pts,{strokeOpacity:0,icons:[{icon:{path:G.SymbolPath.CIRCLE,scale:2.6,fillColor:"#3D7A4F",fillOpacity:1,strokeColor:"#fff",strokeWeight:1},offset:"0",repeat:"10px"}]}).addListener("click",function(){select(s.i);});}});});
   if(D){ // one marker per place; several stops at the same place share it ("3·9")
     var groups={};D.segs.forEach(function(s){if(s.t!=="stop")return;(groups[s.place]=groups[s.place]||[]).push(s);});
     Object.keys(groups).forEach(function(pl){var stops=groups[pl];
@@ -1422,21 +1454,26 @@ function redrawMap(){
     var stays={};T.days.forEach(function(X){if(X.stay)(stays[X.stay]=stays[X.stay]||[]).push(X);});
     Object.keys(stays).forEach(function(pl){var ds=stays[pl];
       addMarker(N[pl],ds.length>2?md(ds[0].date)+"–"+md(ds[ds.length-1].date):ds.map(function(X){return md(X.date);}).join("·"),(T.countries[ds[0].c]||{}).color,pn(pl,true),function(){setView("day",ds[0].date);});});}
-  if(you){you.map=null;you=null;}
+  if(you&&!lMap){you.map=null;you=null;}
   if(D&&liveDate()===state.date){var cur=nowSeg();if(cur){var t=nowIn(tzOf(state.date)).mins,a=mins(cur.start),b=mins(cur.end||cur.start);
     var pos=cur.pts&&cur.pts.length>1?along(cur.pts,b>a?(t-a)/(b-a):1):LL(cur.place);
     var yd=document.createElement("div");yd.className="you";var tag=document.createElement("span");tag.className="you-tag";tag.textContent=U("按计划现在在这");yd.appendChild(tag);
-    you=new Marker({map:map,position:{lat:pos[0],lng:pos[1]},content:yd,zIndex:1000});}}
+    if(lMap){var yw=document.createElement("div");yw.appendChild(yd);you=window.L.marker(pos,{icon:window.L.divIcon({className:"l-mk",html:yw,iconSize:[0,0],iconAnchor:[0,0]}),zIndexOffset:1000}).addTo(lLayer);}
+    else you=new Marker({map:map,position:{lat:pos[0],lng:pos[1]},content:yd,zIndex:1000});}}
   markSel();
 }
 function addMarker(ll,badgeTxt,col,nameTxt,onClick){
   var el=document.createElement("div");el.className="mk";el.style.setProperty("--k",col||"#1F4E6B");
   var badge=document.createElement("span");badge.className="mk-badge";badge.textContent=badgeTxt;
   var name=document.createElement("span");name.className="mk-name";name.textContent=nameTxt;el.append(badge,name);
+  if(lMap){var w=document.createElement("div");w.appendChild(el);
+    var lm=window.L.marker(ll,{icon:window.L.divIcon({className:"l-mk",html:w,iconSize:[0,0],iconAnchor:[0,0]}),title:nameTxt}).addTo(lLayer);
+    lm.el=el;lm.nameEl=name;el.addEventListener("click",function(e){e.stopPropagation();onClick(lm);});markers.push(lm);return lm;}
   var m=new Marker({map:map,position:{lat:ll[0],lng:ll[1]},content:el,title:nameTxt,gmpClickable:true});
   m.el=el;m.nameEl=name;m.addEventListener("gmp-click",function(){onClick(m);});markers.push(m);return m;}
 function markSel(){var D=day(),sel=state.view==="day"&&D&&state.sel!=null&&D.segs[state.sel];
-  markers.forEach(function(m){var on=!!(sel&&m.stops&&m.stops.indexOf(sel)>=0);m.el.classList.toggle("sel",on);if(on)m.nameEl.textContent=plain(sel.name||"[["+sel.place+"]]");m.zIndex=on?999:null;});}
+  markers.forEach(function(m){var on=!!(sel&&m.stops&&m.stops.indexOf(sel)>=0);m.el.classList.toggle("sel",on);if(on)m.nameEl.textContent=plain(sel.name||"[["+sel.place+"]]");
+    if(m.setZIndexOffset)m.setZIndexOffset(on?999:0);else m.zIndex=on?999:null;});}
 
 /* ---------- shared expense log ---------- */
 // Everyone's expenses live on the trip server (backend/expenses.json), behind the chat's access code.
