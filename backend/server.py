@@ -50,6 +50,9 @@ if not ACCESS_CODE or ACCESS_CODE == "change-me":
     raise SystemExit("Set ACCESS_CODE in backend/.env (the code you type into the chat).")
 ALLOWED_ORIGINS = [o.strip() for o in os.getenv("ALLOWED_ORIGINS", "").split(",") if o.strip()]
 DAILY_LIMIT = int(os.getenv("DAILY_LIMIT", "1000"))
+GOOGLE_PLACES_KEY = os.getenv("GOOGLE_PLACES_KEY", "").strip()
+GOOGLE_PLACES_MONTHLY_CAP = int(os.getenv("GOOGLE_PLACES_MONTHLY_CAP", "800"))
+GOOGLE_PLACES_MAX_PHOTOS = int(os.getenv("GOOGLE_PLACES_MAX_PHOTOS", "8"))
 TZ = ZoneInfo("America/Toronto")
 TRIP_TZ = ZoneInfo("Atlantic/Reykjavik")
 
@@ -1188,6 +1191,158 @@ async def decide(pid: str, body: DecideIn, x_access_code: str | None = Header(de
                 except PlanError as e:
                     p.update(state="failed", error=str(e)[:600])
     return {"card": _card(p), **plan_meta()}
+
+
+# ---------- Google Places photos (optional, hard-capped, cached) ----------
+
+_gplaces_lock = asyncio.Lock()
+_GPHOTOS_CACHE_FILE = DATA / "place_photos_cache.json"
+_GPHOTOS_USAGE_FILE = DATA / "google_places_usage.json"
+_GPHOTOS_TTL = 7 * 86400  # refresh Google CDN photo URIs weekly; place_id stays cached
+
+
+def _read_json(path: Path, default: dict) -> dict:
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return dict(default)
+
+
+def _write_json(path: Path, obj: dict) -> None:
+    tmp = path.with_suffix(".tmp")
+    tmp.write_text(json.dumps(obj, ensure_ascii=False), encoding="utf-8")
+    tmp.replace(path)
+
+
+def _gplaces_take_budget(n: int = 1) -> bool:
+    """Hard monthly cap on outbound Google Places API calls so billing stays $0."""
+    month = datetime.now(TZ).strftime("%Y-%m")
+    u = _read_json(_GPHOTOS_USAGE_FILE, {"month": month, "calls": 0})
+    if u.get("month") != month:
+        u = {"month": month, "calls": 0}
+    if u["calls"] + n > GOOGLE_PLACES_MONTHLY_CAP:
+        return False
+    u["calls"] += n
+    _write_json(_GPHOTOS_USAGE_FILE, u)
+    return True
+
+
+def _gplaces_req(url: str, *, method: str = "GET", body: dict | None = None, field_mask: str | None = None) -> dict:
+    headers = {"X-Goog-Api-Key": GOOGLE_PLACES_KEY, "Accept": "application/json"}
+    if field_mask:
+        headers["X-Goog-FieldMask"] = field_mask
+    data = None
+    if body is not None:
+        headers["Content-Type"] = "application/json"
+        data = json.dumps(body).encode("utf-8")
+    req = urllib.request.Request(url, data=data, headers=headers, method=method)
+    with urllib.request.urlopen(req, timeout=15) as r:
+        return json.loads(r.read().decode("utf-8"))
+
+
+def _fetch_google_place_photos(place: dict, cached_gid: str = "") -> tuple[str, list[dict], bool]:
+    """Fetch up to GOOGLE_PLACES_MAX_PHOTOS CDN URLs via Places API (New). Returns (gid, photos, capped)."""
+    gid = cached_gid or (place.get("gid") or "").strip()
+    ll = place.get("ll") or []
+    query = place.get("local") or place.get("en") or place.get("zh") or ""
+    raw_photos: list[dict] = []
+
+    if gid:
+        if not _gplaces_take_budget(1):
+            return gid, [], True
+        res = _gplaces_req(
+            f"https://places.googleapis.com/v1/places/{gid}",
+            field_mask="id,photos",
+        )
+        raw_photos = res.get("photos") or []
+    else:
+        if not query or len(ll) != 2:
+            return "", [], False
+        if not _gplaces_take_budget(1):
+            return "", [], True
+        res = _gplaces_req(
+            "https://places.googleapis.com/v1/places:searchText",
+            method="POST",
+            body={
+                "textQuery": query,
+                "locationBias": {
+                    "circle": {"center": {"latitude": ll[0], "longitude": ll[1]}, "radius": 3000.0}
+                },
+                "maxResultCount": 1,
+            },
+            field_mask="places.id,places.photos",
+        )
+        hits = res.get("places") or []
+        if not hits:
+            return "", [], False
+        gid = hits[0].get("id") or ""
+        raw_photos = hits[0].get("photos") or []
+
+    out: list[dict] = []
+    capped = False
+    alt = place.get("en") or place.get("local") or place.get("zh") or ""
+    for p in raw_photos[:GOOGLE_PLACES_MAX_PHOTOS]:
+        pname = p.get("name")
+        if not pname:
+            continue
+        if not _gplaces_take_budget(1):
+            capped = True
+            break
+        try:
+            media = _gplaces_req(
+                f"https://places.googleapis.com/v1/{pname}/media?maxWidthPx=1600&skipHttpRedirect=true"
+            )
+        except Exception:
+            continue
+        uri = media.get("photoUri")
+        if not uri:
+            continue
+        attrs = p.get("authorAttributions") or []
+        a0 = attrs[0] if attrs else {}
+        out.append({
+            "src": uri,
+            "w": p.get("widthPx") or 1600,
+            "h": p.get("heightPx") or 1067,
+            "author": a0.get("displayName") or "Google Maps",
+            "page": a0.get("uri") or "https://maps.google.com/",
+            "source": "google",
+            "alt": alt,
+        })
+    return gid, out, capped
+
+
+@app.get("/api/place-photos/{pid}")
+async def place_photos(pid: str, x_access_code: str | None = Header(default=None)):
+    check_code(x_access_code)
+    place = PLAN.trip.get("places", {}).get(pid)
+    if not place:
+        raise HTTPException(404, "Unknown place")
+
+    now = time.time()
+    cache = _read_json(_GPHOTOS_CACHE_FILE, {})
+    entry = cache.get(pid)
+    if entry and now - entry.get("ts", 0) < _GPHOTOS_TTL and entry.get("photos"):
+        return {"enabled": bool(GOOGLE_PLACES_KEY), "cached": True, "capped": False, "photos": entry["photos"]}
+
+    if not GOOGLE_PLACES_KEY:
+        return {"enabled": False, "cached": False, "capped": False, "photos": []}
+
+    async with _gplaces_lock:
+        cache = _read_json(_GPHOTOS_CACHE_FILE, {})
+        entry = cache.get(pid)
+        if entry and now - entry.get("ts", 0) < _GPHOTOS_TTL and entry.get("photos"):
+            return {"enabled": True, "cached": True, "capped": False, "photos": entry["photos"]}
+        try:
+            gid, photos, capped = await asyncio.to_thread(
+                _fetch_google_place_photos, place, (entry or {}).get("gid", "")
+            )
+        except Exception as e:
+            print(f"[gphotos] {pid} failed: {e}", flush=True)
+            return {"enabled": True, "cached": False, "capped": False, "photos": (entry or {}).get("photos", [])}
+        if photos or gid:
+            cache[pid] = {"gid": gid, "ts": now if photos else 0, "photos": photos or (entry or {}).get("photos", [])}
+            _write_json(_GPHOTOS_CACHE_FILE, cache)
+        return {"enabled": True, "cached": False, "capped": capped, "photos": cache.get(pid, {}).get("photos", [])}
 
 
 # ---------- the site itself ----------

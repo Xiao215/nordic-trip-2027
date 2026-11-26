@@ -901,8 +901,27 @@ function detail(s){
   acts.push('<button class="pill ask" type="button">'+ICON.ask+U("问问这个")+"</button>");
   h+='<div class="actions">'+acts.join("")+"</div>";
   d.innerHTML=h;
-  d.querySelectorAll(".d-photo[data-k]").forEach(function(fig){fig.addEventListener("click",function(e){if(e.target.closest(".credit"))return;
-    var g=dayGallery(day()),ph=phs[+fig.dataset.k];if(!g.length)g=phs.map(function(p){return {s:s,ph:p};});openLb(g,galleryIndex(g,ph));});});
+  function bindPhotos(){
+    var cur=s.t==="stop"?photosOf(s.place):[];
+    d.querySelectorAll(".d-photo[data-k]").forEach(function(fig){fig.addEventListener("click",function(e){if(e.target.closest(".credit"))return;
+      var ph=cur[+fig.dataset.k];if(!ph)return;
+      var g=cur.length>3?cur.map(function(p){return {s:s,ph:p};}):dayGallery(day());
+      if(!g.length)g=cur.map(function(p){return {s:s,ph:p};});
+      openLb(g,galleryIndex(g,ph));});});
+  }
+  bindPhotos();
+  if(s.t==="stop"&&s.place&&SCENIC[s.kind]){
+    loadGooglePhotos(s.place,function(added){
+      if(!added||!d.isConnected)return;
+      var cur=photosOf(s.place);if(!cur.length)return;
+      var old=d.querySelector(".d-photos");
+      var wrap=document.createElement("div");wrap.innerHTML=photoGrid(cur);
+      var fresh=wrap.firstChild;
+      if(old)old.replaceWith(fresh);else d.insertBefore(fresh,d.firstChild);
+      bindPhotos();
+      if(day())renderHero();
+    });
+  }
   d.querySelector(".ask").addEventListener("click",function(){if(!window.tripChat)return;
     var dt=state.date;
     if(s.t==="move"){
@@ -964,21 +983,52 @@ function replay(el,cls){if(!el)return;el.classList.remove(cls);void el.offsetWid
 // Scenic stops still waiting for photos show a grey "TBD" tile.
 var SCENIC={visit:1,hike:1,glacier:1,water:1,camp:1,city:1};
 var UTM="utm_source=nordic_trip_2027&utm_medium=referral";
-function photosOf(id){var p=T.places[id];return p&&p.photos||[];}
+var GPHOTOS={},GPHOTOS_WAIT={},GPHOTOS_OFF=false;
+function photosOf(id){
+  var p=T&&T.places[id],base=(p&&p.photos)||[],gp=GPHOTOS[id]||[];
+  if(!gp.length)return base;
+  if(!base.length)return gp;
+  var seen={},out=[];
+  base.concat(gp).forEach(function(x){if(x&&x.src&&!seen[x.src]){seen[x.src]=1;out.push(x);}});
+  return out;
+}
+function loadGooglePhotos(id,cb){
+  if(!id||GPHOTOS_OFF||GPHOTOS[id]){if(cb)cb(0);return;}
+  if(GPHOTOS_WAIT[id]){if(cb)GPHOTOS_WAIT[id].push(cb);return;}
+  GPHOTOS_WAIT[id]=cb?[cb]:[];
+  fetch(planApi()+"/api/place-photos/"+encodeURIComponent(id),{headers:{"X-Access-Code":accessCode()}})
+    .then(function(r){return r.ok?r.json():null;})
+    .then(function(j){
+      if(j&&j.enabled===false)GPHOTOS_OFF=true;
+      var list=(j&&Array.isArray(j.photos))?j.photos:[];
+      GPHOTOS[id]=list;
+      var cbs=GPHOTOS_WAIT[id]||[];delete GPHOTOS_WAIT[id];
+      cbs.forEach(function(fn){fn(list.length);});
+    })
+    .catch(function(){
+      var cbs=GPHOTOS_WAIT[id]||[];delete GPHOTOS_WAIT[id];
+      cbs.forEach(function(fn){fn(0);});
+    });
+}
 // Wikimedia serves fixed thumbnail widths only (photos from Commons are all at least 1920px wide)
-function sized(src,w){if(src.indexOf("images.unsplash.com")<0)return src.replace(/\/(\d+)px-/,"/"+(w<=500?500:w<=960?960:w<=1280?1280:1920)+"px-");
+function sized(src,w){
+  if(/googleusercontent\.com|googleapis\.com/.test(src))return src;
+  if(src.indexOf("images.unsplash.com")<0)return src.replace(/\/(\d+)px-/,"/"+(w<=500?500:w<=960?960:w<=1280?1280:1920)+"px-");
   var u=src.replace(/([?&])(w|q|fm|fit|auto)=[^&]*/g,"$1").replace(/&&+/g,"&").replace(/[?&]+$/,"");
   return u+(u.indexOf("?")<0?"?":"&")+"w="+w+"&q=80&fm=jpg&fit=max";}
 function img(ph,w,cls){return '<img class="'+(cls||"")+'" src="'+esc(sized(ph.src,w))+'" width="'+ph.w+'" height="'+ph.h+'" alt="'+esc(ph.alt||"")+'" loading="lazy" decoding="async" onload="this.classList.add(\'ok\')">';}
 function photoGrid(phs,optK){
   var oa=optK!=null?' data-opt-k="'+esc(optK)+'"':"";
+  var show=phs.slice(0,4),extra=phs.length-show.length;
   var cnt=phs.length>1?'<span class="d-photo-cnt">'+(en()?phs.length+" photos":phs.length+" 张")+"</span>":"";
-  return '<div class="d-photos n'+phs.length+'">'+phs.map(function(ph,k){
-    return '<figure class="d-photo"'+oa+' data-k="'+k+'">'+img(ph,k?600:1200)+(k?"":cnt+"<figcaption>"+credit(ph)+"</figcaption>")+"</figure>";
+  return '<div class="d-photos n'+show.length+'">'+show.map(function(ph,k){
+    var more=(extra>0&&k===show.length-1)?'<span class="d-photo-more">+'+extra+"</span>":"";
+    return '<figure class="d-photo"'+oa+' data-k="'+k+'">'+img(ph,k?600:1200)+(k?"":cnt+"<figcaption>"+credit(ph)+"</figcaption>")+more+"</figure>";
   }).join("")+"</div>";
 }
 function utm(u){return u+(u.indexOf("?")<0?"?":"&")+UTM;}
 function credit(ph){
+  if(ph.source==="google")return '<a class="credit" href="'+esc(ph.page||"https://maps.google.com/")+'" target="_blank" rel="noopener">'+esc(U("照片："))+esc(ph.author||"Google Maps")+" · Google Maps</a>";
   if(ph.author_link)return '<span class="credit">'+esc(U("摄影："))+'<a href="'+esc(utm(ph.author_link))+'" target="_blank" rel="noopener">'+esc(ph.author)+'</a> / <a href="'+esc(utm("https://unsplash.com/"))+'" target="_blank" rel="noopener">Unsplash</a></span>';
   return '<a class="credit" href="'+esc(ph.page)+'" target="_blank" rel="noopener">'+esc(U("照片："))+esc(ph.author||"")+(ph.license?" · "+esc(ph.license):"")+"</a>";}
 /* a plan place in the assistant's map cards (chat.js): the place a stop stands for (its id, else the same
