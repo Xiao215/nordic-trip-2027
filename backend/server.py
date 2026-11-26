@@ -51,7 +51,7 @@ if not ACCESS_CODE or ACCESS_CODE == "change-me":
 ALLOWED_ORIGINS = [o.strip() for o in os.getenv("ALLOWED_ORIGINS", "").split(",") if o.strip()]
 DAILY_LIMIT = int(os.getenv("DAILY_LIMIT", "1000"))
 GOOGLE_PLACES_KEY = os.getenv("GOOGLE_PLACES_KEY", "").strip()
-GOOGLE_PLACES_MONTHLY_CAP = int(os.getenv("GOOGLE_PLACES_MONTHLY_CAP", "800"))
+GOOGLE_PLACES_MONTHLY_CAP = int(os.getenv("GOOGLE_PLACES_MONTHLY_CAP", "995"))
 GOOGLE_PLACES_MAX_PHOTOS = int(os.getenv("GOOGLE_PLACES_MAX_PHOTOS", "8"))
 TZ = ZoneInfo("America/Toronto")
 TRIP_TZ = ZoneInfo("Atlantic/Reykjavik")
