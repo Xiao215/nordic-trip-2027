@@ -66,6 +66,7 @@ app.add_middleware(
     allow_origins=ALLOWED_ORIGINS or ["*"],
     allow_methods=["GET", "POST"],
     allow_headers=["Content-Type", "X-Access-Code"],
+    expose_headers=["X-Raw-Length"],  # the plan's unzipped size, for the page's download progress
 )
 
 
@@ -659,7 +660,8 @@ async def delete_expense(item_id: str, x_access_code: str | None = Header(defaul
 # (edited on a laptop) comes in through /api/plan/replace, with the admin token that only the Pi itself knows.
 
 _plan_lock = asyncio.Lock()
-_plan_gz: dict = {"rev": None, "body": b""}
+# each body JSON-encoded and gzipped once per version: "all" (plan + English), "zh" (plan only), "en" (English only)
+_plan_gz: dict = {}
 
 
 def plan_meta() -> dict:
@@ -672,20 +674,44 @@ async def plan_rev(x_access_code: str | None = Header(default=None)):
     return Response(json.dumps(plan_meta(), ensure_ascii=False), media_type="application/json", headers={"Cache-Control": "no-store"})
 
 
-@app.get("/api/plan")
-async def plan(if_none_match: str | None = Header(default=None), accept_encoding: str | None = Header(default=None),
-               x_access_code: str | None = Header(default=None)):
-    check_code(x_access_code)
-    etag = f'"{PLAN.rev}"'
+def plan_body(kind: str) -> tuple[bytes, bytes]:
+    """The plan as JSON, plain and gzipped, made once per version: kind "all" (plan and its English, what pages
+    before ?en=0 expect), "zh" (the plan only: a page in Chinese gets the English later, if at all) or "en"."""
+    key = (kind, PLAN.rev)
+    if key not in _plan_gz:
+        part = {"all": {"trip": PLAN.trip, "en": PLAN.en}, "zh": {"trip": PLAN.trip}, "en": {"en": PLAN.en}}[kind]
+        raw = json.dumps({**plan_meta(), **part}, ensure_ascii=False, separators=(",", ":")).encode()
+        for k in [k for k in _plan_gz if k[1] != PLAN.rev]:
+            del _plan_gz[k]
+        _plan_gz[key] = (raw, gzip.compress(raw, 6))
+    return _plan_gz[key]
+
+
+def plan_response(kind: str, if_none_match: str | None, accept_encoding: str | None) -> Response:
+    etag = f'"{PLAN.rev}-{kind}"'
     if if_none_match == etag:
         return Response(status_code=304, headers={"ETag": etag})
-    if _plan_gz["rev"] != PLAN.rev:  # about 450 KB of JSON, 100 KB gzipped: compressed once per version
-        body = json.dumps({**plan_meta(), "trip": PLAN.trip, "en": PLAN.en}, ensure_ascii=False, separators=(",", ":")).encode()
-        _plan_gz.update(rev=PLAN.rev, raw=body, body=gzip.compress(body, 6))
-    headers = {"Cache-Control": "no-cache", "ETag": etag, "Vary": "Accept-Encoding"}
+    raw, gz = plan_body(kind)
+    headers = {"Cache-Control": "no-cache", "ETag": etag, "Vary": "Accept-Encoding", "X-Raw-Length": str(len(raw))}
     if "gzip" in (accept_encoding or ""):
-        return Response(_plan_gz["body"], media_type="application/json", headers={**headers, "Content-Encoding": "gzip"})
-    return Response(_plan_gz["raw"], media_type="application/json", headers=headers)
+        return Response(gz, media_type="application/json", headers={**headers, "Content-Encoding": "gzip"})
+    return Response(raw, media_type="application/json", headers=headers)
+
+
+# The plan is about 450 KB of JSON and its English about 400 KB (330 KB gzipped together): ?en=0 leaves the English
+# out, which halves a Chinese page's first download, and /api/plan/en sends it on its own.
+@app.get("/api/plan")
+async def plan(en: int = 1, if_none_match: str | None = Header(default=None), accept_encoding: str | None = Header(default=None),
+               x_access_code: str | None = Header(default=None)):
+    check_code(x_access_code)
+    return plan_response("all" if en else "zh", if_none_match, accept_encoding)
+
+
+@app.get("/api/plan/en")
+async def plan_en(if_none_match: str | None = Header(default=None), accept_encoding: str | None = Header(default=None),
+                  x_access_code: str | None = Header(default=None)):
+    check_code(x_access_code)
+    return plan_response("en", if_none_match, accept_encoding)
 
 
 # The admin token: ADMIN_TOKEN in .env, or one made on first start in DATA/admin.token (readable only on the Pi).

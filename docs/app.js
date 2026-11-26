@@ -51,6 +51,10 @@ var UIEN={
   "记一笔":"Add an expense","买了什么？比如：Bónus 超市买菜":"What was it? e.g. groceries at Bónus","买了什么":"What","金额":"Amount","日期":"Date","类别":"Category",
   "谁付的":"Paid by","谁平摊":"Split between","记下":"Save","金额要是大于 0 的数字。":"The amount needs to be a number above 0.","至少选一个人平摊。":"Pick at least one person to share it.",
   "验证中…":"Checking…","访问码不对。":"That code didn't work.","连不上行程服务器。":"Can't reach the trip server.",
+  "连不上行程服务器：这个网络可能打不开它。换个网络（Wi-Fi / 流量）或开关 VPN 再试。":"Can't reach the trip server: this network may be blocking it. Try another network (Wi-Fi / mobile data), or turn a VPN on or off.",
+  "行程服务器出错了（{n}），过一会儿再试。":"The trip server had a problem ({n}). Try again in a little while.",
+  "访问码没问题，正在下载行程…":"Code accepted, downloading the plan…",
+  "访问码没问题，但行程没下载完（网络太慢）。到信号好一点的地方再点一次。":"The code is right, but the plan didn't finish downloading (the connection is too slow). Try again where the signal is better.",
   "删掉「{w}」这一笔？":"Delete “{w}”?","把 {p} 移出账本？":"Remove {p} from the log?",
   "{p} 还有账目，先删掉相关的几笔再移除。":"{p} still has expenses. Delete those first.",
   "连不上行程服务器，联网后才能改成员。":"Can't reach the trip server. People can be changed once you're online.",
@@ -357,7 +361,7 @@ function applyStatic(){
 /* ---------- language switch ---------- */
 function applyNames(){document.querySelectorAll(".names button").forEach(function(b){b.setAttribute("aria-checked",b.dataset.nm===NM);});slideInd(".names",'[aria-checked="true"]');}
 document.querySelectorAll(".names button").forEach(function(b){b.addEventListener("click",function(){
-  if(NM===b.dataset.nm)return;NM=b.dataset.nm;store("nt-names",NM);applyNames();rerender(true);prefsOpen(false);});});
+  if(NM===b.dataset.nm)return;NM=b.dataset.nm;store("nt-names",NM);applyNames();rerender(true);prefsOpen(false);ensureEn();});});
 // redraw everything that shows text (after a language or currency change), keeping the open stop
 function rerender(lang){
   var sel=state.sel;applyStatic();renderCur();renderHeader();renderAll();renderStrip();markStrip();renderPrep();renderMoney();$("fitLabel").textContent=U(state.view==="day"?"全天":"全程");
@@ -723,8 +727,8 @@ $("rows").addEventListener("click",function(e){
     OPTOPEN[id]=on;
     li.classList.toggle("open",on);t.setAttribute("aria-expanded",on);li.querySelector(".opt-fold").inert=!on;
     if(on){var o=optByKey(li.dataset.opt);
-      if(o&&(o.kind==="hike"||(o.pts&&o.pts.length>1))){$("mapCaption").textContent=plain(o.name||"[["+o.place+"]]");showHikeMap(o.pts,o.place&&N[o.place],"opt:"+id,allTrailsUrl(o));}
-      else if(o&&o.place&&N[o.place])frameGroup([o.place]);}
+      if(o&&(o.kind==="hike"||(o.pts&&o.pts.length>1))){setCaption(plain(o.name||"[["+o.place+"]]"));showHikeMap(o.pts,o.place&&N[o.place],"opt:"+id,allTrailsUrl(o));}
+      else if(o&&o.place&&N[o.place])frameOpt(o);}
     else if(state.sel==null)fitView();
     return;}
   var a=e.target.closest("[data-opt-ask]");
@@ -1173,9 +1177,16 @@ function renderGlance(){
 
 /* ---------- map ---------- */
 var G=null,map=null,Marker=null,lines=[],markers=[],you=null,embed=null;
-function caption(){var D=day(),s=state.view==="day"&&D&&state.sel!=null?D.segs[state.sel]:null,old=$("mapCaption").textContent;
-  setTimeout(function(){if($("mapCaption").textContent!==old)replay($("mapCaption"),"pop");});
-  $("mapCaption").textContent=s?(s.t==="move"?moveLabel(s,true):s.num+". "+plain(s.name||"[["+s.place+"]]")):(state.view==="day"?U("{d}：全天",{d:md(state.date)+" "+(D?plain(D.short||D.title):U("规划中"))}):U("全程路线"));}
+function caption(){var D=day(),s=state.view==="day"&&D&&state.sel!=null?D.segs[state.sel]:null;
+  if(s)setCaption(s.t==="move"?moveLabel(s,true):s.num+". "+plain(s.name||"[["+s.place+"]]"),s.t==="move"&&dur(s)?mode(s.mode)+" "+hmS(dur(s)):"");
+  else if(state.view==="day")setCaption(U("{d}：全天",{d:md(state.date)+" "+(D?plain(D.short||D.title):U("规划中"))}),D&&driveOf(D)?U("开车 {t}",{t:hmS(driveOf(D))}):"");
+  else setCaption(U("全程路线"));}
+// The caption carries the time on the road after the name, kept whole when a long name is cut short: Google's
+// keyless map draws its own time bubble only at some zooms (a long day framed small loses it), so it's written here.
+function setCaption(label,t){var c=$("mapCaption"),old=c.textContent;
+  c.innerHTML='<span class="cap-l">'+esc(label)+"</span>"+(t?'<span class="cap-t">'+esc(t)+"</span>":"");
+  if(c.textContent!==old)setTimeout(function(){replay(c,"pop");});}
+function driveOf(D){return D.segs.reduce(function(a,s){return a+(s.t==="move"&&s.mode==="drive"?dur(s):0);},0);}
 
 // A bad or missing key drops back to Google's keyless embed (one place or one route at a time).
 window.gm_authFailure=function(){console.warn("Google Maps rejected googleMapsKey in config.js; using the basic embed instead.");useEmbed();};
@@ -1193,7 +1204,7 @@ function ll2(p){return p[0]+","+p[1];}
 // t=k is satellite; the embed's own route framing ignores the frame's shape, so routes get an explicit ll/z
 function embedTail(){return "&t=k&hl="+(NM==="zh"?"zh-CN":"en")+"&output=embed";}
 function embedPlace(ll,z){embedTo("https://maps.google.com/maps?q="+ll2(ll)+"&z="+z+embedTail());}
-function embedRoute(stops){embedTo("https://maps.google.com/maps?saddr="+ll2(stops[0])+"&daddr="+stops.slice(1).map(ll2).join("+to:")+embedFit(stops)+embedTail());}
+function embedRoute(stops,walk){embedTo("https://maps.google.com/maps?saddr="+ll2(stops[0])+"&daddr="+stops.slice(1).map(ll2).join("+to:")+(walk?"&dirflg=w":"")+embedFit(stops)+embedTail());}
 function embedArea(q,z){embedTo("https://maps.google.com/maps?q="+encodeURIComponent(q)+"&z="+z+embedTail());}
 // Center and zoom that fit every stop in the frame, leaving room for the directions card (top) and caption (bottom).
 function embedFit(pts){var box=$("map"),w=box.clientWidth||400,h=box.clientHeight||500,T0=Math.min(120,h*.3),B0=Math.min(50,h*.12),S=Math.min(40,w*.08),
@@ -1267,6 +1278,17 @@ function allTrailsUrl(x){
   var t=(x.body||"")+" "+(x.facts||[]).map(function(f){return f[1]||"";}).join(" ")+" "+(x.tips||[]).join(" ");
   var m=t.match(/https?:\/\/(?:www\.)?alltrails\.com\/[^\s)"']+/i);
   return m?m[0]:null;}
+// An optional extra shows where it sits in the day the way a stop does: the day's route up to the stop it
+// follows, then on to it, so the red pin (and Google's time to get there) is the optional. One reached on foot
+// shows the walk from that stop; one reached by train or ferry, which Google can't route, just its place.
+function optRoute(o){var D=day(),m=(o["in"]||{}).mode||"drive",at=o.after&&N[o.after];
+  if(!D||!o.place||!N[o.place]||!ROADS[m]||!at)return null;
+  var r=m==="walk"?[]:embedDayRoute(D),i=-1;r.forEach(function(p,k){if(i<0&&p[0]===at[0]&&p[1]===at[1])i=k;});
+  var pts=(i>=0?r.slice(0,i+1):[at]).concat([N[o.place]]);
+  return {pts:pts.slice(-10),walk:m==="walk"};}
+function frameOpt(o){var r=optRoute(o);if(!r){frameGroup([o.place]);}
+  else{hideHikeMap();if(embed)embedRoute(r.pts,r.walk);else if(map)fitPts(r.pts,14);}
+  var m=o["in"]||{};setCaption(U("可选")+" · "+plain(o.name||"[["+o.place+"]]"),m.mins&&m.mode?mode(m.mode)+" "+hmS(m.mins):"");}
 function frame(s){
   if(s&&s.t==="stop"&&(s.kind==="hike"||(s.pts&&s.pts.length>1))){
     caption();showHikeMap(s.pts,LL(s.place),"seg:"+state.date+":"+s.i,allTrailsUrl(s));return;}
@@ -1562,8 +1584,8 @@ $("moneyView").addEventListener("submit",function(e){
   if(e.target.id==="mnyPerson"){e.preventDefault();var v=$("mnyPersonIn").value.trim();if(v)personOp("/api/expenses/people",v);}
   else if(e.target.id==="mnyCode"){e.preventDefault();var code=$("mnyCodeIn").value.trim(),er=$("mnyCodeErr"),A=auth();if(!code)return;er.textContent=U("验证中…");
     fetch(A.api+"/api/check",{method:"POST",headers:{"X-Access-Code":code}}).then(function(r){
-      if(r.status===401){er.textContent=U("访问码不对。");return;}if(!r.ok)throw new Error();A.setCode(code);loadMoney();})
-      .catch(function(){er.textContent=U("连不上行程服务器。");});}});
+      if(r.status===401){er.textContent=U("访问码不对。");return;}if(!r.ok){er.textContent=whyNot(httpErr(r.status));return;}A.setCode(code);loadMoney();},
+      function(e){er.textContent=whyNot(e,false);});}});
 $("moneyView").addEventListener("click",function(e){
   var d=e.target.closest("[data-del]");if(d){var x=mItems().filter(function(i){return i.id===d.dataset.del;})[0];if(x&&confirm(U("删掉「{w}」这一笔？",{w:x.what})))delExpense(x.id);return;}
   var u=e.target.closest("[data-unperson]");if(u&&confirm(U("把 {p} 移出账本？",{p:u.dataset.unperson})))personOp("/api/expenses/people/delete",u.dataset.unperson);});
@@ -1615,11 +1637,37 @@ function setAccessCode(c){if(window.tripAuth){window.tripAuth.setCode(c);return;
 var LOCALDEV=/^(localhost|127\.0\.0\.1)$/.test(location.hostname);
 function planApi(){var a=((window.TRIP_CONFIG||{}).apiBase||"").replace(/\/$/,""),o=new URLSearchParams(location.search).get("api");
   return o&&/^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(o)?o:a;}
-function fetchPlan(ms){var c=window.AbortController?new AbortController():null,t=c&&setTimeout(function(){c.abort();},ms||10000);
-  return fetch(planApi()+"/api/plan",{cache:"no-cache",signal:c&&c.signal,headers:{"X-Access-Code":accessCode()}}).then(function(r){clearTimeout(t);
-      if(!r.ok){var e=new Error(r.status);e.code=r.status;throw e;}return r.json();})
-    .then(function(p){if(!p||!p.trip||!p.rev)throw new Error("no plan");return p;});}
-function keepPlan(p){PLAN={rev:p.rev,last:p.last};try{localStorage.setItem("nt-plan",JSON.stringify({rev:p.rev,last:p.last,trip:p.trip,en:p.en}));}catch(e){}}
+/* The plan from the trip server. A page in Chinese asks for it without its English (?en=0: about half the download)
+   and fetches the English afterwards, in the background (ensureEn). A download gives up only when it stalls: no
+   answer, or no new data, for `stall` ms (15 s); a slow connection that keeps going always finishes. progress(got,
+   total) reports the bytes so far (unzipped, the same unit as the server's X-Raw-Length; total 0 if it didn't say). */
+var STALL=15000;
+function fetchPlan(stall,progress,path){var c=window.AbortController?new AbortController():null,t=null;
+  function wait(ms){clearTimeout(t);if(c)t=setTimeout(function(){c.abort();},ms||stall||STALL);}
+  wait();
+  return fetch(planApi()+(path||"/api/plan"+(en()?"":"?en=0")),{cache:"no-cache",signal:c&&c.signal,headers:{"X-Access-Code":accessCode()}}).then(function(r){
+      if(!r.ok)throw httpErr(r.status);
+      var total=+r.headers.get("X-Raw-Length")||0;
+      if(!r.body||!r.body.getReader||!window.TextDecoder){wait(60000);return r.json();} // no streaming: one long wait
+      var rd=r.body.getReader(),dec=new TextDecoder(),txt="",got=0;wait();
+      function pump(){return rd.read().then(function(x){if(x.done)return JSON.parse(txt+dec.decode());
+        got+=x.value.length;txt+=dec.decode(x.value,{stream:true});wait();if(progress)progress(got,total);return pump();});}
+      return pump();})
+    .then(function(p){clearTimeout(t);if(!p||!p.rev||!(path?p.en:p.trip))throw new Error("no plan");return p;},function(e){clearTimeout(t);throw e;});}
+function kb(got,total){return Math.round(got/1024)+(total?" / "+Math.round(total/1024):"")+" KB";}
+// the plan's English and the version it belongs to; a plan that came without it keeps the last one until a new one comes
+var ENREV=null,enBusy=false;
+function keepPlan(p){PLAN={rev:p.rev,last:p.last};if(p.en){EN=p.en;ENREV=p.rev;}
+  try{localStorage.setItem("nt-plan",JSON.stringify({rev:p.rev,last:p.last,trip:p.trip,en:EN,enRev:ENREV}));}catch(e){}}
+// the saved copy gets the English that came on its own (the plan in it is kept as it came, not as the page reworked it)
+function keepEn(){try{var k=JSON.parse(localStorage.getItem("nt-plan"));if(k&&k.rev===PLAN.rev){k.en=EN;k.enRev=ENREV;localStorage.setItem("nt-plan",JSON.stringify(k));}}catch(e){}}
+// the English for this version of the plan: right away for a page in English (redrawn when it comes), otherwise
+// a few seconds after the plan is up, so the page also reads in English offline and in quotes sent to the chat
+function ensureEn(later){if(!PLAN.rev||ENREV===PLAN.rev||enBusy)return;
+  if(later&&!en()){setTimeout(function(){ensureEn();},5000);return;}
+  enBusy=true;
+  fetchPlan(0,null,"/api/plan/en").then(function(j){EN=j.en;ENREV=j.rev;keepEn();if(en())rerender(true);})
+    .catch(function(){}).then(function(){enBusy=false;});}
 // local testing only: a copy of the plan in docs/ (never committed; scripts/plan.sh pull fetches it)
 function publishedPlan(){
   if(!LOCALDEV)return Promise.reject(new Error("offline"));
@@ -1632,10 +1680,11 @@ function checkPlan(){if(navigator.onLine===false)return;
     .then(function(j){if(j&&j.rev&&j.rev!==PLAN.rev)return fetchPlan().then(applyPlan);}).catch(function(){});}
 // a newer version: redraw everything from it, keeping the tab, the day and (if it's still there) the open stop
 function applyPlan(p){if(!p||p.rev===PLAN.rev)return;var quiet=!PLAN.rev;keepPlan(p);
-  morph(function(){EN=p.en||{};index(p.trip);
+  morph(function(){index(p.trip);
     if(DATES.indexOf(state.date)<0)state.date=DATES[0];
     var D=day();if(state.sel!=null&&(!D||state.sel>=D.segs.length))state.sel=null;
     rerender();redrawMap();caption();},"plan");
+  ensureEn(true);
   if(!quiet)planToast(p.last);}
 function planToast(last){var t=$("planToast");if(!t){t=document.createElement("button");t.type="button";t.id="planToast";t.className="plan-toast";document.body.appendChild(t);
     t.addEventListener("click",function(){t.classList.remove("show");});}
@@ -1657,15 +1706,24 @@ function showLock(msg){var box=$("lock");if(!box){box=document.createElement("di
   var inp=$("lockIn");inp.focus();
   $("lockForm").addEventListener("submit",function(e){e.preventDefault();var code=inp.value.trim(),er=$("lockErr");if(!code)return;er.textContent=U("验证中…");
     fetch(planApi()+"/api/check",{method:"POST",headers:{"X-Access-Code":code}}).then(function(r){
-      if(r.status===401){er.textContent=U("访问码不对。");inp.select();return;}if(!r.ok)throw new Error(r.status);
-      setAccessCode(code);return fetchPlan().then(function(p){keepPlan(p);box.remove();document.documentElement.classList.remove("locked");start(p);});})
-      .catch(function(){er.textContent=U("连不上行程服务器。");});});}
-function start(p){EN=p.en||{};if(p.rev)PLAN={rev:p.rev,last:p.last};boot(p.trip);watchPlan();}
+      if(r.status===401){er.textContent=U("访问码不对。");inp.select();return;}if(!r.ok){er.textContent=whyNot(httpErr(r.status));return;}
+      setAccessCode(code);er.textContent=U("访问码没问题，正在下载行程…");
+      return fetchPlan(0,function(g,n){er.textContent=U("访问码没问题，正在下载行程…")+" "+kb(g,n);}).then(function(p){keepPlan(p);box.remove();document.documentElement.classList.remove("locked");start(p);},
+        function(e){er.textContent=whyNot(e,true);});},
+      function(e){er.textContent=whyNot(e,false);});});}
+// Why unlocking failed, in words someone can act on: no answer at all (the network can't reach the Pi's *.ts.net
+// address: some Wi-Fi filters and countries block it), an error from the server, or a plan too slow to arrive.
+function httpErr(n){var e=new Error(n);e.code=n;return e;}
+function whyNot(e,plan){
+  if(e&&e.code>=400)return U("行程服务器出错了（{n}），过一会儿再试。",{n:e.code}); // (a timed-out fetch has code 20)
+  return plan?U("访问码没问题，但行程没下载完（网络太慢）。到信号好一点的地方再点一次。"):U("连不上行程服务器：这个网络可能打不开它。换个网络（Wi-Fi / 流量）或开关 VPN 再试。");}
+// (a copy saved before the English came on its own has no enRev: its English is that version's)
+function start(p){if(p.en&&Object.keys(p.en).length){EN=p.en;ENREV="enRev" in p?p.enRev:p.rev;}if(p.rev)PLAN={rev:p.rev,last:p.last};boot(p.trip);watchPlan();ensureEn(true);}
 applyStatic();
 var kept=null;try{kept=JSON.parse(localStorage.getItem("nt-plan"));}catch(e){}
 if(kept&&kept.trip&&accessCode())start(kept);
 else if(!accessCode()&&!LOCALDEV)showLock();
-else fetchPlan(4000).then(function(p){keepPlan(p);return p;}).catch(function(e){
+else fetchPlan(LOCALDEV?4000:0,function(g,n){$("lede").textContent=U("正在载入行程…")+" "+kb(g,n);}).then(function(p){keepPlan(p);return p;}).catch(function(e){
     if(e.code===401){setAccessCode(null);showLock();return null;}
     console.warn("live plan unavailable:",e);return publishedPlan();})
   .then(function(p){if(p)start(p);}).catch(function(e){
