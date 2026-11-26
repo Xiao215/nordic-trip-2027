@@ -1050,7 +1050,7 @@ $("rows").addEventListener("click",function(e){
     OPTOPEN[id]=on;
     li.classList.toggle("open",on);t.setAttribute("aria-expanded",on);li.querySelector(".opt-fold").inert=!on;
     if(on){var o=optByKey(li.dataset.opt);
-      if(o&&(o.kind==="hike"||(o.pts&&o.pts.length>1))){setCaption(plain(o.name||"[["+o.place+"]]"));showHikeMap(o.pts,o.place&&N[o.place],"opt:"+id,allTrailsUrl(o));}
+      if(o&&(o.kind==="hike"||(o.pts&&o.pts.length>1)))frameOptHike(o);
       else if(o&&o.place&&N[o.place])frameOpt(o);}
     else if(state.sel==null)fitView();
     return;}
@@ -1646,9 +1646,20 @@ function useLeaflet(){
   ensureLeaflet().then(function(L){
     if(lMap||map)return;
     var box=$("map");box.innerHTML="";
-    lMap=L.map(box,{center:[62,5],zoom:4,zoomControl:false,attributionControl:true});
+    lMap=L.map(box,{center:[62,5],zoom:4,minZoom:2,maxZoom:21,zoomSnap:0,zoomDelta:.75,scrollWheelZoom:false,zoomControl:false,attributionControl:true});
     L.control.zoom({position:"bottomright"}).addTo(lMap);
-    L.tileLayer("https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}",{maxZoom:19,attribution:"Map data &copy; Google"}).addTo(lMap);
+    L.tileLayer("https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}",{maxNativeZoom:20,maxZoom:21,attribution:"Map data &copy; Google"}).addTo(lMap);
+    // Smooth continuous trackpad pinch (ctrlKey) & scroll-wheel zoom anchored at the cursor, like Google Maps
+    box.addEventListener("wheel",function(e){
+      if(!lMap)return;
+      e.preventDefault();e.stopPropagation();
+      var dy=e.deltaMode===1?e.deltaY*24:e.deltaY;
+      var k=e.ctrlKey?.018:(Math.abs(dy)>=40&&dy%1===0?.004:.0055);
+      var dz=Math.max(-.45,Math.min(.45,-dy*k));
+      if(!dz)return;
+      var z=Math.max(lMap.getMinZoom(),Math.min(lMap.getMaxZoom(),lMap.getZoom()+dz));
+      lMap.setZoomAround(lMap.mouseEventToContainerPoint(e),z,{animate:false});
+    },{passive:false});
     lLayer=L.layerGroup().addTo(lMap);
     drawnFor=null;redrawMap();
     var D=day();if(state.view==="day"&&D&&state.sel!=null)frame(D.segs[state.sel]);else fitView();
@@ -1741,11 +1752,6 @@ function around(pts,c){return pts.concat(pts.map(function(p){return [2*c[0]-p[0]
 function stopOnRoute(s){var D=day();if(!D||s.t!=="stop"||!s.place)return null;
   var r=embedDayRoute(D),at=LL(s.place),i=-1;r.forEach(function(p,k){if(i<0&&p[0]===at[0]&&p[1]===at[1])i=k;});
   return r.length>1&&i>=0?{route:r,i:i,at:at}:null;}
-function allTrailsUrl(x){
-  if(!x)return null;
-  var t=(x.body||"")+" "+(x.facts||[]).map(function(f){return f[1]||"";}).join(" ")+" "+(x.tips||[]).join(" ");
-  var m=t.match(/https?:\/\/(?:www\.)?alltrails\.com\/[^\s)"']+/i);
-  return m?m[0]:null;}
 // An optional extra shows where it sits in the day the way a stop does: the day's route up to the stop it
 // follows, then on to it, so the red pin (and Google's time to get there) is the optional. One reached on foot
 // shows the walk from that stop; one reached by train or ferry, which Google can't route, just its place.
@@ -1754,17 +1760,25 @@ function optRoute(o){var D=day(),m=(o["in"]||{}).mode||"drive",at=o.after&&N[o.a
   var r=m==="walk"?[]:embedDayRoute(D),i=-1;r.forEach(function(p,k){if(i<0&&p[0]===at[0]&&p[1]===at[1])i=k;});
   var pts=(i>=0?r.slice(0,i+1):[at]).concat([N[o.place]]);
   return {pts:pts.slice(-10),walk:m==="walk"};}
+function putOptMark(o){
+  if(!o||!o.place||!N[o.place])return;
+  var el=document.createElement("div");el.className="mk sel";el.style.setProperty("--k",KCOL[o.kind]||"#C9711C");
+  var b=document.createElement("span");b.className="mk-badge";b.textContent="+";var nm=document.createElement("span");nm.className="mk-name";nm.textContent=plain(o.name||"[["+o.place+"]]");
+  el.append(b,nm);
+  if(lMap&&window.L){var w=document.createElement("div");w.appendChild(el);
+    optMark=window.L.marker(N[o.place],{icon:window.L.divIcon({className:"l-mk",html:w,iconSize:[0,0],iconAnchor:[0,0]}),zIndexOffset:1000,interactive:false}).addTo(lMap);}
+  else if(map&&Marker){optMark=new Marker({map:map,position:{lat:N[o.place][0],lng:N[o.place][1]},content:el,zIndex:1000});}}
 function frameOpt(o){var r=optRoute(o);if(!r){frameGroup([o.place]);}
   else{hideHikeMap();if(embed)embedRoute(r.pts,r.walk);else if(map||lMap)fitPts(r.pts,14);}
-  // on the Leaflet map the day's routes are drawn already; the optional gets a marker of its own until something else opens
-  if(lMap&&window.L){var el=document.createElement("div");el.className="mk sel";el.style.setProperty("--k","#C9711C");
-    var b=document.createElement("span");b.className="mk-badge";b.textContent="+";var nm=document.createElement("span");nm.className="mk-name";nm.textContent=plain(o.name||"[["+o.place+"]]");
-    el.append(b,nm);var w=document.createElement("div");w.appendChild(el);
-    optMark=window.L.marker(N[o.place],{icon:window.L.divIcon({className:"l-mk",html:w,iconSize:[0,0],iconAnchor:[0,0]}),zIndexOffset:1000,interactive:false}).addTo(lMap);}
+  putOptMark(o);
+  var m=o["in"]||{};setCaption(U("可选")+" · "+plain(o.name||"[["+o.place+"]]"),m.mins&&m.mode?mode(m.mode)+" "+hmS(m.mins):"");}
+function frameOptHike(o){
+  showHikeMap(o.pts,o.place&&N[o.place],16);
+  putOptMark(o);
   var m=o["in"]||{};setCaption(U("可选")+" · "+plain(o.name||"[["+o.place+"]]"),m.mins&&m.mode?mode(m.mode)+" "+hmS(m.mins):"");}
 function frame(s){
   if(s&&s.t==="stop"&&(s.kind==="hike"||(s.pts&&s.pts.length>1))){
-    caption();showHikeMap(s.pts,LL(s.place),"seg:"+state.date+":"+s.i,allTrailsUrl(s));return;}
+    caption();showHikeMap(s.pts,LL(s.place),s.zoom||16);return;}
   hideHikeMap();
   var on=stopOnRoute(s);caption();
   if(embed){
@@ -1776,22 +1790,12 @@ function frame(s){
   if(!map&&!lMap)return;
   if(on){fitPts(around(dayPts(day()),on.at),14);return;}
   if(s.pts&&s.pts.length>1)fitPts(s.pts,s.t==="move"?13:15);else fitPts([LL(s.place)],s.zoom||14);}
-/* ---------- hike trail map (default Google satellite route + switchable topo trail map) ---------- */
-var tMap=null,tBase={},tRoutes=null,tLoadP=null,curHike=null,trailMode="route",gHikeLines=[];
-function clearGHike(){gHikeLines.forEach(function(l){l.setMap(null);});gHikeLines=[];}
-var optMark=null;
+/* ---------- hike trail highlight on main Google satellite map ---------- */
+var tLoadP=null,gHikeLines=[],lHikeLines=[],optMark=null;
 function hideHikeMap(){
-  curHike=null;clearGHike();if(optMark){optMark.remove();optMark=null;}
-  var box=$("trailMap"),btn=$("trailModeBtn"),at=$("allTrailsBtn"),dr=$("dayRoute");
-  if(box)box.hidden=true;if(btn)btn.hidden=true;if(at)at.hidden=true;if(dr)dr.hidden=false;}
-function syncTrailBtn(){
-  var btn=$("trailModeBtn"),lbl=$("trailModeLabel"),at=$("allTrailsBtn"),dr=$("dayRoute");if(!btn||!lbl)return;
-  var topo=trailMode==="topo",hasAT=!!(curHike&&curHike.atUrl);
-  btn.hidden=!curHike;btn.classList.toggle("on",topo);
-  lbl.textContent=U(topo?"卫星徒步图":"等高线图");
-  btn.title=U(topo?"切回卫星徒步图":"切换到等高线地形图");
-  if(at){at.hidden=!hasAT;if(hasAT)at.href=curHike.atUrl;}
-  if(dr)dr.hidden=hasAT;}
+  gHikeLines.forEach(function(l){l.setMap(null);});gHikeLines=[];
+  lHikeLines.forEach(function(l){l.remove();});lHikeLines=[];
+  if(optMark){if(optMark.remove)optMark.remove();else optMark.map=null;optMark=null;}}
 function ensureLeaflet(){
   if(window.L)return Promise.resolve(window.L);
   if(tLoadP)return tLoadP;
@@ -1804,57 +1808,21 @@ function ensureLeaflet(){
       js2.onload=function(){ok(window.L);};js2.onerror=err;document.head.appendChild(js2);};
     document.head.appendChild(js);});
   return tLoadP;}
-function paintHikeMap(reframe){
-  if(!curHike)return;syncTrailBtn();clearGHike();
-  var pts=curHike.pts,center=curHike.center,box=$("trailMap"),initPt=(pts&&pts[0])||center||[64,-19];
-  // When Google Maps JS API is active and user wants the default Google route view (non-AllTrails), draw directly on `map`
-  if(trailMode==="route"&&map&&!curHike.atUrl&&pts&&pts.length>1){
-    box.hidden=true;
-    gHikeLines.push(new G.Polyline({map:map,path:pts.map(function(p){return {lat:p[0],lng:p[1]};}),strokeColor:"#38bdf8",strokeOpacity:.35,strokeWeight:10,clickable:false,zIndex:900}));
-    gHikeLines.push(new G.Polyline({map:map,path:pts.map(function(p){return {lat:p[0],lng:p[1]};}),strokeColor:"#38bdf8",strokeOpacity:1,strokeWeight:3.5,clickable:false,zIndex:901}));
-    if(reframe)fitPts(pts,15);
-    return;}
-  box.hidden=false;
-  ensureLeaflet().then(function(L){
-    if(!curHike)return;
-    if(!tMap){
-      tMap=L.map(box,{center:initPt,zoom:13,zoomControl:false,attributionControl:true});
-      L.control.zoom({position:"bottomright"}).addTo(tMap);
-      tBase.route=L.layerGroup([
-        L.tileLayer("https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}",{maxZoom:19,attribution:"Map data &copy; Google"}),
-        L.tileLayer("https://tile.waymarkedtrails.org/hiking/{z}/{x}/{y}.png",{maxZoom:17,opacity:.8,attribution:"Waymarked Trails"})
-      ]);
-      tBase.topo=L.layerGroup([
-        L.tileLayer("https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",{maxZoom:17,attribution:"&copy; OpenTopoMap &middot; OSM"}),
-        L.tileLayer("https://tile.waymarkedtrails.org/hiking/{z}/{x}/{y}.png",{maxZoom:17,opacity:.85,attribution:"Waymarked Trails"})
-      ]);
-      tRoutes=L.layerGroup().addTo(tMap);}
-    tMap.invalidateSize();
-    if(pts&&pts.length>1){
-      if(reframe)tMap.fitBounds(pts,{paddingTopLeft:[28,56],paddingBottomRight:[28,36],maxZoom:15});
-    }else if(center&&reframe){
-      tMap.setView(center,14);}
-    var want=trailMode==="topo"?tBase.topo:tBase.route,other=trailMode==="topo"?tBase.route:tBase.topo;
-    if(tMap.hasLayer(other))tMap.removeLayer(other);
-    if(!tMap.hasLayer(want))want.addTo(tMap);
-    tRoutes.clearLayers();
-    if(pts&&pts.length>1){
-      var topo=trailMode==="topo";
-      L.polyline(pts,{color:topo?"#ffffff":"#38bdf8",weight:topo?7:9,opacity:topo?.8:.35,lineCap:"round",lineJoin:"round"}).addTo(tRoutes);
-      L.polyline(pts,{color:topo?"#0284c7":"#38bdf8",weight:3.5,opacity:1,lineCap:"round",lineJoin:"round"}).addTo(tRoutes);
-      L.circleMarker(pts[0],{radius:6,color:"#0f172a",weight:2,fillColor:"#22c55e",fillOpacity:1}).addTo(tRoutes);
-    }else if(center){
-      L.circleMarker(center,{radius:7,color:"#0f172a",weight:2,fillColor:"#22c55e",fillOpacity:1}).addTo(tRoutes);}
-  }).catch(function(e){console.error("Hike map error:",e);box.hidden=true;});}
-function showHikeMap(pts,center,key,atUrl){
-  var changed=!curHike||curHike.key!==key;
-  if(changed)trailMode="route";
-  curHike={pts:pts,center:center,key:key,atUrl:atUrl||null};
-  paintHikeMap(changed);}
-$("trailModeBtn").addEventListener("click",function(){
-  if(!curHike)return;
-  trailMode=trailMode==="topo"?"route":"topo";
-  paintHikeMap(false);});
+function showHikeMap(pts,center,zoom){
+  hideHikeMap();
+  if(embed){embedPlace(center||(pts&&pts[0]),zoom||14);return;}
+  if(pts&&pts.length>1){
+    if(lMap&&window.L){
+      lHikeLines.push(window.L.polyline(pts,{color:"#ffffff",weight:8,opacity:.92,interactive:false,lineCap:"round",lineJoin:"round"}).addTo(lMap));
+      lHikeLines.push(window.L.polyline(pts,{color:"#16a34a",weight:4.2,opacity:1,dashArray:"2,8",interactive:false,lineCap:"round",lineJoin:"round"}).addTo(lMap));
+    }else if(map){
+      gHikeLines.push(new G.Polyline({map:map,path:pts.map(function(p){return {lat:p[0],lng:p[1]};}),strokeColor:"#ffffff",strokeOpacity:.9,strokeWeight:8,clickable:false,zIndex:900}));
+      gHikeLines.push(new G.Polyline({map:map,path:pts.map(function(p){return {lat:p[0],lng:p[1]};}),strokeOpacity:0,icons:[{icon:{path:G.SymbolPath.CIRCLE,scale:3,fillColor:"#16a34a",fillOpacity:1,strokeColor:"#fff",strokeWeight:1.2},offset:"0",repeat:"10px"}],clickable:false,zIndex:901}));
+    }
+    fitPts(pts,zoom||16);
+  }else if(center){
+    fitPts([center],zoom||15);
+  }}
 // The map box follows the window (and moves into an open stop on phones). Once a resize settles, frame the same
 // view again for the new size: the embed was centred and zoomed for the old one.
 function refit(){reloadEmbed=true;var D=day();if(state.view==="day"&&D&&state.sel!=null)frame(D.segs[state.sel]);else fitView();}
@@ -1873,12 +1841,21 @@ function gc(a,b,n){var r=Math.PI/180,la1=a[0]*r,lo1=a[1]*r,la2=b[0]*r,lo2=b[1]*r
     var x=A*Math.cos(la1)*Math.cos(lo1)+B*Math.cos(la2)*Math.cos(lo2),y=A*Math.cos(la1)*Math.sin(lo1)+B*Math.cos(la2)*Math.sin(lo2),z=A*Math.sin(la1)+B*Math.sin(la2);
     out.push([Math.atan2(z,Math.sqrt(x*x+y*y))/r,Math.atan2(y,x)/r]);}return out;}
 function line(pts,opts){var l=new G.Polyline(Object.assign({map:map,path:pts.map(function(p){return {lat:p[0],lng:p[1]};})},opts));lines.push(l);return l;}
-function moveLine(s,col,strong,pick){
+function bindTip(pl,tip){if(tip&&pl&&pl.bindTooltip)pl.bindTooltip(tip,{sticky:true,className:"rt-tip",direction:"top",offset:[0,-8]});return pl;}
+function moveLine(s,col,strong,pick,tip){
   var pts=s.mode==="flight"?gc(s.pts[0],s.pts[s.pts.length-1],48):s.pts;
+  var walk=s.mode==="walk"||s.mode==="bike";
   if(lMap){var L=window.L;
-    if(s.mode==="flight"||s.mode==="ferry"){var lf=L.polyline(pts,{color:col,weight:strong?3:2,opacity:strong?.95:.5,dashArray:s.mode==="flight"?"6,8":"4,7",lineCap:"round"}).addTo(lLayer);if(pick)lf.on("click",pick);return;}
+    if(walk){
+      L.polyline(pts,{color:"#ffffff",weight:5.5,opacity:.75,interactive:false,lineCap:"round",lineJoin:"round"}).addTo(lLayer);
+      var lw=L.polyline(pts,{color:"#2E7D47",weight:3.5,opacity:1,dashArray:"2,7",lineCap:"round",lineJoin:"round"}).addTo(lLayer);
+      if(pick)lw.on("click",pick);return;}
+    if(s.mode==="flight"||s.mode==="ferry"){var lf=bindTip(L.polyline(pts,{color:col,weight:strong?3:2,opacity:strong?.95:.5,dashArray:s.mode==="flight"?"6,8":"4,7",lineCap:"round"}).addTo(lLayer),tip);if(pick)lf.on("click",pick);return;}
     if(strong)L.polyline(pts,{color:"#ffffff",weight:7.5,opacity:.9,interactive:false,lineCap:"round",lineJoin:"round"}).addTo(lLayer);
-    var lr=L.polyline(pts,{color:col,weight:strong?4.2:2.5,opacity:strong?1:.5,interactive:!!pick,lineCap:"round",lineJoin:"round"}).addTo(lLayer);if(pick)lr.on("click",pick);return;}
+    var lr=bindTip(L.polyline(pts,{color:col,weight:strong?4.2:2.5,opacity:strong?1:.5,interactive:!!pick,lineCap:"round",lineJoin:"round"}).addTo(lLayer),tip);if(pick)lr.on("click",pick);return;}
+  if(walk){
+    var gw=line(pts,{strokeOpacity:0,icons:[{icon:{path:G.SymbolPath.CIRCLE,scale:2.6,fillColor:"#2E7D47",fillOpacity:1,strokeColor:"#fff",strokeWeight:1},offset:"0",repeat:"10px"}],clickable:!!pick});
+    if(pick)gw.addListener("click",pick);return;}
   if(s.mode==="flight"||s.mode==="ferry"){var l=line(pts,{strokeOpacity:0,icons:[{icon:{path:"M 0,-1 0,1",strokeOpacity:strong?1:.45,strokeColor:col,strokeWeight:strong?3:2,scale:3},offset:"0",repeat:s.mode==="flight"?"12px":"9px"}]});if(pick)l.addListener("click",pick);return;}
   if(strong)line(pts,{strokeColor:"#ffffff",strokeOpacity:.9,strokeWeight:8,clickable:false});
   var l2=line(pts,{strokeColor:col,strokeOpacity:strong?1:.45,strokeWeight:strong?4.5:2.5,clickable:!!pick});if(pick)l2.addListener("click",pick);}
@@ -1888,21 +1865,28 @@ function redrawMap(){
   else{lines.forEach(function(l){l.setMap(null);});lines=[];markers.forEach(function(m){m.map=null;});markers=[];}
   var D=state.view==="day"?day():null;
   T.days.forEach(function(X){var col=(T.countries[X.c]||{}).color||"#5D6B73",mine=D===X;
-    X.segs.forEach(function(s){if(s.t!=="move"||!s.pts||s.pts.length<2)return;
-      moveLine(s,mine?"#C9711C":col,mine||!D,mine?function(){select(s.i);}:function(){setView("day",X.date);});});
+    var tip=!D?md(X.date)+" · "+plain(X.short||X.title):"";
+    X.segs.forEach(function(s,si){if(s.t!=="move"||!s.pts||s.pts.length<2)return;
+      if(s.mode==="walk"||s.mode==="bike"){
+        if(!mine)return; // keep whole-trip overview clean of tiny local walks
+        if(s.mode==="walk"){
+          var pv=X.segs[si-1],nx=X.segs[si+1];
+          if((pv&&pv.t==="stop"&&pv.pts&&pv.pts.length>1)||(nx&&nx.t==="stop"&&nx.pts&&nx.pts.length>1))return;
+        }
+      }
+      moveLine(s,mine?"#C9711C":col,mine||!D,mine?function(){select(s.i);}:function(){setView("day",X.date);},tip);});
     if(mine)X.segs.forEach(function(s){if(s.t==="stop"&&s.pts&&s.pts.length>1){
-      if(lMap)window.L.polyline(s.pts,{color:"#3D7A4F",weight:3.5,opacity:.95,dashArray:"2,7",lineCap:"round"}).addTo(lLayer).on("click",function(){select(s.i);});
-      else line(s.pts,{strokeOpacity:0,icons:[{icon:{path:G.SymbolPath.CIRCLE,scale:2.6,fillColor:"#3D7A4F",fillOpacity:1,strokeColor:"#fff",strokeWeight:1},offset:"0",repeat:"10px"}]}).addListener("click",function(){select(s.i);});}});});
-  if(D){ // one marker per place; several stops at the same place share it ("3·9")
+      if(lMap){
+        window.L.polyline(s.pts,{color:"#ffffff",weight:5.8,opacity:.8,interactive:false,lineCap:"round",lineJoin:"round"}).addTo(lLayer);
+        window.L.polyline(s.pts,{color:"#2E7D47",weight:3.6,opacity:1,dashArray:"2,7",lineCap:"round",lineJoin:"round"}).addTo(lLayer).on("click",function(){select(s.i);});
+      }else line(s.pts,{strokeOpacity:0,icons:[{icon:{path:G.SymbolPath.CIRCLE,scale:2.6,fillColor:"#2E7D47",fillOpacity:1,strokeColor:"#fff",strokeWeight:1},offset:"0",repeat:"10px"}]}).addListener("click",function(){select(s.i);});}});});
+  if(D){ // one marker per place; several stops at the same place share it ("3·9"); overview shows the route only
     var groups={};D.segs.forEach(function(s){if(s.t!=="stop")return;(groups[s.place]=groups[s.place]||[]).push(s);});
     Object.keys(groups).forEach(function(pl){var stops=groups[pl];
       addMarker(N[pl],stops.map(function(s){return s.num;}).join("·"),KCOL[stops[0].kind]||KCOL.visit,plain(stops[0].name||"[["+pl+"]]"),function(m){
         var cur=state.sel!=null?D.segs[state.sel]:null,idx=stops.indexOf(cur),next=stops[(idx+1)%stops.length];
         select(next.i);var li=document.querySelector('#rows li[data-i="'+next.i+'"]');if(li)li.scrollIntoView({block:"nearest",behavior:"smooth"});}).stops=stops;});
-  }else{ // overview: where you sleep each night
-    var stays={};T.days.forEach(function(X){if(X.stay)(stays[X.stay]=stays[X.stay]||[]).push(X);});
-    Object.keys(stays).forEach(function(pl){var ds=stays[pl];
-      addMarker(N[pl],ds.length>2?md(ds[0].date)+"–"+md(ds[ds.length-1].date):ds.map(function(X){return md(X.date);}).join("·"),(T.countries[ds[0].c]||{}).color,pn(pl,true),function(){setView("day",ds[0].date);});});}
+  }
   if(you&&!lMap){you.map=null;you=null;}
   if(D&&liveDate()===state.date){var cur=nowSeg();if(cur){var t=nowIn(tzOf(state.date)).mins,a=mins(cur.start),b=mins(cur.end||cur.start);
     var pos=cur.pts&&cur.pts.length>1?along(cur.pts,b>a?(t-a)/(b-a):1):LL(cur.place);

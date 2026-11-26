@@ -51,8 +51,6 @@ code{font-family:var(--f-mono);font-size:.84em;background:var(--fjord-soft);padd
 .map{position:absolute;inset:0}
 /* 16px past the bottom crops Google's footer (键盘快捷键 · 地图数据 · 条款); .map-attr keeps the credit */
 .map iframe{display:block;width:100%;height:calc(100% + 16px);border:0}
-.trail-map{z-index:1;background:var(--surface-2)}
-.trail-map[hidden]{display:none!important}
 .map-hud{position:absolute;top:12px;left:12px;right:12px;display:flex;align-items:center;gap:8px;z-index:410;pointer-events:none}
 .map-tools{margin-left:auto;display:flex;gap:8px;flex:0 0 auto;pointer-events:auto}
 .tool{display:inline-flex;align-items:center;gap:7px;height:36px;padding:0 12px;border:1px solid var(--line);border-radius:999px;background:var(--glass);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 2px 10px rgba(0,0,0,.12);font-size:13px;font-weight:600;color:var(--ink);text-decoration:none;cursor:pointer}
@@ -621,14 +619,17 @@ li.now>.row .t{color:var(--sun);font-weight:600}
 .foot{display:grid;gap:8px;font-size:12.5px;color:var(--muted);padding-top:16px;border-top:1px solid var(--line)}
 .foot a{color:var(--muted)}
 
-/* map markers (Google AdvancedMarker content) */
-.mk{display:flex;align-items:center;gap:6px;transform:translateY(50%);cursor:pointer}
-.l-mk .mk{transform:translate(-14px,-50%)}
-.mk-badge{min-width:28px;height:28px;padding:0 7px;border-radius:9px;display:grid;place-items:center;font-family:var(--f-mono);font-size:12px;font-weight:600;color:#fff;background:var(--k,#1F4E6B);border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.3);transition:transform .15s;white-space:nowrap}
-.mk-name{display:none;padding:4px 9px;border-radius:8px;background:#14212A;color:#fff;font-size:12.5px;font-weight:600;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.3)}
-.mk.sel .mk-badge{transform:scale(1.18);background:#14212A}
+/* map markers (Google AdvancedMarker & Leaflet divIcon content) */
+.mk{position:relative;display:inline-flex;align-items:center;width:max-content;transform:translateY(50%);cursor:pointer}
+.l-mk .mk{transform:translate(-50%,-50%)}
+.mk-badge{flex:none;min-width:28px;height:28px;padding:0 7px;border-radius:9px;display:inline-flex;align-items:center;justify-content:center;font-family:var(--f-mono);font-size:12px;font-weight:600;letter-spacing:-.02em;color:#fff;background:var(--k,#1F4E6B);border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.3);transition:transform .15s;white-space:nowrap}
+.mk-name{display:none;position:absolute;left:calc(100% + 6px);top:50%;transform:translateY(-50%);padding:4px 9px;border-radius:8px;background:#14212A;color:#fff;font-size:12.5px;font-weight:600;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.3);pointer-events:none}
+.mk.sel .mk-badge{transform:scale(1.16);background:#14212A}
 .mk.sel .mk-name,.mk:hover .mk-name{display:block}
+.rt-tip.leaflet-tooltip{padding:4px 9px;border:0;border-radius:8px;background:#14212A;color:#fff;font:600 12px var(--f-body);box-shadow:0 2px 8px rgba(0,0,0,.3)}
+.rt-tip.leaflet-tooltip::before{display:none}
 .you{position:relative;width:18px;height:18px;transform:translateY(50%)}
+.l-mk .you{transform:translate(-50%,-50%)}
 .you::before{content:"";position:absolute;inset:-12px;border-radius:50%;background:rgba(201,113,28,.25);animation:pulse 2s ease-out infinite}
 .you::after{content:"";position:absolute;inset:0;border-radius:50%;background:#C9711C;border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.35)}
 .you-tag{position:absolute;left:24px;top:-1px;padding:2px 7px;border-radius:6px;background:#C9711C;color:#fff;font-size:11px;font-weight:600;white-space:nowrap}
