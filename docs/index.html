@@ -63,12 +63,32 @@
     </header>
 
     <section id="allView" class="view">
-      <div class="route" id="ribbon" aria-label="路线" data-i18n-aria-label="路线"></div>
+      <div class="fun-nums" id="funNums" aria-label="行程数字总览" data-i18n-aria-label="行程数字总览"></div>
+      <div class="bento" id="bento">
+        <section class="bento-card rdy-card" id="bentoReady" aria-label="行前雷达" data-i18n-aria-label="行前雷达"></section>
+        <section class="bento-card bgt-card" id="bentoBudget" aria-label="预算小账箱" data-i18n-aria-label="预算小账箱"></section>
+      </div>
+      <section class="jewels-sec" id="jewelsSec">
+        <div class="tl-head jewels-head">
+          <div class="jh-txt"><h2 data-i18n="高光时刻">高光时刻</h2><span class="hint" data-i18n="点任意明信片直达当天该站">点任意明信片直达当天该站</span></div>
+          <div class="jewels-nav">
+            <button type="button" class="j-arr" id="jPrev" aria-label="往左翻" data-i18n-aria-label="往左翻">‹</button>
+            <button type="button" class="j-arr" id="jNext" aria-label="往右翻" data-i18n-aria-label="往右翻">›</button>
+          </div>
+        </div>
+        <div class="jewels" id="jewels" role="list"></div>
+      </section>
       <div class="tl-head"><h2 data-i18n="四周日历">四周日历</h2><span class="hint" data-i18n="点任意一天看当天安排">点任意一天看当天安排</span></div>
+      <div class="route" id="ribbon" aria-label="路线" data-i18n-aria-label="路线"></div>
       <div class="cal" id="cal"></div>
       <div class="pace-sum" id="paceSum"></div>
-      <div class="tl-head"><h2 data-i18n="路线分段">路线分段</h2><span class="hint" id="legHint"></span></div>
-      <div class="legs" id="legs"></div>
+      <details class="legs-fold" id="legsFold">
+        <summary class="legs-sum">
+          <div class="legs-sum-l"><h2 data-i18n="路线分段">路线分段</h2><span class="hint" id="legHint"></span></div>
+          <span class="legs-sum-r"><span class="lf-open" data-i18n="展开文字与照片">展开文字与照片</span><span class="lf-shut" data-i18n="收起">收起</span><svg class="b-chev" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 8l5 5 5-5"/></svg></span>
+        </summary>
+        <div class="legs" id="legs"></div>
+      </details>
     </section>
 
     <section id="dayView" class="view" hidden>
@@ -110,7 +130,7 @@
       <div id="trailMap" class="map trail-map" hidden></div>
       <div class="map-hud">
         <div class="map-caption" id="mapCaption"></div>
-        <div class="map-tools" role="toolbar" aria-label="地图">
+        <div class="map-tools" role="toolbar" aria-label="地图" data-i18n-aria-label="地图">
           <a class="tool on" id="allTrailsBtn" href="https://www.alltrails.com" target="_blank" rel="noopener" hidden>
             <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M8 4H4v12h12v-4M11 3h6v6M17 3l-8 8"/></svg><span>AllTrails</span>
           </a>

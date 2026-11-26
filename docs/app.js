@@ -108,7 +108,28 @@ var UIEN={
   "{n} 张没下载成功，有信号时再点一次":"{n} didn't download; try again with a better connection",
   "地图和行程助手要联网。出发前在 Google 地图 app 里下载冰岛、挪威、瑞典、丹麦的离线地图。":"The map and the assistant need a connection. Before you go, download offline maps of Iceland, Norway, Sweden and Denmark in the Google Maps app.",
   "离线中：行程和存好的照片都能看，地图、助手和同步要等有信号":"Offline: the plan and saved photos still work; the map, the assistant and syncing wait for signal",
-  "等高线图":"Topo map","卫星徒步图":"Satellite trails","切换到等高线地形图":"Switch to topographic contour map","切回卫星徒步图":"Switch back to satellite trail view"
+  "等高线图":"Topo map","卫星徒步图":"Satellite trails","切换到等高线地形图":"Switch to topographic contour map","切回卫星徒步图":"Switch back to satellite trail view",
+  // overview bento: fun numbers, readiness, budget box, crown jewels, folded legs
+  "行程数字总览":"Trip by the numbers","全程跨度":"Trip span","{d} 天 · {c} 国":"{d}d · {c} countries","{n} 晚 · {k} 种货币":"{n}n · {k} currencies",
+  "自驾里程":"Road-tripping","约 {h}h · {n} 趟车程":"~{h}h driving · {n} legs",
+  "海陆空接力":"Air, sea & rail","{f} 飞 · {s} 船 · {t} 铁":"{f} flights · {s} boats · {t} rail","含波罗的海过夜邮轮":"Incl. Baltic night cruise","跨国航班、峡湾渡轮与火车":"Flights, ferries & trains",
+  "山野与冰川":"Trails & ice","{n} 场徒步":"{n} hikes","{w} 座瀑布 · {g} 片冰川":"{w} waterfalls · {g} glaciers",
+  "最北足迹":"Northernmost","{p} · 距北极圈 {k} km":"{p} · {k} km to Arctic Circle",
+  "盛夏日照":"Summer daylight","约 {h} 小时":"~{h} h","日均 {a}h · {r} 日出":"~{a}h/day · {r} sunrise",
+  "行前雷达":"Trip readiness","选护照看签证":"Pick passport","项已订":"booked","项现在可订":"open now","即将开放":"Opening soon","现在先盯":"Do now",
+  "今天开放":"Opens today","明天开放":"Tomorrow","{n} 天后":"in {n}d","全部订好了！":"All bookings done!","清单 {a}/{b}":"Checklist {a}/{b}",
+  "全部预订与准备":"All bookings & prep","今日行程":"Today on the trip","看今天":"Open today",
+  "预算小账箱":"Budget box","人均全包估算":"Est. / person","{n}人":"{n}p","分摊人数":"Group split","/ 人":"/ person",
+  "约 {a}–{b} / 天 · 按 {c} 折算":"~{a}–{b}/day · in {c}","点细项看包含什么 · 货币随右上角切换":"Tap a row for details · currency follows top bar",
+  "机票邮轮":"Flights & sea","跨大西洋往返 + 欧内直飞 + 波罗的海过夜船 + 火车":"Transatlantic + intra-Europe flights + Baltic cruise + rail",
+  "{n} 晚住宿":"{n}n stays","青旅床位、峡湾营地木屋与老城公寓":"Hostels, fjord cabins & apartments",
+  "租车油费 ÷{n}":"Car & gas ÷{n}","{k} km 租车、保险、油费、停车与过路费（{n} 人平摊）":"{k} km rentals, full cover, fuel, tolls & parking (÷{n})",
+  "吃饭超市":"Food & groceries","{d} 天超市采买做饭、面包房与特色正餐":"{d}d groceries, bakeries & local meals",
+  "冰川门票":"Tours & sights","快艇、冰川徒步、峡湾游船、温泉与博物馆":"Zodiac, glacier hike, fjord cruise, baths & museums",
+  "各国物价":"Price vibe","偏高":"High","中高":"Mid-high","回血站":"Chill",
+  "账本已记 {t}（{n} 笔）":"Logged {t} ({n})","去账本":"Expenses","出发后拍小票就能自动记账平摊":"Snap receipts on the road to log & split costs",
+  "高光时刻":"Crown jewels","点任意明信片直达当天该站":"Tap a postcard to jump straight to that stop","往左翻":"Scroll left","往右翻":"Scroll right",
+  "展开文字与照片":"Show leg notes & photos","收起":"Hide"
 };
 /* ---------- currency ---------- */
 // Prices stay as written in trip.json (ISK, NOK, SEK, DKK, €, US$). With CAD, CNY or USD picked, every
@@ -187,7 +208,14 @@ var ICON={
   bus:'<svg viewBox="0 0 20 20"><rect x="4" y="3" width="12" height="12" rx="2"/><path d="M4 10h12M6 15v2M14 15v2M7 12.5h.01M13 12.5h.01"/></svg>',
   bike:'<svg viewBox="0 0 20 20"><circle cx="5" cy="13.5" r="3"/><circle cx="15" cy="13.5" r="3"/><path d="M5 13.5l3-6h5l2 6M8 7.5L10 13.5h0M11.5 5.5H14"/></svg>',
   walk:'<svg viewBox="0 0 20 20"><circle cx="11" cy="3.8" r="1.6"/><path d="M8 18l2-5 2 2v3M10 13l1-5-3 2-1 3M11 8l2 3h2.5"/></svg>',
-  down:'<svg viewBox="0 0 20 20"><path d="M10 3v10M5.5 9l4.5 4.5L14.5 9M4 16.5h12"/></svg>'
+  down:'<svg viewBox="0 0 20 20"><path d="M10 3v10M5.5 9l4.5 4.5L14.5 9M4 16.5h12"/></svg>',
+  globe:'<svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="7.5"/><path d="M2.5 10h15M10 2.5c2.2 2.2 2.2 12.8 0 15M10 2.5c-2.2 2.2-2.2 12.8 0 15"/></svg>',
+  peak:'<svg viewBox="0 0 20 20"><path d="M2.5 16L8 7l3.2 4.5 2.6-3.5 3.7 8z"/><circle cx="14.5" cy="5.2" r="1.5"/></svg>',
+  north:'<svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="7.5"/><path d="M10 4.5l2.2 5.5-2.2 5.5-2.2-5.5z"/></svg>',
+  sun:'<svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="3.5"/><path d="M10 2.5v2.2M10 15.3v2.2M2.5 10h2.2M15.3 10h2.2M4.7 4.7l1.5 1.5M13.8 13.8l1.5 1.5M4.7 15.3l1.5-1.5M13.8 6.2l1.5-1.5"/></svg>',
+  radar:'<svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="7.5"/><circle cx="10" cy="10" r="3.2"/><path d="M10 10l5.2-5.2"/></svg>',
+  coin:'<svg viewBox="0 0 20 20"><rect x="2.5" y="5" width="15" height="11" rx="2.6"/><path d="M12.8 10.5h4.7"/><circle cx="13" cy="10.5" r="1"/></svg>',
+  idcard:'<svg viewBox="0 0 20 20"><rect x="2.5" y="4.5" width="15" height="11" rx="2"/><circle cx="7.2" cy="9.2" r="1.6"/><path d="M4.8 13.2c.6-1.2 1.5-1.8 2.4-1.8s1.8.6 2.4 1.8M11.5 8.5h3.5M11.5 11.5h2.5"/></svg>'
 };
 var WX={sun:'<svg viewBox="0 0 48 48"><g class="sun"><circle cx="24" cy="24" r="8"/><path d="M24 6v5M24 37v5M6 24h5M37 24h5M11 11l3.5 3.5M33.5 33.5 37 37M11 37l3.5-3.5M33.5 14.5 37 11"/></g></svg>',
   part:'<svg viewBox="0 0 48 48"><g class="sun"><circle cx="18" cy="17" r="6"/><path d="M18 5v3M6 17h3M9.5 8.5l2 2M26.5 8.5l-2 2"/></g><path d="M16 38h20a7 7 0 0 0 0-14 10 10 0 0 0-19 3 5.5 5.5 0 0 0-1 11z"/></svg>',
@@ -279,7 +307,7 @@ function boot(trip){
   function viewContext(){var D=day(),s=D&&state.sel!=null?D.segs[state.sel]:null;
     var lang=en()?"en":"zh",curTxt=curContext();
     if(state.view==="prep")return {lang:lang,currency:curTxt,day:"Prep tab",looking_at:"visas, bookings and checklists"};
-    if(state.view==="all")return {lang:lang,currency:curTxt,day:"Overview",looking_at:"the whole trip's calendar and route legs"};
+    if(state.view==="all")return {lang:lang,currency:curTxt,day:"Overview",looking_at:"the trip summary numbers, readiness & deadlines, budget estimate, crown-jewel highlights, calendar and route legs"};
     if(state.view==="money")return {lang:lang,currency:curTxt,day:"Expenses tab",looking_at:"the group's shared expense log"};
     return {lang:lang,currency:curTxt,day:state.date+" · "+(D?plain(D.title):"being planned"),looking_at:s?(s.t==="move"?mode(s.mode)+" "+moveLabel(s,true):s.num+". "+plain(s.name||"[["+s.place+"]]")+(s.start?" ("+s.start+")":"")):"the whole day"};}
   document.dispatchEvent(new CustomEvent("trip:view"));
@@ -308,9 +336,289 @@ function renderHeader(){
   $("allSub").textContent=U("{n} 天",{n:DATES.length});
 }
 
-/* ---------- overview: ribbon, calendar, legs ---------- */
+/* ---------- overview: fun numbers, bento (readiness + budget), crown jewels, calendar, folded legs ---------- */
+var CFLAG={is:"🇮🇸",fo:"🇫🇴",no:"🇳🇴",se:"🇸🇪",ee:"🇪🇪",dk:"🇩🇰"};
+var CVIBE={is:[4,"偏高"],fo:[4,"偏高"],no:[4,"偏高"],dk:[3,"中高"],se:[3,"中高"],ee:[2,"回血站"]};
+var BGT_CAT=null,TRIP_STATS=null;
+
+function calcTripStats(){
+  var days=DATES.length,nights=Math.max(1,days-1),cList=[],cSeen={},curMap={is:"ISK",fo:"DKK",no:"NOK",se:"SEK",ee:"EUR",dk:"DKK"},curSeen={};
+  DATES.forEach(function(d){var c=cOf(d);if(c&&!cSeen[c]){cSeen[c]=1;cList.push(c);}if(c&&curMap[c])curSeen[curMap[c]]=1;});
+  var driveKm=0,driveMins=0,driveCnt=0,flights=0,ferries=0,trains=0,hikes=0,wfSet={},glSet={};
+  var maxLat=-90,northDate=DATES[0],northStopId=null,northStopLat=-90,bossDate=null,ferryDate=null;
+  T.days.forEach(function(D){
+    var dayMax=-90,dayStop=null,dayStopLat=-90;
+    D.segs.forEach(function(s){
+      var m=dur(s);
+      if(s.t==="move"){
+        if(s.mode==="drive"){driveCnt++;driveMins+=m;var k=s.km||0;
+          if(!k&&s.pts&&s.pts.length>1){for(var p=1;p<s.pts.length;p++)k+=km(s.pts[p-1],s.pts[p]);}
+          driveKm+=k;}
+        else if(s.mode==="flight")flights++;
+        else if(s.mode==="ferry"){ferries++;if(!ferryDate||/tallink|过夜|overnight/i.test(s.note||""))ferryDate=D.date;}
+        else if(s.mode==="train")trains++;
+        (s.pts||[]).forEach(function(pt){if(pt&&pt[0]>dayMax)dayMax=pt[0];});
+      }else{
+        var pid=s.place,pl=pid&&T.places[pid];
+        if(s.kind==="hike"){hikes++;if(pid==="trolltunga"||(!bossDate&&pid==="blahnukur"))bossDate=D.date;}
+        if(pl){
+          var nm=(pid+" "+(pl.zh||"")+" "+(pl.local||"")+" "+(pl.en||"")),scenicStop=!/^(start|stay|shop|food)$/.test(s.kind||"");
+          if(scenicStop&&(/foss/i.test(pid)||/瀑布/.test(pl.zh||"")))wfSet[pid]=1;
+          if(scenicStop&&(s.kind==="glacier"||/jokull|jokulsarlon|fjallsarlon|breen|冰川|冰河/i.test(nm)))glSet[pid]=1;
+          if(pl.ll&&pl.ll[0]>dayMax)dayMax=pl.ll[0];
+          if(pl.ll&&scenicStop&&pl.ll[0]>dayStopLat){dayStopLat=pl.ll[0];dayStop=pid;}
+        }
+      }
+    });
+    if(dayMax>maxLat){maxLat=dayMax;northDate=D.date;northStopId=dayStop||D.stay;}
+    if(dayStopLat>northStopLat&&dayStop){northStopLat=dayStopLat;if(D.date===northDate)northStopId=dayStop;}
+  });
+  var sunMins=0,earliest="99:99",earliestDate=DATES[0];
+  DATES.forEach(function(d){
+    var D=BYDATE[d],c=cOf(d),nxC=cOf(addDays(d,1));
+    var sid=(D&&D.wx)||(D&&D.stay&&nxC===c?D.stay:(D&&D.segs[0]&&D.segs[0].place)||(D&&D.stay))||(legOf(d)&&legOf(d).wx);
+    if(sid&&N[sid]){var st=sunTimes(d,N[sid][0],N[sid][1],tzOf(d));
+      var len=st.polar==="day"?1440:st.polar==="night"?0:(st.len||0);
+      sunMins+=len;if(st.rise&&st.rise<earliest){earliest=st.rise;earliestDate=d;}}
+  });
+  var overnightCruise=(T.bookings||[]).some(function(b){return /tallink|过夜邮轮|overnight/i.test(b.id+" "+(b.what||""));});
+  if(overnightCruise){var tb=(T.bookings||[]).filter(function(b){return /tallink/i.test(b.id);})[0];if(tb&&tb.days&&tb.days[0])ferryDate=tb.days[0];}
+  var stayNights=Math.max(1,nights-(overnightCruise?1:0));
+  var arcticKm=Math.max(0,Math.round((66.5622-(maxLat>-90?maxLat:65.7))*111.2));
+  return {
+    days:days,nights:nights,stayNights:stayNights,countries:cList,currencies:Object.keys(curSeen).length||5,
+    driveKm:Math.round(driveKm),driveHrs:Math.round(driveMins/60),driveCnt:driveCnt,
+    flights:flights,ferries:ferries,trains:trains,overnightCruise:overnightCruise,ferryDate:ferryDate||DATES[0],
+    hikes:hikes,waterfalls:Object.keys(wfSet).length,glaciers:Object.keys(glSet).length,bossDate:bossDate||DATES[0],
+    maxLat:maxLat>-90?maxLat:65.8,northDate:northDate,northStopId:northStopId,arcticKm:arcticKm,
+    sunHrs:Math.round(sunMins/60),sunAvg:(sunMins/60/Math.max(1,days)).toFixed(1),earliest:earliest<"99:99"?earliest:"02:30",earliestDate:earliestDate
+  };
+}
+
+function renderFunNums(){
+  var S=TRIP_STATS||calcTripStats(),box=$("funNums");if(!box)return;
+  var flags=S.countries.map(function(c){return CFLAG[c]||"";}).filter(Boolean).join(" ");
+  var nPlace=S.northStopId?pn(S.northStopId,true):"Akureyri";
+  var items=[
+    {ic:ICON.globe,k:"fjord",dt:DATES[0],lbl:U("全程跨度"),val:U("{d} 天 · {c} 国",{d:S.days,c:S.countries.length}),sub:(flags?flags+" · ":"")+U("{n} 晚 · {k} 种货币",{n:S.nights,k:S.currencies})},
+    {ic:ICON.drive,k:"road",dt:DATES[0],lbl:U("自驾里程"),val:S.driveKm.toLocaleString("en-US")+" km",sub:U("约 {h}h · {n} 趟车程",{h:S.driveHrs,n:S.driveCnt})},
+    {ic:ICON.ferry,k:"ice",dt:S.ferryDate,lbl:U("海陆空接力"),val:U("{f} 飞 · {s} 船 · {t} 铁",{f:S.flights,s:S.ferries,t:S.trains}),sub:U(S.overnightCruise?"含波罗的海过夜邮轮":"跨国航班、峡湾渡轮与火车")},
+    {ic:ICON.peak,k:"moss",dt:S.bossDate,lbl:U("山野与冰川"),val:U("{n} 场徒步",{n:S.hikes}),sub:U("{w} 座瀑布 · {g} 片冰川",{w:S.waterfalls,g:S.glaciers})},
+    {ic:ICON.north,k:"ice",dt:S.northDate,lbl:U("最北足迹"),val:S.maxLat.toFixed(1)+"°N",sub:U("{p} · 距北极圈 {k} km",{p:nPlace,k:S.arcticKm})},
+    {ic:ICON.sun,k:"sun",dt:S.earliestDate,lbl:U("盛夏日照"),val:U("约 {h} 小时",{h:S.sunHrs}),sub:U("日均 {a}h · {r} 日出",{a:S.sunAvg,r:S.earliest})}
+  ];
+  box.innerHTML=items.map(function(x,i){
+    return '<button type="button" class="fn-cell '+x.k+'" style="--n:'+i+'" data-date="'+esc(x.dt)+'" title="'+esc(x.lbl+" · "+x.sub)+'">'+
+      '<span class="fn-top"><span class="fn-ic">'+x.ic+'</span><span class="fn-lbl">'+esc(x.lbl)+'</span></span>'+
+      '<b class="fn-val">'+esc(x.val)+'</b>'+
+      '<span class="fn-sub">'+esc(x.sub)+'</span></button>';
+  }).join("");
+}
+
+function prepStats(){
+  var today=homeToday(),done=bookedIds(),shown=shownBookings(),now=[],hotNow=[],later=[],booked=[];
+  shown.forEach(function(b){
+    if(done[b.id])booked.push(b);
+    else if(b.opens&&b.opens.slice(0,10)>today)later.push(b);
+    else{now.push(b);if(b.hot)hotNow.push(b);}
+  });
+  later.sort(function(a,b){return a.opens<b.opens?-1:1;});
+  now.sort(function(a,b){return (b.hot?1:0)-(a.hot?1:0);});
+  var checked=store("nt-check")||{},checkAll=0,checkOn=0;
+  (T.prep||[]).forEach(function(card,ci){(card.items||[]).forEach(function(it,ii){
+    var id=it.id||(card.id||ci)+"-"+ii;checkAll++;if(checked[id])checkOn++;});});
+  var pr=profile(),P=pr&&T.entry&&T.entry.profiles&&T.entry.profiles[pr];
+  if(P&&P.steps)P.steps.forEach(function(st){var id="entry-"+pr+"-"+st.id;checkAll++;if(checked[id])checkOn++;});
+  return {today:today,shown:shown,now:now,hotNow:hotNow,later:later,booked:booked,checkAll:checkAll,checkOn:checkOn};
+}
+
+function renderReady(){
+  var box=$("bentoReady");if(!box||!T)return;
+  var P=prepStats(),pr=profile(),total=Math.max(1,P.shown.length),live=liveDate();
+  var ppTxt=pr?profLabel(pr):U("选护照看签证");
+  var h='<div class="bc-head"><div class="bc-title"><span class="bc-ic fjord">'+ICON.radar+'</span><h3>'+esc(U("行前雷达"))+'</h3></div>'+
+    '<button type="button" class="bc-pill'+(pr?"":" warn")+'" data-jump-entry="1">'+ICON.idcard+'<span>'+esc(ppTxt)+'</span></button></div>';
+  if(live&&BYDATE[live]){
+    h+='<button type="button" class="rdy-live" data-date="'+esc(live)+'"><span class="live-dot"></span><span class="rl-txt"><b>'+esc(U("今日行程"))+" · "+md(live)+'</b><small>'+esc(dayLabel(live))+'</small></span><span class="rl-go">'+esc(U("看今天"))+' →</span></button>';
+  }
+  var pDone=P.booked.length/total*100,pHot=P.hotNow.length/total*100,pOpen=Math.max(0,P.now.length-P.hotNow.length)/total*100,pLater=P.later.length/total*100;
+  h+='<div class="rdy-hero"><div class="rdy-num"><b>'+P.booked.length+'</b><span>/ '+P.shown.length+' '+esc(U("项已订"))+'</span></div>'+
+    (P.now.length?'<span class="rdy-open-tag">'+P.now.length+' '+esc(U("项现在可订"))+'</span>':'<span class="rdy-open-tag ok">'+esc(U("全部订好了！"))+'</span>')+'</div>';
+  h+='<div class="rdy-bar" aria-hidden="true">'+
+    (pDone?'<span class="rb-done" style="flex:'+pDone+'"></span>':"")+
+    (pHot?'<span class="rb-hot" style="flex:'+pHot+'"></span>':"")+
+    (pOpen?'<span class="rb-open" style="flex:'+pOpen+'"></span>':"")+
+    (pLater?'<span class="rb-later" style="flex:'+pLater+'"></span>':"")+'</div>';
+  if(P.later.length){
+    h+='<div class="rdy-sec"><div class="rdy-sh">'+esc(U("即将开放"))+'</div><div class="rdy-list">'+P.later.slice(0,2).map(function(b){
+      var dt=b.opens.slice(0,10),n=daysBetween(P.today,dt);
+      var when=n<=0?U("今天开放"):n===1?U("明天开放"):U("{n} 天后",{n:n});
+      var dBadge=(en()?MON[+dt.slice(5,7)-1]:(+dt.slice(5,7))+"月")+" "+(+dt.slice(8,10));
+      return '<button type="button" class="rdy-item later" data-booking="'+esc(b.id)+'">'+
+        '<span class="ri-date">'+esc(dBadge)+'</span>'+
+        '<span class="ri-txt"><b>'+esc(plain(b.what))+'</b></span>'+
+        '<span class="ri-due">'+esc(when)+'</span></button>';
+    }).join("")+'</div></div>';
+  }
+  if(P.now.length){
+    h+='<div class="rdy-sec"><div class="rdy-sh">'+esc(U("现在先盯"))+'</div><div class="rdy-list">'+P.now.slice(0,3).map(function(b){
+      var sub=plain(b.for||b.when||"");if(en())sub=sub.replace(/、/g,", ");
+      return '<button type="button" class="rdy-item'+(b.hot?" hot":"")+'" data-booking="'+esc(b.id)+'">'+
+        '<span class="ri-dot"></span>'+
+        '<span class="ri-txt"><b>'+esc(plain(b.what))+'</b>'+(sub?'<small>'+esc(sub)+'</small>':"")+'</span>'+
+        '<span class="ri-arr">›</span></button>';
+    }).join("")+'</div></div>';
+  }
+  h+='<button type="button" class="bc-foot" data-go-view="prep"><span>'+esc(U("清单 {a}/{b}",{a:P.checkOn,b:P.checkAll}))+'</span><b>'+esc(U("全部预订与准备"))+' →</b></button>';
+  box.innerHTML=h;
+}
+
+function bgtGroupSize(){
+  var s=+store("nt-bgt-n");if(s===2||s===3||s===4)return s;
+  var p=MNY&&MNY.people?MNY.people.length:0;
+  return p>=2&&p<=4?p:4;
+}
+
+function calcBudget(n){
+  var S=TRIP_STATS||calcTripStats(),sc=settleCur();
+  var rates=FX||(T.fx&&T.fx.rates)||{USD:1,CAD:1.4248,CNY:6.71,ISK:121.9,NOK:9.62,SEK:10.04,DKK:6.65,EUR:0.89};
+  var mult=(rates[sc]||1)/(rates.USD||1),cStep=sc==="CNY"?100:50,tStep=sc==="CNY"?500:100,dStep=sc==="CNY"?10:5;
+  function rnd(u,st){return Math.round(u*mult/st)*st;}
+  var kmBase=Math.max(1500,S.driveKm||4214);
+  var raw=[
+    {k:"fly",col:"#3F8FB5",ic:ICON.flight,lbl:U("机票邮轮"),note:U("跨大西洋往返 + 欧内直飞 + 波罗的海过夜船 + 火车"),uLo:1160+120/n,uHi:1810+220/n},
+    {k:"stay",col:"#7A5C9E",ic:ICON.maps,lbl:U("{n} 晚住宿",{n:S.stayNights}),note:U("青旅床位、峡湾营地木屋与老城公寓"),uLo:S.stayNights*(59+16/n),uHi:S.stayNights*(88+26/n)},
+    {k:"car",col:"#1F4E6B",ic:ICON.drive,lbl:U("租车油费 ÷{n}",{n:n}),note:U("{k} km 租车、保险、油费、停车与过路费（{n} 人平摊）",{k:kmBase.toLocaleString("en-US"),n:n}),uLo:(kmBase*0.84)/n,uHi:(kmBase*1.14)/n},
+    {k:"food",col:"#C9711C",ic:ICON.sun,lbl:U("吃饭超市"),note:U("{d} 天超市采买做饭、面包房与特色正餐",{d:S.days}),uLo:S.days*38,uHi:S.days*62},
+    {k:"fun",col:"#3D7A4F",ic:ICON.peak,lbl:U("冰川门票"),note:U("快艇、冰川徒步、峡湾游船、温泉与博物馆"),uLo:520,uHi:690}
+  ];
+  var sumLo=0,sumHi=0,cats=raw.map(function(c){
+    var lo=rnd(c.uLo,cStep),hi=Math.max(lo,rnd(c.uHi,cStep)),mid=(lo+hi)/2;
+    sumLo+=lo;sumHi+=hi;
+    return {k:c.k,col:c.col,ic:c.ic,lbl:c.lbl,note:c.note,lo:lo,hi:hi,mid:mid};
+  });
+  var totLo=Math.round(sumLo/tStep)*tStep,totHi=Math.round(sumHi/tStep)*tStep;
+  var dayLo=Math.round(totLo/Math.max(1,S.days)/dStep)*dStep,dayHi=Math.round(totHi/Math.max(1,S.days)/dStep)*dStep;
+  return {sc:sc,sym:CSYM[sc]||(sc+" "),totLo:totLo,totHi:totHi,dayLo:dayLo,dayHi:dayHi,cats:cats,countries:S.countries};
+}
+
+function paintBgtFocus(){
+  var box=$("bentoBudget");if(!box)return;
+  var has=!!BGT_CAT,noteEl=box.querySelector(".bgt-focus");
+  box.querySelectorAll("[data-bgt-cat]").forEach(function(el){
+    var on=el.dataset.bgtCat===BGT_CAT;
+    el.classList.toggle("on",on);el.classList.toggle("dim",has&&!on);
+  });
+  if(noteEl){
+    var active=has&&box.querySelector('.bgt-cat[data-bgt-cat="'+BGT_CAT+'"]');
+    noteEl.textContent=active?active.dataset.note:U("点细项看包含什么 · 货币随右上角切换");
+    noteEl.classList.toggle("on",has);
+  }
+}
+
+function renderBudget(){
+  var box=$("bentoBudget");if(!box||!T)return;
+  var n=bgtGroupSize(),B=calcBudget(n),sym=B.sym;
+  function rng(a,b){return sym+a.toLocaleString("en-US")+"–"+b.toLocaleString("en-US");}
+  var h='<div class="bc-head"><div class="bc-title"><span class="bc-ic sun">'+ICON.coin+'</span><div><h3>'+esc(U("预算小账箱"))+'</h3></div></div>'+
+    '<div class="bgt-split" role="radiogroup" aria-label="'+esc(U("分摊人数"))+'">'+[2,3,4].map(function(k){
+      return '<button type="button" role="radio" data-bgt-n="'+k+'" aria-checked="'+(k===n)+'">'+esc(U("{n}人",{n:k}))+'</button>';
+    }).join("")+'</div></div>';
+  h+='<div class="bgt-hero"><div class="bgt-tot"><b>'+esc(rng(B.totLo,B.totHi))+'</b><span>'+esc(U("/ 人"))+'</span></div>'+
+    '<div class="bgt-sub">'+esc(U("约 {a}–{b} / 天 · 按 {c} 折算",{a:sym+B.dayLo.toLocaleString("en-US"),b:B.dayHi.toLocaleString("en-US"),c:B.sc}))+'</div></div>';
+  h+='<div class="bgt-bar" role="group" aria-label="'+esc(U("人均全包估算"))+'">'+B.cats.map(function(c){
+    return '<button type="button" class="bb-seg" style="flex:'+Math.round(c.mid)+';--k:'+c.col+'" data-bgt-cat="'+c.k+'" title="'+esc(c.lbl+" "+rng(c.lo,c.hi))+'" aria-label="'+esc(c.lbl)+'"></button>';
+  }).join("")+'</div>';
+  h+='<p class="bgt-focus">'+esc(U("点细项看包含什么 · 货币随右上角切换"))+'</p>';
+  h+='<div class="bgt-cats">'+B.cats.map(function(c){
+    return '<button type="button" class="bgt-cat" style="--k:'+c.col+'" data-bgt-cat="'+c.k+'" data-note="'+esc(c.note)+'">'+
+      '<span class="bcat-dot"></span><span class="bcat-l">'+esc(c.lbl)+'</span>'+
+      '<b class="bcat-v">'+esc(rng(c.lo,c.hi))+'</b></button>';
+  }).join("")+'</div>';
+  h+='<div class="bgt-vibe"><span class="bv-lbl">'+esc(U("各国物价"))+'</span><div class="bv-pills">'+B.countries.map(function(c){
+    var v=CVIBE[c]||[3,"中高"],lv=v[0],chill=lv<=2;
+    var dots=[1,2,3,4].map(function(i){return '<i class="'+(i<=lv?"on":"")+'"></i>';}).join("");
+    return '<span class="bv-pill'+(chill?" chill":"")+'" title="'+esc(pn(c,true)+" · "+U(v[1]))+'">'+(CFLAG[c]||"")+'<span>'+esc(pn(c,true))+'</span><span class="bv-dots">'+dots+'</span>'+(chill?'<em>'+esc(U("回血站"))+'</em>':"")+'</span>';
+  }).join("")+'</div></div>';
+  var items=mItems(),logged=items.length?balances(items).total:0;
+  h+='<button type="button" class="bc-foot" data-go-view="money"><span>'+(items.length?esc(U("账本已记 {t}（{n} 笔）",{t:fmtC(logged,B.sc),n:items.length})):esc(U("出发后拍小票就能自动记账平摊")))+'</span><b>'+esc(U("去账本"))+' →</b></button>';
+  box.innerHTML=h;
+  if(BGT_CAT)paintBgtFocus();
+}
+
+var JEWEL_CANDS=[
+  ["blahnukur","流纹岩彩山双峰与野溪温泉","Rhyolite twin peaks & hot spring"],
+  ["landmannalaugar","彩色流纹岩高地与天然温泉","Colorful highlands & hot spring"],
+  ["svartifoss","六棱玄武岩柱瀑布与冰川俯瞰","Basalt-column waterfall & ice"],
+  ["jokulsarlon","快艇穿行浮冰与冰川徒步","Zodiac icebergs & glacier hike"],
+  ["stokksnes","黑沙滩潮汐镜面与东部海鹦","Mirror black beach & puffins"],
+  ["studlagil","冰川碧水切开的玄武岩峡谷","Turquoise basalt-column canyon"],
+  ["kirkjufellsfoss","斯奈山草帽山瀑布与熔岩海岸","Snæfellsnes icon & lava coast"],
+  ["trollstigen","11 道发卡弯翻越云端峡湾","11 hairpins into Geirangerfjord"],
+  ["loen_skylift","千米高空俯瞰翡翠色峡湾湖谷","1,011 m fjord & glacier panorama"],
+  ["gudvangen","世界遗产纳柔依最窄峡湾巡航","World Heritage narrow-fjord cruise"],
+  ["trolltunga","悬于湖面 700 米的终极悬崖徒步","700 m cliff tongue — the boss hike"],
+  ["gamla_stan","群岛之都中世纪街巷与瓦萨沉船","Old town islands & Vasa warship"],
+  ["toompea","过夜邮轮醒来走进红顶中世纪城墙","Baltic ferry into medieval Tallinn"],
+  ["nyhavn","彩色木船运河与哥本哈根慢生活","Colorful canal sails & bakeries"],
+  ["mons_klint","波罗的海百米白垩海崖徒步","120 m white chalk sea cliffs"]
+];
+
+function pickJewels(){
+  var byPlace={},out=[],seen={},legCovered={};
+  T.days.forEach(function(D){D.segs.forEach(function(s){
+    if(s.t==="stop"&&s.place&&!byPlace[s.place]&&SCENIC[s.kind])byPlace[s.place]={date:D.date,c:D.c,kind:s.kind,s:s};
+  });});
+  // avoid picking both blahnukur and landmannalaugar on the same day
+  var seenDay={};
+  JEWEL_CANDS.forEach(function(c){
+    var id=c[0],hit=byPlace[id],phs=hit&&photosOf(id);
+    if(!hit||!phs||!phs.length||seen[id])return;
+    if(id==="landmannalaugar"&&seen.blahnukur)return;
+    seen[id]=1;seenDay[hit.date]=(seenDay[hit.date]||0)+1;
+    var lg=legOf(hit.date);if(lg)legCovered[lg.from]=1;
+    out.push({id:id,date:hit.date,c:hit.c,kind:hit.kind,ph:phs[0],hook:en()?c[2]:c[1]});
+  });
+  // fallback: ensure every leg with photos has at least one postcard if the plan changed
+  (T.legs||[]).forEach(function(l){
+    if(legCovered[l.from])return;
+    var lp=legPhotos(l)[0];if(!lp||seen[lp.s.place])return;
+    var v=placeVisits(lp.s.place)[0];if(!v)return;
+    seen[lp.s.place]=1;
+    out.push({id:lp.s.place,date:v.date,c:l.c,kind:lp.s.kind||"visit",ph:lp.ph,hook:plain(l.short||l.title)});
+  });
+  out.sort(function(a,b){return a.date<b.date?-1:a.date>b.date?1:0;});
+  return out;
+}
+
+function syncJewelBtns(){
+  var el=$("jewels"),p=$("jPrev"),n=$("jNext");if(!el||!p||!n)return;
+  p.disabled=el.scrollLeft<=6;
+  n.disabled=el.scrollLeft+el.clientWidth>=el.scrollWidth-6;
+}
+
+function renderJewels(){
+  var sec=$("jewelsSec"),box=$("jewels");if(!sec||!box||!T)return;
+  var list=pickJewels();
+  if(!list.length){sec.hidden=true;return;}
+  sec.hidden=false;
+  box.innerHTML=list.map(function(j,i){
+    var col=(T.countries[j.c]||{}).color||"#1F4E6B",cName=pn(j.c,true),kName=L(T.kinds[j.kind])||"";
+    return '<button type="button" class="jewel" role="listitem" style="--c:'+esc(col)+';--n:'+i+'" data-jewel="'+esc(j.id)+'" data-jdate="'+esc(j.date)+'">'+
+      img(j.ph,600,"jewel-img")+
+      '<span class="jw-top"><span class="jw-when"><i class="jw-dot"></i>'+esc(md(j.date)+" · "+cName)+'</span>'+(kName?'<span class="jw-kind">'+esc(kName)+'</span>':"")+'</span>'+
+      '<span class="jw-cap"><b>'+pn(j.id)+'</b><small>'+esc(j.hook)+'</small></span></button>';
+  }).join("");
+  setTimeout(syncJewelBtns,40);
+}
+
 function renderAll(){
   var total=DATES.length;
+  TRIP_STATS=calcTripStats();
+  renderFunNums();
+  renderReady();
+  renderBudget();
+  renderJewels();
   $("ribbon").innerHTML=T.legs.map(function(l){var n=daysBetween(l.from,l.to)+1,c=T.countries[l.c]||{};
     return '<button type="button" class="rt" style="--c:'+esc(c.color||"#8A99A3")+';flex:'+n+' 1 0" data-date="'+esc(l.from)+'" title="'+esc(plain(l.title))+'"><span class="rt-bar"></span><b>'+esc(plain(l.short||l.title))+'</b><small>'+md(l.from)+"–"+md(l.to)+" · "+U("{n} 天",{n:n})+"</small></button>";}).join("");
   var live=liveDate(),h=(en()?WKEN:WK).map(function(w){return '<div class="cal-h">'+(en()?w:w.slice(1))+"</div>";}).join("");
@@ -326,10 +634,24 @@ function renderAll(){
     return '<div class="leg" style="--c:'+esc(c.color||"#8A99A3")+'">'+('<div class="leg-imgs">'+lp.slice(0,4).map(function(x,k){return '<button type="button" class="leg-img" data-leg="'+li+'" data-k="'+k+'" aria-label="'+esc(plain(x.s.name||"[["+x.s.place+"]]"))+'">'+img(x.ph,600)+"</button>";}).join("")+(lp.length<4?new Array(5-lp.length).join('<span class="leg-img">'+tbd()+"</span>"):"")+"</div>")+'<div class="leg-h"><h3>'+tx(l.title)+'</h3><span class="when">'+cnDate(l.from)+" – "+cnDate(l.to)+" · "+U("{n} 天",{n:n})+"</span>"+(l.draft?'<span class="leg-tag">'+U("草案")+'</span>':"")+"</div>"+
       (l.body?"<p>"+tx(l.body)+"</p>":"")+(l.items&&l.items.length?"<ul>"+l.items.map(function(x){return "<li>"+tx(x)+"</li>";}).join("")+"</ul>":"")+"</div>";}).join("");
   var drafts=DATES.filter(function(d){return !BYDATE[d];}).length;
-  $("legHint").textContent=drafts?U("已排好 {a} 天，其余 {b} 天规划中",{a:total-drafts,b:drafts}):U("全部 {n} 天已排好",{n:total});
+  $("legHint").textContent=(T.legs?T.legs.length+" "+(en()?"legs · ":"段 · "):"")+(drafts?U("已排好 {a} 天，其余 {b} 天规划中",{a:total-drafts,b:drafts}):U("全部 {n} 天已排好",{n:total}));
 }
-$("allView").addEventListener("click",function(e){var li=e.target.closest(".leg-img");if(li){openLb(legPhotos(T.legs[+li.dataset.leg]),+li.dataset.k);return;}
-  var b=e.target.closest("[data-date]");if(b)setView("day",b.dataset.date);});
+$("jewels").addEventListener("scroll",syncJewelBtns,{passive:true});
+window.addEventListener("resize",syncJewelBtns);
+$("jPrev").addEventListener("click",function(){var el=$("jewels");el.scrollBy({left:-Math.max(240,el.clientWidth*.72),behavior:"smooth"});});
+$("jNext").addEventListener("click",function(){var el=$("jewels");el.scrollBy({left:Math.max(240,el.clientWidth*.72),behavior:"smooth"});});
+$("bentoBudget").addEventListener("pointerover",function(e){if(e.pointerType==="touch")return;var c=e.target.closest("[data-bgt-cat]");if(c&&BGT_CAT!==c.dataset.bgtCat){BGT_CAT=c.dataset.bgtCat;paintBgtFocus();}});
+$("bentoBudget").addEventListener("pointerleave",function(e){if(e.pointerType==="touch")return;if(BGT_CAT){BGT_CAT=null;paintBgtFocus();}});
+$("allView").addEventListener("click",function(e){
+  var li=e.target.closest(".leg-img");if(li){openLb(legPhotos(T.legs[+li.dataset.leg]),+li.dataset.k);return;}
+  var bk=e.target.closest("[data-booking]");if(bk){openBooking(bk.dataset.booking);return;}
+  var je=e.target.closest("[data-jump-entry]");if(je){morph(function(){setView("prep");var el=$("entry");if(el)el.scrollIntoView({block:"start",behavior:"smooth"});},"tab");return;}
+  var gv=e.target.closest("[data-go-view]");if(gv){var v=gv.dataset.goView;morph(function(){setView(v);window.scrollTo({top:0,behavior:"smooth"});},"tab");return;}
+  var bn=e.target.closest("[data-bgt-n]");if(bn){store("nt-bgt-n",+bn.dataset.bgtN);renderBudget();return;}
+  var bc=e.target.closest("[data-bgt-cat]");if(bc){BGT_CAT=BGT_CAT===bc.dataset.bgtCat?null:bc.dataset.bgtCat;paintBgtFocus();return;}
+  var jw=e.target.closest("[data-jewel]");if(jw){var pid=jw.dataset.jewel,dt=jw.dataset.jdate;morph(function(){goToPlace(pid,dt);},"tab");return;}
+  var b=e.target.closest("[data-date]");if(b)morph(function(){setView("day",b.dataset.date);},"tab");
+});
 
 /* ---------- day strip ---------- */
 function renderStrip(){
@@ -414,7 +736,7 @@ function forMe(b){var pr=profile();return !b.who||!pr||b.who.indexOf(pr)>=0||b.w
 function shownBookings(){return SHOWALL?T.bookings:T.bookings.filter(forMe);}
 function profLabel(k){var E=T.entry;return k==="ca"?L(E.passports.ca):U("{p} · 住在 {l}",{p:L(E.passports.cn),l:L(E.live[k.slice(3)])});}
 function passportText(){var pr=profile();return pr?(pr==="ca"?"Canadian passport":"Chinese passport, lives in "+{ca:"Canada",uk:"the UK",cn:"China"}[PASS.live||"ca"]):"";}
-function setPassport(p,live){PASS={p:p,live:live||PASS.live||"ca"};store("nt-passport",PASS);SHOWALL=false;renderPrep();renderHeader();}
+function setPassport(p,live){PASS={p:p,live:live||PASS.live||"ca"};store("nt-passport",PASS);SHOWALL=false;renderPrep();renderHeader();renderAll();}
 function renderEntry(){
   var E=T.entry,pr=profile(),checked=store("nt-check")||{},shown=shownBookings();
   var h='<div class="tl-head"><h2>'+U("签证和入境")+'</h2><span class="hint">'+U("护照和勾选只保存在这台设备上")+'</span></div>';
@@ -507,7 +829,8 @@ function countPrep(){var all=0,on=0;
     all+=card.items.length;on+=c;var lab=document.querySelector('[data-count="'+ci+'"]');if(lab)lab.textContent=c+" / "+card.items.length;});
   $("entry").querySelectorAll("input[data-id]").forEach(function(el){all++;if(el.checked)on++;});
   var done=bookedIds(),shown=shownBookings(),b=shown.filter(function(x){return done[x.id];}).length;
-  $("prepCount").textContent=(b+on)+"/"+(shown.length+all);}
+  $("prepCount").textContent=(b+on)+"/"+(shown.length+all);
+  renderReady();}
 $("prepView").addEventListener("change",function(e){var id=e.target.dataset&&e.target.dataset.id;if(!id)return;var d=store("nt-check")||{};d[id]=e.target.checked;store("nt-check",d);countPrep();});
 $("prepView").addEventListener("click",function(e){
   var pp=e.target.closest("[data-pp]");if(pp){if(PASS.p!==pp.dataset.pp)setPassport(pp.dataset.pp);return;}
@@ -1608,7 +1931,7 @@ function markSel(){var D=day(),sel=state.view==="day"&&D&&state.sel!=null&&D.seg
 // settled in the currency picked in the top bar (CAD when that's "local"), at the page's exchange rates.
 var MCAT=[["food","吃饭","Eating out","#C9711C"],["groceries","超市","Groceries","#3D7A4F"],["fuel","油费","Fuel","#5D6B73"],["transport","交通","Transport","#3F8FB5"],
   ["stay","住宿","Lodging","#7A5C9E"],["tickets","门票活动","Tickets","#2B7A8C"],["other","其他","Other","#8A99A3"]];
-var MCUR=["ISK","NOK","SEK","DKK","EUR","CAD","USD","CNY"],CCUR={is:"ISK",fo:"DKK",no:"NOK",se:"SEK",dk:"DKK"},MSYM={CAD:"C$",USD:"US$",CNY:"¥",EUR:"€"};
+var MCUR=["ISK","NOK","SEK","DKK","EUR","CAD","USD","CNY"],CCUR={is:"ISK",fo:"DKK",no:"NOK",se:"SEK",ee:"EUR",dk:"DKK"},MSYM={CAD:"C$",USD:"US$",CNY:"¥",EUR:"€"};
 var MNY=store("nt-money")||{people:[],items:[]},OUT=store("nt-money-out")||[],mState={status:"",err:""},mTimer=null,flushing=null,formKey=null;
 function auth(){return window.tripAuth||{api:"",code:function(){return "";},setCode:function(){}};}
 function settleCur(){return CUR==="local"?"CAD":CUR;}
@@ -1672,6 +1995,7 @@ function renderMoney(){
   if(!T)return;
   var items=mItems(),sc=settleCur(),B=balances(items),st=mState.status,P=MNY.people,pend=OUT.length;
   $("moneySub").textContent=items.length?items.length:"";
+  renderBudget();
   $("moneyHint").textContent=U("大家共用一本账 · 按 {c} 结算，汇率为约数",{c:sc});
   var g="";
   if(st==="code")g='<form class="mny-gate" id="mnyCode"><p>'+U("账本存在行程服务器上，跟行程助手用同一个访问码。")+'</p><div class="mny-row"><input type="password" id="mnyCodeIn" autocomplete="off" placeholder="'+esc(U("访问码"))+'" aria-label="'+esc(U("访问码"))+'"><button class="pill primary" type="submit">'+U("确定")+'</button></div><span class="mny-err" id="mnyCodeErr" role="alert"></span></form>';
