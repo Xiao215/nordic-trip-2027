@@ -482,6 +482,7 @@ li.now>.row .t{color:var(--sun);font-weight:600}
 
 /* map markers (Google AdvancedMarker content) */
 .mk{display:flex;align-items:center;gap:6px;transform:translateY(50%);cursor:pointer}
+.l-mk .mk{transform:translate(-14px,-50%)}
 .mk-badge{min-width:28px;height:28px;padding:0 7px;border-radius:9px;display:grid;place-items:center;font-family:var(--f-mono);font-size:12px;font-weight:600;color:#fff;background:var(--k,#1F4E6B);border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.3);transition:transform .15s;white-space:nowrap}
 .mk-name{display:none;padding:4px 9px;border-radius:8px;background:#14212A;color:#fff;font-size:12.5px;font-weight:600;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.3)}
 .mk.sel .mk-badge{transform:scale(1.18);background:#14212A}
