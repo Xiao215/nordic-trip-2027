@@ -922,6 +922,26 @@ function detail(s){
       if(day())renderHero();
     });
   }
+  if(s.t==="stop"&&s.place){
+    var stopDate=state.date;
+    loadPlaceInfo(s.place,function(info){
+      if(!info||!d.isConnected)return;
+      var badge=renderPlaceHours(info,s,stopDate);
+      if(badge){
+        var kindEl=d.querySelector(".kind");
+        if(kindEl&&!d.querySelector(".g-hours"))kindEl.insertAdjacentHTML("afterend",badge);
+      }
+      if(info.website){
+        var actsEl=d.querySelector(".actions");
+        if(actsEl&&!actsEl.querySelector(".g-web")){
+          var a=document.createElement("a");a.className="pill g-web";a.target="_blank";a.rel="noopener";a.href=info.website;
+          a.textContent=en()?"Official site":"官网";
+          var mapBtn=actsEl.firstChild;
+          if(mapBtn&&mapBtn.nextSibling)actsEl.insertBefore(a,mapBtn.nextSibling);else actsEl.appendChild(a);
+        }
+      }
+    });
+  }
   d.querySelector(".ask").addEventListener("click",function(){if(!window.tripChat)return;
     var dt=state.date;
     if(s.t==="move"){
@@ -984,6 +1004,62 @@ function replay(el,cls){if(!el)return;el.classList.remove(cls);void el.offsetWid
 var SCENIC={visit:1,hike:1,glacier:1,water:1,camp:1,city:1};
 var UTM="utm_source=nordic_trip_2027&utm_medium=referral";
 var GPHOTOS={},GPHOTOS_WAIT={},GPHOTOS_OFF=false;
+var GINFO={},GINFO_WAIT={},GINFO_OFF=false;
+function loadPlaceInfo(id,cb){
+  if(!id||GINFO_OFF){if(cb)cb(null);return;}
+  if(GINFO[id]){if(cb)cb(GINFO[id]);return;}
+  if(GINFO_WAIT[id]){if(cb)GINFO_WAIT[id].push(cb);return;}
+  GINFO_WAIT[id]=cb?[cb]:[];
+  fetch(planApi()+"/api/place-info/"+encodeURIComponent(id),{headers:{"X-Access-Code":accessCode()}})
+    .then(function(r){return r.ok?r.json():null;})
+    .then(function(j){
+      if(j&&j.enabled===false)GINFO_OFF=true;
+      var info=(j&&(j.website||j.status||(j.hours&&j.hours.periods)))?j:null;
+      GINFO[id]=info||{};
+      var cbs=GINFO_WAIT[id]||[];delete GINFO_WAIT[id];
+      cbs.forEach(function(fn){fn(info);});
+    })
+    .catch(function(){
+      var cbs=GINFO_WAIT[id]||[];delete GINFO_WAIT[id];
+      cbs.forEach(function(fn){fn(null);});
+    });
+}
+function pad2(n){return (n<10?"0":"")+n;}
+function renderPlaceHours(info,s,date){
+  if(!info)return "";
+  if(info.status==="CLOSED_PERMANENTLY")return '<div class="g-hours warn">'+(en()?"⚠️ Marked permanently closed on Google Maps":"⚠️ Google 地图标记为已永久停业")+"</div>";
+  if(info.status==="CLOSED_TEMPORARILY")return '<div class="g-hours warn">'+(en()?"⚠️ Marked temporarily closed on Google Maps":"⚠️ Google 地图标记为暂时歇业")+"</div>";
+  var periods=(info.hours&&info.hours.periods)||[];
+  if(!periods.length)return "";
+  if(periods.length===1&&periods[0].open&&periods[0].open.day===0&&periods[0].open.hour===0&&!periods[0].close){
+    return '<div class="g-hours ok">'+(en()?"Open 24 hours (Google)":"24 小时开放（Google）")+"</div>";
+  }
+  var dow=new Date(date+"T12:00:00").getDay();
+  var dayNames=en()?["Sun","Mon","Tue","Wed","Thu","Fri","Sat"]:["周日","周一","周二","周三","周四","周五","周六"];
+  var dn=dayNames[dow];
+  var slots=periods.filter(function(p){return p.open&&p.open.day===dow;});
+  var checkKind=/^(visit|city|food|shop|water)$/.test(s.kind||"");
+  if(!slots.length){
+    return '<div class="g-hours '+(checkKind?"warn":"ok")+'">'+(en()?"⚠️ Closed on "+dn+" (Google Maps)":"⚠️ Google 显示"+dn+"闭馆/休息")+"</div>";
+  }
+  var spans=slots.map(function(p){
+    var o=p.open.hour*60+(p.open.minute||0);
+    var c=p.close?(p.close.day===dow?p.close.hour*60+(p.close.minute||0):1440+p.close.hour*60+(p.close.minute||0)):1440;
+    var label=pad2(p.open.hour)+":"+pad2(p.open.minute||0)+"–"+(p.close?pad2(p.close.hour)+":"+pad2(p.close.minute||0):"24:00");
+    return {o:o,c:c,label:label};
+  });
+  var txt=spans.map(function(x){return x.label;}).join(", ");
+  var conflict=false;
+  if(checkKind&&s.start){
+    var st=mins(s.start),enM=s.end&&s.end!==s.start?mins(s.end):st;
+    var fits=spans.some(function(x){return st>=x.o&&enM<=x.c;});
+    if(!fits)conflict=true;
+  }
+  if(conflict){
+    return '<div class="g-hours warn">'+(en()?"⚠️ Hours conflict ("+dn+" "+txt+")":"⚠️ 与营业时间冲突（"+dn+" "+txt+"）")+"</div>";
+  }
+  return '<div class="g-hours ok">'+(en()?"Hours · "+dn+" "+txt:"营业时间 · "+dn+" "+txt)+"</div>";
+}
 function photosOf(id){
   var p=T&&T.places[id],base=(p&&p.photos)||[],gp=GPHOTOS[id]||[];
   if(!gp.length)return base;

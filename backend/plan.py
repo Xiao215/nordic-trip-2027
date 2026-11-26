@@ -33,7 +33,7 @@ NO_EN = {"/places/{}/zh", "/countries/{}/zh"}
 # fields the page understands that the plan may not use yet: pattern -> {field: kinds}
 EXTRA = {"/bookings/[]": {"booked": {"bool"}}, "/days/[]": {"options": {"list"}, "tips": {"list"}}, "/days/[]/segs/[]": {"group": {"str"}},
          "/days/[]/options/[]": {"geom": {"str"}},
-         "/places/{}": {"story": {"list"}}, "/places/{}/photos/[]": {"license": {"str"}}}
+         "/places/{}": {"story": {"list"}, "gid": {"str"}}, "/places/{}/photos/[]": {"license": {"str"}}}
 # fields that may be left out even where every record so far has them: a photo from Wikimedia Commons has a
 # license and no author_link (that one is Unsplash's photographer page)
 OPTIONAL = {"/places/{}/photos/[]": {"author_link"}}

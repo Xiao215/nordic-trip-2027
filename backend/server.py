@@ -1197,8 +1197,10 @@ async def decide(pid: str, body: DecideIn, x_access_code: str | None = Header(de
 
 _gplaces_lock = asyncio.Lock()
 _GPHOTOS_CACHE_FILE = DATA / "place_photos_cache.json"
+_GINFO_CACHE_FILE = DATA / "place_info_cache.json"
 _GPHOTOS_USAGE_FILE = DATA / "google_places_usage.json"
 _GPHOTOS_TTL = 7 * 86400  # refresh Google CDN photo URIs weekly; place_id stays cached
+_GINFO_TTL = 14 * 86400   # refresh opening hours & website biweekly
 
 
 def _read_json(path: Path, default: dict) -> dict:
@@ -1343,6 +1345,104 @@ async def place_photos(pid: str, x_access_code: str | None = Header(default=None
             cache[pid] = {"gid": gid, "ts": now if photos else 0, "photos": photos or (entry or {}).get("photos", [])}
             _write_json(_GPHOTOS_CACHE_FILE, cache)
         return {"enabled": True, "cached": False, "capped": capped, "photos": cache.get(pid, {}).get("photos", [])}
+
+
+def _fetch_google_place_info(place: dict, cached_gid: str = "") -> tuple[str, dict, bool]:
+    """Fetch websiteUri, businessStatus, and regularOpeningHours via Places API (New)."""
+    gid = cached_gid or (place.get("gid") or "").strip()
+    ll = place.get("ll") or []
+    query = place.get("local") or place.get("en") or place.get("zh") or ""
+    if gid:
+        if not _gplaces_take_budget(1):
+            return gid, {}, True
+        h = _gplaces_req(
+            f"https://places.googleapis.com/v1/places/{gid}",
+            field_mask="id,websiteUri,businessStatus,regularOpeningHours",
+        )
+    else:
+        if not query or len(ll) != 2:
+            return "", {}, False
+        if not _gplaces_take_budget(1):
+            return "", {}, True
+        res = _gplaces_req(
+            "https://places.googleapis.com/v1/places:searchText",
+            method="POST",
+            body={
+                "textQuery": query,
+                "locationBias": {"circle": {"center": {"latitude": ll[0], "longitude": ll[1]}, "radius": 3000.0}},
+                "maxResultCount": 1,
+            },
+            field_mask="places.id,places.websiteUri,places.businessStatus,places.regularOpeningHours",
+        )
+        hits = res.get("places") or []
+        if not hits:
+            return "", {}, False
+        h = hits[0]
+        gid = h.get("id") or ""
+    return gid, {
+        "website": h.get("websiteUri") or "",
+        "status": h.get("businessStatus") or "",
+        "hours": h.get("regularOpeningHours") or {},
+    }, False
+
+
+@app.get("/api/place-info/{pid}")
+async def place_info(pid: str, x_access_code: str | None = Header(default=None)):
+    check_code(x_access_code)
+    place = PLAN.trip.get("places", {}).get(pid)
+    if not place:
+        raise HTTPException(404, "Unknown place")
+
+    now = time.time()
+    cache = _read_json(_GINFO_CACHE_FILE, {})
+    entry = cache.get(pid)
+    if entry and now - entry.get("ts", 0) < _GINFO_TTL:
+        return {
+            "enabled": bool(GOOGLE_PLACES_KEY),
+            "cached": True,
+            "website": entry.get("website", ""),
+            "status": entry.get("status", ""),
+            "hours": entry.get("hours") or {},
+        }
+
+    if not GOOGLE_PLACES_KEY:
+        return {"enabled": False, "cached": False, "website": "", "status": "", "hours": {}}
+
+    async with _gplaces_lock:
+        cache = _read_json(_GINFO_CACHE_FILE, {})
+        entry = cache.get(pid)
+        if entry and now - entry.get("ts", 0) < _GINFO_TTL:
+            return {
+                "enabled": True,
+                "cached": True,
+                "website": entry.get("website", ""),
+                "status": entry.get("status", ""),
+                "hours": entry.get("hours") or {},
+            }
+        try:
+            gid, info, capped = await asyncio.to_thread(
+                _fetch_google_place_info, place, (entry or {}).get("gid", "")
+            )
+        except Exception as e:
+            print(f"[ginfo] {pid} failed: {e}", flush=True)
+            return {
+                "enabled": True,
+                "cached": False,
+                "website": (entry or {}).get("website", ""),
+                "status": (entry or {}).get("status", ""),
+                "hours": (entry or {}).get("hours") or {},
+            }
+        if not capped:
+            cache[pid] = {"gid": gid, "ts": now, **info}
+            _write_json(_GINFO_CACHE_FILE, cache)
+        out = cache.get(pid, info)
+        return {
+            "enabled": True,
+            "cached": False,
+            "website": out.get("website", ""),
+            "status": out.get("status", ""),
+            "hours": out.get("hours") or {},
+        }
 
 
 # ---------- the site itself ----------
