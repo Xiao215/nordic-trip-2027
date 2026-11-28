@@ -100,7 +100,14 @@ function L(s){if(s==null)return "";var r=en()&&EN[s]!=null?EN[s]:s;return normEn
 
 var UIEN={
   "北欧之旅":"Nordic Trip","北欧 2027":"NORDIC 2027","北欧之旅 2027":"Nordic Trip 2027",
-  "总览":"Overview","行程":"Itinerary","影像":"Photos","准备":"Prep","账本":"Ledger",
+  "总览":"Overview","行程":"Itinerary","风物":"Guide","影像":"Photos","准备":"Prep","账本":"Ledger",
+  "城市与风物志":"CITIES & DEEP-DIVES","沿途九城与风物深读":"Cities, History & Stories",
+  "01 / 沿途九城志":"01 / NINE CITIES","沿途九座城市画像":"Nine Cities Along the Route",
+  "02 / 地标与自然专页":"02 / LANDMARK STORIES","重点地标 · 历史与人文故事":"Landmarks, History & Local Lore",
+  "阅读城市专页 →":"Read city guide →","阅读深度专页 →":"Read full story →","深度专页":"Full story",
+  "{n} 篇专题":"{n} chapters","← 返回风物志":"← All guides","← 返回 {d} 行程":"← Back to {d}",
+  "在本趟行程中":"IN YOUR ITINERARY","本城及周边深度专页":"Deep-Dive Stops in This Region",
+  "上一篇":"Previous","下一篇":"Next","9 城 · {n} 处深度考据与人文故事":"9 cities · {n} deep-dive place stories",
   "主导航":"Main navigation","视图":"Views","价格换算":"Currency","货币":"Currency","语言":"Language",
   "切换深浅主题":"Switch theme","问助手":"Ask","问行程助手（⌘K）":"Ask trip assistant (⌘K)",
   "前一天":"Previous day","后一天":"Next day","选择日期":"Choose a day","前后日期导航":"Previous and next day",
@@ -187,6 +194,9 @@ var UIEN={
 
 function U(s,v){
   var r=en()&&UIEN[s]!=null?UIEN[s]:s;
+  if(en()&&v&&v.n===1){
+    r=r.replace(/\{n\} stops/g,"1 stop").replace(/\{n\} STOPS/g,"1 STOP").replace(/\{n\} hikes/g,"1 hike");
+  }
   return v?r.replace(/\{(\w+)\}/g,function(_,k){return v[k];}):r;
 }
 function wk(d){return (en()?WKEN:WK)[wkday(d)];}
@@ -201,9 +211,10 @@ function kindLabel(k){
 
 /* ---------- Currency ---------- */
 var CUR=["CAD","CNY","USD"].indexOf(store("nt-cur"))>=0?store("nt-cur"):"local";
-var FX=null,FXAT=null,CSYM={CAD:"C$",CNY:"¥",USD:"US$"},SYMCODE={"US$":"USD","C$":"CAD","CA$":"CAD","€":"EUR"};
+var FX=null,FXAT=null,CSYM={CAD:"C$",CNY:"¥",USD:"US$"};
+var SYMCODE={"US$":"USD","$":"USD","USD":"USD","C$":"CAD","CA$":"CAD","CAD":"CAD","€":"EUR","EUR":"EUR","PLN":"PLN","DKK":"DKK","SEK":"SEK","NOK":"NOK","ISK":"ISK","CNY":"CNY"};
 var NUM="(\\d{1,3}(?:,\\d{3})+(?:\\.\\d+)?|\\d+(?:\\.\\d+)?)";
-var RE_PRE=new RegExp("(US\\$|CA\\$|C\\$|€)\\s?"+NUM+"(?:\\s*[–-]\\s*(?:US\\$|CA\\$|C\\$|€)?"+NUM+")?","g");
+var RE_PRE=new RegExp("(?<![A-Za-z])(US\\$|CA\\$|C\\$|€|\\$|(?:USD|CAD|EUR|PLN|DKK|SEK|NOK|ISK|CNY)(?=\\s|\\d))\\s?"+NUM+"(?:\\s*[–-]\\s*(?:US\\$|CA\\$|C\\$|€|\\$)?\\s?"+NUM+")?","g");
 var RE_SUF=new RegExp(NUM+"(?:\\s*[–-]\\s*"+NUM+")?\\s?(ISK|NOK|SEK|DKK|EUR|PLN|CAD|USD|CNY)(?![A-Za-z])","g");
 
 function fmtMoney(v){
@@ -213,7 +224,7 @@ function fmtMoney(v){
 function money(s,hold){
   if(CUR==="local"||!FX)return s;
   function conv(m,code,a,b){
-    if(code===CUR||!FX[code]||!FX[CUR])return m;
+    if(!code||code===CUR||!FX[code]||!FX[CUR])return m;
     var f=function(x){return +x.replace(/,/g,"")/FX[code]*FX[CUR];},t=fmtMoney(f(a))+(b?"–"+fmtMoney(f(b)).replace(CSYM[CUR],""):"");
     return hold?hold('<span class="pl money" data-lo="'+esc(m)+'">'+esc(t)+"</span>"):t;
   }
@@ -316,9 +327,9 @@ document.addEventListener("scroll",function(){tip.hidden=true;},true);
 
 /* ---------- State ---------- */
 var T,DATES=[],BYDATE={},N={},GPID={},PACE={},TRIP_STATS=null;
-var state={view:"all",date:null,sel:null,itin:"cal",phFilter:"all",phUnique:true,bkFilter:"all",bgtFocus:null,mobileMap:false};
+var state={view:"all",date:null,sel:null,itin:"cal",phFilter:"all",phUnique:true,bkFilter:"all",bgtFocus:null,mobileMap:false,guideId:null,gdFilter:"all",gdFrom:null};
 var weather={};
-var VIEWS={all:1,photos:1,prep:1,money:1};
+var VIEWS={all:1,guide:1,photos:1,prep:1,money:1};
 
 function LL(x){return typeof x==="string"?N[x]:x;}
 function gPlace(id){var ll=N[id];var u="https://www.google.com/maps/search/?api=1&query="+ll[0]+"%2C"+ll[1];if(GPID[id])u+="&query_place_id="+GPID[id];return u;}
@@ -389,11 +400,13 @@ function boot(trip){
   var bs=$("bootState");if(bs)bs.hidden=true;
   index(trip);
   loadFx();renderCur();applyTheme();applyNames();applyStatic();
-  renderHeader();renderAll();renderStrip();renderPhotos();renderPrep();renderMoney();
+  renderHeader();renderAll();renderStrip();renderGuide();renderPhotos();renderPrep();renderMoney();
 
   var h=decodeURIComponent(location.hash.slice(1)),saved=store("nt-pos")||{};
+  var gMatch=h.indexOf("guide/")===0?h.slice(6):null;
+  if(gMatch&&T.places[gMatch])state.guideId=gMatch;
   var live=liveDate(),date=BYDATE[h]||DATES.indexOf(h)>=0?h:live||saved.date||T.dates.start;
-  var view=VIEWS[h]?h:DATES.indexOf(h)>=0||live?"day":VIEWS[saved.view]||saved.view==="day"?saved.view:"all";
+  var view=gMatch?"guide":VIEWS[h]?h:DATES.indexOf(h)>=0||live?"day":VIEWS[saved.view]||saved.view==="day"?saved.view:"all";
   setView(view,date);
   loadMap();
   if(OUT.length&&auth().code())flush();
@@ -401,6 +414,8 @@ function boot(trip){
   setInterval(function(){if(state.view==="day"&&liveDate()===state.date)renderGlance();},60000);
   window.addEventListener("hashchange",function(){
     var hh=decodeURIComponent(location.hash.slice(1));
+    if(hh.indexOf("guide/")===0){var gid=hh.slice(6);if(T.places[gid]){state.guideId=gid;setView("guide");renderGuide();return;}}
+    if(hh==="guide"&&(state.view!=="guide"||state.guideId)){state.guideId=null;setView("guide");renderGuide();return;}
     if(DATES.indexOf(hh)>=0&&!(state.view==="day"&&state.date===hh))setView("day",hh);
     else if(VIEWS[hh]&&state.view!==hh)setView(hh);
   });
@@ -494,7 +509,7 @@ function renderHeader(){
   var d0=T.dates.start,d1=T.dates.end;
   var span=en()?(MON[+d0.slice(5,7)-1].toUpperCase()+" "+(+d0.slice(8,10))+" – "+MON[+d1.slice(5,7)-1].toUpperCase()+" "+(+d1.slice(8,10))+", "+d1.slice(0,4)+" · "+S.days+" DAYS")
                :(d0.replace(/-/g,".")+" – "+mdPad(d1).replace("/",".")+" · "+S.days+" 天");
-  $("eyebrow").innerHTML=cHtml+'<span aria-hidden="true">·</span><span>'+esc(span)+'</span>';
+  $("eyebrow").innerHTML='<span class="eyebrow-chain">'+cHtml+'</span><span class="eyebrow-span">'+esc(span)+'</span>';
 
   $("title").innerHTML=en()&&T.titleEn?esc(T.titleEn):esc(T.title)+(T.titleEn?'<span class="en">'+esc(T.titleEn)+"</span>":"");
   $("lede").innerHTML=tx(T.lede);
@@ -652,6 +667,7 @@ function renderAll(){
   }).join("");
 }
 
+var PORT_CODE={helsinki:"HEL",helsinki_olympia:"HEL",helsinki_west_terminal:"HEL",tallinn:"TLL",tallinn_port:"TLL",stockholm:"STO",kobenhavn:"CPH",gdansk:"GDN",bergen:"BGO",oslo:"OSL",reykjavik:"REK"};
 function dayTransitTile(D){
   if(!D)return {ic:ICON.globe,txt:""};
   for(var i=0;i<D.segs.length;i++){
@@ -660,17 +676,31 @@ function dayTransitTile(D){
       return {ic:ICON.flight,txt:String(s.path[0]).toUpperCase()+" → "+String(s.path[s.path.length-1]).toUpperCase()};
     }
     var fl=extractFlights(s);
-    if(fl.flights.length)return {ic:ICON.flight,txt:fl.flights[0].from+" → "+fl.flights[0].to};
+    var f0=fl.flights&&fl.flights[0];
+    if(f0&&!f0.kind&&f0.from&&f0.to)return {ic:ICON.flight,txt:f0.from+" → "+f0.to};
   }
   for(var j=0;j<D.segs.length;j++){
     var sf=D.segs[j];
-    if(sf.t==="move"&&sf.mode==="ferry"){
+    if(sf.t==="move"&&sf.mode==="ferry"&&sf.path&&sf.path.length>=2){
+      var a=PORT_CODE[sf.path[0]],b=PORT_CODE[sf.path[sf.path.length-1]];
+      if(a&&b&&a!==b)return {ic:ICON.ferry,txt:a+" → "+b};
       var co=T.countries[D.c]||{};
       return {ic:ICON.ferry,txt:(en()?(co.en||D.c):(co.zh||D.c)).toUpperCase()};
     }
   }
   var cObj=T.countries[D.c]||{};
   return {ic:ICON.globe,txt:(en()?(cObj.en||D.c):(cObj.zh||D.c)).toUpperCase()};
+}
+
+function stayShort(d,D){
+  if(D&&D.stayNote&&/silja\s*symphony|过夜邮轮|overnight\s*(cruise|ferry|ship)/i.test(D.stayNote)){
+    return en()?"Overnight ship":"过夜邮轮";
+  }
+  var stId=stayOf(D);
+  if(!stId)return d===T.dates.end?U("当日返程"):"";
+  if(stId==="tallinn_old_town"&&T.places.tallinn)stId="tallinn";
+  var stName=names(stId);
+  return stName?(U("住 ")+(en()?stName.lo:stName.zh)):"";
 }
 
 function renderItinerarySection(){
@@ -681,13 +711,13 @@ function renderItinerarySection(){
   var box=$("itinBody"),live=liveDate();
   if(state.itin==="list"){
     box.innerHTML='<ol class="itin-list">'+DATES.map(function(d,i){
-      var D=BYDATE[d],col=colorOf(d),stId=stayOf(D),stName=stId?names(stId):null;
+      var D=BYDATE[d],col=colorOf(d);
       var openBk=dayBookings(d).filter(function(b){return !b.done;}).length;
       var dk=D?dayDriveKm(D):0,hero=D?heroOf(D):null,tt=!hero?dayTransitTile(D):null;
       var thumb=hero&&hero.ph
         ?'<div class="img-frame itin-thumb">'+img(hero.ph,240)+'</div>'
         :'<div class="img-frame itin-thumb"><span class="cd-transit" style="--c:'+esc(col)+'">'+(tt?tt.ic:ICON.globe)+'</span></div>';
-      var stayTxt=stName?(U("住 ")+esc(en()?stName.lo:stName.zh)):(d===T.dates.end?esc(U("当日返程")):"");
+      var stayTxt=esc(stayShort(d,D));
       return '<li><button type="button" class="itin-row'+(d===live?" today":"")+'" data-date="'+d+'">'+
         '<span class="itin-cbar" style="--c:'+esc(col)+'"></span>'+
         '<span class="mono">D'+pad2(i+1)+' · '+mdPad(d)+'</span>'+
@@ -700,13 +730,13 @@ function renderItinerarySection(){
     var h=(en()?WKEN:WK).map(function(w){return '<div class="cal-h">'+(en()?w:w.slice(1))+'</div>';}).join("");
     for(var p=0;p<wkday(DATES[0]);p++)h+='<div class="cal-pad"></div>';
     DATES.forEach(function(d){
-      var D=BYDATE[d],col=colorOf(d),stId=stayOf(D),stName=stId?names(stId):null;
+      var D=BYDATE[d],col=colorOf(d);
       var openBk=dayBookings(d).filter(function(b){return !b.done;}).length;
       var hero=D?heroOf(D):null,tt=!hero?dayTransitTile(D):null;
       var topMedia=hero&&hero.ph
         ?'<span class="cd-img">'+img(hero.ph,320)+'</span>'
         :'<span class="cd-img"><span class="cd-transit">'+(tt?tt.ic:ICON.globe)+(tt&&tt.txt?'<span>'+esc(tt.txt)+'</span>':'')+'</span></span>';
-      var stayLine=stName?(U("住 ")+(en()?stName.lo:stName.zh)):(d===T.dates.end?U("当日返程"):"");
+      var stayLine=stayShort(d,D);
       h+='<button type="button" class="cd'+(d===live?" today":"")+'" style="--c:'+esc(col)+'" data-date="'+d+'">'+
         topMedia+
         '<span class="cd-d"><span>'+md(d)+'<small class="cd-wk"> '+esc(wk(d))+'</small></span><span style="display:inline-flex;align-items:center;gap:4px">'+(D?paceMeter(d,true):"")+(openBk?'<span class="dot amber"></span>':'')+'</span></span>'+
@@ -921,7 +951,7 @@ function setView(v,date){
   placeMap(null,true);
   store("nt-pos",{view:v,date:state.date});
 
-  var hash=v==="day"?state.date:v;
+  var hash=v==="day"?state.date:(v==="guide"&&state.guideId?"guide/"+state.guideId:v);
   if(decodeURIComponent(location.hash.slice(1))!==hash)history.replaceState(null,"","#"+hash);
 
   document.querySelectorAll(".seg-btn").forEach(function(b){b.setAttribute("aria-selected",b.dataset.view===v?"true":"false");});
@@ -931,12 +961,13 @@ function setView(v,date){
   var shell=$("appShell");
   shell.classList.toggle("no-map",!showMap);
   shell.classList.toggle("day-mode",v==="day");
-  shell.classList.toggle("wide-archive",v==="photos");
+  shell.classList.toggle("wide-archive",v==="photos"||v==="guide");
   $("mapCol").hidden=!showMap;
   $("mapDirBtn").hidden=(v==="day");
 
   $("allView").hidden=v!=="all";
   $("dayView").hidden=v!=="day";
+  if($("guideView"))$("guideView").hidden=v!=="guide";
   $("photosView").hidden=v!=="photos";
   $("prepView").hidden=v!=="prep";
   $("moneyView").hidden=v!=="money";
@@ -954,6 +985,7 @@ function setView(v,date){
   markStrip();
   if(v==="all")setTimeout(syncJewelArrows,30);
   if(v==="money")loadMoney();
+  if(v==="guide")renderGuide();
   if(v==="photos")renderPhotos();
   if(v==="day"){
     renderDay();
@@ -970,7 +1002,12 @@ function setView(v,date){
 document.querySelectorAll(".seg-btn").forEach(function(b){
   b.addEventListener("click",function(){
     var v=b.dataset.view;
+    if(v==="guide"&&state.view==="guide"&&state.guideId){
+      morph(function(){state.guideId=null;setView("guide");renderGuide();window.scrollTo({top:0,behavior:"instant"});});
+      return;
+    }
     if(state.view!==v){
+      if(v==="guide")state.guideId=null;
       morph(function(){setView(v);window.scrollTo({top:0,behavior:"instant"});});
     }
   });
@@ -1060,8 +1097,12 @@ function renderRows(){
   for(var i=0;i<segs.length;i++){
     var s=segs[i];
     if(s.group){
-      var run=[s];while(i+1<segs.length&&segs[i+1].group===s.group)run.push(segs[++i]);
-      if(run.some(function(x){return x.t==="stop";})){
+      var gname=s.group,run=[s];
+      while(i+1<segs.length&&(segs[i+1].group===gname||(!segs[i+1].group&&(segs[i+1].t==="stop"||segs[i+1].mode==="walk")&&segs[i+2]&&segs[i+2].group===gname))){
+        run.push(segs[++i]);
+      }
+      var stopN=run.filter(function(x){return x.t==="stop";}).length;
+      if(stopN>=2||(stopN>=1&&run.length>=2)){
         var g=grpRow(run,cur);ol.appendChild(g);run.forEach(function(x){after(x,ol);});continue;
       }
       i-=run.length-1;
@@ -1121,6 +1162,63 @@ function itemLines(x){
   return out.join("\n").slice(0,1800);
 }
 
+/* Smooth WAAPI Disclosure Animator for .detail-fold, .grp-fold, and .opt-fold */
+function animateFold(fold,wantOpen,onDone,fromZero){
+  if(!fold)return;
+  if(!fold.animate){
+    fold.hidden=!wantOpen;fold.inert=!wantOpen;
+    fold.style.height="";fold.style.opacity="";fold.style.overflow="";
+    if(!wantOpen&&onDone)onDone();
+    return;
+  }
+  var midH=fold._anim?fold.offsetHeight:null;
+  var midOp=fold._anim?parseFloat(getComputedStyle(fold).opacity):null;
+  if(fold._anim){fold._anim.onfinish=null;fold._anim.oncancel=null;fold._anim.cancel();fold._anim=null;}
+  if(wantOpen){
+    var wasHidden=fold.hidden||!!fromZero;
+    fold.hidden=false;fold.inert=false;
+    fold.style.overflow="hidden";
+    fold.style.height="auto";
+    var endH=fold.scrollHeight;
+    var startH=midH!=null?midH:(wasHidden?0:endH);
+    if(Math.abs(endH-startH)<2){
+      fold.style.height="";fold.style.opacity="";fold.style.overflow="";
+      if(onDone)onDone();
+      return;
+    }
+    var startOp=midOp!=null?midOp:0;
+    var a=fold.animate(
+      [{height:startH+"px",opacity:startOp},{height:endH+"px",opacity:1}],
+      {duration:280,easing:"cubic-bezier(0.32, 0.72, 0, 1)"}
+    );
+    fold._anim=a;
+    a.onfinish=function(){
+      fold._anim=null;fold.style.height="";fold.style.opacity="";fold.style.overflow="";
+      if(onDone)onDone();
+    };
+  }else{
+    if(fold.hidden){if(onDone)onDone();return;}
+    var h0=midH!=null?midH:fold.offsetHeight;
+    var op0=midOp!=null?midOp:1;
+    fold.inert=true;
+    if(h0<2){
+      fold.hidden=true;fold.style.height="";fold.style.opacity="";fold.style.overflow="";
+      if(onDone)onDone();
+      return;
+    }
+    fold.style.overflow="hidden";
+    var a2=fold.animate(
+      [{height:h0+"px",opacity:op0},{height:"0px",opacity:0}],
+      {duration:250,easing:"cubic-bezier(0.32, 0.72, 0, 1)"}
+    );
+    fold._anim=a2;
+    a2.onfinish=function(){
+      fold._anim=null;fold.hidden=true;fold.style.height="";fold.style.opacity="";fold.style.overflow="";
+      if(onDone)onDone();
+    };
+  }
+}
+
 function grpRow(run,cur){
   var li=document.createElement("li"),first=run[0],last=run[run.length-1],id=state.date+"|"+first.i;
   var open=!!GOPEN[id]||run.some(function(x){return x.i===state.sel;});
@@ -1139,8 +1237,7 @@ function grpRow(run,cur){
     '<span class="s">'+esc(bits)+'</span><span class="grp-chips">'+chips+'</span>';
   li.appendChild(b);
 
-  var fold=document.createElement("div");fold.className="grp-fold";fold.inert=!open;
-  var inn=document.createElement("div");inn.className="grp-in";
+  var fold=document.createElement("div");fold.className="grp-fold";fold.hidden=!open;fold.inert=!open;
   var box=document.createElement("div");box.className="grp-box";
   var ul=document.createElement("ol");ul.className="grp-list";
   run.forEach(function(x){ul.appendChild(segLi(x,cur,true));});
@@ -1156,14 +1253,15 @@ function grpRow(run,cur){
       return {meta:md(dt)+" · "+U("{n} 站",{n:st.length}),title:plain(first.group),sub:rt,full:rt};
     }));
   });
-  box.appendChild(ul);box.appendChild(acts);inn.appendChild(box);fold.appendChild(inn);li.appendChild(fold);
+  box.appendChild(ul);box.appendChild(acts);fold.appendChild(box);li.appendChild(fold);
 
   b.addEventListener("click",function(){
     var sel=getSelection();if(sel&&!sel.isCollapsed&&b.contains(sel.anchorNode))return;
     var on=!li.classList.contains("open");
     if(on){closeGroups(li);closeOpts(null);if(state.sel!=null){state.sel=null;paintOpen();markSel();}}
     else if(run.some(function(x){return x.i===state.sel;})){state.sel=null;paintOpen();markSel();}
-    GOPEN[id]=on;li.classList.toggle("open",on);b.setAttribute("aria-expanded",on);fold.inert=!on;
+    GOPEN[id]=on;li.classList.toggle("open",on);b.setAttribute("aria-expanded",on);
+    animateFold(fold,on);
     if(on)frameGroup(pts);else if(state.sel==null)fitView();
   });
   b.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();b.click();}});
@@ -1173,7 +1271,7 @@ function closeGroups(keep){
   document.querySelectorAll("#rows li.grp.open").forEach(function(el){
     if(el===keep)return;
     el.classList.remove("open");el.querySelector(".grp-row").setAttribute("aria-expanded","false");
-    var gf=el.querySelector(":scope > .grp-fold");if(gf)gf.inert=true;
+    var gf=el.querySelector(":scope > .grp-fold");animateFold(gf,false);
     GOPEN[state.date+"|"+el.dataset.g]=false;
   });
 }
@@ -1181,7 +1279,7 @@ function closeOpts(keep){
   document.querySelectorAll("#rows li.opts.open").forEach(function(el){
     if(el===keep)return;
     el.classList.remove("open");el.querySelector(".opt-toggle").setAttribute("aria-expanded","false");
-    var of=el.querySelector(":scope > .opt-fold");if(of)of.inert=true;
+    var of=el.querySelector(":scope > .opt-fold");animateFold(of,false);
     OPTOPEN[state.date+"|"+el.dataset.opt]=false;
   });
 }
@@ -1219,7 +1317,7 @@ function optRow(o,k){
   li.className="opts"+(open?" open":"");li.dataset.opt=k;
   var label=plain(o.name||"[["+o.place+"]]");
   li.innerHTML='<button type="button" class="opt-toggle" aria-expanded="'+open+'"><span class="opt-ar">›</span>'+esc(U("可选"))+' · '+esc(label)+'</button>'+
-    '<div class="opt-fold"'+(open?"":" inert")+'><div class="opt-in"><div class="opt-list">'+optCard(o,k)+'</div></div></div>';
+    '<div class="opt-fold"'+(open?"":" hidden inert")+'><div class="opt-list">'+optCard(o,k)+'</div></div>';
   return li;
 }
 
@@ -1229,7 +1327,7 @@ $("rows").addEventListener("click",function(e){
     var li=t.closest("li.opts"),id=state.date+"|"+li.dataset.opt,on=!OPTOPEN[id];
     if(on){closeOpts(li);closeGroups(null);if(state.sel!=null){state.sel=null;paintOpen();markSel();}}
     OPTOPEN[id]=on;li.classList.toggle("open",on);t.setAttribute("aria-expanded",on);
-    var of=li.querySelector(":scope > .opt-fold");if(of)of.inert=!on;
+    var of=li.querySelector(":scope > .opt-fold");animateFold(of,on);
     if(on){var o=optByKey(li.dataset.opt);if(o&&(o.kind==="hike"||(o.pts&&o.pts.length>1)))frameOptHike(o);else if(o&&o.place&&N[o.place])frameOpt(o);}
     else if(state.sel==null)fitView();
     return;
@@ -1262,42 +1360,33 @@ function paintOpen(){
   var from=STAGE.closest("#rows li[data-i]");
   var nextLi=state.sel!=null?document.querySelector('#rows li[data-i="'+state.sel+'"]'):null;
   var prevY=nextLi?nextLi.getBoundingClientRect().top:null;
-  var closingAboveH=0;
+  var closingAboveH=0,createdNew=false;
 
   document.querySelectorAll("#rows li[data-i]").forEach(function(li){
     var i=+li.dataset.i,on=i===state.sel;
     li.querySelector(".row").setAttribute("aria-expanded",on);
     var fold=li.querySelector(":scope > .detail-fold");
     if(on){
-      clearTimeout(li._closeT);
       li.classList.remove("closing");
       if(!fold){
         fold=document.createElement("div");fold.className="detail-fold";
-        var inn=document.createElement("div");inn.className="detail-in";
-        inn.appendChild(detail(day().segs[i]));
-        fold.appendChild(inn);
+        fold.appendChild(detail(day().segs[i]));
         li.appendChild(fold);
+        createdNew=true;
       }
-      fold.inert=false;
+      fold.hidden=false;fold.inert=false;
     }else if(fold){
       if(li.classList.contains("open")&&nextLi&&(li.compareDocumentPosition(nextLi)&Node.DOCUMENT_POSITION_FOLLOWING)){
         closingAboveH+=fold.offsetHeight;
       }
       li.classList.remove("open");
-      fold.inert=true;
-      if(prefersStill()){
+      li.classList.add("closing");
+      animateFold(fold,false,function(){
+        if(li.classList.contains("open"))return;
+        li.classList.remove("closing");
         if(fold.contains(STAGE))MAPHOME.appendChild(STAGE);
         fold.remove();
-      }else{
-        li.classList.add("closing");
-        clearTimeout(li._closeT);
-        li._closeT=setTimeout(function(){
-          if(li.classList.contains("open"))return;
-          li.classList.remove("closing");
-          if(fold.contains(STAGE))MAPHOME.appendChild(STAGE);
-          fold.remove();
-        },300);
-      }
+      });
     }
   });
 
@@ -1306,15 +1395,16 @@ function paintOpen(){
   if(gl&&!gl.classList.contains("open")){
     gl.classList.add("open");
     gl.querySelector(".grp-row").setAttribute("aria-expanded",true);
-    var gf=gl.querySelector(":scope > .grp-fold");if(gf)gf.inert=false;
+    var gf=gl.querySelector(":scope > .grp-fold");animateFold(gf,true);
     GOPEN[state.date+"|"+gl.dataset.g]=true;
   }
 
   if(nextLi){
     var nf=nextLi.querySelector(":scope > .detail-fold");
+    var wasOpen=nextLi.classList.contains("open");
     placeMap(nextLi);
-    if(!prefersStill()&&nf&&!nextLi.classList.contains("open"))void nf.offsetHeight;
     nextLi.classList.add("open");
+    if(nf&&!wasOpen)animateFold(nf,true,null,createdNew);
     if(closingAboveH>0&&prevY!=null){
       var stickyBottom=($("sticky")?$("sticky").getBoundingClientRect().bottom:96)+12;
       if(prevY-closingAboveH<stickyBottom){
@@ -1323,7 +1413,7 @@ function paintOpen(){
             var r=nextLi.getBoundingClientRect();
             if(r.top<stickyBottom)window.scrollBy({top:r.top-stickyBottom,behavior:"smooth"});
           }
-        },290);
+        },265);
       }
     }
   }else{
@@ -1334,7 +1424,7 @@ function paintOpen(){
 
 /* Smooth <details> Accordion Animator (Route Legs, Bookings, Steps) */
 function toggleDetails(det,wantOpen){
-  if(prefersStill()||!det.animate){det.open=wantOpen;return;}
+  if(!det.animate){det.open=wantOpen;return;}
   if(det._anim){det._anim.cancel();det._anim=null;}
   var sum=det.querySelector(":scope > summary");if(!sum)return;
   var cs=getComputedStyle(det),bt=parseFloat(cs.borderTopWidth)||0,bb=parseFloat(cs.borderBottomWidth)||0;
@@ -1343,7 +1433,7 @@ function toggleDetails(det,wantOpen){
     var h0=det.offsetHeight,h1=sum.offsetHeight+bt+bb;
     det.classList.add("is-closing");
     det.style.overflow="hidden";
-    var a=det.animate([{height:h0+"px"},{height:h1+"px"}],{duration:240,easing:"cubic-bezier(0.22, 1, 0.36, 1)"});
+    var a=det.animate([{height:h0+"px"},{height:h1+"px"}],{duration:250,easing:"cubic-bezier(0.32, 0.72, 0, 1)"});
     det._anim=a;
     a.onfinish=function(){det._anim=null;det.open=false;det.classList.remove("is-closing");det.style.height="";det.style.overflow="";};
     a.oncancel=function(){det._anim=null;det.classList.remove("is-closing");det.style.height="";det.style.overflow="";};
@@ -1353,7 +1443,7 @@ function toggleDetails(det,wantOpen){
     det.open=true;
     var s1=det.offsetHeight;
     det.style.overflow="hidden";
-    var a2=det.animate([{height:s0+"px"},{height:s1+"px"}],{duration:260,easing:"cubic-bezier(0.22, 1, 0.36, 1)"});
+    var a2=det.animate([{height:s0+"px"},{height:s1+"px"}],{duration:280,easing:"cubic-bezier(0.32, 0.72, 0, 1)"});
     det._anim=a2;
     a2.onfinish=a2.oncancel=function(){det._anim=null;det.style.height="";det.style.overflow="";};
   }
@@ -1425,7 +1515,7 @@ function parseFlightFact(f){
   var val=String(f[1]||""),m=val.match(/(?:^|\s)(?:(\d+\/\d+)\s+)?(\d{1,2}:\d{2})\s+([A-Z]{2,3})\s*(?:→|->)\s*(?:(\d+\/\d+)\s+)?(\d{1,2}:\d{2})\s+([A-Z]{2,3})/);
   if(!m)return null;
   var codes=detectAirlines(val),d1=m[1]||"",d2=m[4]||"",nextDay=!!(d1&&d2&&d1!==d2);
-  var pm=val.match(/(?:~?\$|USD\s*|CAD\s*|NOK\s*|SEK\s*)\d[\d,]*/i);
+  var pm=val.match(/~?(?:US\$|CA\$|C\$|\$|€|(?:USD|CAD|EUR|NOK|SEK|DKK|PLN)\s+)\s*\d[\d,]*/i);
   var dm=val.match(/(\d+\s*h(?:\s*\d+\s*m(?:in)?)?)/i);
   var tm=val.match(/([+-]\d+\s*h)/i);
   var aname=codes.length?codes.map(function(c){return AIRLINES[c].name;}).join(" / "):val.split(/\s+/)[0];
@@ -1436,7 +1526,7 @@ function flightFromMove(s,dt){
   if(!s||s.t!=="move"||s.mode!=="flight"||!s.path||s.path.length<2)return null;
   var note=s.note||"",codes=detectAirlines(note),p0=String(s.path[0]).toUpperCase(),p1=String(s.path[s.path.length-1]).toUpperCase();
   var dr=s.mins?(Math.floor(s.mins/60)+"h"+(s.mins%60?" "+(s.mins%60)+"m":"")):"";
-  var tm=note.match(/([+-]\s*\d+\s*h)/i),pm=note.match(/(?:~?\$|USD\s*)\d[\d,]*/i),mdStr=dt?md(dt):"";
+  var tm=note.match(/([+-]\s*\d+\s*h)/i),pm=note.match(/~?(?:US\$|CA\$|C\$|\$|€|(?:USD|CAD|EUR|NOK|SEK|DKK|PLN)\s+)\s*\d[\d,]*/i),mdStr=dt?md(dt):"";
   var aname=codes.length?codes.map(function(c){return AIRLINES[c].name;}).join(" / "):"Flight";
   return {codes:codes,airline:aname,tag:"",from:p0,fromCity:IATA_CITY[p0]||"",to:p1,toCity:IATA_CITY[p1]||"",
     dep:s.start||"",arr:s.end||"",dateDep:mdStr,dateArr:mdStr,dur:dr,tz:tm?tm[1].replace(/\s+/g,""):"",price:pm?pm[0]:"",direct:/直飞|nonstop|direct/i.test(note)};
@@ -1579,12 +1669,16 @@ function detail(s){
 
   var sto=s.t==="stop"&&T.places[s.place]&&T.places[s.place].story;
   if(sto&&sto.length){
-    h+='<section class="story"><h5>'+esc(U("背景与考据"))+'</h5><dl>'+sto.map(function(x){
-      return '<div><dt>'+esc(L(x[0]))+'</dt><dd>'+tx(x[1])+'</dd></div>';
-    }).join("")+'</dl></section>';
+    var previewSto=sto.slice(0,2);
+    h+='<section class="story"><div class="story-head-row"><h5>'+esc(U("背景与考据"))+'</h5>'+
+      '<button type="button" class="text-link go-guide" style="font-size:12px" data-guide-id="'+esc(s.place)+'">📖 '+esc(U("阅读深度专页 →"))+'</button></div>'+
+      '<dl>'+previewSto.map(function(x){
+        return '<div><dt>'+esc(L(x[0]))+'</dt><dd>'+tx(x[1])+'</dd></div>';
+      }).join("")+'</dl></section>';
   }
 
   var acts=[];
+  if(sto&&sto.length)acts.push('<button type="button" class="btn-primary go-guide" data-guide-id="'+esc(s.place)+'">📖 '+esc(U("深度专页"))+' →</button>');
   if(s.t==="stop")acts.push('<a class="btn-secondary" target="_blank" rel="noopener" href="'+esc(gPlace(s.place))+'">'+ICON.map+esc(U("在 Google 地图打开"))+' ↗</a>');
   if(s.t==="move"&&(s.mode==="drive"||s.mode==="walk"||s.mode==="bike"||s.mode==="train"||s.mode==="bus")){
     var ends=[s.path[0],s.path[s.path.length-1]].filter(function(x){return typeof x==="string";});
@@ -1636,6 +1730,10 @@ function detail(s){
       }
     });
   }
+
+  d.querySelectorAll(".go-guide").forEach(function(btn){
+    btn.addEventListener("click",function(){openGuide(btn.dataset.guideId,state.date);});
+  });
 
   d.querySelector(".ask").addEventListener("click",function(){
     if(!window.tripChat)return;
@@ -1815,6 +1913,240 @@ $("hero").addEventListener("click",function(e){
   var t=e.target.closest(".ht");if(t){select(+t.dataset.i,false);return;}
   if(e.target.closest(".credit"))return;
   if(e.target.closest("[data-lb]")){var D=day(),g=dayGallery(D);if(g.length)openLb(g,galleryIndex(g,heroOf(D).ph));}
+});
+
+/* ---------- View 2.5: City & Landmark Deep-Dive Guide (#guideView) ---------- */
+var GUIDE_CITIES=[
+  {id:"kobenhavn",c:"dk",from:"2027-07-01",to:"2027-07-03"},
+  {id:"stockholm",c:"se",from:"2027-07-04",to:"2027-07-07"},
+  {id:"helsinki",c:"fi",from:"2027-07-08",to:"2027-07-08"},
+  {id:"tallinn",c:"ee",from:"2027-07-08",to:"2027-07-10"},
+  {id:"gdansk",c:"pl",from:"2027-07-11",to:"2027-07-13"},
+  {id:"bergen",c:"no",from:"2027-07-13",to:"2027-07-15"},
+  {id:"alesund",c:"no",from:"2027-07-18",to:"2027-07-19"},
+  {id:"oslo",c:"no",from:"2027-07-20",to:"2027-07-21"},
+  {id:"reykjavik",c:"is",from:"2027-07-31",to:"2027-08-01"}
+];
+var GUIDE_CITY_SET={kobenhavn:1,stockholm:1,helsinki:1,tallinn:1,gdansk:1,bergen:1,alesund:1,oslo:1,reykjavik:1};
+
+function openGuide(id,fromDate){
+  if(!id||!T||!T.places[id])return;
+  state.guideId=id;
+  if(fromDate)state.gdFrom={date:fromDate,place:id};
+  morph(function(){setView("guide");renderGuide();window.scrollTo({top:0,behavior:"instant"});});
+}
+
+function guideMetaFor(id){
+  var cm=GUIDE_CITIES.filter(function(x){return x.id===id;})[0];
+  var days=[],stops=[];
+  T.days.forEach(function(D){
+    D.segs.forEach(function(s){
+      if(s.t==="stop"&&s.place===id){
+        if(days.indexOf(D.date)<0)days.push(D.date);
+        stops.push({date:D.date,s:s});
+      }
+    });
+    (D.options||[]).forEach(function(o){
+      if(o.place===id&&days.indexOf(D.date)<0)days.push(D.date);
+    });
+  });
+  var c=cm?cm.c:(days.length?cOf(days[0]):"is");
+  return {c:c,cityMeta:cm||null,days:days,stops:stops};
+}
+
+function allGuideItems(){
+  var seen={},out=[];
+  GUIDE_CITIES.forEach(function(cm){
+    if(T.places[cm.id]&&T.places[cm.id].story&&T.places[cm.id].story.length){
+      seen[cm.id]=1;out.push({id:cm.id,c:cm.c,date:cm.from,to:cm.to,isCity:true});
+    }
+  });
+  T.days.forEach(function(D){
+    D.segs.forEach(function(s){
+      if(s.t==="stop"&&s.place&&!seen[s.place]&&T.places[s.place]&&T.places[s.place].story&&T.places[s.place].story.length){
+        seen[s.place]=1;out.push({id:s.place,c:D.c,date:D.date,kind:s.kind,isCity:false});
+      }
+    });
+    (D.options||[]).forEach(function(o){
+      if(o.place&&!seen[o.place]&&T.places[o.place]&&T.places[o.place].story&&T.places[o.place].story.length){
+        seen[o.place]=1;out.push({id:o.place,c:D.c,date:D.date,kind:o.kind,isCity:false});
+      }
+    });
+  });
+  return out;
+}
+
+var GUIDE_HERO_LB=[];
+function renderGuide(){
+  var box=$("guideView");if(!box||!T)return;
+  var items=allGuideItems();
+  var placeItems=items.filter(function(x){return !x.isCity;});
+  if($("guideSub"))$("guideSub").textContent=items.length;
+
+  if(state.guideId&&T.places[state.guideId]){
+    var id=state.guideId,pl=T.places[id],sto=pl.story||[],m=guideMetaFor(id);
+    var col=(T.countries[m.c]||{}).color||"#1f5678";
+    var phs=photosOf(id);
+    if(!phs.length&&m.cityMeta){
+      /* fallback: grab first photo from any stop in that city's date range */
+      T.days.forEach(function(D){
+        if(!phs.length&&D.date>=m.cityMeta.from&&D.date<=m.cityMeta.to){
+          D.segs.forEach(function(s){if(!phs.length&&s.t==="stop"&&s.place){var sp=photosOf(s.place);if(sp.length)phs=sp.slice(0,2);}});
+        }
+      });
+    }
+    GUIDE_HERO_LB=phs.map(function(ph){return {place:id,ph:ph,date:m.days[0]||(m.cityMeta&&m.cityMeta.from)||null};});
+
+    var heroHtml="";
+    if(phs.length===1){
+      heroHtml='<div class="gd-hero-grid one"><figure class="gd-hero-main" data-gd-lb="0">'+img(phs[0],1200)+'</figure></div>';
+    }else if(phs.length===2){
+      heroHtml='<div class="gd-hero-grid two"><figure class="gd-hero-main" data-gd-lb="0">'+img(phs[0],1000)+'</figure><figure class="gd-hero-main" data-gd-lb="1">'+img(phs[1],1000)+'</figure></div>';
+    }else if(phs.length>=3){
+      heroHtml='<div class="gd-hero-grid"><figure class="gd-hero-main" data-gd-lb="0">'+img(phs[0],1200)+'</figure>'+
+        '<div class="gd-hero-side"><figure data-gd-lb="1">'+img(phs[1],700)+'</figure><figure data-gd-lb="2">'+img(phs[2],700)+'</figure></div></div>';
+    }
+
+    var dateBadge=m.cityMeta
+      ?(m.cityMeta.from===m.cityMeta.to?md(m.cityMeta.from):md(m.cityMeta.from)+"–"+md(m.cityMeta.to))
+      :(m.days.length?m.days.map(md).join(", "):"");
+    var nm=names(id)||{zh:id,lo:id,en:id};
+    var titleMain=en()?nm.lo:nm.zh;
+    var titleSub=en()?(nm.en!==nm.lo?nm.en:""):(nm.lo!==nm.zh?nm.lo:"");
+
+    var itinHtml="";
+    if(m.cityMeta||m.stops.length){
+      var targetDate=m.cityMeta?m.cityMeta.from:m.days[0];
+      var summaryLines=m.stops.slice(0,3).map(function(st){
+        var b=st.s.body||"";
+        return b?'<p style="margin:0;font-size:13.2px;color:var(--text-soft);line-height:1.6">'+tx(b)+'</p>':"";
+      }).filter(Boolean).join("");
+      itinHtml='<div class="gd-itin-box" style="--c:'+esc(col)+'">'+
+        '<div class="gd-itin-row"><span class="mono" style="font-size:11px;font-weight:600;color:'+esc(col)+'">'+esc(U("在本趟行程中"))+' · '+esc(dateBadge)+'</span>'+
+        (targetDate?'<button type="button" class="text-link" data-gd-goto="'+esc(id)+'" data-date="'+esc(targetDate)+'">'+esc(U("第 {n} 天 →",{n:pad2(dayNum(targetDate))}))+'</button>':'')+'</div>'+
+        summaryLines+'</div>';
+    }
+
+    var chapsHtml='<div class="gd-chaps" style="--c:'+esc(col)+'">'+sto.map(function(ch,idx){
+      return '<article class="gd-chap"><div class="gd-chap-head"><span class="gd-chap-num">'+pad2(idx+1)+'</span><h3>'+esc(L(ch[0]))+'</h3></div><p>'+tx(ch[1])+'</p></article>';
+    }).join("")+'</div>';
+
+    /* Related landmarks when viewing a city */
+    var relHtml="";
+    if(m.cityMeta){
+      var rel=placeItems.filter(function(x){return x.c===m.c&&(m.c!=="no"||(x.date>=m.cityMeta.from&&x.date<=addDays(m.cityMeta.to,1)));});
+      if(rel.length){
+        relHtml='<section class="gd-sec"><div class="sec-head"><h3>'+esc(U("本城及周边深度专页"))+'</h3></div>'+
+          '<div class="gd-place-grid">'+rel.map(guidePlaceCard).join("")+'</div></section>';
+      }
+    }
+
+    var idxInAll=-1;items.forEach(function(x,k){if(x.id===id)idxInAll=k;});
+    var prevIt=idxInAll>0?items[idxInAll-1]:null,nextIt=idxInAll>=0&&idxInAll<items.length-1?items[idxInAll+1]:null;
+    var backBtn=state.gdFrom&&state.gdFrom.date
+      ?'<button type="button" class="btn-secondary" data-gd-back-day="'+esc(state.gdFrom.date)+'" data-place="'+esc(state.gdFrom.place||id)+'">'+esc(U("← 返回 {d} 行程",{d:md(state.gdFrom.date)}))+'</button>'
+      :"";
+
+    box.innerHTML='<div class="gd-article">'+
+      '<div class="gd-backbar"><button type="button" class="btn-secondary" data-gd-index="1">'+esc(U("← 返回风物志"))+'</button>'+backBtn+'</div>'+
+      '<header class="gd-art-head">'+
+        '<div class="gd-art-kicker"><span class="dot" style="--c:'+esc(col)+'"></span><span>'+esc(pn(m.c,true))+'</span>'+(dateBadge?'<span>· '+esc(dateBadge)+'</span>':'')+'</div>'+
+        '<h1 class="gd-art-title">'+esc(titleMain)+(titleSub?' <span class="gd-art-local">'+esc(titleSub)+'</span>':'')+'</h1>'+
+      '</header>'+
+      heroHtml+itinHtml+chapsHtml+
+      '<div class="item-actions actions">'+
+        '<a class="btn-secondary" target="_blank" rel="noopener" href="'+esc(gPlace(id))+'">'+ICON.map+esc(U("在 Google 地图打开"))+' ↗</a>'+
+        '<button type="button" class="btn-secondary" data-gd-ask="'+esc(id)+'">'+ICON.ask+esc(U("询问助手"))+'</button>'+
+      '</div>'+
+      relHtml+
+      '<nav class="daynav">'+
+        (prevIt?'<button type="button" class="dn-btn" data-gd-open="'+esc(prevIt.id)+'"><span class="mono">← '+esc(U("上一篇"))+'</span><b>'+pn(prevIt.id)+'</b></button>':'<span></span>')+
+        (nextIt?'<button type="button" class="dn-btn right" data-gd-open="'+esc(nextIt.id)+'"><span class="mono">'+esc(U("下一篇"))+' →</span><b>'+pn(nextIt.id)+'</b></button>':'<span></span>')+
+      '</nav></div>';
+    return;
+  }
+
+  /* Index Page: 9 Cities + Filterable Landmarks */
+  var cntByC={all:placeItems.length};
+  placeItems.forEach(function(x){cntByC[x.c]=(cntByC[x.c]||0)+1;});
+  var cOrder=[];T.legs.forEach(function(l){if(cOrder.indexOf(l.c)<0&&cntByC[l.c])cOrder.push(l.c);});
+  var filterTabs=[["all",U("全部")]].concat(cOrder.map(function(c){return [c,pn(c,true)];})).map(function(p){
+    var on=state.gdFilter===p[0];
+    return '<button type="button" role="tab" class="tab-pill" aria-selected="'+on+'" data-gd-c="'+p[0]+'">'+esc(p[1])+' <small>'+(cntByC[p[0]]||0)+'</small></button>';
+  }).join("");
+
+  var shownPlaces=state.gdFilter==="all"?placeItems:placeItems.filter(function(x){return x.c===state.gdFilter;});
+
+  var cityCards=GUIDE_CITIES.map(function(cm){
+    var pl=T.places[cm.id];if(!pl)return "";
+    var col=(T.countries[cm.c]||{}).color||"#1f5678";
+    var phs=photosOf(cm.id),ph=phs[0]||null;
+    var sto=pl.story||[];
+    var excerpt=sto.length?plain(L(sto[0][1])):"";
+    var nm=names(cm.id)||{zh:cm.id,lo:cm.id};
+    var span=cm.from===cm.to?md(cm.from):md(cm.from)+"–"+md(cm.to);
+    return '<button type="button" class="gd-city-card" style="--c:'+esc(col)+'" data-gd-open="'+esc(cm.id)+'">'+
+      '<div class="gd-city-img">'+(ph?img(ph,700):'')+'</div>'+
+      '<div class="gd-city-body">'+
+        '<div class="gd-city-meta"><span>'+esc(pn(cm.c,true))+'</span><span>'+esc(span)+'</span></div>'+
+        '<div class="gd-city-title"><h3>'+esc(en()?nm.lo:nm.zh)+'</h3>'+(nm.lo!==nm.zh&&!en()?'<span>'+esc(nm.lo)+'</span>':'')+'</div>'+
+        '<p class="gd-city-excerpt">'+esc(excerpt)+'</p>'+
+        '<div class="gd-city-foot"><span>'+esc(U("{n} 篇专题",{n:sto.length}))+'</span><span>'+esc(U("阅读城市专页 →"))+'</span></div>'+
+      '</div></button>';
+  }).join("");
+
+  box.innerHTML='<header class="sec-head">'+
+      '<span class="eyebrow">'+esc(U("城市与风物志"))+'</span>'+
+      '<h1 style="font-size:clamp(23px,2.6vw,30px)">'+esc(U("沿途九城与风物深读"))+'</h1>'+
+      '<p class="sec-sub">'+esc(U("9 城 · {n} 处深度考据与人文故事",{n:placeItems.length}))+'</p>'+
+    '</header>'+
+    '<section class="gd-sec" style="margin-top:16px">'+
+      '<div class="sec-head"><span class="eyebrow">'+esc(U("01 / 沿途九城志"))+'</span><h2>'+esc(U("沿途九座城市画像"))+'</h2></div>'+
+      '<div class="gd-city-grid">'+cityCards+'</div>'+
+    '</section>'+
+    '<section class="gd-sec">'+
+      '<div class="sec-head"><span class="eyebrow">'+esc(U("02 / 地标与自然专页"))+'</span><h2>'+esc(U("重点地标 · 历史与人文故事"))+'</h2></div>'+
+      '<div class="tab-row" role="tablist">'+filterTabs+'</div>'+
+      '<div class="gd-place-grid">'+shownPlaces.map(guidePlaceCard).join("")+'</div>'+
+    '</section>';
+}
+
+function guidePlaceCard(x){
+  var pl=T.places[x.id]||{};
+  var col=(T.countries[x.c]||{}).color||"#1f5678";
+  var ph=(photosOf(x.id))[0]||null;
+  var sto=pl.story||[];
+  var snip=sto.length?plain(L(sto[0][1])):"";
+  var dTag=x.date?(en()?"DAY "+pad2(dayNum(x.date))+" · "+md(x.date):"第 "+pad2(dayNum(x.date))+" 天 · "+md(x.date)):"";
+  return '<button type="button" class="gd-place-card'+(ph?"":" no-thumb")+'" style="--c:'+esc(col)+'" data-gd-open="'+esc(x.id)+'">'+
+    (ph?'<div class="gd-place-thumb">'+img(ph,300)+'</div>':'')+
+    '<div class="gd-place-info">'+
+      '<div class="gd-place-top"><span>'+esc(pn(x.c,true))+'</span><span>'+esc(dTag)+'</span></div>'+
+      '<div class="gd-place-name">'+pn(x.id)+'</div>'+
+      '<div class="gd-place-snip">'+esc(snip)+'</div>'+
+    '</div></button>';
+}
+
+$("guideView").addEventListener("click",function(e){
+  var op=e.target.closest("[data-gd-open]");
+  if(op){state.gdFrom=null;openGuide(op.dataset.gdOpen);return;}
+  var ix=e.target.closest("[data-gd-index]");
+  if(ix){morph(function(){state.guideId=null;setView("guide");renderGuide();window.scrollTo({top:0,behavior:"instant"});});return;}
+  var bd=e.target.closest("[data-gd-back-day]");
+  if(bd){goToPlace(bd.dataset.place,bd.dataset.gdBackDay);return;}
+  var gt=e.target.closest("[data-gd-goto]");
+  if(gt){goToPlace(gt.dataset.gdGoto,gt.dataset.date);return;}
+  var fc=e.target.closest("[data-gd-c]");
+  if(fc){state.gdFilter=fc.dataset.gdC;renderGuide();return;}
+  var lb=e.target.closest("[data-gd-lb]");
+  if(lb&&GUIDE_HERO_LB.length){openLb(GUIDE_HERO_LB,+lb.dataset.gdLb||0);return;}
+  var ak=e.target.closest("[data-gd-ask]");
+  if(ak&&window.tripChat){
+    var pid=ak.dataset.gdAsk,pl=T.places[pid]||{},st=(pl.story||[]).map(function(s){return s[0]+"："+s[1];}).join("\n");
+    window.tripChat.quote(quoteEvent("GUIDE [place="+pid+"]",function(){
+      return {meta:U("风物"),title:plain("[["+pid+"]]"),sub:plain((pl.story&&pl.story[0]&&pl.story[0][1])||"").slice(0,180),full:st};
+    }));
+  }
 });
 
 /* ---------- View 3: Photographic Archive (#photosView) ---------- */
@@ -2717,7 +3049,7 @@ document.querySelectorAll(".names button").forEach(function(b){
 
 function rerender(lang){
   var sel=state.sel;
-  applyStatic();renderCur();renderHeader();renderAll();renderStrip();markStrip();renderPhotos();renderPrep();renderMoney();
+  applyStatic();renderCur();renderHeader();renderAll();renderStrip();markStrip();renderGuide();renderPhotos();renderPrep();renderMoney();
   $("fitLabel").textContent=en()?(state.view==="day"?"Whole day":"Whole route"):(state.view==="day"?"全天":"全程");
   if(state.view==="day"){renderDay();if(sel!=null&&day()){state.sel=sel;paintOpen();}}
   if(lang){redrawMap();caption();document.dispatchEvent(new CustomEvent("trip:lang"));}

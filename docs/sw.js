@@ -1,5 +1,5 @@
 /* Offline copy of the trip planner (registered by app.js). */
-var SHELL="nt-shell-v15",PHOTOS="nt-photos",FONTS="nt-fonts-v1",DATA="nt-data-v1",KEEP=[SHELL,PHOTOS,FONTS,DATA];
+var SHELL="nt-shell-v18",PHOTOS="nt-photos",FONTS="nt-fonts-v1",DATA="nt-data-v1",KEEP=[SHELL,PHOTOS,FONTS,DATA];
 var CORE=["./","index.html","tokens.css","styles.css","app.js","chat.js","config.js"];
 
 self.addEventListener("install",function(e){
