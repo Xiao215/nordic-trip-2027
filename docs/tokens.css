@@ -1,0 +1,101 @@
+/* Nordic Trip 2027 — Tailored Nordic Travel Design Tokens
+ * Combines clean editorial typography (Inter + JetBrains Mono) with clear 8-10px cards,
+ * soft fjord-mist canvas separation, and rich Nordic country & activity colors.
+ */
+
+:root {
+  /* Surfaces — Cool Nordic Fjord Mist canvas + Crisp White cards */
+  --bg: #eef2f5;
+  --surface: #ffffff;
+  --surface-2: #f5f7f9;
+  --surface-elev: #ffffff;
+  --mat: #e3e9ee;
+
+  /* Text — high-clarity WCAG AA+ */
+  --text: #13202b;
+  --text-dim: #4c5d6b;
+  --text-faint: #647684;
+
+  /* Borders & Card Elevation */
+  --hairline: #dde5eb;
+  --hairline-strong: #c4d1db;
+  --card-shadow: 0 1px 2px rgba(15, 30, 44, 0.04), 0 4px 12px rgba(15, 30, 44, 0.035);
+
+  /* Brand & Activity Accents */
+  --fjord: #1f5678;
+  --fjord-soft: #e3eff6;
+  --ice: #2b7da3;
+  --ice-soft: #e2f2f8;
+  --emerald: #2b7a52;
+  --emerald-soft: #e2f3ea;
+  --amber: #c46816;
+  --amber-soft: #fdf0e1;
+  --sky: #256d96;
+  --rose: #b83b4a;
+  --rose-soft: #fce8eb;
+  --plum: #6f4e96;
+
+  /* Overlays */
+  --tag-bg: rgba(14, 24, 34, 0.80);
+  --tag-fg: #f4f7f9;
+  --scrim: rgba(12, 22, 32, 0.44);
+  --lb-bg: #080d12;
+
+  /* Typography */
+  --sans: "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Text", "Noto Sans SC", "PingFang SC", system-ui, sans-serif;
+  --mono: "JetBrains Mono", "SF Mono", ui-monospace, Menlo, monospace;
+
+  /* Tailored Card Radii */
+  --radius-sm: 5px;
+  --radius: 8px;
+  --radius-lg: 10px;
+
+  /* Layout & Motion */
+  --nav-h: 52px;
+  --strip-h: 50px;
+  --map-w: clamp(380px, 42vw, 760px);
+  --t-fast: 140ms ease;
+
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  /* Surfaces — Polar Night + Elevated Slate Cards */
+  --bg: #0b1015;
+  --surface: #131b23;
+  --surface-2: #19232d;
+  --surface-elev: #1a242f;
+  --mat: #080c10;
+
+  /* Text */
+  --text: #eaf0f5;
+  --text-dim: #9ab0c1;
+  --text-faint: #7c93a6;
+
+  /* Borders & Card Elevation */
+  --hairline: #23313f;
+  --hairline-strong: #324659;
+  --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.28);
+
+  /* Brand & Activity Accents (Polar Night luminous) */
+  --fjord: #5cb3e6;
+  --fjord-soft: #162e40;
+  --ice: #67c6eb;
+  --ice-soft: #152f3d;
+  --emerald: #4ade80;
+  --emerald-soft: #143123;
+  --amber: #fbbf24;
+  --amber-soft: #362812;
+  --sky: #60b8e8;
+  --rose: #fb7185;
+  --rose-soft: #381922;
+  --plum: #b392f0;
+
+  /* Overlays */
+  --tag-bg: rgba(9, 14, 20, 0.84);
+  --tag-fg: #eef3f7;
+  --scrim: rgba(0, 0, 0, 0.62);
+  --lb-bg: #05080b;
+
+  color-scheme: dark;
+}

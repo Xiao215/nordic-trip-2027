@@ -1,12 +1,6 @@
-/* Offline copy of the trip planner (registered by app.js).
-   The page and its code come from the network when it answers within a few seconds, otherwise from
-   the copy saved here, so the plan still opens with no signal (highlands, fjords, ferries) and weak signal
-   doesn't leave a blank page. Photos and fonts are kept once seen, and the prep tab can fetch every photo ahead
-   of time; a photo not saved at the size asked for falls back to any size that is. The forecast and exchange
-   rates keep their last answer. The chat and the expense log (/api/) and Google Maps always go to
-   the network. Bump SHELL's version only when this file's caching changes, not for edits to the site. */
-var SHELL="nt-shell-v7",PHOTOS="nt-photos",FONTS="nt-fonts-v1",DATA="nt-data-v1",KEEP=[SHELL,PHOTOS,FONTS,DATA];
-var CORE=["./","index.html","styles.css","app.js","chat.js","config.js"];
+/* Offline copy of the trip planner (registered by app.js). */
+var SHELL="nt-shell-v15",PHOTOS="nt-photos",FONTS="nt-fonts-v1",DATA="nt-data-v1",KEEP=[SHELL,PHOTOS,FONTS,DATA];
+var CORE=["./","index.html","tokens.css","styles.css","app.js","chat.js","config.js"];
 
 self.addEventListener("install",function(e){
   e.waitUntil(caches.open(SHELL).then(function(c){
@@ -27,8 +21,6 @@ self.addEventListener("fetch",function(e){
   if(u.hostname==="api.open-meteo.com"||u.hostname==="open.er-api.com")e.respondWith(fresh(req,DATA,6000));
 });
 
-// network first; after `wait` ms, or when the network fails, the saved copy answers instead (the network reply
-// still lands in the cache for next time). Any page address falls back to the saved index.html.
 function fresh(req,name,wait){
   return caches.open(name).then(function(c){
     var nav=req.mode==="navigate";
@@ -41,12 +33,10 @@ function fresh(req,name,wait){
         saved().then(function(r){if(r)give(r);else if(!done){done=true;reject(err);}});});
     });});}
 
-// saved copy first, then the network
 function kept(req,name){
   return caches.open(name).then(function(c){return c.match(req).then(function(r){
     return r||fetch(req).then(function(n){if(n.ok||n.type==="opaque")c.put(req,n.clone());return n;});});});}
 
-// photos are fetched with CORS (Unsplash allows it) so the saved copy is a normal response, not an opaque one
 function photo(url){
   return caches.open(PHOTOS).then(function(c){return c.match(url).then(function(r){if(r)return r;
     return fetch(url,{mode:"cors",credentials:"omit"}).then(function(n){if(n.ok)c.put(url,n.clone());return n;}).catch(function(err){

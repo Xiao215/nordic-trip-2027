@@ -1,140 +1,263 @@
 <!doctype html>
-<html lang="zh-Hans">
+<html lang="zh-Hans" data-theme="light">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
-<title>北欧之旅 2027</title>
-<meta name="description" content="2027 年 7 月冰岛、挪威、瑞典、丹麦四周行程：每日路线、地图、预订、天气和行程助手。">
-<meta name="theme-color" content="#1F4E6B">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231F4E6B'/%3E%3Cpath d='M4 23l7-10 4 5 5-9 8 14z' fill='%23EEF3F6'/%3E%3Ccircle cx='23' cy='8' r='2.5' fill='%23E7A33E'/%3E%3C/svg%3E">
+<title>Nordic Trip 2027</title>
+<meta name="description" content="July – August 2027 · Nordic &amp; Baltic trip: daily itinerary, interactive route maps, photographic archive, bookings, and shared ledger.">
+<meta name="theme-color" id="themeMeta" content="#eef2f5">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231F5678'/%3E%3Cpath d='M4 23l7-10 4 5 5-9 8 14z' fill='%23ffffff'/%3E%3Ccircle cx='23' cy='8' r='2.5' fill='%23F59E0B'/%3E%3C/svg%3E">
+<script>
+(function(){try{var t=JSON.parse(localStorage.getItem("nt-theme"));if(t==="dark"||t==="light"){document.documentElement.dataset.theme=t;document.getElementById("themeMeta").content=t==="dark"?"#0b1015":"#eef2f5";}}catch(e){}})();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="tokens.css">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<div class="app">
 
-  <main class="content">
-    <!-- top bar: brand, the tabs, currency and language -->
-    <div class="sticky" id="sticky">
-      <nav class="topbar" aria-label="主导航" data-i18n-aria-label="主导航">
-        <a class="brand" href="#all" aria-label="北欧之旅 2027">
-          <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9"/><path d="M4 23l7-10 4 5 5-9 8 14z"/><circle cx="23" cy="8" r="2.5"/></svg>
-          <span id="brandName" data-i18n="北欧之旅">北欧之旅</span>
-        </a>
-        <div class="seg" role="tablist" aria-label="视图" data-i18n-aria-label="视图">
-          <button role="tab" class="seg-btn" data-view="all" aria-selected="true"><span data-i18n="总览" data-i18n-sm="Trip">总览</span> <small id="allSub"></small></button>
-          <button role="tab" class="seg-btn" data-view="day" aria-selected="false"><span data-i18n="每日" data-i18n-sm="Day">每日</span> <small id="daySub"></small></button>
-          <button role="tab" class="seg-btn" data-view="prep" aria-selected="false"><span data-i18n="准备" data-i18n-sm="Prep">准备</span> <small id="prepCount"></small></button>
-          <button role="tab" class="seg-btn" data-view="money" aria-selected="false"><span data-i18n="账本" data-i18n-sm="Money">账本</span> <small id="moneySub"></small></button>
-        </div>
-        <!-- phones: currency and language fold into this one button -->
-        <button type="button" class="prefs-btn" id="prefsBtn" aria-expanded="false" aria-controls="prefs" aria-label="货币和语言" data-i18n-aria-label="货币和语言">
-          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 6h7M15 6h1M4 14h1M9 14h7"/><circle cx="13" cy="6" r="2"/><circle cx="7" cy="14" r="2"/></svg><span id="prefsSym">kr</span>
-        </button>
-        <div class="prefs" id="prefs">
-          <div class="cur" id="curBox">
-            <button type="button" class="cur-btn" id="curBtn" aria-haspopup="listbox" aria-expanded="false" aria-controls="curMenu" title="价格换算" data-i18n-title="价格换算">
-              <span class="cur-sym" id="curSym">kr</span><span id="curLabel">当地</span>
-              <svg class="cur-chev" viewBox="0 0 20 20" aria-hidden="true"><path d="M6 8l4 4 4-4"/></svg>
-            </button>
-            <div class="cur-menu" id="curMenu" role="listbox" aria-label="货币" data-i18n-aria-label="货币" tabindex="-1" hidden></div>
-          </div>
-          <div class="names" role="radiogroup" aria-label="语言 Language">
-            <button type="button" role="radio" data-nm="zh" aria-checked="true" title="中文（地名悬停显示原文）">中文</button>
-            <button type="button" role="radio" data-nm="local" aria-checked="false" title="English (place names in the local spelling)">EN</button>
-          </div>
-        </div>
-      </nav>
-      <div class="strip-wrap" id="stripWrap" hidden>
-        <button type="button" class="strip-arrow" id="prevDay" aria-label="前一天" data-i18n-aria-label="前一天">‹</button>
-        <div class="strip" id="strip" role="tablist" aria-label="选择日期" data-i18n-aria-label="选择日期"></div>
-        <button type="button" class="strip-arrow" id="nextDay" aria-label="后一天" data-i18n-aria-label="后一天">›</button>
-      </div>
-      <div class="offline-bar" id="offlineBar" role="status" data-i18n="离线中：行程和存好的照片都能看，地图、助手和同步要等有信号" hidden>离线中：行程和存好的照片都能看，地图、助手和同步要等有信号</div>
+<header class="sticky" id="sticky">
+  <nav class="topbar" aria-label="Main navigation" data-i18n-aria-label="主导航">
+    <a class="brand" id="brandLink" href="#all" data-i18n-aria-label="北欧之旅 2027" aria-label="Nordic Trip 2027">
+      <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7"/><path d="M4 23l7-10 4 5 5-9 8 14z"/><circle cx="23" cy="8" r="2.5"/></svg>
+      <span id="brandName" data-i18n="北欧之旅">北欧之旅</span>
+    </a>
+
+    <div class="nav-tabs" role="tablist" aria-label="Views" data-i18n-aria-label="视图">
+      <button type="button" role="tab" class="nav-tab seg-btn" data-view="all" aria-selected="true">
+        <span data-i18n="总览">总览</span>
+      </button>
+      <button type="button" role="tab" class="nav-tab seg-btn" data-view="day" aria-selected="false">
+        <span data-i18n="行程">行程</span><small id="daySub"></small>
+      </button>
+      <button type="button" role="tab" class="nav-tab seg-btn" data-view="photos" aria-selected="false">
+        <span data-i18n="影像">影像</span><small id="photosSub"></small>
+      </button>
+      <button type="button" role="tab" class="nav-tab seg-btn" data-view="prep" aria-selected="false">
+        <span data-i18n="准备">准备</span><small id="prepCount"></small>
+      </button>
+      <button type="button" role="tab" class="nav-tab seg-btn" data-view="money" aria-selected="false">
+        <span data-i18n="账本">账本</span><small id="moneySub"></small>
+      </button>
     </div>
 
-    <header class="top" id="top">
-      <span class="eyebrow" id="eyebrow">Nordic Trip 2027</span>
-      <h1 id="title">北欧之旅 2027</h1>
-      <p class="lede" id="lede" data-i18n="正在载入行程…">正在载入行程…</p>
-      <div class="chips" id="chips"></div>
-    </header>
-
-    <section id="allView" class="view">
-      <div class="fun-nums" id="funNums" aria-label="行程数字总览" data-i18n-aria-label="行程数字总览"></div>
-      <div class="bento" id="bento">
-        <section class="bento-card rdy-card" id="bentoReady" aria-label="行前雷达" data-i18n-aria-label="行前雷达"></section>
-        <section class="bento-card bgt-card" id="bentoBudget" aria-label="预算小账箱" data-i18n-aria-label="预算小账箱"></section>
+    <div class="nav-utils">
+      <div class="cur" id="curBox">
+        <button type="button" class="util-btn" id="curBtn" aria-haspopup="listbox" aria-expanded="false" aria-controls="curMenu" title="Currency" data-i18n-title="价格换算">
+          <span id="curLabel">LOCAL</span>
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M6 8l4 4 4-4"/></svg>
+        </button>
+        <div class="cur-menu" id="curMenu" role="listbox" aria-label="Currency" data-i18n-aria-label="货币" tabindex="-1" hidden></div>
       </div>
-      <section class="jewels-sec" id="jewelsSec">
-        <div class="tl-head jewels-head">
-          <div class="jh-txt"><h2 data-i18n="高光时刻">高光时刻</h2><span class="hint" data-i18n="点任意明信片直达当天该站">点任意明信片直达当天该站</span></div>
+
+      <div class="names" role="radiogroup" aria-label="Language" data-i18n-aria-label="语言">
+        <button type="button" role="radio" data-nm="zh" aria-checked="true" title="中文（地名悬停显示原文）">中</button>
+        <button type="button" role="radio" data-nm="local" aria-checked="false" title="English (local place names)">EN</button>
+      </div>
+
+      <button type="button" class="util-btn" id="themeBtn" title="Switch theme" data-i18n-title="切换深浅主题">
+        <span id="themeLabel">Dark</span>
+      </button>
+
+      <button type="button" class="ask-trigger" id="askBtn" aria-controls="chat" aria-expanded="false" title="Ask trip assistant (⌘K)" data-i18n-title="问行程助手（⌘K）">
+        <span data-i18n="问助手">问助手</span>
+        <kbd id="chatKbd">⌘K</kbd>
+        <span class="ask-badge" id="chatBadge" hidden></span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="strip-wrap" id="stripWrap" hidden>
+    <button type="button" class="strip-arrow" id="prevDay" aria-label="Previous day" data-i18n-aria-label="前一天">‹</button>
+    <div class="strip" id="strip" role="tablist" aria-label="Choose a day" data-i18n-aria-label="选择日期"></div>
+    <button type="button" class="strip-arrow" id="nextDay" aria-label="Next day" data-i18n-aria-label="后一天">›</button>
+  </div>
+
+  <div class="offline-bar" id="offlineBar" role="status" data-i18n="离线模式：已缓存行程与照片可读；地图、助手与同步需联网" hidden>离线模式：已缓存行程与照片可读；地图、助手与同步需联网</div>
+</header>
+
+<div class="app" id="appShell">
+  <main class="content">
+    <div id="bootState">
+      <div class="load-bar">
+        <div class="load-bar-head">
+          <span class="mono" id="bootMsg" data-i18n="正在载入行程…">正在载入行程…</span>
+          <span class="mono" id="bootBytes"></span>
+        </div>
+        <div class="progress-line"><span id="bootBar" style="width:24%"></span></div>
+      </div>
+      <div class="skeleton" style="height:128px;margin-bottom:18px"></div>
+      <div class="skeleton" style="height:360px"></div>
+    </div>
+
+    <!-- 1. Overview -->
+    <section id="allView" class="view" hidden>
+      <header class="top" id="top">
+        <div class="route-eyebrow" id="eyebrow"></div>
+        <h1 id="title"></h1>
+        <p class="lede" id="lede"></p>
+        <div class="hero-actions" id="heroActions"></div>
+      </header>
+
+      <div class="fun-nums" id="funNums" aria-label="Trip by the numbers" data-i18n-aria-label="行程数字总览"></div>
+
+      <section id="itinSec">
+        <div class="sec-head-row">
+          <div>
+            <span class="eyebrow" data-i18n="01 / 路线与日历">01 / ROUTE &amp; CALENDAR</span>
+            <h2 data-i18n="全程路线与日历">全程路线与日历</h2>
+          </div>
+          <div class="seg-box" id="itinTabs" role="tablist">
+            <button type="button" role="tab" class="seg-opt" data-itin="cal" aria-selected="true"><span data-i18n="日历">日历</span></button>
+            <button type="button" role="tab" class="seg-opt" data-itin="list" aria-selected="false"><span data-i18n="列表">列表</span> <small id="itinListCnt">32</small></button>
+          </div>
+        </div>
+        <div class="mobile-map-slot" id="overviewMapSlot"></div>
+        <div class="route-ribbon" id="ribbon" aria-label="Route legs" data-i18n-aria-label="路线分段"></div>
+        <div id="itinBody"></div>
+        <div class="pace-foot" id="paceSum"></div>
+      </section>
+
+      <section class="sec" id="jewelsSec">
+        <div class="sec-head-row">
+          <div>
+            <span class="eyebrow" data-i18n="02 / 沿途高光">02 / HIGHLIGHTS</span>
+            <h2 data-i18n="高光时刻">高光时刻</h2>
+          </div>
           <div class="jewels-nav">
-            <button type="button" class="j-arr" id="jPrev" aria-label="往左翻" data-i18n-aria-label="往左翻">‹</button>
-            <button type="button" class="j-arr" id="jNext" aria-label="往右翻" data-i18n-aria-label="往右翻">›</button>
+            <button type="button" class="j-arr" id="jPrev" aria-label="Scroll left" data-i18n-aria-label="往左翻">‹</button>
+            <button type="button" class="j-arr" id="jNext" aria-label="Scroll right" data-i18n-aria-label="往右翻">›</button>
           </div>
         </div>
         <div class="jewels" id="jewels" role="list"></div>
       </section>
-      <div class="tl-head"><h2 data-i18n="四周日历">四周日历</h2><span class="hint" data-i18n="点任意一天看当天安排">点任意一天看当天安排</span></div>
-      <div class="route" id="ribbon" aria-label="路线" data-i18n-aria-label="路线"></div>
-      <div class="cal" id="cal"></div>
-      <div class="pace-sum" id="paceSum"></div>
-      <details class="legs-fold" id="legsFold">
-        <summary class="legs-sum">
-          <div class="legs-sum-l"><h2 data-i18n="路线分段">路线分段</h2><span class="hint" id="legHint"></span></div>
-          <span class="legs-sum-r"><span class="lf-open" data-i18n="展开文字与照片">展开文字与照片</span><span class="lf-shut" data-i18n="收起">收起</span><svg class="b-chev" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 8l5 5 5-5"/></svg></span>
-        </summary>
-        <div class="legs" id="legs"></div>
-      </details>
+
+      <section class="sec" id="logSec">
+        <div class="sec-head">
+          <span class="eyebrow" data-i18n="03 / 筹备与预算">03 / READINESS &amp; BUDGET</span>
+          <h2 data-i18n="行前雷达与人均预算">行前雷达与人均预算</h2>
+        </div>
+        <div class="log-grid">
+          <div class="log-card" id="bentoReady"></div>
+          <div class="log-card" id="bentoBudget"></div>
+        </div>
+      </section>
+
+      <section class="sec" id="routeSec">
+        <div class="sec-head">
+          <span class="eyebrow" data-i18n="04 / 路线分段">04 / ROUTE LEGS</span>
+          <h2 id="legsHeading" data-i18n="路线分段详情">路线分段详情</h2>
+          <p class="sec-sub" id="routeSummary"></p>
+        </div>
+        <div class="leg-list" id="legs"></div>
+      </section>
     </section>
 
+    <!-- 2. Daily Itinerary & Stop Detail -->
     <section id="dayView" class="view" hidden>
+      <header class="day-head">
+        <div class="day-pill" id="dayEyebrow"></div>
+        <div class="day-head-top">
+          <h1 id="dayTitle"></h1>
+          <div class="day-head-acts">
+            <button type="button" class="btn-secondary" id="mobileMapToggle"></button>
+            <a class="btn-primary" id="dayRoute" href="https://www.google.com/maps" target="_blank" rel="noopener">
+              <span data-i18n="在地图打开路线">在地图打开路线</span> ↗
+            </a>
+          </div>
+        </div>
+      </header>
+
+      <div class="mobile-map-slot" id="dayMapSlot" hidden></div>
+      <div class="load-bar" id="dayPhotoLoad" hidden></div>
       <div class="hero" id="hero" hidden></div>
-      <div class="glance" id="glance"></div>
-      <div class="tl-head">
-        <h2 id="dayTitle"></h2>
+      <div class="glance-card" id="glance"></div>
+
+      <div class="sec-head-row" id="tlHead" style="margin-bottom:8px">
+        <span class="eyebrow" data-i18n="当日时间轴">DAILY TIMELINE</span>
+        <span class="mono" id="tlCount"></span>
       </div>
-      <div class="day-tips" id="dayTips" hidden></div>
       <ol class="timeline" id="rows"></ol>
-      <div class="draftbox" id="draftBox" hidden></div>
-      <nav class="daynav" id="dayNav" aria-label="前一天 / 后一天"></nav>
+      <div class="card" style="padding:18px" id="draftBox" hidden></div>
+      <nav class="daynav" id="dayNav" aria-label="Previous and next day" data-i18n-aria-label="前后日期导航"></nav>
     </section>
 
+    <!-- 3. Photographic Archive -->
+    <section id="photosView" class="view" hidden>
+      <header class="sec-head">
+        <span class="eyebrow" data-i18n="影像档案">PHOTOGRAPHIC ARCHIVE</span>
+        <h1 style="font-size:clamp(23px,2.6vw,30px)" data-i18n="沿途风物影像志">沿途风物影像志</h1>
+        <p class="sec-sub" id="photosDesc"></p>
+      </header>
+      <div class="ph-toolbar">
+        <div class="tab-row" id="photoFilters" role="tablist" aria-label="Filter by country" data-i18n-aria-label="按国家筛选"></div>
+        <div class="seg-box" id="photoMode"></div>
+      </div>
+      <div class="load-bar" id="archivePhotoLoad" hidden></div>
+      <div class="contact-sheet" id="photoGrid"></div>
+    </section>
+
+    <!-- 4. Prep: Visas, Bookings, Checklists, Offline -->
     <section id="prepView" class="view" hidden>
-      <section class="entry" id="entry" aria-live="polite"></section>
-      <div class="tl-head"><h2 data-i18n="预订">预订</h2><span class="hint" id="bookedCount"></span></div>
-      <div class="bookings" id="bookings"></div>
-      <section class="offline" id="offline"></section>
-      <div id="prepLists"></div>
+      <section id="entry" aria-live="polite"></section>
+
+      <section class="sec" id="bookingsSec">
+        <div class="sec-head-row">
+          <div>
+            <span class="eyebrow" data-i18n="02 / 预订清单">02 / BOOKINGS</span>
+            <h2 data-i18n="预订">预订</h2>
+          </div>
+          <span class="mono" id="bookedCount"></span>
+        </div>
+        <div id="bookings"></div>
+      </section>
+
+      <section class="sec" id="listsSec">
+        <div class="sec-head">
+          <span class="eyebrow" data-i18n="03 / 行装核对">03 / CHECKLISTS</span>
+          <h2 data-i18n="出发前核对">出发前核对</h2>
+        </div>
+        <div class="prep-grid" id="prepLists"></div>
+      </section>
+
+      <section class="sec" id="offline"></section>
+
       <footer class="foot">
         <p id="footnote"></p>
         <p id="sources"></p>
       </footer>
     </section>
 
+    <!-- 5. Shared Expense Ledger -->
     <section id="moneyView" class="view" hidden>
-      <div class="tl-head"><h2 data-i18n="账本">账本</h2><span class="hint" id="moneyHint"></span></div>
+      <header class="sec-head">
+        <span class="eyebrow" data-i18n="共享账本">SHARED LEDGER</span>
+        <div class="sec-head-row" style="margin-bottom:0">
+          <h1 style="font-size:clamp(23px,2.6vw,30px)" data-i18n="账本">账本</h1>
+          <span class="mono" id="moneyHint"></span>
+        </div>
+      </header>
       <div id="moneyGate"></div>
       <div id="moneySum"></div>
       <form class="mny-add" id="moneyAdd" autocomplete="off" hidden></form>
       <div id="moneyList"></div>
+      <div class="log-card" id="moneyEstFallback" hidden></div>
     </section>
   </main>
 
-  <aside class="mapcol" aria-label="地图" data-i18n-aria-label="地图">
-    <div class="stage">
-      <div id="map" class="map" role="region" aria-label="行程地图" data-i18n-aria-label="行程地图"></div>
+  <aside class="mapcol" id="mapCol" aria-label="Map" data-i18n-aria-label="地图">
+    <div class="stage" id="mapStage">
+      <div id="map" class="map" role="region" aria-label="Trip map" data-i18n-aria-label="行程地图"></div>
       <div class="map-hud">
         <div class="map-caption" id="mapCaption"></div>
-        <div class="map-tools" role="toolbar" aria-label="地图" data-i18n-aria-label="地图">
-          <button class="tool" id="fitBtn" title="看全天 / 全程" data-i18n-title="看全天 / 全程">
-            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 7V3h4M13 3h4v4M17 13v4h-4M7 17H3v-4"/></svg><span id="fitLabel">全程</span>
+        <div class="map-tools" role="toolbar" aria-label="Map controls" data-i18n-aria-label="地图控制">
+          <button type="button" class="tool" id="fitBtn" title="Reset map view" data-i18n-title="看全天 / 全程">
+            <span id="fitLabel">全程</span>
           </button>
-          <a class="tool" id="dayRoute" href="https://www.google.com/maps" target="_blank" rel="noopener" title="在 Google 地图里打开当天路线" data-i18n-title="在 Google 地图里打开当天路线">
-            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M8 4H4v12h12v-4M11 3h6v6M17 3l-8 8"/></svg><span data-i18n="导航">导航</span>
+          <a class="tool" id="mapDirBtn" href="https://www.google.com/maps" target="_blank" rel="noopener" title="Open in Google Maps" data-i18n-title="在 Google 地图打开">
+            <span data-i18n="地图">地图</span> ↗
           </a>
         </div>
       </div>
@@ -142,62 +265,68 @@
   </aside>
 </div>
 
-<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="照片" data-i18n-aria-label="照片" hidden>
-  <button type="button" class="lb-x" id="lbClose" aria-label="关闭" data-i18n-aria-label="关闭"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15"/></svg></button>
-  <button type="button" class="lb-nav prev" id="lbPrev" aria-label="上一张" data-i18n-aria-label="上一张"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12.5 4.5L7 10l5.5 5.5"/></svg></button>
-  <figure class="lb-fig"><img id="lbImg" alt=""><figcaption id="lbCap"></figcaption></figure>
-  <button type="button" class="lb-nav next" id="lbNext" aria-label="下一张" data-i18n-aria-label="下一张"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7.5 4.5L13 10l-5.5 5.5"/></svg></button>
+<!-- Photo Lightbox -->
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Photo viewer" data-i18n-aria-label="照片查看" hidden>
+  <button type="button" class="lb-x" id="lbClose" aria-label="Close" data-i18n-aria-label="关闭">
+    <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15"/></svg>
+  </button>
+  <button type="button" class="lb-nav prev" id="lbPrev" aria-label="Previous" data-i18n-aria-label="上一张">
+    <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12.5 4.5L7 10l5.5 5.5"/></svg>
+  </button>
+  <figure class="lb-fig">
+    <img id="lbImg" alt="">
+    <figcaption id="lbCap"></figcaption>
+  </figure>
+  <button type="button" class="lb-nav next" id="lbNext" aria-label="Next" data-i18n-aria-label="下一张">
+    <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7.5 4.5L13 10l-5.5 5.5"/></svg>
+  </button>
 </div>
 
-<!-- the trip assistant: a button that opens a side drawer (Ctrl/⌘+K) -->
-<button type="button" class="ask-btn" id="askBtn" aria-controls="chat" aria-expanded="false" title="问行程助手（⌘K）" data-i18n-title="问行程助手（⌘K）">
-  <svg class="spark" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2.5l1.6 4.4 4.4 1.6-4.4 1.6L10 14.5l-1.6-4.4L4 8.5l4.4-1.6z"/><path d="M15.5 13l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7z"/></svg>
-  <span data-i18n="问助手">问助手</span><kbd id="chatKbd">⌘K</kbd>
-  <span class="ask-badge" id="chatBadge" hidden></span>
-</button>
+<!-- Trip Assistant Drawer -->
 <div class="chat-scrim" id="chatScrim" aria-hidden="true"></div>
-<!-- the layer clips the drawer while it waits off-screen, so phones don't see a wider page -->
 <div class="chat-layer">
-<aside class="drawer" id="chat" data-open="false" aria-hidden="true" aria-label="行程助手" data-i18n-aria-label="行程助手">
-  <header class="drawer-head">
-    <button type="button" class="icon-btn back" id="chatBack" aria-label="所有对话" data-i18n-aria-label="所有对话" title="所有对话" data-i18n-title="所有对话">
-      <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12.5 4.5L7 10l5.5 5.5"/></svg>
-    </button>
-    <svg class="spark" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2.5l1.6 4.4 4.4 1.6-4.4 1.6L10 14.5l-1.6-4.4L4 8.5l4.4-1.6z"/><path d="M15.5 13l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7z"/></svg>
-    <h2 id="chatTitle">行程助手</h2>
-    <span class="drawer-status"><span class="live-dot off" id="chatDot"></span><span id="chatSub">连接中…</span></span>
-    <span class="grow"></span>
-    <button type="button" class="icon-btn" id="chatNew" aria-label="新对话" data-i18n-aria-label="新对话" title="清空对话，重新开始" data-i18n-title="清空对话，重新开始">
-      <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 4v12M4 10h12"/></svg>
-    </button>
-    <button type="button" class="icon-btn" id="chatHide" aria-label="关闭" data-i18n-aria-label="关闭" title="关闭（Esc）。关了回答也会继续。" data-i18n-title="关闭（Esc）。关了回答也会继续。">
-      <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15"/></svg>
-    </button>
-  </header>
-  <div class="chat-log" id="chatLog" aria-live="polite"></div>
-  <div class="chat-list" id="chatList"></div>
-  <form class="chat-join" id="chatJoin" hidden>
-    <span data-i18n="输入访问码：">输入访问码：</span>
-    <input id="joinCode" type="password" autocomplete="off" aria-label="访问码" data-i18n-aria-label="访问码" placeholder="访问码" data-i18n-placeholder="访问码">
-    <button type="submit" class="btn accent" data-i18n="确定">确定</button>
-    <span class="chat-err" id="joinErr" role="alert"></span>
-  </form>
-  <form class="composer" id="chatForm">
-    <div class="chat-quote" id="chatQuote" hidden></div>
-    <div class="chat-pics" id="chatPics" hidden></div>
-    <div class="composer-box">
-      <button type="button" class="attach" id="chatAttach" aria-label="加图片（拍照或从相册选）" data-i18n-aria-label="加图片（拍照或从相册选）" title="加图片：小票、收据、截图" data-i18n-title="加图片：小票、收据、截图">
-        <svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="5" width="15" height="11" rx="2.5"/><path d="M7 5l1.2-2h3.6L13 5"/><circle cx="10" cy="10.5" r="3"/></svg>
+  <aside class="drawer" id="chat" data-open="false" aria-hidden="true" aria-label="Trip assistant" data-i18n-aria-label="行程助手">
+    <header class="drawer-head">
+      <button type="button" class="icon-btn back" id="chatBack" aria-label="All chats" data-i18n-aria-label="所有对话" title="All chats" data-i18n-title="所有对话">
+        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12.5 4.5L7 10l5.5 5.5"/></svg>
       </button>
-      <input type="file" id="chatFile" accept="image/*" multiple hidden>
-      <textarea id="chatText" rows="1" placeholder="问问助手，或发张小票让它记账…" data-i18n-placeholder="问问助手，或发张小票让它记账…" aria-label="问行程助手" data-i18n-aria-label="问行程助手" maxlength="2000"></textarea>
-      <button type="submit" class="send" id="chatSend" aria-label="发送" title="发送">
-        <svg class="i-send" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 16V4M5 9l5-5 5 5"/></svg>
-        <svg class="i-stop" viewBox="0 0 20 20" aria-hidden="true"><rect x="4.5" y="4.5" width="11" height="11" rx="2.5"/></svg>
+      <h2 id="chatTitle">行程助手</h2>
+      <span class="drawer-status"><span class="live-dot off" id="chatDot"></span><span id="chatSub">连接中…</span></span>
+      <span class="grow"></span>
+      <button type="button" class="icon-btn" id="chatNew" aria-label="New chat" data-i18n-aria-label="新对话" title="New chat" data-i18n-title="新对话">
+        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 4v12M4 10h12"/></svg>
       </button>
-    </div>
-  </form>
-</aside>
+      <button type="button" class="icon-btn" id="chatHide" aria-label="Close" data-i18n-aria-label="关闭" title="Close (Esc)" data-i18n-title="关闭（Esc）">
+        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15"/></svg>
+      </button>
+    </header>
+
+    <div class="chat-log" id="chatLog" aria-live="polite"></div>
+    <div class="chat-list" id="chatList"></div>
+
+    <form class="chat-join" id="chatJoin" hidden>
+      <span data-i18n="访问码">访问码</span>
+      <input class="field" id="joinCode" type="password" autocomplete="off" aria-label="Access code" data-i18n-aria-label="访问码" placeholder="Access code" data-i18n-placeholder="输入访问码" style="flex:1">
+      <button type="submit" class="btn-secondary" data-i18n="验证">验证</button>
+      <span class="mny-err" id="joinErr" role="alert"></span>
+    </form>
+
+    <form class="composer" id="chatForm">
+      <div class="chat-quote" id="chatQuote" hidden></div>
+      <div class="chat-pics" id="chatPics" hidden></div>
+      <div class="composer-box">
+        <button type="button" class="attach" id="chatAttach" aria-label="Attach receipt or photo" data-i18n-aria-label="添加收据或图片" title="Attach photo" data-i18n-title="添加收据或截图">
+          <svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="5" width="15" height="11" rx="2"/><path d="M7 5l1.2-2h3.6L13 5"/><circle cx="10" cy="10.5" r="2.8"/></svg>
+        </button>
+        <input type="file" id="chatFile" accept="image/*" multiple hidden>
+        <textarea id="chatText" rows="1" placeholder="Ask about the itinerary, or attach a receipt…" data-i18n-placeholder="提问或发张小票记账…" aria-label="Message trip assistant" data-i18n-aria-label="输入问题" maxlength="2000"></textarea>
+        <button type="submit" class="send" id="chatSend" aria-label="Send" title="Send">
+          <svg class="i-send" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 16V4M5 9l5-5 5 5"/></svg>
+          <svg class="i-stop" viewBox="0 0 20 20" aria-hidden="true"><rect x="5" y="5" width="10" height="10" rx="1.5"/></svg>
+        </button>
+      </div>
+    </form>
+  </aside>
 </div>
 
 <script src="config.js"></script>
